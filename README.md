@@ -6,6 +6,11 @@
 
 This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything you need to quickly and easily add a blog to your laravel app.
 
+
+## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc)
+
+Also see [Packagist](https://packagist.org/packages/webdevetc/blogetc)
+
 ## Features
 
 - Includes all views, routes, models, controllers, events, etc
@@ -112,6 +117,7 @@ This is a list of features or things that I want to eventually get round to addi
 ## Version History
 
 
+- 1.0.1 - First release
 - 0.3 - Small changes, packagist settings.
 - 0.1 - Initial release
 

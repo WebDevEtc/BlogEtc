@@ -14,13 +14,13 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // load the routes file:
         if (config("blogetc.include_default_routes",true)) {
             include(__DIR__ . "/routes.php");
         }
 
         $this->publishes([
-            __DIR__ . '/../migrations/2018_05_28_224023_create_blog_etc_posts_table.php' => database_path('migrations/2018_05_28_224023_create_blog_etc_posts_table.php')
+            __DIR__ . '/../migrations/2018_05_28_224023_create_blog_etc_posts_table.php'
+                => database_path('migrations/2018_05_28_224023_create_blog_etc_posts_table.php')
         ]);
 
         $this->publishes([
@@ -35,10 +35,10 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // for public facing views:
+        // for public facing views (view("blogetc::BLADEFILE")):
         $this->loadViewsFrom(__DIR__ . "/Views/blogetc",'blogetc');
 
-        // for the admin backend views:
+        // for the admin backend views ( view("blogetc_admin::BLADEFILE") )
         $this->loadViewsFrom(__DIR__ . "/Views/blogetc_admin",'blogetc_admin');
     }
 }

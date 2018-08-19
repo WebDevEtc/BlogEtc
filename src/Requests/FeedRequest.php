@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use WebDevEtc\BlogEtc\BaseRequestInterface;
 
 class FeedRequest extends FormRequest
@@ -11,7 +12,7 @@ class FeedRequest extends FormRequest
 
 
     /**
-     * Determine if the user is authorized to make this request.
+     * Always return true, as this is just to view the rss feed
      *
      * @return bool
      */
@@ -22,14 +23,14 @@ class FeedRequest extends FormRequest
 
 
     /**
-     * Get the validation rules that apply to the request.
+     *
      *
      * @return array
      */
     public function rules()
     {
         return [
-            //
+            'type' => [Rule::in(['rss','atom'])],
         ];
     }
 

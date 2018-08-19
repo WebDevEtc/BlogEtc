@@ -4,9 +4,6 @@
 
 
     @include("blogetc::partials.show_errors")
-
-
-
     @include("blogetc::partials.full_post_details")
 
 

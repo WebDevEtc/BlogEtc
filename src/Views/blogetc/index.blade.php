@@ -5,7 +5,7 @@
 
         <h2 class='text-center'>Viewing Category: {{$blogetc_category->category_name}}</h2>
 
-        @endif
+    @endif
 
     @forelse($posts as $post)
         @include("blogetc::partials.index_loop")
