@@ -28,6 +28,7 @@
 
                 @if($comment->post)
 
+                    {{--VIEW + EDIT POST LINKS--}}
                     <a href="{{$comment->post->url()}}" class="card-link btn btn-outline-secondary"><i class="fa fa-file-text-o"
                                                                                               aria-hidden="true"></i>
                         View Post</a>
@@ -39,7 +40,9 @@
                 @endif
 
 
+
                 @if(!$comment->approved)
+                    {{--APPROVE BUTTON--}}
                     <form method='post' action='{{route("blogetc.admin.comments.approve", $comment->id)}}' class='float-right'>
                         @csrf
                         @method("PATCH")
@@ -47,6 +50,7 @@
                     </form>
                 @endif
 
+                {{--DELETE BUTTON--}}
                 <form
                         onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"m
                         method='post' action='{{route("blogetc.admin.comments.delete", $comment->id)}}' class='float-right'>

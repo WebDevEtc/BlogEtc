@@ -2,16 +2,16 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
+/**
+ * Class CommentAdded
+ * @package WebDevEtc\BlogEtc\Events
+ */
 class CommentAdded
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -20,10 +20,11 @@ class CommentAdded
     public $blogEtcPost;
     /** @var  BlogEtcComment */
     public $newComment;
+
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * CommentAdded constructor.
+     * @param BlogEtcPost $blogEtcPost
+     * @param BlogEtcComment $newComment
      */
     public function __construct(BlogEtcPost $blogEtcPost, BlogEtcComment $newComment)
     {

@@ -104,11 +104,15 @@ This is a list of features or things that I want to eventually get round to addi
 - Option to use HTMLPurifier to sanatise output.
 - Better options for assigning post authors (currently it just assigns the currently logged in user)
 - Possibly add tags (we already have categories) but I am not sure how useful they really are, given that we already have categories.
+- Pagination for comments on view single post?
+- RSS feed: shows from full (stripped tags) ->html of blog post (although has a setTextLimit() on it) - need to trim this, and if it uses custom view files then it should render that (without html).
 
 
 
 ## Version History
 
+
+- 0.3 - Small changes, packagist settings.
 - 0.1 - Initial release
 
 

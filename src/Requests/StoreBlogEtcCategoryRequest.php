@@ -3,7 +3,6 @@
 namespace WebDevEtc\BlogEtc\Requests;
 
 
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 
 class StoreBlogEtcCategoryRequest extends BaseRequest
 {

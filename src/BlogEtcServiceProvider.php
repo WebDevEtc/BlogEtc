@@ -14,19 +14,10 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         // load the routes file:
         if (config("blogetc.include_default_routes",true)) {
             include(__DIR__ . "/routes.php");
         }
-
-
-
-//        \DB::listen(function(QueryExecuted $sql) {
-//            dump($sql->sql);
-//        });
-
-
 
         $this->publishes([
             __DIR__ . '/../migrations/2018_05_28_224023_create_blog_etc_posts_table.php' => database_path('migrations/2018_05_28_224023_create_blog_etc_posts_table.php')

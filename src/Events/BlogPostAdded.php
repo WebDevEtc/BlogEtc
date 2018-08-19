@@ -12,16 +12,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
+/**
+ * Class BlogPostAdded
+ * @package WebDevEtc\BlogEtc\Events
+ */
 class BlogPostAdded
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /** @var  BlogEtcPost */
     public $blogEtcPost;
+
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * BlogPostAdded constructor.
+     * @param BlogEtcPost $blogEtcPost
      */
     public function __construct(BlogEtcPost $blogEtcPost)
     {

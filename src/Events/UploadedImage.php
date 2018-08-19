@@ -2,29 +2,32 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
+/**
+ * Class UploadedImage
+ * @package WebDevEtc\BlogEtc\Events
+ */
 class UploadedImage
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /** @var  BlogEtcPost */
     public $blogEtcPost;
-    public $image;
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * @var
      */
-    public function __construct(BlogEtcPost $blogEtcPost,$image)
+    public $image;
+
+    /**
+     * UploadedImage constructor.
+     * @param BlogEtcPost $blogEtcPost
+     * @param $image
+     */
+    public function __construct(BlogEtcPost $blogEtcPost, $image)
     {
         $this->blogEtcPost=$blogEtcPost;
         $this->image=$image;

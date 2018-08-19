@@ -79,6 +79,7 @@ return [
              *
              * You must enter the whole url (but not the "s.src = '" part!)
              */
+
             'src_url' => "https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js",
 
             ],

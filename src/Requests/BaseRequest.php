@@ -7,6 +7,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\BaseRequestInterface;
 use WebDevEtc\BlogEtc\Helpers;
 
+/**
+ * Class BaseRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 abstract class BaseRequest extends FormRequest implements BaseRequestInterface
 {
 
@@ -21,6 +25,10 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
         return \Auth::check() && \Auth::user()->canManageBlogEtcPosts();
     }
 
+    /**
+     * Shared rules for categories
+     * @return array
+     */
     protected function baseCategoryRules()
     {
 
@@ -33,6 +41,8 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
     }
 
     /**
+     * Shared rules for blog posts
+     *
      * @return array
      */
     protected function BaseBlogPostRules()
@@ -67,7 +77,7 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
             'use_view_file' => ['nullable', 'string', 'alpha_num', 'min:1', 'max:75',],
         ];
 
-        foreach (config('blogetc.image_sizes') as $size => $image_detail) {
+        foreach ((array) config('blogetc.image_sizes') as $size => $image_detail) {
 
             if ($image_detail['enabled']) {
                 $return[$size] = [

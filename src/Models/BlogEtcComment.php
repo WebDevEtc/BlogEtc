@@ -21,6 +21,7 @@ class BlogEtcComment extends Model
 
 
     /**
+     * The associated BlogEtcPost
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function post()
@@ -39,6 +40,7 @@ class BlogEtcComment extends Model
 
     /**
      * Return author string (either from the User (via ->user_id), or the submitted author_name value
+     *
      * @return string
      */
     public function author()

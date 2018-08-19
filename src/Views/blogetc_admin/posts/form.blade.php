@@ -149,5 +149,5 @@
     <div class='col-md-12 my-3 text-center'>
 
         <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'>Add new categories here</a></em>
-        </div>
+    </div>
 </div>

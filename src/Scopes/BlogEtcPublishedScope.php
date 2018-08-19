@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
 class BlogEtcPublishedScope implements Scope
 {
     /**
-     * Apply the scope to a given Eloquent query builder.
+     * If user is logged in and canManageBlogEtcPosts() == true, then don't add any scope
+     * But for everyone else then it should only show PUBLISHED posts with a POSTED_AT < NOW()
      *
      * @param  \Illuminate\Database\Eloquent\Builder $builder
      * @param  \Illuminate\Database\Eloquent\Model $model

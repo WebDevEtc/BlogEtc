@@ -1,13 +1,8 @@
-<div class="comments-list col-md-6 mx-auto" >
+<div class="comments-list col-md-6 mx-auto">
 
 
+    <?
 
-    <? $comments = $post->comments()
-            ->where( "approved" , true )
-            ->orderBy( "id" , 'asc' )
-            ->limit( config( "blogetc.comments.max_num_of_comments_to_show" , 500 ) )
-            ->with( "user" )
-            ->get();
     ?>
     @forelse($comments as $comment)
 
@@ -34,7 +29,8 @@
     @endforelse
 
     @if(count($comments)> config("blogetc.comments.max_num_of_comments_to_show",500) - 1)
-        <p><em>Only the first {{config("blogetc.comments.max_num_of_comments_to_show",500)}} comments are shown.</em></p>
+        <p><em>Only the first {{config("blogetc.comments.max_num_of_comments_to_show",500)}} comments are shown.</em>
+        </p>
     @endif
 
 </div>

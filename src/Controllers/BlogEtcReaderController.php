@@ -9,37 +9,62 @@ use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Requests\FeedRequest;
 
+/**
+ * Class BlogEtcReaderController
+ * @package WebDevEtc\BlogEtc\Controllers
+ */
 class BlogEtcReaderController extends Controller
 {
 
 
+    /**
+     * Show blog posts
+     * If category_slug is set, then only show from that category
+     *
+     * @param Request $request
+     * @param null $category_slug
+     * @return mixed
+     */
     public function index(Request $request, $category_slug = null)
     {
         // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manageb log posts
         $posts = BlogEtcPost::orderBy("posted_at", "desc");
-        $title = 'Viewing blog';
+        $title = 'Viewing blog'; // default title...
 
         if ($category_slug) {
             $category = BlogEtcCategory::where("slug", $category_slug)->firstOrFail();
             $posts = $posts->join("blog_etc_post_categories", "blog_etc_post_categories.blog_etc_post_id",
                 'blog_etc_posts.id')
                 ->where("blog_etc_post_categories.blog_etc_category_id", $category->id);
-            \View::share('blogetc_category',$category);
-            $title = 'Viewing posts in ' . $category->category_name . " category";
+            \View::share('blogetc_category', $category); // so the view can say "You are viewing $CATEGORYNAME category posts"
+
+            $title = 'Viewing posts in ' . $category->category_name . " category"; // hardcode title here...
         }
 
-        $posts = $posts->select("blog_etc_posts.*")
+        $posts = $posts->select("blog_etc_posts.*") // because of the join, we don't want to select anything else
             ->paginate(config("blogetc.per_page", 10));
 
-        return view("blogetc::index")->withPosts($posts)->withTitle($title);
+        return view("blogetc::index")
+            ->withPosts($posts)
+            ->withTitle($title);
     }
 
+    /**
+     * RSS Feed
+     *
+     * @param FeedRequest $request
+     * @return mixed
+     */
     public function feed(FeedRequest $request)
     {
 
 
         $feed = \App::make("feed");
-        $feed->setCache(config("blogetc.rssfeed.cache_in_minutes", 60), "blog-" . $request->getFeedType());
+        $feed->setCache(
+            config("blogetc.rssfeed.cache_in_minutes", 60)
+            ,
+            "blog-" . $request->getFeedType()
+        );
 
         if (!$feed->isCached()) {
 
@@ -47,18 +72,13 @@ class BlogEtcReaderController extends Controller
             // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manageb log posts
             $posts = BlogEtcPost::orderBy("posted_at", "desc")
                 ->limit(10)
-
-//                            ->where( "posted_at" , "<=" , Carbon::now() )
                 ->get();
 
 
-
-            // set your feed's title, description, link, pubdate and language
             $feed->title = config("app.name") . ' Blog';
             $feed->description = config("blogetc.rssfeed.description", "Our blog RSS feed");
-//            $feed->logo        = public_path( "publicfrontend/images/logo-dark.png" );
             $feed->link = route('blogetc.index');
-            $feed->setDateFormat('datetime'); // 'datetime', 'timestamp' or 'carbon'
+            $feed->setDateFormat('carbon');
 
             if (isset($posts[0])) {
                 $feed->pubdate = $posts[0]->posted_at;
@@ -77,7 +97,7 @@ class BlogEtcReaderController extends Controller
                     $post->url(),
                     $post->posted_at,
                     $post->subtitle,
-                    strip_tags($post->html)
+                    strip_tags($post->html) // shows from full post - todo: handle this better.
                 );
             }
 
@@ -89,11 +109,25 @@ class BlogEtcReaderController extends Controller
     }
 
 
+    /**
+     * View all posts in $category_slug category
+     *
+     * @param Request $request
+     * @param $category_slug
+     * @return mixed
+     */
     public function view_category(Request $request, $category_slug)
     {
         return $this->index($request, $category_slug);
     }
 
+    /**
+     * View a single post and (if enabled) its comments
+     *
+     * @param Request $request
+     * @param $blogPostSlug
+     * @return mixed
+     */
     public function viewSinglePost(Request $request, $blogPostSlug)
     {
 
@@ -101,11 +135,15 @@ class BlogEtcReaderController extends Controller
         $blog_post = BlogEtcPost::where("slug", $blogPostSlug)
             ->firstOrFail();
 
-//        dump($blog_post->categories);
+        $comments = $blog_post->comments()
+            ->where("approved", true)
+            ->orderBy("id", 'asc')
+            ->limit(config("blogetc.comments.max_num_of_comments_to_show", 500))// sane limit on num of comments. No pagination (maybe todo?)
+            ->with("user")
+            ->get();
 
-//        dd("EOF");
 
-        return view("blogetc::single_post")->withPost($blog_post);
+        return view("blogetc::single_post")->withPost($blog_post)->withComments($comments);
     }
 
 }

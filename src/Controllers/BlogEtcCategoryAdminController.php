@@ -15,25 +15,49 @@ use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\StoreBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
 
+/**
+ * Class BlogEtcCategoryAdminController
+ * @package WebDevEtc\BlogEtc\Controllers
+ */
 class BlogEtcCategoryAdminController extends Controller
 {
 
 
+    /**
+     * BlogEtcCategoryAdminController constructor.
+     */
     public function __construct()
     {
         $this->middleware(UserCanManageBlogPosts::class);
     }
 
+    /**
+     * Show list of categories
+     *
+     * @return mixed
+     */
     public function index(){
 
         $categories = BlogEtcCategory::orderBy("category_name")->paginate(25);
         return view("blogetc_admin::categories.index")->withCategories($categories);
     }
+
+    /**
+     * Show the form for creating new category
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create_category(){
 
         return view("blogetc_admin::categories.add_category");
 
     }
+
+    /**
+     * Store a new category
+     *
+     * @param StoreBlogEtcCategoryRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function store_category(StoreBlogEtcCategoryRequest $request){
         $new_category = new BlogEtcCategory($request->all());
         $new_category->save();
@@ -41,11 +65,25 @@ class BlogEtcCategoryAdminController extends Controller
         event(new CategoryAdded($new_category));
         return redirect($new_category->edit_url());
     }
+
+    /**
+     * Show the edit form for category
+     * @param $categoryId
+     * @return mixed
+     */
     public function edit_category($categoryId){
         $category = BlogEtcCategory::findOrFail($categoryId);
         return view("blogetc_admin::categories.edit_category")->withCategory($category);
     }
-    public function update_category(UpdateBlogEtcCategoryRequest $request,$categoryId){
+
+    /**
+     * Save submitted changes
+     *
+     * @param UpdateBlogEtcCategoryRequest $request
+     * @param $categoryId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId){
 
 
         /** @var BlogEtcCategory $category */
@@ -57,7 +95,15 @@ class BlogEtcCategoryAdminController extends Controller
         event(new CategoryEdited($category));
         return redirect($category->edit_url());
     }
-    public function destroy_category(DeleteBlogEtcCategoryRequest $request,$categoryId){
+
+    /**
+     * Delete the category
+     *
+     * @param DeleteBlogEtcCategoryRequest $request
+     * @param $categoryId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId){
 
 
         $category = BlogEtcCategory::findOrFail($categoryId);

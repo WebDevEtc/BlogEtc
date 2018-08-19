@@ -21,6 +21,9 @@ Route::group( [ 'middleware' => [ 'web' ] ] , function () {
 
     } );
 
+
+
+    /* Admin backend routes - CRUD for posts, categories, and approving/deleting submitted comments */
     Route::group( [ 'prefix' => config( "blogetc.admin_prefix" , "blog_admin" ) ] , function () {
 
         Route::get( "/" , '\WebDevEtc\BlogEtc\Controllers\BlogEtcAdminController@index' )

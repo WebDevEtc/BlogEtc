@@ -10,9 +10,21 @@ use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;
 
+/**
+ * Class BlogEtcCommentWriterController
+ * @package WebDevEtc\BlogEtc\Controllers
+ */
 class BlogEtcCommentWriterController extends Controller
 {
 
+    /**
+     * Let a guest (or logged in user) submit a new comment for a blog post
+     *
+     * @param AddNewCommentRequest $request
+     * @param $blog_post_slug
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
     public function addNewComment(AddNewCommentRequest $request, $blog_post_slug)
     {
 

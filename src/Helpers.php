@@ -35,14 +35,14 @@ class Helpers
 
             'image_large' => [
                 'w' => config("blogetc.image_sizes.image_large.w", 1000),
-                'h' => config("blogetc.image_sizes.image_large.h", 1000),
+                'h' => config("blogetc.image_sizes.image_large.h", 700),
                 'name' => "Large",
                 'enabled' => config("blogetc.image_sizes.image_large.enabled", true),
             ],
 
             'image_medium' => [
-                'w' => config("blogetc.image_sizes.image_medium.w", 500),
-                'h' => config("blogetc.image_sizes.image_medium.h", 500),
+                'w' => config("blogetc.image_sizes.image_medium.w", 600),
+                'h' => config("blogetc.image_sizes.image_medium.h", 200),
                 'name' => "Medium",
                 'enabled' => config("blogetc.image_sizes.image_medium.enabled", true),
             ],

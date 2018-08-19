@@ -77,6 +77,7 @@ class BlogEtcPost extends Model
     }
 
     /**
+     * The associated author (if user_id) is set
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function author()
@@ -99,6 +100,8 @@ class BlogEtcPost extends Model
 
 
     /**
+     * The associated categories for this blog post
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function categories()
@@ -107,6 +110,8 @@ class BlogEtcPost extends Model
     }
 
     /**
+     * Comments for this post
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments()
@@ -134,6 +139,7 @@ class BlogEtcPost extends Model
     }
 
     /**
+     * If $this->user_view_file is not empty, then it'll return the dot syntax location of the blade file it should look for
      * @return string
      * @throws \Exception
      */
@@ -148,6 +154,7 @@ class BlogEtcPost extends Model
 
     /**
      * Does this object have an uploaded image of that size...?
+     *
      * @param string $size
      * @return int
      * @throws \Exception

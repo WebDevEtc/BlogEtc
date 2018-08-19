@@ -17,25 +17,56 @@ use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
 
+/**
+ * Class BlogEtcAdminController
+ * @package WebDevEtc\BlogEtc\Controllers
+ */
 class BlogEtcAdminController extends Controller
 {
 
 
+    /**
+     * BlogEtcAdminController constructor.
+     */
     public function __construct()
     {
         $this->middleware(UserCanManageBlogPosts::class);
     }
 
+    /**
+     * View all posts
+     *
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
-        return view("blogetc_admin::index")->withPosts(BlogEtcPost::orderBy("posted_at","desc")->paginate(10));
+        return view("blogetc_admin::index")
+            ->withPosts(
+
+                BlogEtcPost::orderBy("posted_at", "desc")
+                ->paginate(10)
+
+            );
     }
 
+    /**
+     * Show form for creating new post
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create_post()
     {
         return view("blogetc_admin::posts.add_post");
     }
 
+    /**
+     * Save a new post
+     *
+     * @param CreateBlogEtcPostRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
+     */
     public function store_post(CreateBlogEtcPostRequest $request)
     {
         $new_blog_post = new BlogEtcPost($request->all());
@@ -56,12 +87,26 @@ class BlogEtcAdminController extends Controller
         return redirect($new_blog_post->edit_url());
     }
 
+    /**
+     * Show form to edit post
+     *
+     * @param $blogPostId
+     * @return mixed
+     */
     public function edit_post($blogPostId)
     {
         $post = BlogEtcPost::findOrFail($blogPostId);
         return view("blogetc_admin::posts.edit_post")->withPost($post);
     }
 
+    /**
+     * Save changes to a post
+     *
+     * @param UpdateBlogEtcPostRequest $request
+     * @param $blogPostId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
+     */
     public function update_post(UpdateBlogEtcPostRequest $request, $blogPostId)
     {
 
@@ -72,17 +117,28 @@ class BlogEtcAdminController extends Controller
 
         $post->save();
         $post->categories()->sync($request->categories());
+
         Helpers::flash_message("Updated post");
         event(new BlogPostEdited($post));
+
         return redirect($post->edit_url());
 
     }
 
+    /**
+     * Delete a post
+     *
+     * @param DeleteBlogEtcPostRequest $request
+     * @param $blogPostId
+     * @return mixed
+     */
     public function destroy_post(DeleteBlogEtcPostRequest $request, $blogPostId)
     {
 
         $post = BlogEtcPost::findOrFail($blogPostId);
+
         event(new BlogPostWillBeDeleted($post));
+
         $post->delete();
 
         return view("blogetc_admin::posts.deleted_post")->withDeletedPost($post);
@@ -90,6 +146,8 @@ class BlogEtcAdminController extends Controller
     }
 
     /**
+     * Process any uploaded images (for featured image)
+     *
      * @param CreateBlogEtcPostRequest $request
      * @param $new_blog_post
      * @throws \Exception
@@ -101,9 +159,10 @@ class BlogEtcAdminController extends Controller
             return;
         }
 
-        foreach (config('blogetc.image_sizes') as $size => $image_detail) {
+        foreach ((array) config('blogetc.image_sizes') as $size => $image_detail) {
 
             if ($image_detail['enabled']) {
+
                 if ($photo = $request->get_image_file($size)) {
 
                     $imagename = str_slug($new_blog_post->title) . "-" . str_random(4) . $image_detail['w'] . "x" . $image_detail['h'] . '.' . $photo->getClientOriginalExtension();
@@ -116,14 +175,22 @@ class BlogEtcAdminController extends Controller
 
                     $thumb_img = \Image::make($photo->getRealPath());
                     $thumb_img = $thumb_img->fit($image_detail['w'], $image_detail['h']);
-                    $thumb_img->save($destinationPath . '/' . $imagename, config("blogetc.image_quality",80));
+                    $thumb_img->save($destinationPath . '/' . $imagename, config("blogetc.image_quality", 80));
 
                     event(new UploadedImage($new_blog_post, $thumb_img));
 
                     $new_blog_post->$size = $imagename;
+
+                }
+                else {
+
+                    // no image was uploaded. Don't set anything to null (this could be from editing, so we want to leave $new_blog_post->$size as it is!
+
                 }
             } else {
-                $new_blog_post->$size = null; // set to null as it is disabled
+
+                // image is disabled. Don't do anything! If it is already set, leave it as it is in the database.
+
             }
         }
     }

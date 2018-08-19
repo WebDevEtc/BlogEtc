@@ -8,7 +8,15 @@ class AddNewCommentRequest extends BaseRequest
 
     public function authorize()
     {
-        return true;
+
+        if (config("blogetc.comments.type_of_comments_to_show") !== 'disabled') {
+            // anyone is allowed to submit a comment, to return true always.
+            return true;
+        }
+
+
+        //comments are disabled.
+        return false;
     }
 
     /**

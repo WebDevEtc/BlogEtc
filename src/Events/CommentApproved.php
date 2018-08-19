@@ -2,30 +2,30 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
+/**
+ * Class CommentApproved
+ * @package WebDevEtc\BlogEtc\Events
+ */
 class CommentApproved
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /** @var  BlogEtcComment */
     public $comment;
+
     /**
-     * Create a new event instance.
-     *
-     * @return void
+     * CommentApproved constructor.
+     * @param BlogEtcComment $comment
      */
     public function __construct(BlogEtcComment $comment)
     {
         $this->comment=$comment;
+        // you can get the blog post via $comment->post
     }
 
 }
