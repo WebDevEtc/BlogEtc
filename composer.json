@@ -1,5 +1,6 @@
 {
   "name": "webdevetc/blogetc",
+  "version": "v1.0.1",
   "keywords": [
     "laravel",
     "blog",
