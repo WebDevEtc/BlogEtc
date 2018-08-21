@@ -4,8 +4,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
-use WebDevEtc\BlogEtc\BaseRequestInterface;
-use WebDevEtc\BlogEtc\Helpers;
+use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 
 /**
  * Class BaseRequest

@@ -262,6 +262,8 @@ class MainTest extends \Tests\TestCase
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
 
+        // logout - so we are guest user
+        \Auth::logout();
         $response = $this->get(config("blogetc.blog_prefix", "blog"));
         // if we see the slug (which is str_random()) we can safely assume that there was a link to the post, so it is working ok. of course it would depend a bit on your template but this should work.
         $response->assertSee($new_object_vals['slug']);

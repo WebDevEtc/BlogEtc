@@ -117,6 +117,7 @@ This is a list of features or things that I want to eventually get round to addi
 ## Version History
 
 
+- 1.0.5 - composer.json changes.
 - 1.0.2 - First release
 - 0.3 - Small changes, packagist settings.
 - 0.1 - Initial release

@@ -1,4 +1,4 @@
-<? namespace WebDevEtc\BlogEtc;
+<? namespace WebDevEtc\BlogEtc\Interfaces;
 
 interface BaseRequestInterface
 {

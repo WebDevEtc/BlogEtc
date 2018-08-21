@@ -2,14 +2,11 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use WebDevEtc\BlogEtc\BaseRequestInterface;
 
 class FeedRequest extends FormRequest
 {
-
 
     /**
      * Always return true, as this is just to view the rss feed
