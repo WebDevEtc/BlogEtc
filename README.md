@@ -9,6 +9,8 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
 
 ## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
 
+[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
+
 Also see [Packagist](https://packagist.org/packages/webdevetc/blogetc)
 
 ## Features
@@ -90,8 +92,6 @@ It will auto set all required routes (both public facing, and admin backend). Th
 ## Config options
 
 Please see the [BlogEtc config option documentation here](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#config_options) for details.
-
-https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#config_options
 
 All config options have comments which describe what they do. Please just refer to the `blogetc.php` file in your /config/ dir.
 
