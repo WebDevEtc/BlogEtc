@@ -13,6 +13,25 @@
         </div>
     @endif
 
+
+
+
+    @if(config("blogetc.captcha.captcha_enabled")  )
+
+        {{--Captcha is enabled. Load the type class, and then include the view as defined in the captcha class --}}
+        <?
+        /** @var string $captcha_class */
+        $captcha_class = config("blogetc.captcha.captcha_type");
+
+        /** @var \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface $captcha */
+        $captcha = new $captcha_class;
+        ?>
+
+        @include($captcha->view())
+
+    @endif
+
+
     <div class="form-group col-md-6 mx-auto">
                     <textarea class="form-control" name='comment' id="comment" placeholder="Write your comment here"
                               rows="7">{{old("comment")}}</textarea>

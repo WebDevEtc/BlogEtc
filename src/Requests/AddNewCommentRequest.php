@@ -27,12 +27,14 @@ class AddNewCommentRequest extends BaseRequest
     public function rules()
     {
 
+        // basic rules
         $return = [
             'comment' => ['required', 'string', 'min:3', 'max:1000'],
             'author_name' => ['string', 'min:1', 'max:50']
         ];
 
 
+        // do we need author name?
         if (\Auth::check() && config("blogetc.comments.save_user_id_if_logged_in", true)) {
             // is logged in, so we don't need an author name (it won't get used)
             $return['author_name'][] = 'nullable';
@@ -41,8 +43,20 @@ class AddNewCommentRequest extends BaseRequest
             $return['author_name'][] = 'required';
         }
 
-        return $return;
 
+       if(config("blogetc.captcha.captcha_enabled") ) {
+           /** @var string $captcha_class */
+           $captcha_class = config("blogetc.captcha.captcha_type");
+
+           /** @var \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface $captcha */
+           $captcha = new $captcha_class;
+
+           $return[$captcha->captcha_field_name()] = $captcha->rules();
+       }
+
+
+
+        return $return;
 
     }
 

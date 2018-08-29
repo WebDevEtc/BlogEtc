@@ -20,6 +20,8 @@ return [
     'blog_upload_dir' => "blog_images", // this should be in public_path() (i.e. /public/blog_images), and should be writable
 
     'image_quality' => 80,
+
+
     'image_sizes' => [
 
         // if you set 'enabled' to false, it will clear any data for that field the next time any row is updated. However it will NOT delete the .jpg file on your file server.
@@ -31,7 +33,7 @@ return [
 
         'image_large' => [
             'w' => 1000,
-            'h' => 1000,
+            'h' => 700,
             'enabled' => true, // see note above
         ],
         'image_medium' => [
@@ -46,6 +48,18 @@ return [
         ],
     ],
 
+
+    'captcha' => [
+
+        'captcha_enabled' => true, // true = we should use a captcha, false = turn it off. If comments are disabled this makes no difference.
+        'captcha_type' =>  \WebDevEtc\BlogEtc\Captcha\Basic::class, // this should be a class that implements the \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface interface
+
+        'basic_question' => "What is the opposite of white?", // a simple captcha question to always ask (if captcha_type is set to 'basic'
+        'basic_answers' => "white,dark", // comma separated list of possible answers. Don't worry about case.
+
+
+    ],
+
     ////////// RSS FEED
 
     'rssfeed' => [
@@ -53,7 +67,7 @@ return [
         'cache_in_minutes' => 60, // how long (in minutes) to cache the RSS blog feed for.
         'description' => "Our blog post RSS feed", //description for the RSS feed
         'language'=>"en", // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
-        ],
+    ],
 
     ////////// comments:
 
@@ -63,7 +77,7 @@ return [
 
         'max_num_of_comments_to_show' => 10000, // max num of comments to show on a single blog post. Set to a lower number for smaller page sizes.
         'save_ip_address' => true, // should we save the IP address in the database?
-    'auto_approve_comments' => true, // should comments appear straight away on the site? or wait for approval
+        'auto_approve_comments' => false, // should comments appear straight away on the site? or wait for approval
 
 
         'save_user_id_if_logged_in' => true, // if user is logged in, should we save that user id? (if false it will always ask for an author name, which the commenter can provide
@@ -79,11 +93,10 @@ return [
              *
              * You must enter the whole url (but not the "s.src = '" part!)
              */
-
             'src_url' => "https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js",
 
-            ],
         ],
+    ],
 
 
 

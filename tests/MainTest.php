@@ -10,6 +10,9 @@ class MainTest extends \Tests\TestCase
      *
      *
 
+    This is one great big huge test file that checks most of the features (not 100% yet) of this package.
+
+
     List of all main routes, and if they are covered by any tests:
     There might be some additional tests still to be written (For example we create a new post, but don't assign any categories to it at the moment)
 
@@ -18,7 +21,7 @@ class MainTest extends \Tests\TestCase
         blogetc.feed                        YES
         blogetc.view_category               no - but this is basically blogetc.index
         blogetc.single                      YES
-        blogetc.comments.add_new_comment    YES
+        blogetc.comments.add_new_comment    YES - tested multiple times with/without basic captcha on/off/correct/incorrect.
 
     /blog_admin/...
         blogetc.admin.index                 YES
@@ -42,6 +45,8 @@ class MainTest extends \Tests\TestCase
             blogetc.admin.categories.edit_category      no - but is just a form
             blogetc.admin.categories.update_category
             blogetc.admin.categories.destroy_category   YES
+
+
 
      *
      *
@@ -288,13 +293,12 @@ class MainTest extends \Tests\TestCase
     }
 
 
-
     public function testCreatePostWithNotPublishedThenCheckIsNotViewableToPublic()
     {
 
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
-        list( $new_object_vals, $search_for_obj) = $this->prepare_post_creation();
+        list($new_object_vals, $search_for_obj) = $this->prepare_post_creation();
 
         $new_object_vals['is_published'] = false;
 
@@ -328,7 +332,7 @@ class MainTest extends \Tests\TestCase
 
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
-        list( $new_object_vals, $search_for_obj) = $this->prepare_post_creation();
+        list($new_object_vals, $search_for_obj) = $this->prepare_post_creation();
 
         $new_object_vals['posted_at'] = \Carbon\Carbon::now()->addMonths(12);
 
@@ -357,11 +361,18 @@ class MainTest extends \Tests\TestCase
     }
 
 
-    public function testCreatePostThenCheckCanCreateCommentThenApproveComment()
+
+    public function testCreatePostThenCheckCanCreateCommentThenApproveCommentWithBasicCaptchaEnabledAndWrongAnswer()
     {
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
 
+        \Config::set('blogetc.comments.auto_approve_comments', false);
+        \Config::set('blogetc.captcha.captcha_enabled', true);
+        \Config::set('blogetc.captcha.captcha_type', \WebDevEtc\BlogEtc\Captcha\Basic::class);
+        $captcha = new \WebDevEtc\BlogEtc\Captcha\Basic();
+        \Config::set('blogetc.captcha.basic_question', "a test question");
+        \Config::set('blogetc.captcha.basic_answers', "answer1,answer2");
 
         $user = $this->create_admin_user();
 
@@ -384,52 +395,184 @@ class MainTest extends \Tests\TestCase
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
 
 
-        if (config("blogetc.comments.type_of_comments_to_show") === 'built_in') {
-            $comment_detail = [
-                '_token' => csrf_token(),
-                'author_name' => str_random(),
-                'comment' => str_random(),
-            ];
-            $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
-            $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
-            $response->assertStatus(200);
-
-            $default_approved = config("blogetc.comments.auto_approve_comments", true) == true ? 1 : 0;
-            $this->assertDatabaseHas('blog_etc_comments', ['approved' => $default_approved, 'author_name' => $comment_detail['author_name']]);
-
-            if ($default_approved == 0) {
-                dump("By default comments are NOT approved (config(\"blogetc.comments.auto_approve_comments\") == false), so we will check the admin user can approve the comment just subitted");
-
-                $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where('author_name', $comment_detail['author_name'])->firstOrFail();
-
-                $response = $this->get(route("blogetc.admin.comments.index"));
-                $response->assertSee($justAddedRow->author_name);
+        \Config::set('blogetc.comments.type_of_comments_to_show', 'built_in');
 
 
-                // approve it:
-                $response = $this->patch(route("blogetc.admin.comments.approve", $justAddedRow->id), [
-                    '_token' => csrf_token(),
-                ]);
-                // check it was approved
-                $response->assertStatus(302);
+        $comment_detail = [
+            '_token' => csrf_token(),
+            'author_name' => str_random(),
+            'comment' => str_random(),
+            $captcha->captcha_field_name() => "wronganswer1", // << WRONG CAPTCHA
+        ];
+        $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
+        $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
+        $response->assertStatus(302);
 
-                $this->assertDatabaseHas('blog_etc_comments', ['approved' => 1, 'author_name' => $justAddedRow->author_name]);
-
-
-            } else {
-                dump("By default comments are auto approved (config(\"blogetc.comments.auto_approve_comments\" == true), so we don't check now if the admin user can approve it");
-            }
+        $this->assertDatabaseMissing('blog_etc_comments', [ 'author_name' => $comment_detail['author_name']]);
 
 
-        } else {
-            dump("NOT TESTING COMMENT FEATURE, as config(\"blogetc.comments.type_of_comments_to_show\") is not set to 'built_in')");
-        }
+
+        $comment_detail = [
+            '_token' => csrf_token(),
+            'author_name' => str_random(),
+            'comment' => str_random(),
+           // << NO CAPTCHA FIELD
+        ];
+        $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
+        $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
+        $response->assertStatus(302);
+
+        $this->assertDatabaseMissing('blog_etc_comments', [ 'author_name' => $comment_detail['author_name']]);
+
+
+
+
+    }
+
+
+
+
+
+    public function testCreatePostThenCheckCanCreateCommentThenApproveCommentWithBasicCaptchaEnabled()
+    {
+
+        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
+
+        \Config::set('blogetc.comments.auto_approve_comments', false);
+        \Config::set('blogetc.captcha.captcha_enabled', true);
+        \Config::set('blogetc.captcha.captcha_type', \WebDevEtc\BlogEtc\Captcha\Basic::class);
+        $captcha = new \WebDevEtc\BlogEtc\Captcha\Basic();
+        \Config::set('blogetc.captcha.basic_question', "a test question");
+        \Config::set('blogetc.captcha.basic_answers', "answer1,answer2");
+
+        $user = $this->create_admin_user();
+
+        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
+        $new_object_vals = $this->generate_basic_blog_post_with_random_data();
+
+        // to verify this was added to database. Use a different variable, so we can add things (like _token) and still be able to assertDatabaseHas later.
+        $search_for_obj = $new_object_vals;
+
+        $new_object_vals['is_published'] = 1;
+        $new_object_vals['posted_at'] = \Carbon\Carbon::now();
+        $new_object_vals['use_view_file'] = null;
+
+        $new_object_vals['_token'] = csrf_token();
+
+        $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+
+
+        $response->assertStatus(302); // redirect
+        $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
+
+
+        \Config::set('blogetc.comments.type_of_comments_to_show', 'built_in');
+
+
+        $comment_detail = [
+            '_token' => csrf_token(),
+            'author_name' => str_random(),
+            'comment' => str_random(),
+            $captcha->captcha_field_name() => "AnsWer2",
+        ];
+        $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
+        $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
+        $response->assertStatus(200);
+
+        \Config::set('blogetc.captcha.auto_approve_comments', false);
+
+        $this->assertDatabaseHas('blog_etc_comments', ['approved' => false, 'author_name' => $comment_detail['author_name']]);
+
+
+        $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where('author_name', $comment_detail['author_name'])->firstOrFail();
+
+        $response = $this->get(route("blogetc.admin.comments.index"));
+        $response->assertSee($justAddedRow->author_name);
+
+
+        // approve it:
+        $response = $this->patch(route("blogetc.admin.comments.approve", $justAddedRow->id), [
+            '_token' => csrf_token(),
+        ]);
+        // check it was approved
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('blog_etc_comments', ['approved' => 1, 'author_name' => $justAddedRow->author_name]);
+
+
+    }
+
+
+
+    public function testCreatePostThenCheckCanCreateCommentThenApproveComment()
+    {
+
+        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
+
+        \Config::set('blogetc.comments.auto_approve_comments', false);
+        \Config::set('blogetc.captcha.captcha_enabled', false);
+
+        $user = $this->create_admin_user();
+
+        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
+        $new_object_vals = $this->generate_basic_blog_post_with_random_data();
+
+        // to verify this was added to database. Use a different variable, so we can add things (like _token) and still be able to assertDatabaseHas later.
+        $search_for_obj = $new_object_vals;
+
+        $new_object_vals['is_published'] = 1;
+        $new_object_vals['posted_at'] = \Carbon\Carbon::now();
+        $new_object_vals['use_view_file'] = null;
+
+        $new_object_vals['_token'] = csrf_token();
+
+        $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+
+
+        $response->assertStatus(302); // redirect
+        $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
+
+
+        \Config::set('blogetc.comments.type_of_comments_to_show', 'built_in');
+        \Config::set('blogetc.captcha.captcha_enabled', false);
+
+
+        $comment_detail = [
+            '_token' => csrf_token(),
+            'author_name' => str_random(),
+            'comment' => str_random(),
+        ];
+        $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
+        $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
+        $response->assertStatus(200);
+
+        \Config::set('blogetc.captcha.auto_approve_comments', false);
+
+        $this->assertDatabaseHas('blog_etc_comments', ['approved' => false, 'author_name' => $comment_detail['author_name']]);
+
+
+        $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where('author_name', $comment_detail['author_name'])->firstOrFail();
+
+        $response = $this->get(route("blogetc.admin.comments.index"));
+        $response->assertSee($justAddedRow->author_name);
+
+
+        // approve it:
+        $response = $this->patch(route("blogetc.admin.comments.approve", $justAddedRow->id), [
+            '_token' => csrf_token(),
+        ]);
+        // check it was approved
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('blog_etc_comments', ['approved' => 1, 'author_name' => $justAddedRow->author_name]);
+
 
     }
 
 
     public function testCreatePostThenCheckCanCreateCommentThenDeleteComment()
     {
+        \Config::set('blogetc.comments.auto_approve_comments', false);
+        \Config::set('blogetc.captcha.captcha_enabled', false);
+
         $user = $this->create_admin_user();
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
@@ -681,8 +824,8 @@ class MainTest extends \Tests\TestCase
         $this->actingAs($user);
 
 
-        //get a page (for session/csrf) - do not delete this line!
-        $response = $this->get("/");
+        //get a page (for session to be set/ for csrf) - do not delete this line! We don't need to do anything with the response though
+        $this->get("/");
 
 
         return $user;
@@ -715,8 +858,10 @@ class MainTest extends \Tests\TestCase
         // check we don't see it at moment
         $response = $this->get(config("blogetc.blog_prefix", "blog"));
         $response->assertDontSee($new_object_vals['slug']);
-        return array( $new_object_vals, $search_for_obj);
+        return array($new_object_vals, $search_for_obj);
     }
+
+
 
 }
 

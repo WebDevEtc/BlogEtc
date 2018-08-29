@@ -1,13 +1,13 @@
-#WebDevEtc BlogEtc
+# WebDevEtc BlogEtc
 ## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app
 ### 5 minutes to install! Quick and easy!
 
-##Introduction
+## Introduction
 
 This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything you need to quickly and easily add a blog to your laravel app.
 
 
-## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc)
+## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
 
 Also see [Packagist](https://packagist.org/packages/webdevetc/blogetc)
 
@@ -72,14 +72,14 @@ Also see [Packagist](https://packagist.org/packages/webdevetc/blogetc)
 
 
 
-## How to install BlogEtc
+## How to install BlogEtc to your laravel app
 
-Please see our [BlogEtc Laravel Blog Package Documentation](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app) for install instructions. (It is very simple - done via composer/artisan commands, plus adding one method to your \App\User model (`canManageBlogEtcPosts()` which should return `true` if this user can manage the blog).
+Please see our [BlogEtc Laravel Blog Package Documentation/install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) for install instructions. (It is very simple - done via composer/artisan commands, plus adding one method to your \App\User model (`canManageBlogEtcPosts()` which should return `true` if this user can manage the blog).
 
 
 ## How to customise the blog views/templates
 
-This is easy to do, and further detail can be found in our  [BlogEtc Laravel Blog Package Documentation](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app).
+This is easy to do, and further detail can be found in our  [BlogEtc Laravel Blog Package Documentation](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views).
 
 But to give a quick overiew, find the .blade.php file that you want to replace, and create it in `/resources/views/vendor/blogetc/` directory. Because all the main views use the `view("blogetc::$view")` method (with `::`), Laravel will first look in your `/resources/views/vendor/blogetc/` directory before it looks in the package's `/webdevetc/blogetc/src/Views/' directory. More details about this in our docs.
 
@@ -89,7 +89,7 @@ It will auto set all required routes (both public facing, and admin backend). Th
 
 ## Config options
 
-(remember to do `php artisan vendor:publish --provider="WebDevEtc\BlogEtc\BlogEtcServiceProvider"` to get the `blogetc.php` file in your config directory)
+Please see the [BlogEtc config option documentation here](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#config_options) for details.
 
 All config options have comments which describe what they do. Please just refer to the `blogetc.php` file in your /config/ dir.
 
@@ -99,12 +99,17 @@ You can find all the events that are fired by looking in the `/src/Events` direc
 
 Add these (and an Event Listener) to your `EventServiceProvider.php` file to make use of these events when they fire.
 
+## Built in CAPTCHA / anti spam
+
+There is a built in captcha (anti spam comment) system built in, which will be easy for you to replace with your own implementation.
+
+  Please see [our Captcha docs](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#captcha) for  more details.
+
 ## TODO
 
 This is a list of features or things that I want to eventually get round to adding
 
 - Allow users to upload images for the blog post body (at the moment only featured images (1 per size) can be added to a blog post.
-- Built in captcha for blog comments
 - Built in WYSIWYG editor for the blog posts
 - Option to use HTMLPurifier to sanatise output.
 - Better options for assigning post authors (currently it just assigns the currently logged in user)
@@ -117,6 +122,7 @@ This is a list of features or things that I want to eventually get round to addi
 ## Version History
 
 
+- 1.1 - added basic captcha
 - 1.0.5 - composer.json changes.
 - 1.0.2 - First release
 - 0.3 - Small changes, packagist settings.

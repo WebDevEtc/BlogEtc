@@ -16,11 +16,11 @@ class Helpers
 
         return '<link rel="alternate" type="application/rss+xml"
   title="Atom RSS Feed"
-  href="' . route("blogetc.feed") .'?type=atom" />
+  href="' .e( route("blogetc.feed")) .'?type=atom" />
 
   <link rel="alternate" type="application/rss+xml"
   title="XML RSS Feed"
-  href="' . route("blogetc.feed") .'?type=rss" />
+  href="' . e(route("blogetc.feed")) .'?type=rss" />
 
   ';
 
