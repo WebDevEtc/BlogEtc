@@ -91,6 +91,8 @@ It will auto set all required routes (both public facing, and admin backend). Th
 
 Please see the [BlogEtc config option documentation here](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#config_options) for details.
 
+https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#config_options
+
 All config options have comments which describe what they do. Please just refer to the `blogetc.php` file in your /config/ dir.
 
 ## Events
@@ -133,6 +135,7 @@ This is a list of features or things that I want to eventually get round to addi
 ## Issues, support, bug reports, security issues
 
 Please contact me on the contact from on [WebDev Etc](https://webdevetc.com/) or on [twitter](https://twitter.com/web_dev_etc/) and I'll get back to you asap.
+
 
 
 
