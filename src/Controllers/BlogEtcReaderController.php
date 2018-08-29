@@ -41,8 +41,8 @@ class BlogEtcReaderController extends Controller
             $title = 'Viewing posts in ' . $category->category_name . " category"; // hardcode title here...
         }
 
-        $posts = $posts->select("blog_etc_posts.*") // because of the join, we don't want to select anything else
-            ->paginate(config("blogetc.per_page", 10));
+        $posts = $posts->select("blog_etc_posts.*")// because of the join, we don't want to select anything else
+        ->paginate(config("blogetc.per_page", 10));
 
         return view("blogetc::index")
             ->withPosts($posts)
@@ -143,7 +143,35 @@ class BlogEtcReaderController extends Controller
             ->get();
 
 
-        return view("blogetc::single_post")->withPost($blog_post)->withComments($comments);
+        $captcha = $this->getCaptchaObject();
+
+
+        return view("blogetc::single_post")
+            ->withPost($blog_post)
+            ->withComments($comments)
+            ->withCaptcha($captcha);
+    }
+
+    /**
+     * @return null|\WebDevEtc\BlogEtc\Interfaces\CaptchaInterface
+     */
+    private function getCaptchaObject()
+    {
+
+        if (!config("blogetc.captcha.captcha_enabled")) {
+
+            return null;
+        }
+
+
+        // else: captcha is enabled
+
+        /** @var string $captcha_class */
+        $captcha_class = config("blogetc.captcha.captcha_type");
+        /** @var \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface $captcha */
+        $captcha = new $captcha_class;
+
+        return $captcha;
     }
 
 }

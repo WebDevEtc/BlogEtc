@@ -16,16 +16,11 @@
 
 
 
-    @if(config("blogetc.captcha.captcha_enabled")  )
+
+    @if($captcha)
 
         {{--Captcha is enabled. Load the type class, and then include the view as defined in the captcha class --}}
-        <?
-        /** @var string $captcha_class */
-        $captcha_class = config("blogetc.captcha.captcha_type");
 
-        /** @var \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface $captcha */
-        $captcha = new $captcha_class;
-        ?>
 
         @include($captcha->view())
 

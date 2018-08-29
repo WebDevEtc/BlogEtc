@@ -79,8 +79,8 @@ class CreateBlogEtcPostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blog_etc_posts');
         Schema::dropIfExists('blog_etc_post_categories');
         Schema::dropIfExists('blog_etc_categories');
+        Schema::dropIfExists('blog_etc_posts');
     }
 }
