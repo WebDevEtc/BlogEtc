@@ -5,6 +5,8 @@ namespace WebDevEtc\BlogEtc\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
+use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Requests\FeedRequest;
@@ -16,6 +18,7 @@ use WebDevEtc\BlogEtc\Requests\FeedRequest;
 class BlogEtcReaderController extends Controller
 {
 
+    use UsesCaptcha;
 
     /**
      * Show blog posts
@@ -97,7 +100,7 @@ class BlogEtcReaderController extends Controller
                     $post->url(),
                     $post->posted_at,
                     $post->subtitle,
-                    strip_tags($post->html) // shows from full post - todo: handle this better.
+                    strip_tags(e($post->html)) // shows from full post - todo: handle this better.
                 );
             }
 
@@ -143,7 +146,11 @@ class BlogEtcReaderController extends Controller
             ->get();
 
 
+        /** @var CaptchaAbstract $captcha */
         $captcha = $this->getCaptchaObject();
+        if ($captcha) {
+            $captcha->runCaptchaBeforeShowingPosts($request, $blog_post);
+        }
 
 
         return view("blogetc::single_post")
@@ -152,26 +159,5 @@ class BlogEtcReaderController extends Controller
             ->withCaptcha($captcha);
     }
 
-    /**
-     * @return null|\WebDevEtc\BlogEtc\Interfaces\CaptchaInterface
-     */
-    private function getCaptchaObject()
-    {
-
-        if (!config("blogetc.captcha.captcha_enabled")) {
-
-            return null;
-        }
-
-
-        // else: captcha is enabled
-
-        /** @var string $captcha_class */
-        $captcha_class = config("blogetc.captcha.captcha_type");
-        /** @var \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface $captcha */
-        $captcha = new $captcha_class;
-
-        return $captcha;
-    }
 
 }

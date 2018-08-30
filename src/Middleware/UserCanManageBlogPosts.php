@@ -19,9 +19,9 @@ class UserCanManageBlogPosts
      */
     public function handle($request, Closure $next)
     {
-        if (\Auth::check() && \Auth::user()->canManageBlogEtcPosts()) {
-            return $next($request);
+        if (!\Auth::check() ||  !\Auth::user()->canManageBlogEtcPosts()) {
+            abort(401,"User not authorised to manage blog posts");
         }
-        abort(401,"User not authorised to manage blog posts");
+        return $next($request);
     }
 }

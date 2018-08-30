@@ -23,4 +23,21 @@ interface CaptchaInterface
      * @return array
      */
     public function rules();
+
+
+//    // optional methods, which are run if method_exists($captcha,'...'):
+//    //  do a search in the project to see how they are used.
+
+//    /**
+//     * executed when viewing single post
+//     * @return void
+//     */
+//    public function runCaptchaBeforeShowingPosts();
+//
+//    /**
+//     * executed when posting new comment
+//     * @return void
+//     */
+//    public function runCaptchaBeforeAddingComment();
+
 }

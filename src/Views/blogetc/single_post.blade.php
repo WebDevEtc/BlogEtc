@@ -8,7 +8,7 @@
 
 
     @if(config("blogetc.comments.type_of_comments_to_show","built_in") !== 'disabled')
-        <div class="container">
+        <div class="container" id='maincommentscontainer'>
             <div>
                 <hr>
                 <h2 class='text-center' id='blogetccomments'>Comments</h2>

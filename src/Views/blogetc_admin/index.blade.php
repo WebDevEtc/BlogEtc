@@ -2,7 +2,7 @@
 @section("content")
 
 
-    <h5>Admin - manage posts</h5>
+    <h5>Admin - Manage Blog Posts</h5>
 
     @forelse($posts as $post)
         <div class="card m-4" style="">
@@ -23,12 +23,7 @@
                     <dt class="">Is published?</dt>
                     <dd class="">
 
-                        @if($post->is_published)
-                            Yes
-                        @else
-                            <span class="border border-danger rounded p-1">No</span>
-
-                        @endif
+                        {!!($post->is_published ? "Yes" : '<span class="border border-danger rounded p-1">No</span>')!!}
 
                     </dd>
 

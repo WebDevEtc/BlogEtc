@@ -17,7 +17,7 @@ class CreateBlogEtcPostsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger("user_id")->index()->nullable();
             $table->dateTime("posted_at")->index()->nullable()->comment("Public posted at time");
-            $table->boolean("is_published")->default(true);;
+            $table->boolean("is_published")->default(true);
             $table->string("title")->nullable()->default("New blog post");
             $table->string("subtitle")->nullable()->default("");
             $table->mediumText("post_body")->nullable();
@@ -37,8 +37,9 @@ class CreateBlogEtcPostsTable extends Migration
 
             $table->string("category_name")->nullable();
             $table->string("slug")->unique();
+            $table->mediumText("category_description")->nullable();
 
-            $table->unsignedInteger("created_by")->nullable()->index();
+            $table->unsignedInteger("created_by")->nullable()->index()->comment("user id");
 
             $table->timestamps();
         });
@@ -47,8 +48,8 @@ class CreateBlogEtcPostsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger("blog_etc_post_id")->index();
             $table->foreign('blog_etc_post_id')->references('id')->on('blog_etc_posts')->onDelete("cascade");
-            $table->unsignedInteger("blog_etc_category_id")->index()->onDelete("cascade");
-            $table->foreign('blog_etc_category_id')->references('id')->on('blog_etc_categories');
+            $table->unsignedInteger("blog_etc_category_id")->index();
+            $table->foreign('blog_etc_category_id')->references('id')->on('blog_etc_categories')->onDelete("cascade");
         });
 
 
@@ -56,13 +57,13 @@ class CreateBlogEtcPostsTable extends Migration
             $table->increments('id');
 
             $table->unsignedInteger("blog_etc_post_id")->index();
-            $table->foreign('blog_etc_post_id')->references('id')->on('blog_etc_posts')->onDelete("cascade");;
-            $table->unsignedInteger("user_id")->nullable()->index();
+            $table->foreign('blog_etc_post_id')->references('id')->on('blog_etc_posts')->onDelete("cascade");
+            $table->unsignedInteger("user_id")->nullable()->index()->comment("if user was logged in");
 
-            $table->string("ip")->nullable();
-            $table->string("author_name")->nullable();
+            $table->string("ip")->nullable()->comment("if enabled in the config file");
+            $table->string("author_name")->nullable()->comment("if not logged in");
 
-            $table->text("comment");
+            $table->text("comment")->comment("the comment body");
 
             $table->boolean("approved")->default(true);
 

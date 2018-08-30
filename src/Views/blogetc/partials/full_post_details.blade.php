@@ -7,21 +7,22 @@
                 Post</a>
         @endif
 
-        <h5 class='card-title'><a href='{{$post->url()}}'>{{$post->title}}</a></h5>
+        <h2 class='card-title'>{{$post->title}}</h2>
         <h5 class='card-subtitle mb-2 text-muted'>{{$post->subtitle}}</h5>
 
 
-        <?=$post->image_tag("medium", 'd-block mx-auto'); ?>
+        <?=$post->image_tag("medium", false, 'd-block mx-auto'); ?>
 
         <p class="card-text">
+            {!! $post->post_body_output() !!}
 
-            @if($post->use_view_file)
-                @include("blogetc::partials.use_view_file")
-            @else
-                {{--echos out the post_body as HTML, unescaped! --}}
-                {!! $post->post_body !!}
-            @endif
-
+            {{--@if(config("blogetc.use_custom_view_files")  && $post->use_view_file)--}}
+            {{--                                // use a custom blade file for the output of those blog post--}}
+            {{--   @include("blogetc::partials.use_view_file")--}}
+            {{--@else--}}
+            {{--   {!! $post->post_body !!}        // unsafe, echoing the plain html/js--}}
+            {{--   {{ $post->post_body }}          // for safe escaping --}}
+            {{--@endif--}}
         </p>
 
         <hr/>

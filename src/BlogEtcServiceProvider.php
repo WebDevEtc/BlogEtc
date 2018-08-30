@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc;
 
-use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\ServiceProvider;
 
 class BlogEtcServiceProvider extends ServiceProvider
@@ -26,6 +25,13 @@ class BlogEtcServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/Config/blogetc.php' => config_path('blogetc.php'),
         ]);
+
+
+        $this->publishes([
+            __DIR__ . '/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
+        ]);
+
+
     }
 
     /**

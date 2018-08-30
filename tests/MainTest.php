@@ -22,6 +22,11 @@ class MainTest extends \Tests\TestCase
         blogetc.view_category               no - but this is basically blogetc.index
         blogetc.single                      YES
         blogetc.comments.add_new_comment    YES - tested multiple times with/without basic captcha on/off/correct/incorrect.
+                                                Also tested with diff configs for comment form:
+                                                    disabled
+                                                    built_in
+                                                    disqus
+                                                    custom
 
     /blog_admin/...
         blogetc.admin.index                 YES
@@ -55,14 +60,14 @@ class MainTest extends \Tests\TestCase
 
     public function testFilesArePresent()
     {
-        $this->assertTrue(file_exists(config_path("blogetc.php")), "/config/blogetc.php should exist - currently no file with that filename is found");
+        $this->assertFileExists(config_path("blogetc.php"), "/config/blogetc.php should exist - currently no file with that filename is found");
         $this->assertTrue(is_array(include(config_path("blogetc.php"))), "/config/blogetc.php should exist - currently no file with that filename is found");
     }
 
     public function testImageSizesAreSane()
     {
 
-        $this->assertTrue(count(\WebDevEtc\BlogEtc\Helpers::image_sizes()) == 3);
+        $this->assertEquals(count(\WebDevEtc\BlogEtc\Helpers::image_sizes()), 3);
 
         foreach (\WebDevEtc\BlogEtc\Helpers::image_sizes() as $image_key => $image_info) {
 
@@ -70,13 +75,16 @@ class MainTest extends \Tests\TestCase
             $this->assertArrayHasKey("h", $image_info);
             $this->assertArrayHasKey("name", $image_info);
             $this->assertArrayHasKey("enabled", $image_info);
+            $this->assertArrayHasKey("basic_key", $image_info);
 
             $this->assertTrue(is_bool($image_info['enabled']));
             $this->assertTrue(is_int($image_info['w']));
             $this->assertTrue(is_int($image_info['h']));
             $this->assertTrue(is_string($image_info['name']));
+            $this->assertTrue(is_string($image_info['basic_key']));
             $this->assertTrue(is_string($image_key));
-            $this->assertTrue(count($image_info) == 4);
+
+            $this->assertEquals(count($image_info), 5);
 
 
         }
@@ -101,6 +109,7 @@ class MainTest extends \Tests\TestCase
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
 
+        \Auth::logout();
         // without a logged in user, should give error
         $response = $this->get($admin_panel_url);
         $response->assertStatus(401);
@@ -110,6 +119,9 @@ class MainTest extends \Tests\TestCase
 
 
         $user = $this->create_admin_user();
+
+        $response = $this->get($admin_panel_url);
+        $response->assertStatus(200);
 
         // check user can see admin area:
         $this->assertTrue($user->canManageBlogEtcPosts());
@@ -129,6 +141,7 @@ class MainTest extends \Tests\TestCase
 
         $this->assertTrue($user->canManageBlogEtcPosts());
 
+
         $new_object_vals = $this->generate_basic_blog_post_with_random_data();
 
         // to verify this was added to database. Use a different variable, so we can add things (like _token) and still be able to assertDatabaseHas later.
@@ -136,12 +149,15 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+
+        $response->assertSessionHasNoErrors();
+//        dump($response);
 
 
         $response->assertStatus(302); // redirect
@@ -152,7 +168,6 @@ class MainTest extends \Tests\TestCase
 
     public function testCanCreatePost()
     {
-        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
 
 
         $user = $this->create_admin_user();
@@ -168,12 +183,12 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
 
         $new_object_vals['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+        $response->assertSessionHasNoErrors();
 
 
         $response->assertStatus(302); // redirect
@@ -185,7 +200,6 @@ class MainTest extends \Tests\TestCase
 
     public function testCanCreatePostThenEditIt()
     {
-        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
 
 
         $user = $this->create_admin_user();
@@ -201,12 +215,13 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
 
@@ -226,8 +241,6 @@ class MainTest extends \Tests\TestCase
     public function testCreatePostThenCheckIsViewableToPublic()
     {
 
-        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
-
 
         $user = $this->create_admin_user();
 
@@ -244,7 +257,7 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
@@ -262,6 +275,7 @@ class MainTest extends \Tests\TestCase
         $response->assertDontSee($new_object_vals['slug']);
 
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+        $response->assertSessionHasNoErrors();
 
 
         $response->assertStatus(302); // redirect
@@ -303,6 +317,7 @@ class MainTest extends \Tests\TestCase
         $new_object_vals['is_published'] = false;
 
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+        $response->assertSessionHasNoErrors();
 
 
         $response->assertStatus(302); // redirect
@@ -337,6 +352,7 @@ class MainTest extends \Tests\TestCase
         $new_object_vals['posted_at'] = \Carbon\Carbon::now()->addMonths(12);
 
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+        $response->assertSessionHasNoErrors();
 
 
         $response->assertStatus(302); // redirect
@@ -361,11 +377,9 @@ class MainTest extends \Tests\TestCase
     }
 
 
-
     public function testCreatePostThenCheckCanCreateCommentThenApproveCommentWithBasicCaptchaEnabledAndWrongAnswer()
     {
 
-        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
 
         \Config::set('blogetc.comments.auto_approve_comments', false);
         \Config::set('blogetc.captcha.captcha_enabled', true);
@@ -374,7 +388,7 @@ class MainTest extends \Tests\TestCase
         \Config::set('blogetc.captcha.basic_question', "a test question");
         \Config::set('blogetc.captcha.basic_answers', "answer1,answer2");
 
-        $user = $this->create_admin_user();
+        $this->create_admin_user();
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
         $new_object_vals = $this->generate_basic_blog_post_with_random_data();
@@ -384,11 +398,12 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+        $response->assertSessionHasNoErrors();
 
 
         $response->assertStatus(302); // redirect
@@ -408,35 +423,121 @@ class MainTest extends \Tests\TestCase
         $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
         $response->assertStatus(302);
 
-        $this->assertDatabaseMissing('blog_etc_comments', [ 'author_name' => $comment_detail['author_name']]);
-
+        $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
 
 
         $comment_detail = [
             '_token' => csrf_token(),
             'author_name' => str_random(),
             'comment' => str_random(),
-           // << NO CAPTCHA FIELD
+            // << NO CAPTCHA FIELD
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
         $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
         $response->assertStatus(302);
 
-        $this->assertDatabaseMissing('blog_etc_comments', [ 'author_name' => $comment_detail['author_name']]);
-
-
+        $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
 
 
     }
 
 
+    public function testCreatePostThenSetCommentsToDisabledAndCheckNoneShow()
+    {
 
+
+        \Config::set('blogetc.comments.type_of_comments_to_show', "disabled");
+
+        $this->create_admin_user();
+
+        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
+        $new_object_vals = $this->generate_basic_blog_post_with_random_data();
+
+        $newblogpost = new \WebDevEtc\BlogEtc\Models\BlogEtcPost;
+
+        $newblogpost->title=__METHOD__ . " " . time();
+
+
+        $new_object_vals['is_published'] = 1;
+        $new_object_vals['posted_at'] = \Carbon\Carbon::now();
+        foreach($new_object_vals as $k=>$v) {
+            $newblogpost->$k=$v;
+        }
+        $newblogpost->save();
+
+
+        $response = $this->get($newblogpost->url());
+        $response->assertSessionHasNoErrors();
+        $response->assertStatus(200); // redirect
+        $response->assertDontSee("var disqus_config");
+        $response->assertDontSee("Add a comment");
+        $response->assertDontSee("Captcha");
+        $response->assertDontSee("maincommentscontainer");
+        $response->assertDontSee("Comments");
+        $response->assertDontSee("You must customise this by creating a file");
+    }
+    public function testCreatePostThenSetCommentsToDisqusAndCheckDisqusJSIsShown()
+    {
+        \Config::set('blogetc.comments.type_of_comments_to_show', "disqus");
+
+        $this->create_admin_user();
+
+        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
+        $new_object_vals = $this->generate_basic_blog_post_with_random_data();
+
+        $newblogpost = new \WebDevEtc\BlogEtc\Models\BlogEtcPost;
+
+        $newblogpost->title=__METHOD__ . " " . time();
+
+
+        $new_object_vals['is_published'] = 1;
+        $new_object_vals['posted_at'] = \Carbon\Carbon::now();
+        foreach($new_object_vals as $k=>$v) {
+            $newblogpost->$k=$v;
+        }
+        $newblogpost->save();
+
+
+        $response = $this->get($newblogpost->url());
+        $response->assertSessionHasNoErrors();
+        $response->assertStatus(200); // redirect
+        $response->assertSee("var disqus_config");
+    }
+
+    public function testCreatePostThenSetCommentsToCustomAndCheckCustomErrorShows()
+    {
+
+
+        \Config::set('blogetc.comments.type_of_comments_to_show', "custom");
+
+        $this->create_admin_user();
+
+        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
+        $new_object_vals = $this->generate_basic_blog_post_with_random_data();
+
+        $newblogpost = new \WebDevEtc\BlogEtc\Models\BlogEtcPost;
+
+        $newblogpost->title=__METHOD__ . " " . time();
+
+
+        $new_object_vals['is_published'] = 1;
+        $new_object_vals['posted_at'] = \Carbon\Carbon::now();
+        foreach($new_object_vals as $k=>$v) {
+            $newblogpost->$k=$v;
+        }
+        $newblogpost->save();
+
+
+        $response = $this->get($newblogpost->url());
+        $response->assertSessionHasNoErrors();
+        $response->assertStatus(200); // redirect
+        $response->assertSee("You must customise this by creating a file","config type of comments is set to show 'custom', which should (by default) show an error messaging telling user to customise the custom view file. If this is run on a site with its own file defined this will show an error (but it will not be a real error).");
+    }
 
 
     public function testCreatePostThenCheckCanCreateCommentThenApproveCommentWithBasicCaptchaEnabled()
     {
 
-        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
 
         \Config::set('blogetc.comments.auto_approve_comments', false);
         \Config::set('blogetc.captcha.captcha_enabled', true);
@@ -445,7 +546,7 @@ class MainTest extends \Tests\TestCase
         \Config::set('blogetc.captcha.basic_question', "a test question");
         \Config::set('blogetc.captcha.basic_answers', "answer1,answer2");
 
-        $user = $this->create_admin_user();
+        $this->create_admin_user();
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
         $new_object_vals = $this->generate_basic_blog_post_with_random_data();
@@ -455,7 +556,7 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
@@ -502,16 +603,12 @@ class MainTest extends \Tests\TestCase
     }
 
 
-
     public function testCreatePostThenCheckCanCreateCommentThenApproveComment()
     {
-
-        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
-
         \Config::set('blogetc.comments.auto_approve_comments', false);
         \Config::set('blogetc.captcha.captcha_enabled', false);
 
-        $user = $this->create_admin_user();
+        $this->create_admin_user();
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
         $new_object_vals = $this->generate_basic_blog_post_with_random_data();
@@ -521,7 +618,7 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
@@ -543,6 +640,7 @@ class MainTest extends \Tests\TestCase
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
         $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
+
         $response->assertStatus(200);
 
         \Config::set('blogetc.captcha.auto_approve_comments', false);
@@ -573,7 +671,7 @@ class MainTest extends \Tests\TestCase
         \Config::set('blogetc.comments.auto_approve_comments', false);
         \Config::set('blogetc.captcha.captcha_enabled', false);
 
-        $user = $this->create_admin_user();
+        $this->create_admin_user();
 
         $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
         $new_object_vals = $this->generate_basic_blog_post_with_random_data();
@@ -583,7 +681,7 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
@@ -602,6 +700,7 @@ class MainTest extends \Tests\TestCase
             ];
             $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
             $response = $this->post(config("blogetc.blog_prefix", "blog") . "/save_comment/" . $new_object_vals['slug'], $comment_detail);
+            $response->assertSessionHasNoErrors();
             $response->assertStatus(200);
 
             $this->assertDatabaseHas('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
@@ -634,7 +733,6 @@ class MainTest extends \Tests\TestCase
 
     public function testCanCreateThenDeletePost()
     {
-        $admin_panel_url = config("blogetc.admin_prefix", "blog_admin");
 
 
         $user = $this->create_admin_user();
@@ -650,12 +748,13 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
         $response = $this->post($admin_panel_url . "/add_post", $new_object_vals);
+        $response->assertSessionHasNoErrors();
 
 
         $response->assertStatus(302); // redirect
@@ -687,6 +786,7 @@ class MainTest extends \Tests\TestCase
         $new_cat_vals['_token'] = csrf_token();
         $this->assertDatabaseMissing('blog_etc_categories', $search_for_new_cat);
         $response = $this->post($admin_panel_url . "/categories/add_category", $new_cat_vals);
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
 
@@ -714,6 +814,7 @@ class MainTest extends \Tests\TestCase
         $new_cat_vals['_token'] = csrf_token();
         $this->assertDatabaseMissing('blog_etc_categories', $search_for_new_cat);
         $response = $this->post($admin_panel_url . "/categories/add_category", $new_cat_vals);
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
 
@@ -766,6 +867,7 @@ class MainTest extends \Tests\TestCase
         $new_cat_vals['_token'] = csrf_token();
         $this->assertDatabaseMissing('blog_etc_categories', $search_for_new_cat);
         $response = $this->post($admin_panel_url . "/categories/add_category", $new_cat_vals);
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
 
@@ -838,7 +940,6 @@ class MainTest extends \Tests\TestCase
     {
         $user = $this->create_admin_user();
 
-
         $this->assertTrue($user->canManageBlogEtcPosts());
 
         $new_object_vals = $this->generate_basic_blog_post_with_random_data();
@@ -848,12 +949,11 @@ class MainTest extends \Tests\TestCase
 
         $new_object_vals['is_published'] = 1;
         $new_object_vals['posted_at'] = \Carbon\Carbon::now();
-        $new_object_vals['use_view_file'] = null;
+//        $new_object_vals['use_view_file'] = "";
 
         $new_object_vals['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
-
 
         // check we don't see it at moment
         $response = $this->get(config("blogetc.blog_prefix", "blog"));
@@ -861,6 +961,20 @@ class MainTest extends \Tests\TestCase
         return array($new_object_vals, $search_for_obj);
     }
 
+    public function testUserModelHasCanManageBlogEtcPostsMethod()
+    {
+        $u = new \App\User();
+        $this->assertTrue(method_exists($u,"canManageBlogEtcPosts"),"canManageBlogEtcPosts() must be added to User model. Please see WebDevEtc BlogEtc docs for details. It should return true ONLY for the admin users");
+    }
+    public function testUserModelCanManageBlogEtcPostsMethodDoesntAlwaysReturnTrue()
+    {
+        $u = new \App\User();
+
+        $u->id = 9999999; // in case the logic on canManageBlogEtcPosts() checks for a low ID
+        $u->email = str_random(); // in case the logic looks for a certain email or something.
+
+        $this->assertFalse($u->canManageBlogEtcPosts(), "User::canManageBlogEtcPosts() returns true, but it PROBABLY should return false! Otherwise every single user on your site has access to the blog admin panel! This might not be an error though, if your system doesnt allow public registration. But you should look into this.");
+    }
 
 
 }

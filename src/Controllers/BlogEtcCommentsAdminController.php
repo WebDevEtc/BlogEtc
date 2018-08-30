@@ -34,7 +34,19 @@ class BlogEtcCommentsAdminController extends Controller
      */
     public function index(Request $request)
     {
-        return view("blogetc_admin::comments.index")->withComments(BlogEtcComment::orderBy("created_at", "desc")->with("post")->paginate(100));
+        $comments = BlogEtcComment::orderBy("created_at", "desc")
+            ->with("post");
+
+        if ($request->get("waiting_for_approval")) {
+
+            $comments->where("approved",false);
+        }
+
+
+            $comments=$comments->paginate(100);
+        return view("blogetc_admin::comments.index")
+            ->withComments($comments
+                );
     }
 
 

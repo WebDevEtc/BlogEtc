@@ -72,7 +72,14 @@
 
 
 <div class="form-group">
-    <label for="blog_post_body">Post Body (HTML)</label>
+    <label for="blog_post_body">Post Body
+        @if(config("blogetc.echo_html"))
+            (HTML)
+        @else
+         (Html will be escaped)
+        @endif
+
+    </label>
     <textarea style='min-height:600px;' class="form-control" id="blog_post_body" aria-describedby="blog_post_body_help"
               name='post_body'>{{old("post_body",$post->post_body)}}</textarea>
 
@@ -109,45 +116,76 @@
 
 @if(config("blogetc.image_upload_enabled",true))
 
-    @foreach(\WebDevEtc\BlogEtc\Helpers::image_sizes() as $size_key =>$size_info)
-        <div class="form-group">
-            <label for="blog_{{$size_key}}">Image - {{$size_info['name']}} (optional)</label>
-            <input class="form-control" type="file" name="{{$size_key}}" id="blog_{{$size_key}}"
-                   aria-describedby="blog_{{$size_key}}_help">
-
-            <small id="blog_{{$size_key}}_help" class="form-text text-muted">Upload {{$size_info['name']}} image -
-                <code>{{$size_info['w']}}&times;{{$size_info['h']}}px</code> - it will
-                get automatically resized if larger
-            </small>
-        </div>
-    @endforeach
+    <div class='bg-white pt-4 px-4 pb-0 my-2 mb-4 rounded border'>
+        <style>
+            .image_upload_other_sizes {
+                display: none;
+            }
+        </style>
+        <h4>Featured Images</h4>
 
 
+        @foreach(\WebDevEtc\BlogEtc\Helpers::image_sizes() as $size_key =>$size_info)
+            <div class="form-group mb-4p-2
+        @if($loop->iteration>1)
+                    image_upload_other_sizes
+            @endif
+                    ">
+                @if($post->has_image($size_info['basic_key']))
+                    <div style='max-width:55px;  ' class='float-right m-2'>
+                        <a target='_blank' href='{{$post->image_url($size_info['basic_key'])}}'>
+                            <?=$post->image_tag($size_info['basic_key'], false, 'd-block mx-auto img-fluid '); ?>
+                        </a>
+                    </div>
+                @endif
+
+                <label for="blog_{{$size_key}}">Image - {{$size_info['name']}} (optional)</label>
+                <small id="blog_{{$size_key}}_help" class="form-text text-muted">Upload {{$size_info['name']}} image -
+                    <code>{{$size_info['w']}}&times;{{$size_info['h']}}px</code> - it will
+                    get automatically resized if larger
+                </small>
+                <input class="form-control" type="file" name="{{$size_key}}" id="blog_{{$size_key}}"
+                       aria-describedby="blog_{{$size_key}}_help">
+
+
+            </div>
+        @endforeach
+
+        <p>
+            By default it will resize for all images based on the first image. If you want to select specific images for
+            each size, please click: <span onclick='$(this).parent().hide(); $(".image_upload_other_sizes").slideDown()'
+                                           class='btn btn-light btn-sm'>Show other sizes</span>
+        </p>
+
+    </div>
 @else
     <div class='alert alert-warning'>Image uploads were disabled in blogetc.php config</div>
 @endif
 
-<h4>Categories:</h4>
 
-<div class='row'>
+<div class='bg-white pt-4 px-4 pb-0 my-2 mb-4 rounded border'>
+    <h4>Categories:</h4>
+    <div class='row'>
 
-    @forelse(\WebDevEtc\BlogEtc\Models\BlogEtcCategory::orderBy("category_name","asc")->limit(1000)->get() as $category)
-        <div class="form-check col-sm-6">
-            <input class="" type="checkbox" value="1"
-                   @if(old("category.".$category->id, $post->categories->contains($category->id))) checked='checked'
-                   @endif name='category[{{$category->id}}]' id="category_check{{$category->id}}">
-            <label class="form-check-label" for="category_check{{$category->id}}">
-                {{$category->category_name}}
-            </label>
+        @forelse(\WebDevEtc\BlogEtc\Models\BlogEtcCategory::orderBy("category_name","asc")->limit(1000)->get() as $category)
+            <div class="form-check col-sm-6">
+                <input class="" type="checkbox" value="1"
+                       @if(old("category.".$category->id, $post->categories->contains($category->id))) checked='checked'
+                       @endif name='category[{{$category->id}}]' id="category_check{{$category->id}}">
+                <label class="form-check-label" for="category_check{{$category->id}}">
+                    {{$category->category_name}}
+                </label>
+            </div>
+        @empty
+            <div class='col-md-12'>
+                No categories
+            </div>
+        @endforelse
+
+        <div class='col-md-12 my-3 text-center'>
+
+            <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'>Add new categories
+                    here</a></em>
         </div>
-    @empty
-        <div class='col-md-12'>
-            No categories
-        </div>
-    @endforelse
-
-    <div class='col-md-12 my-3 text-center'>
-
-        <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'>Add new categories here</a></em>
     </div>
 </div>

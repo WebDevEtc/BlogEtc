@@ -9,9 +9,7 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
 
 ## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
 
-[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
-
-Also see [Packagist](https://packagist.org/packages/webdevetc/blogetc)
+[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) • [Packagist](https://packagist.org/packages/webdevetc/blogetc)
 
 ## Features
 
@@ -112,12 +110,14 @@ There is a built in captcha (anti spam comment) system built in, which will be e
 This is a list of features or things that I want to eventually get round to adding
 
 - Allow users to upload images for the blog post body (at the moment only featured images (1 per size) can be added to a blog post.
-- Built in WYSIWYG editor for the blog posts
+- Allow users to remove a featured image from a blog post.
 - Option to use HTMLPurifier to sanatise output.
-- Better options for assigning post authors (currently it just assigns the currently logged in user)
+- Better options for assigning post authors (currently it just assigns the currently logged in user). However, if site has 10,000+ users do we really want an UI interface for this? The alternative is to add something like a a is_admin field to the `users` table and only show admin users.
 - Possibly add tags (we already have categories) but I am not sure how useful they really are, given that we already have categories.
-- Pagination for comments on view single post?
+- Pagination for comments on view single post? At the moment we limit it to a high number (default in config is 5000).
 - RSS feed: shows from full (stripped tags) ->html of blog post (although has a setTextLimit() on it) - need to trim this, and if it uses custom view files then it should render that (without html).
+- Email notification to admin when new comment is added
+
 
 
 
@@ -125,6 +125,7 @@ This is a list of features or things that I want to eventually get round to addi
 
 
 
+- 1.2 - added WYSIWYG, few smaller changes
 - 1.1.1 - added basic captcha
 - 1.0.5 - composer.json changes.
 - 1.0.2 - First release
@@ -135,7 +136,6 @@ This is a list of features or things that I want to eventually get round to addi
 ## Issues, support, bug reports, security issues
 
 Please contact me on the contact from on [WebDev Etc](https://webdevetc.com/) or on [twitter](https://twitter.com/web_dev_etc/) and I'll get back to you asap.
-
 
 
 

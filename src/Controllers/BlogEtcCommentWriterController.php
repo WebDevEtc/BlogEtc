@@ -3,8 +3,9 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Auth;
+use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
+use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Events\CommentAdded;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
@@ -17,6 +18,8 @@ use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;
 class BlogEtcCommentWriterController extends Controller
 {
 
+    use UsesCaptcha;
+
     /**
      * Let a guest (or logged in user) submit a new comment for a blog post
      *
@@ -28,12 +31,20 @@ class BlogEtcCommentWriterController extends Controller
     public function addNewComment(AddNewCommentRequest $request, $blog_post_slug)
     {
 
-        if (config("blogetc.comments.type_of_comments_to_show","built_in") !== 'built_in') {
-            throw new \Exception("Built in comments are disabled");
+        if (config("blogetc.comments.type_of_comments_to_show", "built_in") !== 'built_in') {
+            throw new \RuntimeException("Built in comments are disabled");
         }
 
         $blog_post = BlogEtcPost::where("slug", $blog_post_slug)
             ->firstOrFail();
+
+
+        /** @var CaptchaAbstract $captcha */
+        $captcha = $this->getCaptchaObject();
+        if ($captcha) {
+            $captcha->runCaptchaBeforeAddingComment($request, $blog_post);
+        }
+
 
         $new_comment = new BlogEtcComment($request->all());
 
@@ -41,10 +52,8 @@ class BlogEtcCommentWriterController extends Controller
             $new_comment->ip = $request->ip();
         }
 
-        if (config("blogetc.comments.save_user_id_if_logged_in", true)) {
-            if (\Auth::check()) {
-                $new_comment->user_id = \Auth::user()->id;
-            }
+        if (config("blogetc.comments.save_user_id_if_logged_in", true) && Auth::check()) {
+            $new_comment->user_id = Auth::user()->id;
         }
 
         $new_comment->approved = config("blogetc.comments.auto_approve_comments", true) ? true : false;
@@ -53,7 +62,11 @@ class BlogEtcCommentWriterController extends Controller
 
         event(new CommentAdded($blog_post, $new_comment));
 
-        return view("blogetc::saved_comment", ['blog_post' => $blog_post, 'new_comment' => $new_comment]);
+        return view("blogetc::saved_comment", [
+            'captcha' => $captcha,
+            'blog_post' => $blog_post,
+            'new_comment' => $new_comment
+        ]);
 
     }
 

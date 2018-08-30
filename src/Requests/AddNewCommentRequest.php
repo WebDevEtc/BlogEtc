@@ -9,13 +9,12 @@ class AddNewCommentRequest extends BaseRequest
     public function authorize()
     {
 
-        if (config("blogetc.comments.type_of_comments_to_show") !== 'disabled') {
+        if (config("blogetc.comments.type_of_comments_to_show") === 'built_in') {
             // anyone is allowed to submit a comment, to return true always.
             return true;
         }
 
-
-        //comments are disabled.
+        //comments are disabled so just return false to disallow everyone.
         return false;
     }
 
@@ -44,6 +43,7 @@ class AddNewCommentRequest extends BaseRequest
         }
 
 
+        // is captcha enabled? If so, get the rules from its class.
        if(config("blogetc.captcha.captcha_enabled") ) {
            /** @var string $captcha_class */
            $captcha_class = config("blogetc.captcha.captcha_type");
@@ -54,6 +54,13 @@ class AddNewCommentRequest extends BaseRequest
            $return[$captcha->captcha_field_name()] = $captcha->rules();
        }
 
+
+        // in case you need to implement something custom, you can use this...
+        if (config("blogetc.comments.rules") && is_callable(config("blogetc.comments.rules"))) {
+            /** @var callable $func */
+            $func = config('blogetc.comments.rules');
+            $return = $func($return);
+        }
 
 
         return $return;

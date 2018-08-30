@@ -32,9 +32,9 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
     {
 
         $return = [
-            //
-            'category_name' => ['required', 'string', 'min:1', 'max:100'],
-            'slug' => ['required', 'alpha_dash']
+            'category_name' => ['required', 'string', 'min:1', 'max:200'],
+            'slug' => ['required', 'alpha_dash','max:100','min:1'],
+            'category_description' => ['nullable','string','min:1','max:5000'],
         ];
         return $return;
     }
@@ -47,7 +47,6 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
     protected function BaseBlogPostRules()
     {
         $return = [
-            //
             'posted_at' => ['nullable',
 
                 function ($attribute, $value, $fail) {
@@ -62,21 +61,31 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
             ],
             'title' => ['required', 'string', 'min:1', 'max:255'],
             'subtitle' => ['nullable', 'string', 'min:1', 'max:255'],
-
-            'post_body' => ['required_without:use_view_file', 'max:20000'],
-
+            'post_body' => ['required_without:use_view_file', 'max:2000000'],
             'meta_desc' => ['nullable', 'string', 'min:1', 'max:1000'],
-
             'slug' => [
                 'nullable', 'string', 'min:1', 'max:150', 'alpha_dash', // this field should have some extra, which is done in the subclasses.
             ],
-
             'categories' => ['nullable', 'array'],
-
-            'use_view_file' => ['nullable', 'string', 'alpha_num', 'min:1', 'max:75',],
         ];
 
-        foreach ((array) config('blogetc.image_sizes') as $size => $image_detail) {
+        if (config('blogetc.use_custom_view_files')) {
+            $return['use_view_file'] = ['nullable', 'string', 'alpha_num', 'min:1', 'max:75',];
+        } else {
+            // use_view_file is disabled, so give an empty if anything is submitted via this function:
+            $return['use_view_file'] = [
+                'string',
+                function ($attribute, $value, $fail) {
+                    if ($value) {
+                        return $fail("The use of custom view files is not enabled for this site, so you cannot submit a value for it");
+                    }
+                },
+
+            ];
+
+        }
+
+        foreach ((array)config('blogetc.image_sizes') as $size => $image_detail) {
 
             if ($image_detail['enabled']) {
                 $return[$size] = [

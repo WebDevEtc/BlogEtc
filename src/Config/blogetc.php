@@ -4,22 +4,47 @@
 
 return [
 
-    'include_default_routes' => true, // set to false to not include routes.php for BlogEtcReaderController related routes
-//    'include_default_controller' => true, // set to false to not auto include the BlogEtcReaderController controller
-//    'include_default_admin_controller' => true, // set to false to not auto include the BlogEtcAdminController
+    'include_default_routes' => true, // set to false to not include routes.php for BlogEtcReaderController and admin related routes. Default: true. If you disable this, you will have to manually copy over the data from routes.php and add it to your web.php.
 
-    'blog_prefix' => "blog", // used in routes.php. If you want to your http://yoursite.com/latest-news (or anything else), then enter that here
-    'admin_prefix' => "blog_admin", // similar to above, but used for the admin panel for the blog
+    'blog_prefix' => "blog", // used in routes.php. If you want to your http://yoursite.com/latest-news (or anything else), then enter that here. Default: blog
+    'admin_prefix' => "blog_admin", // similar to above, but used for the admin panel for the blog. Default: blog_admin
 
-    'use_custom_view_files' => true, // set to false to disable the use of being able to make blog posts include a view from resources/views/custom_blog_posts/*.blade.php
+    'use_custom_view_files' => false, // set to false to disable the use of being able to make blog posts include a view from resources/views/custom_blog_posts/*.blade.php. Default: false. Set to true to use this feature. Default: false
 
-    'per_page' => 10, // how many posts to show per page on the blog index page
+    'per_page' => 10, // how many posts to show per page on the blog index page. Default: 10
 
 
     'image_upload_enabled' => true, // true or false, if image uploading is allowed.
     'blog_upload_dir' => "blog_images", // this should be in public_path() (i.e. /public/blog_images), and should be writable
 
-    'image_quality' => 80,
+
+
+
+    //if true it will echo out  (with {!! !!}) the blog post with NO escaping! This is not safe if you don't trust your blog post writers! Understand the risks by leaving this to true
+    // (you should disable this (set to false) if you don't trust your blog writers).
+    // This will apply to all posts (past and future).
+    // Do not set to true if you don't trust your blog post writers. They could put in any HTML or JS code.
+    'echo_html' => true, // default true
+
+    // If strip_html is true, it'll run strip_tags() before escaping and echoing.
+    // It doesn't add any security advantage, but avoids any html tags appearing if you have disabled echoing plain html.
+    //  Only works if echo_html is false.
+    'strip_html' => false, // Default: false.
+
+    //  Only works if echo_html if false. If auto_nl2br is true, the output will be run through nl2br after escaping.
+    'auto_nl2br' => true, // Default: true.
+
+    // use the ckeditor WYWIWYG (rich text editor) for formatting your HTML blog posts.
+    // This will load scripts from https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js
+    // echo_html must be set to true for this to have an effect.
+    'use_wysiwyg' => true, // Default: true
+
+
+
+
+
+
+    'image_quality' => 80, // what image quality to use when saving images. higher = better + bigger sizes. Around 80 is normal.
 
 
     'image_sizes' => [
@@ -73,11 +98,24 @@ return [
 
     'comments' => [
 
-        'type_of_comments_to_show' => 'built_in', // options: 'built_in' (default, uses own database for comments), 'disqus' (uses https://disqus.com/, please enter further config options below), 'disabled' (turn comments off)
 
-        'max_num_of_comments_to_show' => 10000, // max num of comments to show on a single blog post. Set to a lower number for smaller page sizes.
-        'save_ip_address' => true, // should we save the IP address in the database?
-        'auto_approve_comments' => false, // should comments appear straight away on the site? or wait for approval
+
+        // What type (if any) of comments/comment form to show.
+        // options:
+        //      'built_in' (default, uses own database for comments),
+        //      'disqus' (uses https://disqus.com/, please enter further config options below),
+        //      'custom' (will load blogetc::partials.custom_comments, which you can copy to your vendor view dir to customise
+        //      'disabled' (turn comments off)
+        'type_of_comments_to_show' => 'built_in', // default: built_in
+
+        'max_num_of_comments_to_show' => 5000, // max num of comments to show on a single blog post. Set to a lower number for smaller page sizes.
+
+        // should we save the IP address in the database?
+        'save_ip_address' => true, // Default: true
+
+
+        //should comments appear straight away on the site (set this to true)? or wait for approval (set to false)
+        'auto_approve_comments' => false, // default: false
 
 
         'save_user_id_if_logged_in' => true, // if user is logged in, should we save that user id? (if false it will always ask for an author name, which the commenter can provide
@@ -87,13 +125,12 @@ return [
 
         'disqus' => [
 
-            /**
-             * The following config option can be found by looking for the following line on the embed code of your disqus code:
-             *             s.src = 'https://yourusername_or_sitename.disqus.com/embed.js';
-             *
-             * You must enter the whole url (but not the "s.src = '" part!)
-             */
-            'src_url' => "https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js",
+            // only applies if comments.type_of_comments_to_show is set to 'disqus'
+//              The following config option can be found by looking for the following line on the embed code of your disqus code:
+//                          s.src = 'https://yourusername_or_sitename.disqus.com/embed.js';
+//
+//             You must enter the whole url (but not the "s.src = '" part!)
+            'src_url' => "https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js", // enter the url here, from the html snippet disqus provides
 
         ],
     ],

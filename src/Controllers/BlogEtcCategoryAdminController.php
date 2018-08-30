@@ -3,8 +3,6 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
 use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
@@ -61,7 +59,9 @@ class BlogEtcCategoryAdminController extends Controller
     public function store_category(StoreBlogEtcCategoryRequest $request){
         $new_category = new BlogEtcCategory($request->all());
         $new_category->save();
+
         Helpers::flash_message("Saved new category");
+
         event(new CategoryAdded($new_category));
         return redirect($new_category->edit_url());
     }
@@ -72,8 +72,11 @@ class BlogEtcCategoryAdminController extends Controller
      * @return mixed
      */
     public function edit_category($categoryId){
+
         $category = BlogEtcCategory::findOrFail($categoryId);
+
         return view("blogetc_admin::categories.edit_category")->withCategory($category);
+
     }
 
     /**

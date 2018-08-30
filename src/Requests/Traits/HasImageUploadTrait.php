@@ -17,9 +17,9 @@ trait HasImageUploadTrait
         }
 
         // not found? lets cycle through all the images and see if anything was submitted, and use that instead
-        foreach (array_keys(Helpers::image_sizes()) as $size) {
-            if ($this->file($size)) {
-                return $this->file($size);
+        foreach (Helpers::image_sizes() as $image_size_name => $image_size_info) {
+            if ($this->file($image_size_name)) {
+                return $this->file($image_size_name);
             }
         }
 

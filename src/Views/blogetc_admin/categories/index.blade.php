@@ -12,7 +12,7 @@
                 <a href="{{$category->edit_url()}}" class="card-link btn btn-primary">Edit Category</a>
                 <form
 
-                        onsubmit="return confirm('Are you sure you want to delete this blog post category?\n You cannot undo this action!');"m
+                        onsubmit="return confirm('Are you sure you want to delete this blog post category?\n You cannot undo this action!');"
 
                         method='post' action='{{route("blogetc.admin.categories.destroy_category", $category->id)}}' class='float-right'>
                     @csrf

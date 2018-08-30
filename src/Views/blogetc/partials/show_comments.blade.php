@@ -11,6 +11,12 @@
 @include("blogetc::partials.disqus_comments")
 @break
 
+
+@case("custom")
+{{--use custom - you should create the custom_comments in your vendor view dir and customise it--}}
+@include("blogetc::partials.custom_comments")
+@break
+
 @case("disabled")
 {{--comments are disabled--}}
 <?

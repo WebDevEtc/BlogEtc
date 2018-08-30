@@ -7,7 +7,7 @@
 
     <?
     $images_to_delete = [];
-    foreach (array_keys(config("blogetc.image_sizes")) as $image_size) {
+    foreach ((array) config("blogetc.image_sizes") as $image_size => $image_size_info) {
         if (!$deletedPost->$image_size) {
             continue;
         }
@@ -69,5 +69,5 @@
     <p>Was deleting it a mistake? Here is some of the output from the deleted post, as JSON. Please use a JSON viewer to
         retrieve the information.</p>
 
-    <textarea class='form-control'>{{ $deletedPost->toJson() }}</textarea>
+    <textarea readonly class='form-control'>{{ $deletedPost->toJson() }}</textarea>
 @endsection

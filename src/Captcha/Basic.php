@@ -1,12 +1,19 @@
 <?php namespace WebDevEtc\BlogEtc\Captcha;
-use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 
 /**
  * Class Basic
  * @package WebDevEtc\BlogEtc\Captcha
  */
-class Basic implements CaptchaInterface
+class Basic extends CaptchaAbstract
 {
+
+    public function __construct()
+    {
+
+        if (!config("blogetc.captcha.basic_question") || !config("blogetc.captcha.basic_answers")) {
+            throw new \DomainException("Invalid question or answers for captcha");
+        }
+    }
 
     /**
      * What should the field name be (in the <input type='text' name='????'>)
@@ -51,8 +58,9 @@ class Basic implements CaptchaInterface
                 $answers = strtolower($answers);
 
                 $answers_array = array_map("trim", explode(",", $answers));
-                if (!in_array($value, $answers_array)) {
+                if (!in_array($value, $answers_array,true)) {
                     return $fail('The captcha field is incorrect.');
+
                 }
             },
 

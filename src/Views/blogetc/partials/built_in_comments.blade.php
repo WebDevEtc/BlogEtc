@@ -1,17 +1,12 @@
 <div class="comments-list col-md-6 mx-auto">
 
 
-    <?
-
-    ?>
     @forelse($comments as $comment)
 
 
 
         <div class="card bg-light mb-3">
             <div class="card-header">
-
-
                 {{$comment->author()}}
                 <span class="float-right" title='{{$comment->created_at}}'><small>{{$comment->created_at->diffForHumans()}}</small></span>
             </div>

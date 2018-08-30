@@ -93,8 +93,9 @@ class BlogEtcPost extends Model
     {
         if ($this->author) {
             return optional($this->author)->name;
+        } else {
+            return 'Unknown Author';
         }
-        else { return "Unknown Author"; }
 
     }
 
@@ -146,7 +147,7 @@ class BlogEtcPost extends Model
     public function full_view_file_path()
     {
         if (!$this->use_view_file) {
-            throw new \Exception("use_view_file was empty, so cannot use " . __METHOD__);
+            throw new \RuntimeException("use_view_file was empty, so cannot use " . __METHOD__);
         }
         return "custom_blog_posts." . $this->use_view_file;
     }
@@ -157,7 +158,6 @@ class BlogEtcPost extends Model
      *
      * @param string $size
      * @return int
-     * @throws \Exception
      */
     public function has_image($size = 'medium')
     {
@@ -171,7 +171,6 @@ class BlogEtcPost extends Model
      *
      * @param string $size - should be 'medium' , 'large' or 'thumbnail'
      * @return string
-     * @throws \Exception
      */
     public function image_url($size = 'medium')
     {
@@ -201,12 +200,45 @@ class BlogEtcPost extends Model
         return '';
     }
 
+    public function post_body_output()
+    {
+
+
+        if (config("blogetc.use_custom_view_files") && $this->use_view_file) {
+            // using custom view files is enabled, and this post has a use_view_file set, so render it:
+            $return = view("blogetc::partials.use_view_file")->render();
+        } else {
+            // just use the plain ->post_body
+            $return = $this->post_body;
+        }
+
+
+        if (!config("blogetc.echo_html")) {
+            // if this is not true, then we should escape the output
+
+            if (config("blogetc.strip_html")) {
+                $return=strip_tags($return);
+            }
+
+            $return = e($return);
+
+            if (config("blogetc.auto_nl2br")) {
+                $return = nl2br($return);
+            }
+
+        }
+
+        return $return;
+
+    }
+
+
     /**
      * Throws an exception if $size is not valid
      * It should be either 'large','medium','thumbnail'
      * @param string $size
      * @return bool
-     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     protected function check_valid_image_size(string $size = 'medium')
     {
@@ -215,7 +247,7 @@ class BlogEtcPost extends Model
             'large', 'medium', 'thumbnail'
         ])
         ) {
-            throw new \Exception("BlogEtcPost image size should be 'large','medium','thumbnail'. Provided size ($size) is not valid");
+            throw new \InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail'. Provided size ($size) is not valid");
         }
 
         return true;

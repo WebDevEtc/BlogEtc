@@ -19,10 +19,8 @@ class BlogEtcPublishedScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (\Auth::check() && \Auth::user()->canManageBlogEtcPosts()) {
-            // user can manage blog posts, so no need to restrict them to published posts.
-        }
-        else {
+        if (!\Auth::check() || ! \Auth::user()->canManageBlogEtcPosts()) {
+            // user is a guest, or if logged in they can't manage blog posts
             $builder->where("is_published", true);
             $builder->where("posted_at", "<=", Carbon::now());
         }
