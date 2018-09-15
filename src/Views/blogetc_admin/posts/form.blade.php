@@ -83,10 +83,10 @@
     <textarea style='min-height:600px;' class="form-control" id="blog_post_body" aria-describedby="blog_post_body_help"
               name='post_body'>{{old("post_body",$post->post_body)}}</textarea>
 
-    <small id="blog_post_body_help" class="form-text text-muted">The HTML of the blog post.</small>
 
-    <div class='alert alert-danger'>Please note that any HTML (including any JS code) that is entered here will be
-        echoed (without escaping) in the default blog view files.
+    <div class='alert alert-danger'>
+        Please note that any HTML (including any JS code) that is entered here will be
+        echoed (without escaping)
     </div>
 </div>
 
@@ -184,7 +184,8 @@
 
         <div class='col-md-12 my-3 text-center'>
 
-            <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'>Add new categories
+            <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'><i class="fa fa-external-link" aria-hidden="true"></i>
+                      Add new categories
                     here</a></em>
         </div>
     </div>

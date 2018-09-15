@@ -16,14 +16,17 @@ class CreateBlogEtcPostsTable extends Migration
         Schema::create('blog_etc_posts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger("user_id")->index()->nullable();
-            $table->dateTime("posted_at")->index()->nullable()->comment("Public posted at time");
-            $table->boolean("is_published")->default(true);
+            $table->string("slug")->unique();
+
             $table->string("title")->nullable()->default("New blog post");
             $table->string("subtitle")->nullable()->default("");
-            $table->mediumText("post_body")->nullable();
-            $table->string("use_view_file")->nullable();
             $table->text("meta_desc")->nullable();
-            $table->string("slug")->unique();
+            $table->mediumText("post_body")->nullable();
+
+            $table->string("use_view_file")->nullable()->comment("should refer to a blade file in /views/");
+
+            $table->dateTime("posted_at")->index()->nullable()->comment("Public posted at time, if this is in future then it wont appear yet");
+            $table->boolean("is_published")->default(true);
 
             $table->string('image_large')->nullable();
             $table->string('image_medium')->nullable();
