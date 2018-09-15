@@ -62,10 +62,11 @@ class BlogEtcReaderController extends Controller
     {
 
 
+
+        /** @var  \Laravelium\Feed\Feed $feed */
         $feed = \App::make("feed");
         $feed->setCache(
-            config("blogetc.rssfeed.cache_in_minutes", 60)
-            ,
+            config("blogetc.rssfeed.cache_in_minutes", 60),
             "blog-" . $request->getFeedType()
         );
 
