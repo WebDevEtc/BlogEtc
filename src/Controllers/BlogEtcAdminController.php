@@ -29,7 +29,7 @@ class BlogEtcAdminController extends Controller
      * If false, we check if the blog_images/ dir is writable, when uploading images
      * @var bool
      */
-    protected $checked_blog_image_dir_is_writable=false;
+    protected $checked_blog_image_dir_is_writable = false;
 
     /**
      * BlogEtcAdminController constructor.
@@ -55,7 +55,7 @@ class BlogEtcAdminController extends Controller
             if (!is_writable($path)) {
                 throw new \RuntimeException("Image destination path is not writable ($path)");
             }
-            $this->checked_blog_image_dir_is_writable=true;
+            $this->checked_blog_image_dir_is_writable = true;
         }
 
         return $path;
@@ -184,7 +184,7 @@ class BlogEtcAdminController extends Controller
      */
     protected function processUploadedImages(BaseRequestInterface $request, BlogEtcPost $new_blog_post)
     {
-        if (!config("blogetc.image_upload_enabled", true) ) {
+        if (!config("blogetc.image_upload_enabled", true)) {
             // image upload was disabled
             return;
         }
@@ -198,8 +198,7 @@ class BlogEtcAdminController extends Controller
                 $image_filename = $this->getImageFilename($new_blog_post, $image_size_details, $photo);
 
                 $destinationPath = $this->image_destination_path();
-
-
+                $this->increaseMemoryLimit();
                 $resizedImage = \Image::make($photo->getRealPath());
                 $resizedImage = $resizedImage->fit($image_size_details['w'], $image_size_details['h']);
                 $resizedImage->save($destinationPath . '/' . $image_filename, config("blogetc.image_quality", 80));
@@ -253,6 +252,19 @@ class BlogEtcAdminController extends Controller
         }
 
 
+    }
+
+    /**
+     * Small method to increase memory limit.
+     * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
+     * This is needed though because if you upload a large image it'll not work
+     */
+    protected function increaseMemoryLimit()
+    {
+    // increase memory - change this setting in config file
+        if (config("blogetc.memory_limit")) {
+            @ini_set('memory_limit', config("blogetc.memory_limit"));
+        }
     }
 
 

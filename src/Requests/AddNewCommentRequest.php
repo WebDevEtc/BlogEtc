@@ -29,7 +29,9 @@ class AddNewCommentRequest extends BaseRequest
         // basic rules
         $return = [
             'comment' => ['required', 'string', 'min:3', 'max:1000'],
-            'author_name' => ['string', 'min:1', 'max:50']
+            'author_name' => ['string', 'min:1', 'max:50'],
+            'author_email' => ['string', 'nullable','min:1', 'max:254', 'email'],
+            'author_website' => ['string', 'nullable','min:' . strlen("http://a.b"), 'max:175', 'active_url',],
         ];
 
 
@@ -62,6 +64,10 @@ class AddNewCommentRequest extends BaseRequest
             $return = $func($return);
         }
 
+
+        if (config("blogetc.comments.require_author_email")) {
+            $return['author_email'][] = 'required';
+        }
 
         return $return;
 

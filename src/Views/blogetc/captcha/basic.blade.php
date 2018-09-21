@@ -1,4 +1,4 @@
-<div class="form-group mx-auto col-md-6 ">
+<div class="form-group ">
     <label id="captcha_label"
            for="captcha">Captcha: {{ config("blogetc.captcha.basic_question", "[error - undefined captcha question]" )}} </label>
     <input type='text' required class="form-control" name='captcha' id="captcha" placeholder=""

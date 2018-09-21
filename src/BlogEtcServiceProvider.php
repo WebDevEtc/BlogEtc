@@ -21,6 +21,10 @@ class BlogEtcServiceProvider extends ServiceProvider
             __DIR__ . '/../migrations/2018_05_28_224023_create_blog_etc_posts_table.php'
                 => database_path('migrations/2018_05_28_224023_create_blog_etc_posts_table.php')
         ]);
+        $this->publishes([
+            __DIR__ . '/../migrations/2018_09_16_224023_add_author_and_url_blog_etc_posts_table.php'
+            => database_path('migrations/2018_09_16_224023_add_author_and_url_blog_etc_posts_table.php')
+        ]);
 
         $this->publishes([
             __DIR__.'/Config/blogetc.php' => config_path('blogetc.php'),

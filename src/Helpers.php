@@ -52,52 +52,23 @@ class Helpers
 
         return '<link rel="alternate" type="application/rss+xml"
   title="Atom RSS Feed"
-  href="' .e( route("blogetc.feed")) .'?type=atom" />
+  href="' . e(route("blogetc.feed")) . '?type=atom" />
 
   <link rel="alternate" type="application/rss+xml"
   title="XML RSS Feed"
-  href="' . e(route("blogetc.feed")) .'?type=rss" />
+  href="' . e(route("blogetc.feed")) . '?type=rss" />
 
   ';
-
-
 
 
     }
 
     /**
+     * Thie method is depreciated. Just use the config() directly.
      * @return array
      */
-    public static function image_sizes()
-    {
-        return [
-
-            'image_large' => [
-                'w' => config("blogetc.image_sizes.image_large.w", 1000),
-                'h' => config("blogetc.image_sizes.image_large.h", 700),
-                'name' => "Large",
-                'enabled' => config("blogetc.image_sizes.image_large.enabled", true),
-                'basic_key'=>"large",
-            ],
-
-            'image_medium' => [
-                'w' => config("blogetc.image_sizes.image_medium.w", 600),
-                'h' => config("blogetc.image_sizes.image_medium.h", 200),
-                'name' => "Medium",
-                'basic_key'=>"medium",
-                'enabled' => config("blogetc.image_sizes.image_medium.enabled", true),
-            ],
-
-            'image_thumbnail' => [
-                'w' => config("blogetc.image_sizes.image_thumbnail.w", 150),
-                'h' => config("blogetc.image_sizes.image_thumbnail.h", 150),
-                'name' => "Thumbnail",
-                'basic_key'=>"thumbnail",
-                'enabled' => config("blogetc.image_sizes.image_thumbnail.enabled", true),
-            ]];
-
-
-
+    public static function image_sizes(){
+        return config("blogetc.image_sizes");
     }
 
 }

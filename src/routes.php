@@ -9,7 +9,10 @@ Route::group( [ 'middleware' => [ 'web' ], 'namespace'=> '\WebDevEtc\BlogEtc\Con
 
         Route::get( '/' , 'BlogEtcReaderController@index' )
             ->name( 'blogetc.index' );
-        
+
+        Route::get( '/search' , 'BlogEtcReaderController@search' )
+            ->name( 'blogetc.search' );
+
         Route::get( '/feed' , 'BlogEtcReaderController@feed' )
             ->name( 'blogetc.feed' ); //RSS feed
         

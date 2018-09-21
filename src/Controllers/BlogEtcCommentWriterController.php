@@ -51,7 +51,12 @@ class BlogEtcCommentWriterController extends Controller
         if (config("blogetc.comments.save_ip_address")) {
             $new_comment->ip = $request->ip();
         }
-
+        if (config("blogetc.comments.ask_for_author_website")) {
+            $new_comment->author_website = $request->get('author_website');
+        }
+        if (config("blogetc.comments.ask_for_author_website")) {
+            $new_comment->author_email = $request->get('author_email');
+        }
         if (config("blogetc.comments.save_user_id_if_logged_in", true) && Auth::check()) {
             $new_comment->user_id = Auth::user()->id;
         }

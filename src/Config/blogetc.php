@@ -20,6 +20,11 @@ return [
 
 
 
+    'memory_limit' => '2048M', // This is used when uploading images :
+    //                              @ini_set('memory_limit', config("blogetc.memory_limit"));
+    //                            See PHP.net for details
+
+
     //if true it will echo out  (with {!! !!}) the blog post with NO escaping! This is not safe if you don't trust your blog post writers! Understand the risks by leaving this to true
     // (you should disable this (set to false) if you don't trust your blog writers).
     // This will apply to all posts (past and future).
@@ -56,21 +61,51 @@ return [
 
         // There must be only three sizes - image_large, image_medium, image_thumbnail.
 
-        'image_large' => [
-            'w' => 1000,
-            'h' => 700,
+
+        'image_large' => [ // this key must start with 'image_'. This is what the DB column must be named
+            'w' => 1000, // width in pixels
+            'h' => 700, //height
+            'basic_key' => "large", // same as the main key, but WITHOUT 'image_'.
+            'name' => "Large", // description, used in the admin panel
             'enabled' => true, // see note above
         ],
-        'image_medium' => [
-            'w' => 600,
-            'h' => 200,
+        'image_medium' => [ // this key must start with 'image_'. This is what the DB column must be named
+            'w' => 600, // width in pixels
+            'h' => 200, //height
+            'basic_key' => "medium",// same as the main key, but WITHOUT 'image_'.
+            'name' => "Medium",// description, used in the admin panel
             'enabled' => true, // see note above
         ],
-        'image_thumbnail' => [
-            'w' => 150,
-            'h' => 150,
+        'image_thumbnail' => [ // this key must start with 'image_'. This is what the DB column must be named
+            'w' => 150, // width in pixels
+            'h' => 150, //height
+            'basic_key' => "thumbnail",// same as the main key, but WITHOUT 'image_'.
+            'name' => "Thumbnail",// description, used in the admin panel
             'enabled' => true, // see note above
         ],
+
+        // you can add more fields here, but make sure that you create the relevant database columns too!
+        // They must be in the same format as the default ones - image_xxxxx (and this db column must exist on the blog_etc_posts table)
+
+        /*
+        'image_custom_example_size' => [ // << MAKE A DB COLUM WITH THIS NAME.
+                                         //   You can name it whatever you want, but it must start with image_
+            'w' => 123,                  // << DEFINE YOUR CUSTOM WIDTH/HEIGHT
+            'h' => 456,
+            'basic_key' =>
+                  "custom_example_size", // << THIS SHOULD BE THE SAME AS THE KEY, BUT WITHOUT THE image_
+            'name' => "Test",            // A HUMAN READABLE NAME
+            'enabled' => true,           // see note above about enabled/disabled
+            ],
+        */
+        // Create the custom db table by doing
+        //  php artisan make:migration --table=blog_etc_posts AddCustomBlogImageSize
+        //   then adding in the up() method:
+        //       $table->string("image_custom_example_size")->nullable();
+        //    and in the down() method:
+        //        $table->dropColumn("image_custom_example_size"); for the down()
+        // then run
+        //   php artisan migrate
     ],
 
 
@@ -108,7 +143,7 @@ return [
         //      'disabled' (turn comments off)
         'type_of_comments_to_show' => 'built_in', // default: built_in
 
-        'max_num_of_comments_to_show' => 5000, // max num of comments to show on a single blog post. Set to a lower number for smaller page sizes.
+        'max_num_of_comments_to_show' => 1000, // max num of comments to show on a single blog post. Set to a lower number for smaller page sizes. No comment pagination is built in yet.
 
         // should we save the IP address in the database?
         'save_ip_address' => true, // Default: true
@@ -122,6 +157,9 @@ return [
 
         'user_field_for_author_name' => "name", // what field on your User model should we use when echoing out the author name? By default this should be 'name', but maybe you have it set up to use 'username' etc.
 
+        'ask_for_author_email' => true, // show 'author email' on the form ?
+        'require_author_email' => false, // require an email (make sure ask_for_author_email is true if you want to use this)
+        'ask_for_author_website' => true, // show 'author website' on the form, show the link when viewing the comment
 
         'disqus' => [
 
@@ -136,6 +174,12 @@ return [
     ],
 
 
+
+    'search' => [
+
+        'search_enabled' => false, // is search enabled? You must run `php artisan vendor:publish --tag=laravel-fulltext` then `php artisan migrate` to get the full text index up! By default this is disabled, but you can easily turn it on. Just remember to do the vendor:publish  and migrate!
+
+        ],
 
 
 

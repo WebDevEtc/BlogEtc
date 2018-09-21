@@ -16,6 +16,9 @@ class MainTest extends \Tests\TestCase
     List of all main routes, and if they are covered by any tests:
     There might be some additional tests still to be written (For example we create a new post, but don't assign any categories to it at the moment)
 
+    UNTESTED - todo:
+    Testing the author_email, author_website.
+
     /blog/...
         blogetc.index                       YES
         blogetc.feed                        YES
@@ -67,9 +70,9 @@ class MainTest extends \Tests\TestCase
     public function testImageSizesAreSane()
     {
 
-        $this->assertEquals(count(\WebDevEtc\BlogEtc\Helpers::image_sizes()), 3);
+        $this->assertTrue(count(config("blogetc.image_sizes")) >=  3);
 
-        foreach (\WebDevEtc\BlogEtc\Helpers::image_sizes() as $image_key => $image_info) {
+        foreach (config("blogetc.image_sizes") as $image_key => $image_info) {
 
             $this->assertArrayHasKey("w", $image_info);
             $this->assertArrayHasKey("h", $image_info);
@@ -973,6 +976,9 @@ class MainTest extends \Tests\TestCase
         $u->id = 9999999; // in case the logic on canManageBlogEtcPosts() checks for a low ID
         $u->email = str_random(); // in case the logic looks for a certain email or something.
 
+        $this->assertTrue(method_exists($u,"canManageBlogEtcPosts"));
+
+        // because this user is just a randomly made one, it probably should not be allowed to edit blog posts.
         $this->assertFalse($u->canManageBlogEtcPosts(), "User::canManageBlogEtcPosts() returns true, but it PROBABLY should return false! Otherwise every single user on your site has access to the blog admin panel! This might not be an error though, if your system doesnt allow public registration. But you should look into this.");
     }
 

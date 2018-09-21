@@ -1,42 +1,54 @@
 @extends("layouts.app",['title'=>$title])
 @section("content")
 
-    @if(\Auth::check() && \Auth::user()->canManageBlogEtcPosts())
-        <div class="card my-5 p-0 mx-auto bg-white font-italic border-primary col-md-5 col-sm-8 col-xs-8">
-            <div class="card-body text-center pb-0 pt-1 ">
-                <p class='mb-1'>You are logged in as a blog admin user.
-                    <br>
+    {{--See the guide on webdevetc.com for how to copy these files to your /resources/views/ directory--}}
+    {{--https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views--}}
 
-                    <a href='{{route("blogetc.admin.index")}}'
-                                                              class='btn border  btn-outline-primary btn-sm '>
+    <div class='row'>
+        <div class='col-sm-12 blogetc_container'>
+            @if(\Auth::check() && \Auth::user()->canManageBlogEtcPosts())
+                <div class="text-center">
+                        <p class='mb-1'>You are logged in as a blog admin user.
+                            <br>
 
-                        <i class="fa fa-cogs" aria-hidden="true"></i>
+                            <a href='{{route("blogetc.admin.index")}}'
+                               class='btn border  btn-outline-primary btn-sm '>
 
-                        Go To Blog Admin Panel</a>
+                                <i class="fa fa-cogs" aria-hidden="true"></i>
+
+                                Go To Blog Admin Panel</a>
 
 
-                </p>
+                        </p>
+                </div>
+            @endif
+
+
+            @if(isset($blogetc_category) && $blogetc_category)
+                <h2 class='text-center'>Viewing Category: {{$blogetc_category->category_name}}</h2>
+
+                @if($blogetc_category->category_description)
+                    <p class='text-center'>{{$blogetc_category->category_description}}</p>
+                @endif
+
+            @endif
+
+
+            @forelse($posts as $post)
+                @include("blogetc::partials.index_loop")
+            @empty
+                <div class='alert alert-danger'>No posts</div>
+            @endforelse
+
+            <div class='text-center  col-sm-4 mx-auto'>
+                {{$posts->appends( [] )->links()}}
             </div>
+
+
+
+
+                @include("blogetc::partials.search_form")
+
         </div>
-    @endif
-
-    @if(isset($blogetc_category) && $blogetc_category)
-        <h2 class='text-center'>Viewing Category: {{$blogetc_category->category_name}}</h2>
-
-        @if($blogetc_category->category_description)
-            <p class='text-center'>{{$blogetc_category->category_description}}</p>
-        @endif
-
-    @endif
-
-    @forelse($posts as $post)
-        @include("blogetc::partials.index_loop")
-    @empty
-        <div class='alert alert-danger'>No posts</div>
-    @endforelse
-
-    <div class='text-center  col-sm-4 mx-auto'>
-        {{$posts->appends( [] )->links()}}
     </div>
-
 @endsection

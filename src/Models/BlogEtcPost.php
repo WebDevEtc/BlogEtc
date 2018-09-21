@@ -5,16 +5,21 @@ namespace WebDevEtc\BlogEtc\Models;
 use App\User;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use WebDevEtc\BlogEtc\Interfaces\SearchResultInterface;
 use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
 
 /**
  * Class BlogEtcPost
  * @package WebDevEtc\BlogEtc\Models
  */
-class BlogEtcPost extends Model
+class BlogEtcPost extends Model implements SearchResultInterface
 {
 
     use Sluggable;
+    use \Swis\LaravelFulltext\Indexable;
+
+    protected $indexContentColumns = ['post_body'];
+    protected $indexTitleColumns = ['title', 'subtitle'];
 
     /**
      * @var array
@@ -58,6 +63,17 @@ class BlogEtcPost extends Model
                 'source' => 'title'
             ]
         ];
+    }
+
+    public function search_result_page_url()
+    {
+
+        return $this->url();
+    }
+
+    public function search_result_page_title()
+    {
+        return $this->title;
     }
 
 
@@ -187,17 +203,23 @@ class BlogEtcPost extends Model
      * @param null|string $classes - if you want any additional CSS classes for this tag
      * @return string
      */
-    public function image_tag($size = 'medium', $auto_link = true, $classes = null)
+    public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $a_class=null)
     {
 
-        if ($this->has_image($size)) {
-            $url = e($this->image_url($size));
-            $alt = e($this->title);
-            $img = "<img src='$url' alt='$alt' class='" . e($classes) . "' >";
-            return $auto_link ? "<a href='" . e($this->url()) . "'>$img</a>" : $img;
+        if (!$this->has_image($size)) {
+            return '';
         }
+        $url = e($this->image_url($size));
+        $alt = e($this->title);
+        $img = "<img src='$url' alt='$alt' class='" . e($img_class) . "' >";
+        return $auto_link ? "<a class='" . e($a_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img;
 
-        return '';
+    }
+
+    public function generate_introduction( $max_len = 500)
+    {
+        $intro = str_limit( strip_tags($this->post_body), (int) $max_len);
+        return nl2br(e($intro));
     }
 
     public function post_body_output()
@@ -217,7 +239,7 @@ class BlogEtcPost extends Model
             // if this is not true, then we should escape the output
 
             if (config("blogetc.strip_html")) {
-                $return=strip_tags($return);
+                $return = strip_tags($return);
             }
 
             $return = e($return);
@@ -243,13 +265,31 @@ class BlogEtcPost extends Model
     protected function check_valid_image_size(string $size = 'medium')
     {
 
-        if (!in_array($size, [
-            'large', 'medium', 'thumbnail'
-        ])
-        ) {
-            throw new \InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail'. Provided size ($size) is not valid");
+
+        if (array_key_exists("image_" . $size, config("blogetc.image_sizes"))) {
+            return true;
         }
 
-        return true;
+//        $e = new \Exception();
+////        dump($e->getTraceAsString());
+//
+//        dd('image_'.$size, config("blogetc.image_sizes"));
+        // was an error!
+
+        if (starts_with($size, "image_")) {
+            /* the config/blogetc.php and the DB columns SHOULD have keys that start with image_$size
+            however when using methods such as image_url() or has_image() it SHOULD NOT start with 'image_'
+
+            To put another way: :
+                in the config/blogetc.php : config("blogetc.image_sizes.image_medium")
+                in the database table:    : blogetc_posts.image_medium
+                when calling image_url()  : image_url("medium")
+            */
+
+
+            throw new \InvalidArgumentException("Invalid image size ($size). BlogEtcPost image size should not begin with 'image_'. Remove this from the start of $size. It *should* be in the blogetc.image_sizes config though!");
+        }
+
+        throw new \InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
     }
 }

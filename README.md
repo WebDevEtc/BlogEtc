@@ -9,7 +9,7 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
 
 ## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
 
-[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) • [Packagist](https://packagist.org/packages/webdevetc/blogetc)
+[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) • [Packagist](https://packagist.org/packages/webdevetc/blogetc) << MAKE SURE YOU FOLLOW THE INSTURCTIONS. They're simple, but must be followed.
 
 ## Features
 
@@ -19,6 +19,7 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
     - View all posts in category (paginated)
     - View single post
     - Add comment views / confirmation views
+    - Search (full text search), search form, search results page.
   - Admin pages:
     - Posts **(CRUD Blog Posts, Upload Featured Images (auto resizes)**
       - View all posts,
@@ -119,12 +120,25 @@ This is a list of features or things that I want to eventually get round to addi
 - Email notification to admin when new comment is added
 
 
+## Recent changes:
+
+1) Added full text search and search views. You have to enable it in the config file (see latest config file)
+2) Need more than the 3 default image sizes? Add more in the config/blogetc.php file, add the database column for it and it'll work!
+
+## Not working?
+
+Image upload errors? Try adding this to config/app.php:
+
+
+    'Image' => Intervention\Image\Facades\Image::class
+
 
 
 ## Version History
 
 
 
+- 2.0 - added full text search (enable it via the config file - it is disabled by default).
 - 1.2 - added WYSIWYG, few smaller changes
 - 1.1.1 - added basic captcha
 - 1.0.5 - composer.json changes.

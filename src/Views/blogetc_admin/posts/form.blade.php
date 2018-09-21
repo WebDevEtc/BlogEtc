@@ -125,7 +125,7 @@
         <h4>Featured Images</h4>
 
 
-        @foreach(\WebDevEtc\BlogEtc\Helpers::image_sizes() as $size_key =>$size_info)
+        @foreach(config("blogetc.image_sizes") as $size_key =>$size_info)
             <div class="form-group mb-4p-2
         @if($loop->iteration>1)
                     image_upload_other_sizes
