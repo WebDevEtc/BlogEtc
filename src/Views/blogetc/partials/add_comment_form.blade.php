@@ -68,7 +68,7 @@
                                     class="form-control"
                                     name='author_website'
                                     id="author_website"
-                                    placeholder="Your Email"
+                                    placeholder="Your Website URL"
                                     required
                                     value="{{old("author_website")}}">
                         </div>
