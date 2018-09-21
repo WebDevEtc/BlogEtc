@@ -31,6 +31,7 @@
     "illuminate/database": "~5.5.0|~5.6.0|~5.7.0",
     "illuminate/support": "~5.5.0|~5.6.0|~5.7.0",
     "laravelium/feed" : "~2.12.0|~3.0.0",
+    "swisnl/laravel-fulltext": "0.13.0",
     "intervention/image": "2.*"
   },
   "require-dev": {
