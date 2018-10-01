@@ -63,7 +63,16 @@ Route::group( [ 'middleware' => [ 'web' ], 'namespace'=> '\WebDevEtc\BlogEtc\Con
             'BlogEtcAdminController@update_post' )
             ->name( 'blogetc.admin.update_post' );
         
-        
+
+
+        Route::group(['prefix'=>"image_uploads",],function() {
+
+            Route::get("/","BlogEtcImageUploadController@index")->name("blogetc.admin.images.all");
+
+            Route::get("/upload","BlogEtcImageUploadController@create")->name("blogetc.admin.images.upload");
+            Route::post("/upload","BlogEtcImageUploadController@store")->name("blogetc.admin.images.store");
+
+        });
         
         
         

@@ -35,6 +35,9 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
       - View all comments,
       - Approve/Moderate comment,
       - Delete comment
+    - Upload images
+      - as well as uploading featured images for each blog post (and auto resizing to multiple defined sizes), you can upload images separately.
+      - view all uploaded images (in multiple sizes)
 - **Includes admin panel**
   - Create / edit posts
   - Create / edit post categories
@@ -82,7 +85,7 @@ Please see our [BlogEtc Laravel Blog Package Documentation/install guide](https:
 
 This is easy to do, and further detail can be found in our  [BlogEtc Laravel Blog Package Documentation](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views).
 
-But to give a quick overiew, find the .blade.php file that you want to replace, and create it in `/resources/views/vendor/blogetc/` directory. Because all the main views use the `view("blogetc::$view")` method (with `::`), Laravel will first look in your `/resources/views/vendor/blogetc/` directory before it looks in the package's `/webdevetc/blogetc/src/Views/' directory. More details about this in our docs.
+After doing the correct `vendor:publish`, all of the default template files will be found in /resources/views/vendor/blogetc/ and are easy to edit to match your needs.
 
 ## Routes
 
@@ -110,7 +113,8 @@ There is a built in captcha (anti spam comment) system built in, which will be e
 
 This is a list of features or things that I want to eventually get round to adding
 
-- Allow users to upload images for the blog post body (at the moment only featured images (1 per size) can be added to a blog post.
+- Better UI for uploading images/viewing uploaded images
+- Link uploaded images to blog post. At the moment they are not related.
 - Allow users to remove a featured image from a blog post.
 - Option to use HTMLPurifier to sanatise output.
 - Better options for assigning post authors (currently it just assigns the currently logged in user). However, if site has 10,000+ users do we really want an UI interface for this? The alternative is to add something like a a is_admin field to the `users` table and only show admin users.
@@ -118,6 +122,7 @@ This is a list of features or things that I want to eventually get round to addi
 - Pagination for comments on view single post? At the moment we limit it to a high number (default in config is 5000).
 - RSS feed: shows from full (stripped tags) ->html of blog post (although has a setTextLimit() on it) - need to trim this, and if it uses custom view files then it should render that (without html).
 - Email notification to admin when new comment is added
+- RSS to use generate_introduction() for its contents.
 
 
 ## Recent changes:
@@ -125,12 +130,18 @@ This is a list of features or things that I want to eventually get round to addi
 1) Added full text search and search views. You have to enable it in the config file (see latest config file)
 2) Need more than the 3 default image sizes? Add more in the config/blogetc.php file, add the database column for it and it'll work!
 
-## Not working?
+## Having problems, something is not working?
 
-Image upload errors? Try adding this to config/app.php:
+*Image upload errors?*
 
+Try adding this to config/app.php:
 
     'Image' => Intervention\Image\Facades\Image::class
+
+- Also make sure that /tmp is writable. If you have open_basedir enabled, be sure to add :/tmp to its value.
+- Ensure that /public/blog_images (or whatever directory you set it to in the config) is writable by the server
+- You might need to set a higher memory limit, or upload smaller image files. This will depend on your server. I've used it to upload huge (10mb+) jpg images without problem, once the server was set up correctly to handle larger file uploads.
+
 
 
 
@@ -138,13 +149,15 @@ Image upload errors? Try adding this to config/app.php:
 
 
 
-- 2.0 - added full text search (enable it via the config file - it is disabled by default).
-- 1.2 - added WYSIWYG, few smaller changes
-- 1.1.1 - added basic captcha
-- 1.0.5 - composer.json changes.
-- 1.0.2 - First release
-- 0.3 - Small changes, packagist settings.
-- 0.1 - Initial release
+- 3.0                   - Added separate functionality for uploading images (and save some meta data in db)
+- 2.1                   - added 'short_description' to db + form, and BlogEtcPost::generate_introduction() method will try and use this to generate intro text.
+- 2.0                   - added full text search (enable it via the config file - it is disabled by default).
+- 1.2                   - added WYSIWYG, few smaller changes
+- 1.1.1                 - added basic captcha
+- 1.0.5                 - composer.json changes.
+- 1.0                   - First release
+- 0.3                   - Small changes, packagist settings.
+- 0.1                   - Initial release
 
 
 ## Issues, support, bug reports, security issues

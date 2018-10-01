@@ -5,6 +5,7 @@ namespace WebDevEtc\BlogEtc\Models;
 use App\User;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Swis\LaravelFulltext\Indexable;
 use WebDevEtc\BlogEtc\Interfaces\SearchResultInterface;
 use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
 
@@ -16,10 +17,11 @@ class BlogEtcPost extends Model implements SearchResultInterface
 {
 
     use Sluggable;
-    use \Swis\LaravelFulltext\Indexable;
+    use Indexable;
 
-    protected $indexContentColumns = ['post_body'];
-    protected $indexTitleColumns = ['title', 'subtitle'];
+    protected $indexContentColumns = ['post_body', 'short_description', 'meta_desc',];
+    protected $indexTitleColumns = ['title', 'subtitle', 'seo_title',];
+
 
     /**
      * @var array
@@ -42,7 +44,9 @@ class BlogEtcPost extends Model implements SearchResultInterface
 
         'title',
         'subtitle',
+        'short_description',
         'post_body',
+        'seo_title',
         'meta_desc',
         'slug',
         'use_view_file',
@@ -192,7 +196,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
     {
         $this->check_valid_image_size($size);
         $filename = $this->{"image_" . $size};
-        return asset("blog_images/" . $filename);
+        return asset(config("blogetc.blog_upload_dir", "blog_images") . "/" . $filename);
     }
 
     /**
@@ -200,10 +204,11 @@ class BlogEtcPost extends Model implements SearchResultInterface
      *
      * @param string $size - large, medium, thumbnail
      * @param boolean $auto_link - if true then itll add <a href=''>...</a> around the <img> tag
-     * @param null|string $classes - if you want any additional CSS classes for this tag
+     * @param null|string $img_class - if you want any additional CSS classes for this tag for the <IMG>
+     * @param null|string $anchor_class - is you want any additional CSS classes in the <a> anchor tag
      * @return string
      */
-    public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $a_class=null)
+    public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null)
     {
 
         if (!$this->has_image($size)) {
@@ -212,13 +217,19 @@ class BlogEtcPost extends Model implements SearchResultInterface
         $url = e($this->image_url($size));
         $alt = e($this->title);
         $img = "<img src='$url' alt='$alt' class='" . e($img_class) . "' >";
-        return $auto_link ? "<a class='" . e($a_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img;
+        return $auto_link ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img;
 
     }
 
-    public function generate_introduction( $max_len = 500)
+    public function generate_introduction($max_len = 500)
     {
-        $intro = str_limit( strip_tags($this->post_body), (int) $max_len);
+        $base_text_to_use = $this->short_description;
+        if (!trim($base_text_to_use)) {
+            $base_text_to_use = $this->post_body;
+        }
+        $base_text_to_use = strip_tags($base_text_to_use);
+
+        $intro = str_limit($base_text_to_use, (int)$max_len);
         return nl2br(e($intro));
     }
 
@@ -228,7 +239,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
 
         if (config("blogetc.use_custom_view_files") && $this->use_view_file) {
             // using custom view files is enabled, and this post has a use_view_file set, so render it:
-            $return = view("blogetc::partials.use_view_file")->render();
+            $return = view("blogetc::partials.use_view_file", ['post' => $this])->render();
         } else {
             // just use the plain ->post_body
             $return = $this->post_body;
@@ -237,17 +248,14 @@ class BlogEtcPost extends Model implements SearchResultInterface
 
         if (!config("blogetc.echo_html")) {
             // if this is not true, then we should escape the output
-
             if (config("blogetc.strip_html")) {
                 $return = strip_tags($return);
             }
 
             $return = e($return);
-
             if (config("blogetc.auto_nl2br")) {
                 $return = nl2br($return);
             }
-
         }
 
         return $return;
@@ -291,5 +299,17 @@ class BlogEtcPost extends Model implements SearchResultInterface
         }
 
         throw new \InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
+    }
+
+
+    public function gen_seo_title()
+    {
+
+        if ($this->seo_title) {
+            return $this->seo_title;
+        }
+
+        return $this->title;
+
     }
 }

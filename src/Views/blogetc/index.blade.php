@@ -1,7 +1,6 @@
 @extends("layouts.app",['title'=>$title])
 @section("content")
 
-    {{--See the guide on webdevetc.com for how to copy these files to your /resources/views/ directory--}}
     {{--https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views--}}
 
     <div class='row'>
@@ -47,7 +46,7 @@
 
 
 
-                @include("blogetc::partials.search_form")
+                @include("blogetc::sitewide.search_form")
 
         </div>
     </div>

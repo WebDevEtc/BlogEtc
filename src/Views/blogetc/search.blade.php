@@ -1,6 +1,8 @@
 @extends("layouts.app",['title'=>$title])
 @section("content")
 
+    {{--https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views--}}
+
     <div class='row'>
         <div class='col-sm-12'>
             <h2>Search Results for {{$query}}</h2>
@@ -20,7 +22,7 @@
             @endforelse
 
 
-            @include("blogetc::partials.search_form")
+            @include("blogetc::sitewide.search_form")
 
         </div>
     </div>

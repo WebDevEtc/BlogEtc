@@ -18,8 +18,6 @@ return [
     'blog_upload_dir' => "blog_images", // this should be in public_path() (i.e. /public/blog_images), and should be writable
 
 
-
-
     'memory_limit' => '2048M', // This is used when uploading images :
     //                              @ini_set('memory_limit', config("blogetc.memory_limit"));
     //                            See PHP.net for details
@@ -45,10 +43,6 @@ return [
     'use_wysiwyg' => true, // Default: true
 
 
-
-
-
-
     'image_quality' => 80, // what image quality to use when saving images. higher = better + bigger sizes. Around 80 is normal.
 
 
@@ -68,13 +62,15 @@ return [
             'basic_key' => "large", // same as the main key, but WITHOUT 'image_'.
             'name' => "Large", // description, used in the admin panel
             'enabled' => true, // see note above
+            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
         ],
         'image_medium' => [ // this key must start with 'image_'. This is what the DB column must be named
-            'w' => 600, // width in pixels
-            'h' => 200, //height
+            'w' => 120, // width in pixels
+            'h' => 600, //height
             'basic_key' => "medium",// same as the main key, but WITHOUT 'image_'.
             'name' => "Medium",// description, used in the admin panel
             'enabled' => true, // see note above
+            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website template then you should probably have this to true.
         ],
         'image_thumbnail' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w' => 150, // width in pixels
@@ -110,29 +106,27 @@ return [
 
 
     'captcha' => [
-
         'captcha_enabled' => true, // true = we should use a captcha, false = turn it off. If comments are disabled this makes no difference.
-        'captcha_type' =>  \WebDevEtc\BlogEtc\Captcha\Basic::class, // this should be a class that implements the \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface interface
-
+        'captcha_type' => \WebDevEtc\BlogEtc\Captcha\Basic::class, // this should be a class that implements the \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface interface
         'basic_question' => "What is the opposite of white?", // a simple captcha question to always ask (if captcha_type is set to 'basic'
         'basic_answers' => "black,dark", // comma separated list of possible answers. Don't worry about case.
-
-
     ],
 
     ////////// RSS FEED
 
     'rssfeed' => [
 
+        'should_shorten_text' => true, // boolean. Default: true. Should we shorten the text in rss feed?
+        'text_limit' => 100, // max length of description text in the rss feed
+        'posts_to_show_in_rss_feed' => 10,  // how many posts should we show in the rss feed
         'cache_in_minutes' => 60, // how long (in minutes) to cache the RSS blog feed for.
         'description' => "Our blog post RSS feed", //description for the RSS feed
-        'language'=>"en", // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
+        'language' => "en", // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
     ],
 
     ////////// comments:
 
     'comments' => [
-
 
 
         // What type (if any) of comments/comment form to show.
@@ -174,13 +168,9 @@ return [
     ],
 
 
-
     'search' => [
-
-        'search_enabled' => false, // is search enabled? You must run `php artisan vendor:publish --tag=laravel-fulltext` then `php artisan migrate` to get the full text index up! By default this is disabled, but you can easily turn it on. Just remember to do the vendor:publish  and migrate!
-
-        ],
-
+        'search_enabled' => false, // is search enabled? By default this is disabled, but you can easily turn it on.
+    ],
 
 
 ];

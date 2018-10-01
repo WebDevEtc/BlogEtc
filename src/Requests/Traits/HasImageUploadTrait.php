@@ -1,7 +1,6 @@
 <?php namespace WebDevEtc\BlogEtc\Requests\Traits;
 
 
-use WebDevEtc\BlogEtc\Helpers;
 
 trait HasImageUploadTrait
 {

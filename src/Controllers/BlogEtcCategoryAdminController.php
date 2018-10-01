@@ -63,7 +63,7 @@ class BlogEtcCategoryAdminController extends Controller
         Helpers::flash_message("Saved new category");
 
         event(new CategoryAdded($new_category));
-        return redirect($new_category->edit_url());
+        return redirect( route('blogetc.admin.categories.index') );
     }
 
     /**
@@ -108,6 +108,8 @@ class BlogEtcCategoryAdminController extends Controller
      */
     public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId){
 
+        /* Please keep this in, so code inspections don't say $request was unused. Of course it might now get marked as left/right parts are equal */
+        $request=$request;
 
         $category = BlogEtcCategory::findOrFail($categoryId);
         event(new CategoryWillBeDeleted($category));

@@ -10,7 +10,7 @@
     };
     (function() { // DON'T EDIT BELOW THIS LINE
         var d = document, s = d.createElement('script');
-        s.src = '{{config("blogetc.comments.disqus.src_url","ENTER YOUR URL HERE")}}';
+        s.src = '{{config("blogetc.comments.disqus.src_url","ENTER YOUR URL HERE!!!")}}';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
     })();

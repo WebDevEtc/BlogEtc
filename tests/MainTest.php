@@ -534,7 +534,7 @@ class MainTest extends \Tests\TestCase
         $response = $this->get($newblogpost->url());
         $response->assertSessionHasNoErrors();
         $response->assertStatus(200); // redirect
-        $response->assertSee("You must customise this by creating a file","config type of comments is set to show 'custom', which should (by default) show an error messaging telling user to customise the custom view file. If this is run on a site with its own file defined this will show an error (but it will not be a real error).");
+        $response->assertSee("You must customise this by creating a file"); //config type of comments is set to show 'custom', which should (by default) show an error messaging telling user to customise the custom view file. If this is run on a site with its own file defined this will show an error (but it will not be a real error).;
     }
 
 
@@ -979,7 +979,7 @@ class MainTest extends \Tests\TestCase
         $this->assertTrue(method_exists($u,"canManageBlogEtcPosts"));
 
         // because this user is just a randomly made one, it probably should not be allowed to edit blog posts.
-        $this->assertFalse($u->canManageBlogEtcPosts(), "User::canManageBlogEtcPosts() returns true, but it PROBABLY should return false! Otherwise every single user on your site has access to the blog admin panel! This might not be an error though, if your system doesnt allow public registration. But you should look into this.");
+        $this->assertFalse($u->canManageBlogEtcPosts(), "User::canManageBlogEtcPosts() returns true, but it PROBABLY should return false! Otherwise every single user on your site has access to the blog admin panel! This might not be an error though, if your system doesn't allow public registration. But you should look into this. I know this isn't a good way to handle this test, but it seems to make sense.");
     }
 
 

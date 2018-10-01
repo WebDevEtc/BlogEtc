@@ -49,8 +49,10 @@ class CreateBlogEtcPostsTable extends Migration
 
         Schema::create('blog_etc_post_categories', function (Blueprint $table) {
             $table->increments('id');
+
             $table->unsignedInteger("blog_etc_post_id")->index();
             $table->foreign('blog_etc_post_id')->references('id')->on('blog_etc_posts')->onDelete("cascade");
+
             $table->unsignedInteger("blog_etc_category_id")->index();
             $table->foreign('blog_etc_category_id')->references('id')->on('blog_etc_categories')->onDelete("cascade");
         });

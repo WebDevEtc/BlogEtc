@@ -5,19 +5,19 @@ namespace WebDevEtc\BlogEtc\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 use WebDevEtc\BlogEtc\Events\BlogPostAdded;
 use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
-use WebDevEtc\BlogEtc\Events\UploadedImage;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
 use File;
+use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 
 /**
  * Class BlogEtcAdminController
@@ -25,11 +25,8 @@ use File;
  */
 class BlogEtcAdminController extends Controller
 {
-    /**
-     * If false, we check if the blog_images/ dir is writable, when uploading images
-     * @var bool
-     */
-    protected $checked_blog_image_dir_is_writable = false;
+    use UploadFileTrait;
+
 
     /**
      * BlogEtcAdminController constructor.
@@ -43,31 +40,13 @@ class BlogEtcAdminController extends Controller
         }
     }
 
-    /**
-     * @return string
-     * @throws \RuntimeException
-     */
-    protected function image_destination_path()
-    {
-        $path = public_path('/' . config("blogetc.blog_upload_dir"));
-
-        if (!$this->checked_blog_image_dir_is_writable) {
-            if (!is_writable($path)) {
-                throw new \RuntimeException("Image destination path is not writable ($path)");
-            }
-            $this->checked_blog_image_dir_is_writable = true;
-        }
-
-        return $path;
-    }
 
     /**
      * View all posts
      *
-     * @param Request $request
      * @return mixed
      */
-    public function index(Request $request)
+    public function index()
     {
         $posts = BlogEtcPost::orderBy("posted_at", "desc")
             ->paginate(10);
@@ -116,11 +95,10 @@ class BlogEtcAdminController extends Controller
     /**
      * Show form to edit post
      *
-     * @param Request $request
      * @param $blogPostId
      * @return mixed
      */
-    public function edit_post(Request $request, $blogPostId)
+    public function edit_post( $blogPostId)
     {
         $post = BlogEtcPost::findOrFail($blogPostId);
         return view("blogetc_admin::posts.edit_post")->withPost($post);
@@ -162,6 +140,7 @@ class BlogEtcAdminController extends Controller
      */
     public function destroy_post(DeleteBlogEtcPostRequest $request, $blogPostId)
     {
+
         $post = BlogEtcPost::findOrFail($blogPostId);
         event(new BlogPostWillBeDeleted($post));
 
@@ -184,10 +163,16 @@ class BlogEtcAdminController extends Controller
      */
     protected function processUploadedImages(BaseRequestInterface $request, BlogEtcPost $new_blog_post)
     {
-        if (!config("blogetc.image_upload_enabled", true)) {
+        if (!config("blogetc.image_upload_enabled")) {
             // image upload was disabled
             return;
         }
+
+        $this->increaseMemoryLimit();
+
+        // to save in db later
+        $uploaded_image_details = [];
+
 
         foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
 
@@ -195,76 +180,24 @@ class BlogEtcAdminController extends Controller
                 // this image size is enabled, and
                 // we have an uploaded image that we can use
 
-                $image_filename = $this->getImageFilename($new_blog_post, $image_size_details, $photo);
+                $uploaded_image = $this->UploadAndResize($new_blog_post, $new_blog_post->title, $image_size_details, $photo);
 
-                $destinationPath = $this->image_destination_path();
-                $this->increaseMemoryLimit();
-                $resizedImage = \Image::make($photo->getRealPath());
-                $resizedImage = $resizedImage->fit($image_size_details['w'], $image_size_details['h']);
-                $resizedImage->save($destinationPath . '/' . $image_filename, config("blogetc.image_quality", 80));
-
-                event(new UploadedImage($new_blog_post, $resizedImage));
-
-                $new_blog_post->$size = $image_filename;
-
+                $new_blog_post->$size = $uploaded_image['filename'];
+                $uploaded_image_details[$size] = $uploaded_image;
             }
         }
-    }
-
-    /**
-     * Get a filename (that doesn't exist) on the filesystem.
-     *
-     * Todo: support multiple filesystem locations.
-     * Todo: move to its own file
-     *
-     * @param BlogEtcPost $new_blog_post
-     * @param $image_size_details
-     * @param $photo
-     * @return string
-     * @throws \RuntimeException
-     */
-    protected function getImageFilename(BlogEtcPost $new_blog_post, array $image_size_details, UploadedFile $photo)
-    {
 
 
-        $base = substr($new_blog_post->title, 0, 100);
-        $wh = '-' . $image_size_details['w'] . 'x' . $image_size_details['h'];
-        $ext = '.' . $photo->getClientOriginalExtension();
-
-
-        $i = 0;
-
-        while (true) {
-
-            $suffix = $i > 1 ? '-' . str_random(5) : '';
-            $attempt = str_slug($base . $suffix . $wh) . $ext;
-
-            if (!File::exists($this->image_destination_path() . "/" . $attempt)) {
-                return $attempt;
-            }
-
-
-            if ($i > 100) {
-                throw new \RuntimeException("Unable to find a free filename after $i attempts - aborting now.");
-            }
-
-            $i++;
+        // store the image upload.
+        // todo: link this to the blogetc_post row.
+        if (count(array_filter($uploaded_image_details))>0) {
+            BlogEtcUploadedPhoto::create([
+                'source' => "BlogFeaturedImage",
+                'uploaded_images' => $uploaded_image_details,
+            ]);
         }
 
 
-    }
-
-    /**
-     * Small method to increase memory limit.
-     * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
-     * This is needed though because if you upload a large image it'll not work
-     */
-    protected function increaseMemoryLimit()
-    {
-    // increase memory - change this setting in config file
-        if (config("blogetc.memory_limit")) {
-            @ini_set('memory_limit', config("blogetc.memory_limit"));
-        }
     }
 
 

@@ -69,7 +69,6 @@
                                     name='author_website'
                                     id="author_website"
                                     placeholder="Your Website URL"
-                                    required
                                     value="{{old("author_website")}}">
                         </div>
                     </div>

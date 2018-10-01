@@ -1,6 +1,8 @@
-@extends("layouts.app",['title'=>$post->title])
+@extends("layouts.app",['title'=>$post->gen_seo_title()])
 @section("content")
 
+
+    {{--https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views--}}
 
     <div class='container'>
     <div class='row'>

@@ -19,8 +19,11 @@ class UserCanManageBlogPosts
      */
     public function handle($request, Closure $next)
     {
-        if (!\Auth::check() ||  !\Auth::user()->canManageBlogEtcPosts()) {
-            abort(401,"User not authorised to manage blog posts");
+        if (!\Auth::check()) {
+            abort(401,"User not authorised to manage blog posts: You are not logged in");
+        }
+        if (!\Auth::user()->canManageBlogEtcPosts()) {
+            abort(401,"User not authorised to manage blog posts: Your account is not authorised to edit blog posts");
         }
         return $next($request);
     }

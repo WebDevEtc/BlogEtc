@@ -5,6 +5,7 @@ namespace WebDevEtc\BlogEtc\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Swis\LaravelFulltext\Search;
 use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
@@ -24,11 +25,10 @@ class BlogEtcReaderController extends Controller
      * Show blog posts
      * If category_slug is set, then only show from that category
      *
-     * @param Request $request
      * @param null $category_slug
      * @return mixed
      */
-    public function index(Request $request, $category_slug = null)
+    public function index( $category_slug = null)
     {
         // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manageb log posts
         $posts = BlogEtcPost::orderBy("posted_at", "desc");
@@ -47,11 +47,19 @@ class BlogEtcReaderController extends Controller
         $posts = $posts->select("blog_etc_posts.*")// because of the join, we don't want to select anything else
         ->paginate(config("blogetc.per_page", 10));
 
-        return view("blogetc::index")
-            ->withPosts($posts)
-            ->withTitle($title);
+        return view("blogetc::index",[
+            'posts' => $posts,
+            'title' => $title,
+        ]);
     }
 
+    /**
+     * Show the search results for $_GET['s']
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Exception
+     */
     public function search(Request $request)
     {
 
@@ -61,25 +69,25 @@ class BlogEtcReaderController extends Controller
 
         $query = $request->get("s");
 
-        $search = new \Swis\LaravelFulltext\Search();
+        $search = new Search();
         $search_results =$search->run($query);
 
         \View::share("title","Search results for " . e($query));
+
         return view("blogetc::search",['query'=>$query,'search_results'=>$search_results]);
 
     }
 
     /**
      * RSS Feed
+     * This is a long (but quite simple) method to show an RSS feed
+     * It makes use of Laravelium\Feed\Feed.
      *
      * @param FeedRequest $request
      * @return mixed
      */
     public function feed(FeedRequest $request)
     {
-
-
-
         /** @var  \Laravelium\Feed\Feed $feed */
         $feed = \App::make("feed");
         $feed->setCache(
@@ -89,10 +97,9 @@ class BlogEtcReaderController extends Controller
 
         if (!$feed->isCached()) {
 
-
             // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manageb log posts
             $posts = BlogEtcPost::orderBy("posted_at", "desc")
-                ->limit(10)
+                ->limit( config("blogetc.rssfeed.posts_to_show_in_rss_feed", 10))
                 ->get();
 
 
@@ -101,24 +108,21 @@ class BlogEtcReaderController extends Controller
             $feed->link = route('blogetc.index');
             $feed->setDateFormat('carbon');
 
-            if (isset($posts[0])) {
-                $feed->pubdate = $posts[0]->posted_at;
-            } else {
-                // fallback
-                $feed->pubdate = Carbon::now()->subYear(10);
-            }
+            $feed->pubdate = isset($posts[0]) ? $posts[0]->posted_at : Carbon::now()->subYear(10);
 
             $feed->lang = config("blogetc.rssfeed.language", "en");
-            $feed->setShortening(true); // true or false
-            $feed->setTextLimit(100); // maximum length of description text
+            $feed->setShortening(config("blogetc.rssfeed.should_shorten_text", true)); // true or false
+            $feed->setTextLimit(config("blogetc.rssfeed.text_limit", 100)); // maximum length of description text
 
+
+            /** @var BlogEtcPost $post */
             foreach ($posts as $post) {
                 $feed->add($post->title,
                     $post->author_name,
                     $post->url(),
                     $post->posted_at,
-                    $post->subtitle,
-                    strip_tags(e($post->html)) // shows from full post - todo: handle this better.
+                    $post->short_description,
+                    $post->generate_introduction()
                 );
             }
 
@@ -137,9 +141,9 @@ class BlogEtcReaderController extends Controller
      * @param $category_slug
      * @return mixed
      */
-    public function view_category(Request $request, $category_slug)
+    public function view_category($category_slug)
     {
-        return $this->index($request, $category_slug);
+        return $this->index($category_slug);
     }
 
     /**
@@ -165,16 +169,17 @@ class BlogEtcReaderController extends Controller
 
 
         /** @var CaptchaAbstract $captcha */
-        $captcha = $this->getCaptchaObject();
+        $captcha = $captcha = $this->getCaptchaObject();
         if ($captcha) {
             $captcha->runCaptchaBeforeShowingPosts($request, $blog_post);
         }
 
 
-        return view("blogetc::single_post")
-            ->withPost($blog_post)
-            ->withComments($comments)
-            ->withCaptcha($captcha);
+        return view("blogetc::single_post", [
+            'post' => $blog_post,
+            'comments' => $comments,
+            'captcha' => $captcha,
+        ]);
     }
 
 
