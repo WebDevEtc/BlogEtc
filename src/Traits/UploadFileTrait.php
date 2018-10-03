@@ -1,4 +1,4 @@
-<? namespace WebDevEtc\BlogEtc\Traits;
+<?php namespace WebDevEtc\BlogEtc\Traits;
 
 use Illuminate\Http\UploadedFile;
 use WebDevEtc\BlogEtc\Events\UploadedImage;

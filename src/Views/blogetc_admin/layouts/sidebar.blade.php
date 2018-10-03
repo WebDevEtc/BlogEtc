@@ -6,7 +6,7 @@
     <li class="list-group-item justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.index') }}">BlogEtc Admin Home</a>
-             <span class="text-muted">(<?
+             <span class="text-muted">(<?php
                  $categoryCount = \WebDevEtc\BlogEtc\Models\BlogEtcPost::count();
 
                  echo $categoryCount . " " . str_plural("Post", $categoryCount);
@@ -36,7 +36,7 @@
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.comments.index') }}">Comments</a>
 
-                            <span class="text-muted">(<?
+                            <span class="text-muted">(<?php
                                 $commentCount = \WebDevEtc\BlogEtc\Models\BlogEtcComment::count();
 
                                 echo $commentCount . " " . str_plural("Comment", $commentCount);
@@ -52,7 +52,7 @@
                     All Comments</a>
 
 
-                <? $comment_approval_count = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where("approved", false)->count(); ?>
+                <?php $comment_approval_count = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where("approved", false)->count(); ?>
 
                 <a href='{{ route('blogetc.admin.comments.index') }}?waiting_for_approval=true'
                    class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.comments.index' && \Request::get("waiting_for_approval")) active @elseif($comment_approval_count>0) list-group-item-warning @endif  '><i
@@ -68,7 +68,7 @@
     <li class="list-group-item  justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.categories.index') }}">Categories</a>
-                    <span class="text-muted">(<?
+                    <span class="text-muted">(<?php
                         $postCount = \WebDevEtc\BlogEtc\Models\BlogEtcCategory::count();
                         echo $postCount . " " . str_plural("Category", $postCount);
                         ?>)</span>

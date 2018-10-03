@@ -50,7 +50,7 @@
                         <strong>View file:</strong><br>
                         <code>{{$post->use_view_file}}</code>
 
-                        <?
+                        <?php
 
                         $viewfile = resource_path("views/custom_blog_posts/" . $post->use_view_file . ".blade.php");
 

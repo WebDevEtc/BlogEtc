@@ -19,7 +19,7 @@
 
 @case("disabled")
 {{--comments are disabled--}}
-<?
+<?php
 return;  // not required, as we already filter for this
 ?>
 @break

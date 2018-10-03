@@ -1,4 +1,4 @@
-<? namespace WebDevEtc\BlogEtc\Captcha;
+<?php namespace WebDevEtc\BlogEtc\Captcha;
 
 /**
  * Trait UsesCaptcha

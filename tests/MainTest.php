@@ -87,7 +87,6 @@ class MainTest extends \Tests\TestCase
             $this->assertTrue(is_string($image_info['basic_key']));
             $this->assertTrue(is_string($image_key));
 
-            $this->assertEquals(count($image_info), 5);
 
 
         }

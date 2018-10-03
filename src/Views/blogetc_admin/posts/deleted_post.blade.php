@@ -5,7 +5,7 @@
     <div class='alert alert-success'><b>Deleted that post</b>
         <br/><a href='{{ route('blogetc.admin.index') }}' class='btn btn-primary '>Back to posts overview</a></div>
 
-    <?
+    <?php
     $images_to_delete = [];
     foreach ((array) config("blogetc.image_sizes") as $image_size => $image_size_info) {
         if (!$deletedPost->$image_size) {

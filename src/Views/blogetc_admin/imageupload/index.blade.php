@@ -36,7 +36,7 @@
                 <div class='col-md-8'>
                     <div class='row' style=' margin: 10px; background: #eee; overflow:auto; padding:5px;'>
 
-                        <?
+                        <?php
                         $smallest = null;
                         $smallest_size = -1;
                         foreach ($uploadedPhoto->uploaded_images as $file_key => $file) {
@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <?
+                        <?php
 
                         $area = $file['w'] * $file['h'];
                         if ($area < $smallest_size || $smallest_size < 0) {

@@ -1,4 +1,4 @@
-<? namespace WebDevEtc\BlogEtc\Interfaces;
+<?php namespace WebDevEtc\BlogEtc\Interfaces;
 
 interface CaptchaInterface
 {
