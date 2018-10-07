@@ -11,7 +11,9 @@
     "write",
     "posts",
     "news",
-    "update"
+    "update",
+    "webdevetc",
+    "webdev"
   ],
   "description": "Simple blog (with admin panel) for Laravel from https://webdevetc.com/",
   "license": "MIT",

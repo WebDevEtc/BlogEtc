@@ -149,6 +149,8 @@ Try adding this to config/app.php:
 
 
 
+- 3.0.2                 - fixed default medium image size (changed to 600x400)
+- 3.0.1                 - replaced all short tags (<?) with full opening ones (<?php)
 - 3.0                   - Added separate functionality for uploading images (and save some meta data in db)
 - 2.1                   - added 'short_description' to db + form, and BlogEtcPost::generate_introduction() method will try and use this to generate intro text.
 - 2.0                   - added full text search (enable it via the config file - it is disabled by default).

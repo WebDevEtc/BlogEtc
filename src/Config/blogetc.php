@@ -65,8 +65,8 @@ return [
             'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
         ],
         'image_medium' => [ // this key must start with 'image_'. This is what the DB column must be named
-            'w' => 120, // width in pixels
-            'h' => 600, //height
+            'w' => 600, // width in pixels
+            'h' => 400, //height
             'basic_key' => "medium",// same as the main key, but WITHOUT 'image_'.
             'name' => "Medium",// description, used in the admin panel
             'enabled' => true, // see note above
