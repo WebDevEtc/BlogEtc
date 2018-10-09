@@ -90,9 +90,17 @@ class BlogEtcReaderController extends Controller
     {
         /** @var  \Laravelium\Feed\Feed $feed */
         $feed = \App::make("feed");
+
+
+
+
+
+        // if a logged in user views the RSS feed it will get cached, and if they are an admin user then it'll show all posts (even if it is not set as published)
+        $user = \Auth::check() ? \Auth::user()->id : 'guest';
+
         $feed->setCache(
             config("blogetc.rssfeed.cache_in_minutes", 60),
-            "blog-" . $request->getFeedType()
+            "blog-" . $request->getFeedType() . $user
         );
 
         if (!$feed->isCached()) {

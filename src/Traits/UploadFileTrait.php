@@ -7,6 +7,8 @@ use File;
 
 trait UploadFileTrait
 {
+    /** How many tries before we throw an Exception error */
+    static $num_of_attempts_to_find_filename=100;
 
     /**
      * If false, we check if the blog_images/ dir is writable, when uploading images
@@ -41,28 +43,16 @@ trait UploadFileTrait
      * @return string
      * @throws \RuntimeException
      */
-    protected function getImageFilename(string $suggested_title,  $image_size_details, UploadedFile $photo)
+    protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo)
     {
-
-
         $base = substr($suggested_title, 0, 100);
         if (!$base) {
             // if we have an empty string then we should use a random one:
-            $base = 'image-'.str_random(5);
+            $base = 'image-' . str_random(5);
         }
 
-        if (is_array($image_size_details)) {
-            $wh = '-' . $image_size_details['w'] . 'x' . $image_size_details['h'];
-        }
-        elseif(is_string($image_size_details)) {
-
-            $wh="-".str_slug($image_size_details);
-        }
-        else {
-            throw new \RuntimeException("Invalid image_size_details: must be an array with w and h, or a string");
-        }
+        $wh = $this->getWhForFilename($image_size_details);
         $ext = '.' . $photo->getClientOriginalExtension();
-
 
         $i = 1;
 
@@ -70,14 +60,14 @@ trait UploadFileTrait
 
             // add suffix if $i>1
             $suffix = $i > 1 ? '-' . str_random(5) : '';
+
             $attempt = str_slug($base . $suffix . $wh) . $ext;
 
             if (!File::exists($this->image_destination_path() . "/" . $attempt)) {
                 return $attempt;
             }
 
-
-            if ($i > 100) {
+            if ($i > self::$num_of_attempts_to_find_filename) {
                 throw new \RuntimeException("Unable to find a free filename after $i attempts - aborting now.");
             }
 
@@ -115,7 +105,7 @@ trait UploadFileTrait
      * @return array
      * @throws \Exception
      */
-    protected function UploadAndResize(BlogEtcPost $new_blog_post= null, $suggested_title, $image_size_details, $photo)
+    protected function UploadAndResize(BlogEtcPost $new_blog_post = null, $suggested_title, $image_size_details, $photo)
     {
         // get the filename/filepath
         $image_filename = $this->getImageFilename($suggested_title, $image_size_details, $photo);
@@ -136,16 +126,13 @@ trait UploadFileTrait
             if (isset($image_size_details['crop']) && $image_size_details['crop']) {
                 $resizedImage = $resizedImage->fit($w, $h);
             } else {
-
                 $resizedImage = $resizedImage->resize($w, $h, function ($constraint) {
                     $constraint->aspectRatio();
                 });
             }
-        }
-        elseif ($image_size_details === 'fullsize') {
+        } elseif ($image_size_details === 'fullsize') {
             // nothing to do here - no resizing needed.
-        }
-        else {
+        } else {
             throw new \Exception("Invalid image_size_details value");
         }
 
@@ -158,11 +145,27 @@ trait UploadFileTrait
         // return the filename
         return [
             'filename' => $image_filename,
-            'w'=>$w,
-            'h'=>$h,
+            'w' => $w,
+            'h' => $h,
         ];
 
     }
 
+    /**
+     * @param $image_size_details
+     * @return string
+     * @throws \RuntimeException
+     */
+    protected function getWhForFilename($image_size_details)
+    {
+        if (is_array($image_size_details)) {
+            $wh = '-' . $image_size_details['w'] . 'x' . $image_size_details['h'];
+            return $wh;
+        } elseif (is_string($image_size_details)) {
+            $wh = "-" . str_slug($image_size_details);
+            return $wh;
+        }
+        throw new \RuntimeException("Invalid image_size_details: must be an array with w and h, or a string");
+    }
 
 }
