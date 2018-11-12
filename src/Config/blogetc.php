@@ -20,7 +20,8 @@ return [
 
     'memory_limit' => '2048M', // This is used when uploading images :
     //                              @ini_set('memory_limit', config("blogetc.memory_limit"));
-    //                            See PHP.net for details
+    //                            See PHP.net for detailso
+    //                            Set to false to not set any value.
 
 
     //if true it will echo out  (with {!! !!}) the blog post with NO escaping! This is not safe if you don't trust your blog post writers! Understand the risks by leaving this to true

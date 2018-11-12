@@ -37,4 +37,10 @@ class BlogEtcCategory extends Model
     {
         return route("blogetc.admin.categories.edit_category", $this->id);
     }
+
+//    public function scopeApproved($query)
+//    {
+//        dd("A");
+//        return $query->where("approved", true);
+//    }
 }

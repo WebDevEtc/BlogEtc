@@ -24,7 +24,5 @@ class BlogEtcPublishedScope implements Scope
             $builder->where("is_published", true);
             $builder->where("posted_at", "<=", Carbon::now());
         }
-
-
     }
 }

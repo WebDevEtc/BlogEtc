@@ -10,12 +10,10 @@ class BlogEtcUploadedPhoto extends Model
     public $casts = [
         'uploaded_images' => 'array',
     ];
-    public $fillable= [
+    public $fillable = [
 
         'image_title',
         'uploader_id',
         'source', 'uploaded_images',
     ];
-
-
 }

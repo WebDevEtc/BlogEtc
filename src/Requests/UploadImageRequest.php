@@ -9,21 +9,8 @@ use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
  * Class BaseRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-class UploadImageRequest extends FormRequest implements BaseRequestInterface
+class UploadImageRequest extends BaseRequest
 {
-
-
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return \Auth::check() && \Auth::user()->canManageBlogEtcPosts();
-    }
-
-
     /**
      *  rules for uploads
      *
@@ -31,8 +18,6 @@ class UploadImageRequest extends FormRequest implements BaseRequestInterface
      */
     public function rules()
     {
-
-
         $rules = [
             'sizes_to_upload' => [
                 'required',
@@ -52,13 +37,8 @@ class UploadImageRequest extends FormRequest implements BaseRequestInterface
                 'min:1',
                 'max:150',
             ],
-
-
         ];
-
 
         return $rules;
     }
-
-
 }

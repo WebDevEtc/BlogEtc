@@ -18,7 +18,6 @@ class FeedRequest extends FormRequest
         return true;
     }
 
-
     /**
      *
      *
@@ -37,8 +36,6 @@ class FeedRequest extends FormRequest
      */
     public function getFeedType()
     {
-        return \Request::get("type") === 'rss' ? 'rss' : 'atom';
+        return $this->get("type") === 'rss' ? 'rss' : 'atom';
     }
-
-
 }

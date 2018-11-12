@@ -1,10 +1,10 @@
 <?php
-
 namespace WebDevEtc\BlogEtc\Requests;
 
 
+use Illuminate\Validation\Rule;
 
-class StoreBlogEtcCategoryRequest extends BaseRequest
+class StoreBlogEtcCategoryRequest extends BaseBlogEtcCategoryRequest
 {
 
     /**
@@ -15,7 +15,7 @@ class StoreBlogEtcCategoryRequest extends BaseRequest
     public function rules()
     {
         $return = $this->baseCategoryRules();
-        $return['slug'][] = "unique:blog_etc_categories,slug";
+        $return['slug'] [] = Rule::unique("blog_etc_categories", "slug");
         return $return;
     }
 }

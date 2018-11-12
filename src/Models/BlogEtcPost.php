@@ -22,7 +22,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
     protected $indexContentColumns = ['post_body', 'short_description', 'meta_desc',];
     protected $indexTitleColumns = ['title', 'subtitle', 'seo_title',];
 
-
     /**
      * @var array
      */
@@ -71,7 +70,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
 
     public function search_result_page_url()
     {
-
         return $this->url();
     }
 
@@ -79,7 +77,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
     {
         return $this->title;
     }
-
 
     /**
      * The "booting" method of the model.
@@ -90,9 +87,9 @@ class BlogEtcPost extends Model implements SearchResultInterface
     {
         parent::boot();
 
-        // If user is logged in and \Auth::user()->canManageBlogEtcPosts() == true, show any/all posts.
-        // otherwise (which will be for most users) it should only show published posts that have a posted_at
-        // time <= Carbon::now(). This sets it up:
+        /* If user is logged in and \Auth::user()->canManageBlogEtcPosts() == true, show any/all posts.
+           otherwise (which will be for most users) it should only show published posts that have a posted_at
+           time <= Carbon::now(). This sets it up: */
         static::addGlobalScope(new BlogEtcPublishedScope());
     }
 
@@ -116,9 +113,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
         } else {
             return 'Unknown Author';
         }
-
     }
-
 
     /**
      * The associated categories for this blog post
@@ -210,8 +205,8 @@ class BlogEtcPost extends Model implements SearchResultInterface
      */
     public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null)
     {
-
         if (!$this->has_image($size)) {
+            // return an empty string if this image does not exist.
             return '';
         }
         $url = e($this->image_url($size));
@@ -235,8 +230,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
 
     public function post_body_output()
     {
-
-
         if (config("blogetc.use_custom_view_files") && $this->use_view_file) {
             // using custom view files is enabled, and this post has a use_view_file set, so render it:
             $return = view("blogetc::partials.use_view_file", ['post' => $this])->render();
@@ -259,7 +252,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
         }
 
         return $return;
-
     }
 
 
@@ -278,13 +270,10 @@ class BlogEtcPost extends Model implements SearchResultInterface
             return true;
         }
 
-//        $e = new \Exception();
-////        dump($e->getTraceAsString());
-//
-//        dd('image_'.$size, config("blogetc.image_sizes"));
         // was an error!
 
         if (starts_with($size, "image_")) {
+            // $size starts with image_, which is an error
             /* the config/blogetc.php and the DB columns SHOULD have keys that start with image_$size
             however when using methods such as image_url() or has_image() it SHOULD NOT start with 'image_'
 
@@ -293,23 +282,27 @@ class BlogEtcPost extends Model implements SearchResultInterface
                 in the database table:    : blogetc_posts.image_medium
                 when calling image_url()  : image_url("medium")
             */
-
-
             throw new \InvalidArgumentException("Invalid image size ($size). BlogEtcPost image size should not begin with 'image_'. Remove this from the start of $size. It *should* be in the blogetc.image_sizes config though!");
         }
+
 
         throw new \InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
     }
 
 
+    /**
+     *
+     * If $this->seo_title was set, return that.
+     * Otherwise just return $this->title
+     *
+     * Basically return $this->seo_title ?? $this->title;
+     * @return string
+     */
     public function gen_seo_title()
     {
-
         if ($this->seo_title) {
             return $this->seo_title;
         }
-
         return $this->title;
-
     }
 }

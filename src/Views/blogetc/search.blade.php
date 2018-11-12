@@ -10,7 +10,7 @@
             @forelse($search_results as $result)
 
                 <?php $post = $result->indexable; ?>
-                @if(is_a($post,\WebDevEtc\BlogEtc\Models\BlogEtcPost::class))
+                @if($post && is_a($post,\WebDevEtc\BlogEtc\Models\BlogEtcPost::class))
                     <h2>Search result #{{$loop->count}}</h2>
                     @include("blogetc::partials.index_loop")
                 @else

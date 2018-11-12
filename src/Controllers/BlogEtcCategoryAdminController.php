@@ -19,8 +19,6 @@ use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
  */
 class BlogEtcCategoryAdminController extends Controller
 {
-
-
     /**
      * BlogEtcCategoryAdminController constructor.
      */
@@ -72,11 +70,8 @@ class BlogEtcCategoryAdminController extends Controller
      * @return mixed
      */
     public function edit_category($categoryId){
-
         $category = BlogEtcCategory::findOrFail($categoryId);
-
         return view("blogetc_admin::categories.edit_category")->withCategory($category);
-
     }
 
     /**
@@ -87,8 +82,6 @@ class BlogEtcCategoryAdminController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId){
-
-
         /** @var BlogEtcCategory $category */
         $category = BlogEtcCategory::findOrFail($categoryId);
         $category->fill($request->all());

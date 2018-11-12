@@ -587,7 +587,7 @@ class MainTest extends \Tests\TestCase
         $this->assertDatabaseHas('blog_etc_comments', ['approved' => false, 'author_name' => $comment_detail['author_name']]);
 
 
-        $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where('author_name', $comment_detail['author_name'])->firstOrFail();
+        $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->where('author_name', $comment_detail['author_name'])->firstOrFail();
 
         $response = $this->get(route("blogetc.admin.comments.index"));
         $response->assertSee($justAddedRow->author_name);
@@ -650,7 +650,7 @@ class MainTest extends \Tests\TestCase
         $this->assertDatabaseHas('blog_etc_comments', ['approved' => false, 'author_name' => $comment_detail['author_name']]);
 
 
-        $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where('author_name', $comment_detail['author_name'])->firstOrFail();
+        $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->where('author_name', $comment_detail['author_name'])->firstOrFail();
 
         $response = $this->get(route("blogetc.admin.comments.index"));
         $response->assertSee($justAddedRow->author_name);
@@ -708,7 +708,7 @@ class MainTest extends \Tests\TestCase
             $this->assertDatabaseHas('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
 
 
-            $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where('author_name', $comment_detail['author_name'])->firstOrFail();
+            $justAddedRow = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->where('author_name', $comment_detail['author_name'])->firstOrFail();
 
             // check the just added row exists...
             $response = $this->get(route("blogetc.admin.comments.index"));

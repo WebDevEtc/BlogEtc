@@ -10,9 +10,8 @@
 
     <title>Blog Admin - {{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    {{--<script src="{{ asset('js/app.js') }}" defer></script>--}}
 
+    <!-- jQuery is only used for hide(), show() and slideDown(). All other features use vanilla JS -->
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

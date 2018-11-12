@@ -3,12 +3,12 @@
 namespace WebDevEtc\BlogEtc\Requests;
 
 
+use Illuminate\Validation\Rule;
 use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
-class CreateBlogEtcPostRequest extends BaseRequest
+class CreateBlogEtcPostRequest extends BaseBlogEtcPostRequest
 {
-
     use HasCategoriesTrait;
     use HasImageUploadTrait;
 
@@ -19,8 +19,8 @@ class CreateBlogEtcPostRequest extends BaseRequest
      */
     public function rules()
     {
-        $return = $this->BaseBlogPostRules();
-        $return['slug'][] = 'unique:blog_etc_posts,slug'; // creating, so lets make sure it is unique in the whole table
+        $return = $this->baseBlogPostRules();
+        $return['slug'] [] = Rule::unique("blog_etc_posts", "slug");
         return $return;
     }
 

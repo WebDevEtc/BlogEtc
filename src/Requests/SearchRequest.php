@@ -2,18 +2,16 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
 
-class SearchRequest extends BaseRequest
+class SearchRequest extends FormRequest
 {
-
     public function authorize()
     {
-
         if (config("blogetc.search.search_enabled")) {
             // anyone is allowed to submit a comment, to return true always.
             return true;
         }
-
         //comments are disabled so just return false to disallow everyone.
         return false;
     }
@@ -25,11 +23,9 @@ class SearchRequest extends BaseRequest
      */
     public function rules()
     {
-
         return [
             's' => ['nullable', 'string', 'min:3', 'max:40'],
         ];
-
     }
 
 }

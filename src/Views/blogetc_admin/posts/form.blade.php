@@ -148,7 +148,7 @@
                     ">
                 @if($post->has_image($size_info['basic_key']))
                     <div style='max-width:55px;  ' class='float-right m-2'>
-                        <a target='_blank' href='{{$post->image_url($size_info['basic_key'])}}'>
+                        <a style='cursor: zoom-in;' target='_blank' href='{{$post->image_url($size_info['basic_key'])}}'>
                             <?=$post->image_tag($size_info['basic_key'], false, 'd-block mx-auto img-fluid '); ?>
                         </a>
                     </div>

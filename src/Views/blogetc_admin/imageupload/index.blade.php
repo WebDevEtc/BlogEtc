@@ -13,8 +13,6 @@
         function show_uploaded_file_row(id, img) {
 
             // show the div, and populate it with the image.
-            // don't rely on jQuery for this.
-
             [].forEach.call(document.querySelectorAll('.' + id), function (el) {
                 el.style.display = 'block';
             });
@@ -50,6 +48,8 @@
                             <p class='text-center'><a
                                         href='{{asset(     config("blogetc.blog_upload_dir") . "/". $file['filename'])}}'
                                         target='_blank'>[link]</a> / <span
+                                        class='btn btn-sm btn-primary'
+                                        style='cursor: zoom-in;'
                                         onclick='show_uploaded_file_row("{{$id}}","{{asset(     config("blogetc.blog_upload_dir") . "/". $file['filename'])}}")'>show</span>
                             </p>
 
@@ -89,7 +89,7 @@
 
 
                         <div style='text-align:center;'>
-                            <a href='{{asset(     config("blogetc.blog_upload_dir") . "/". $smallest['filename'])}}'
+                            <a style='cursor: zoom-in;' href='{{asset(     config("blogetc.blog_upload_dir") . "/". $smallest['filename'])}}'
                                target='_blank'>
                                 <img src='{{asset(     config("blogetc.blog_upload_dir") . "/". $smallest['filename'])}}'
                                      style='max-width:100%; height: auto;'>

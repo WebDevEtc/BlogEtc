@@ -37,7 +37,7 @@
             <h6 class="my-0"><a href="{{ route('blogetc.admin.comments.index') }}">Comments</a>
 
                             <span class="text-muted">(<?php
-                                $commentCount = \WebDevEtc\BlogEtc\Models\BlogEtcComment::count();
+                                $commentCount = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->count();
 
                                 echo $commentCount . " " . str_plural("Comment", $commentCount);
 
@@ -52,7 +52,7 @@
                     All Comments</a>
 
 
-                <?php $comment_approval_count = \WebDevEtc\BlogEtc\Models\BlogEtcComment::where("approved", false)->count(); ?>
+                <?php $comment_approval_count = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->where("approved", false)->count(); ?>
 
                 <a href='{{ route('blogetc.admin.comments.index') }}?waiting_for_approval=true'
                    class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.comments.index' && \Request::get("waiting_for_approval")) active @elseif($comment_approval_count>0) list-group-item-warning @endif  '><i

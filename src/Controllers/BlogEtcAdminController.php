@@ -16,7 +16,6 @@ use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
-use File;
 use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 
 /**
@@ -26,7 +25,6 @@ use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 class BlogEtcAdminController extends Controller
 {
     use UploadFileTrait;
-
 
     /**
      * BlogEtcAdminController constructor.
@@ -51,16 +49,14 @@ class BlogEtcAdminController extends Controller
         $posts = BlogEtcPost::orderBy("posted_at", "desc")
             ->paginate(10);
 
-        return view("blogetc_admin::index")
-            ->withPosts($posts);
+        return view("blogetc_admin::index", ['posts'=>$posts]);
     }
 
     /**
      * Show form for creating new post
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create_post(Request $request)
+    public function create_post()
     {
         return view("blogetc_admin::posts.add_post");
     }
@@ -114,7 +110,6 @@ class BlogEtcAdminController extends Controller
      */
     public function update_post(UpdateBlogEtcPostRequest $request, $blogPostId)
     {
-
         /** @var BlogEtcPost $post */
         $post = BlogEtcPost::findOrFail($blogPostId);
         $post->fill($request->all());
@@ -160,6 +155,7 @@ class BlogEtcAdminController extends Controller
      * @param BaseRequestInterface $request
      * @param $new_blog_post
      * @throws \Exception
+     * @todo - next full release, tidy this up!
      */
     protected function processUploadedImages(BaseRequestInterface $request, BlogEtcPost $new_blog_post)
     {

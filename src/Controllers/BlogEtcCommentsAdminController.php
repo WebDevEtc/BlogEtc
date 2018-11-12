@@ -16,8 +16,6 @@ use WebDevEtc\BlogEtc\Models\BlogEtcComment;
  */
 class BlogEtcCommentsAdminController extends Controller
 {
-
-
     /**
      * BlogEtcCommentsAdminController constructor.
      */
@@ -34,19 +32,17 @@ class BlogEtcCommentsAdminController extends Controller
      */
     public function index(Request $request)
     {
-        $comments = BlogEtcComment::orderBy("created_at", "desc")
+        $comments = BlogEtcComment::withoutGlobalScopes()->orderBy("created_at", "desc")
             ->with("post");
 
         if ($request->get("waiting_for_approval")) {
-
-            $comments->where("approved",false);
+            $comments->where("approved", false);
         }
 
-
-            $comments=$comments->paginate(100);
+        $comments = $comments->paginate(100);
         return view("blogetc_admin::comments.index")
             ->withComments($comments
-                );
+            );
     }
 
 
@@ -58,15 +54,15 @@ class BlogEtcCommentsAdminController extends Controller
      */
     public function approve($blogCommentId)
     {
-        $comment = BlogEtcComment::findOrFail($blogCommentId);
+        $comment = BlogEtcComment::withoutGlobalScopes()->findOrFail($blogCommentId);
         $comment->approved = true;
         $comment->save();
 
         Helpers::flash_message("Approved!");
-
         event(new CommentApproved($comment));
 
         return back();
+
     }
 
     /**
@@ -77,9 +73,11 @@ class BlogEtcCommentsAdminController extends Controller
      */
     public function destroy($blogCommentId)
     {
-        $comment = BlogEtcComment::findOrFail($blogCommentId);
+        $comment = BlogEtcComment::withoutGlobalScopes()->findOrFail($blogCommentId);
         event(new CommentWillBeDeleted($comment));
+
         $comment->delete();
+
         Helpers::flash_message("Deleted!");
         return back();
     }

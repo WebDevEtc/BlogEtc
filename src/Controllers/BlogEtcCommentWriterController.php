@@ -38,14 +38,29 @@ class BlogEtcCommentWriterController extends Controller
         $blog_post = BlogEtcPost::where("slug", $blog_post_slug)
             ->firstOrFail();
 
-
         /** @var CaptchaAbstract $captcha */
         $captcha = $this->getCaptchaObject();
         if ($captcha) {
             $captcha->runCaptchaBeforeAddingComment($request, $blog_post);
         }
 
+        $new_comment = $this->createNewComment($request, $blog_post);
 
+        return view("blogetc::saved_comment", [
+            'captcha' => $captcha,
+            'blog_post' => $blog_post,
+            'new_comment' => $new_comment
+        ]);
+
+    }
+
+    /**
+     * @param AddNewCommentRequest $request
+     * @param $blog_post
+     * @return BlogEtcComment
+     */
+    protected function createNewComment(AddNewCommentRequest $request, $blog_post)
+    {
         $new_comment = new BlogEtcComment($request->all());
 
         if (config("blogetc.comments.save_ip_address")) {
@@ -67,12 +82,7 @@ class BlogEtcCommentWriterController extends Controller
 
         event(new CommentAdded($blog_post, $new_comment));
 
-        return view("blogetc::saved_comment", [
-            'captcha' => $captcha,
-            'blog_post' => $blog_post,
-            'new_comment' => $new_comment
-        ]);
-
+        return $new_comment;
     }
 
 }

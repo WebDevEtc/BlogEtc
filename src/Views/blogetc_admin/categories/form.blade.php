@@ -4,23 +4,22 @@
     /* Generate the slug field, if it was not touched by the user (or if it was an empty string) */
     function populate_slug_field() {
 
-        var cat_slug = $('#category_slug');
+//        alert("A");
+        var cat_slug = document.getElementById('category_slug');
 
-        if (cat_slug.val().length < 1) {
+        if (cat_slug.value.length < 1) {
             // if the slug field is empty, make sure it auto generates
             SHOULD_AUTO_GEN_SLUG = true;
         }
 
         if (SHOULD_AUTO_GEN_SLUG) {
             // the slug hasn't been manually changed (or it was set above), so we should generate the slug
-            var newval = $("#category_category_name").val().toLowerCase()
-                    .replace(/[^\w ]+/g, '')
-                    .replace(/_+/g, '-')
-                    .replace(/ +/g, '-');
+            // This is done in two stages - one to remove non words/spaces etc, the another to replace white space (and underscore) with a -
+            cat_slug.value =document.getElementById("category_category_name").value.toLowerCase()
+                    .replace(/[^\w-_ ]+/g, '') // replace with nothing
+                    .replace(/[_ ]+/g, '-') // replace _ and spaces with -
+                    .substring(0,99); // limit str length
 
-            newval = newval.substring(0, 99);
-
-            cat_slug.val(newval);
         }
 
     }
@@ -75,7 +74,7 @@
 </div>
 
 <script>
-    if ($("#category_slug").val().length < 1) {
+    if (document.getElementById("category_slug").value.length < 1) {
         SHOULD_AUTO_GEN_SLUG = true;
     } else {
         SHOULD_AUTO_GEN_SLUG = false; // there is already a value in #category_slug, so lets pretend it was changed already.

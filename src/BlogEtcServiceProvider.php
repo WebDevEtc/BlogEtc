@@ -59,12 +59,9 @@ class BlogEtcServiceProvider extends ServiceProvider
         // for the admin backend views ( view("blogetc_admin::BLADEFILE") )
         $this->loadViewsFrom(__DIR__ . "/Views/blogetc_admin", 'blogetc_admin');
 
-
         // for public facing views (view("blogetc::BLADEFILE")):
-        // if you do the vendor:publis, these will be copied to /resources/views/vendor/blogetc anyway
+        // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc anyway
         $this->loadViewsFrom(__DIR__ . "/Views/blogetc", 'blogetc');
-
-
     }
 
 }
