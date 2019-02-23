@@ -14,7 +14,6 @@ use WebDevEtc\BlogEtc\Interfaces\SearchResultInterface;
  */
 class BlogEtcPost extends Model implements SearchResultInterface
 {
-
     use Sluggable;
     use Indexable;
 
@@ -55,7 +54,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
 
     /**
      * The callback or user property to be used when resolving author name.
-     * 
+     *
      * @var string|callable
      */
     protected static $authorNameResolver;
@@ -118,7 +117,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
     public function author_string()
     {
         if ($this->author) {
-            return is_callable(self::$authorNameResolver) 
+            return is_callable(self::$authorNameResolver)
                 ? call_user_func_array(self::$authorNameResolver, [$this->author])
                 : $this->author->{self::$authorNameResolver};
         } else {
@@ -181,16 +180,17 @@ class BlogEtcPost extends Model implements SearchResultInterface
         return 'custom_blog_posts.'.$this->use_view_file;
     }
 
-
     /**
      * Does this object have an uploaded image of that size...?
      *
      * @param string $size
+     * 
      * @return int
      */
     public function has_image($size = 'medium')
     {
         $this->check_valid_image_size($size);
+
         return strlen($this->{'image_'.$size});
     }
 
@@ -206,6 +206,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
     {
         $this->check_valid_image_size($size);
         $filename = $this->{'image_'.$size};
+
         return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
     }
 
@@ -221,14 +222,14 @@ class BlogEtcPost extends Model implements SearchResultInterface
      */
     public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null)
     {
-        if (!$this->has_image($size)) {
+        if (! $this->has_image($size)) {
             // return an empty string if this image does not exist.
             return '';
         }
         $url = e($this->image_url($size));
         $alt = e($this->title);
         $img = "<img src='$url' alt='$alt' class='".e($img_class)."' >";
-        return $auto_link ? "<a class='".e($anchor_class)."' href='" . e($this->url())."'>$img</a>" : $img;
+        return $auto_link ? "<a class='".e($anchor_class)."' href='".e($this->url())."'>$img</a>" : $img;
 
     }
 
@@ -241,6 +242,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
         $base_text_to_use = strip_tags($base_text_to_use);
 
         $intro = str_limit($base_text_to_use, (int) $max_len);
+
         return nl2br(e($intro));
     }
 
@@ -253,7 +255,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
             // just use the plain ->post_body
             $return = $this->post_body;
         }
-
 
         if (! config('blogetc.echo_html')) {
             // if this is not true, then we should escape the output
@@ -270,7 +271,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
         return $return;
     }
 
-
     /**
      * Throws an exception if $size is not valid
      * It should be either 'large','medium','thumbnail'.
@@ -283,8 +283,6 @@ class BlogEtcPost extends Model implements SearchResultInterface
      */
     protected function check_valid_image_size(string $size = 'medium')
     {
-
-
         if (array_key_exists('image_'.$size, config('blogetc.image_sizes'))) {
             return true;
         }
@@ -304,10 +302,8 @@ class BlogEtcPost extends Model implements SearchResultInterface
             throw new \InvalidArgumentException("Invalid image size ($size). BlogEtcPost image size should not begin with 'image_'. Remove this from the start of $size. It *should* be in the blogetc.image_sizes config though!");
         }
 
-
         throw new \InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
     }
-
 
     /**
      * If $this->seo_title was set, return that.
@@ -322,6 +318,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
         if ($this->seo_title) {
             return $this->seo_title;
         }
+        
         return $this->title;
     }
 }
