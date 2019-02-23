@@ -184,7 +184,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
      * Does this object have an uploaded image of that size...?
      *
      * @param string $size
-     * 
+     *
      * @return int
      */
     public function has_image($size = 'medium')
@@ -318,7 +318,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
         if ($this->seo_title) {
             return $this->seo_title;
         }
-        
+
         return $this->title;
     }
 }
