@@ -55,6 +55,12 @@ class BlogEtcPost extends Model implements SearchResultInterface
     ];
 
     /**
+     * [$authorNameResolver description]
+     * @var string|Callable
+     */
+    protected static $authorNameResolver;
+
+    /**
      * Return the sluggable configuration array for this model.
      *
      * @return array
@@ -86,6 +92,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
     protected static function boot()
     {
         parent::boot();
+        static::$authorNameResolver = config('blogetc.comments.user_field_for_author_name');
 
         /* If user is logged in and \Auth::user()->canManageBlogEtcPosts() == true, show any/all posts.
            otherwise (which will be for most users) it should only show published posts that have a posted_at
@@ -109,7 +116,9 @@ class BlogEtcPost extends Model implements SearchResultInterface
     public function author_string()
     {
         if ($this->author) {
-            return optional($this->author)->name;
+            return is_callable(self::$authorNameResolver) 
+                ? call_user_func_array(self::$authorNameResolver, [$this->author])
+                : $this->author->{self::$authorNameResolver};
         } else {
             return 'Unknown Author';
         }
