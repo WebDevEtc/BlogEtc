@@ -177,6 +177,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
         if (! $this->use_view_file) {
             throw new \RuntimeException('use_view_file was empty, so cannot use '.__METHOD__);
         }
+        
         return 'custom_blog_posts.'.$this->use_view_file;
     }
 
@@ -229,7 +230,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
         $url = e($this->image_url($size));
         $alt = e($this->title);
         $img = "<img src='$url' alt='$alt' class='".e($img_class)."' >";
-        return $auto_link ? "<a class='".e($anchor_class)."' href='".e($this->url())."'>$img</a>" : $img;
+        return $auto_link ? "<a class='".e($anchor_class)."' href='".e($this->url())."'>$img</a>" : $img;;
 
     }
 
