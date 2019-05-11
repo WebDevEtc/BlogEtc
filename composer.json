@@ -1,4 +1,5 @@
 {
+  "minimum-stability": "dev",
   "name": "gavuk/blogetc",
   "keywords": [
     "laravel",
