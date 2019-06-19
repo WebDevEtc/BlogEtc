@@ -1,19 +1,22 @@
+<?php
+/** @var BlogEtcPost $post */
+?>use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 <div class='add_comment_area'>
     <h5 class='text-center'>Add a comment</h5>
-    <form method='post' action='{{route("blogetc.comments.add_new_comment", $post->slug)}}'>
+    <form method='post' action='{{route('blogetc.comments.add_new_comment', $post->slug)}}'>
         @csrf
 
 
         <div class="form-group ">
 
             <label id="comment_label" for="comment">Your Comment </label>
-                    <textarea
-                            class="form-control"
-                            name='comment'
-                            required
-                            id="comment"
-                            placeholder="Write your comment here"
-                            rows="7">{{old("comment")}}</textarea>
+            <textarea
+                    class="form-control"
+                    name='comment'
+                    required
+                    id="comment"
+                    placeholder="Write your comment here"
+                    rows="7">{{old('comment')}}</textarea>
 
 
         </div>
@@ -21,7 +24,7 @@
         <div class='container-fluid'>
             <div class='row'>
 
-                @if(config("blogetc.comments.save_user_id_if_logged_in", true) == false || !\Auth::check())
+                @if(config('blogetc.comments.save_user_id_if_logged_in', true) == false || !Auth::check())
 
                     <div class='col'>
                         <div class="form-group ">
@@ -33,11 +36,11 @@
                                     id="author_name"
                                     placeholder="Your name"
                                     required
-                                    value="{{old("author_name")}}">
+                                    value="{{old('author_name')}}">
                         </div>
                     </div>
 
-                    @if(config("blogetc.comments.ask_for_author_email"))
+                    @if(config('blogetc.comments.ask_for_author_email'))
                         <div class='col'>
                             <div class="form-group">
                                 <label id="author_email_label" for="author_email">Your Email
@@ -50,14 +53,14 @@
                                         id="author_email"
                                         placeholder="Your Email"
                                         required
-                                        value="{{old("author_email")}}">
+                                        value="{{old('author_email')}}">
                             </div>
                         </div>
                     @endif
                 @endif
 
 
-                @if(config("blogetc.comments.ask_for_author_website"))
+                @if(config('blogetc.comments.ask_for_author_website'))
                     <div class='col'>
                         <div class="form-group">
                             <label id="author_website_label" for="author_website">Your Website
@@ -69,7 +72,7 @@
                                     name='author_website'
                                     id="author_website"
                                     placeholder="Your Website URL"
-                                    value="{{old("author_website")}}">
+                                    value="{{old('author_website')}}">
                         </div>
                     </div>
 

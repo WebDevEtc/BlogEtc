@@ -1,16 +1,17 @@
 <?php namespace WebDevEtc\BlogEtc\Captcha;
 
+use DomainException;
+
 /**
  * Class Basic
  * @package WebDevEtc\BlogEtc\Captcha
  */
 class Basic extends CaptchaAbstract
 {
-
     public function __construct()
     {
-        if (!config("blogetc.captcha.basic_question") || !config("blogetc.captcha.basic_answers")) {
-            throw new \DomainException("Invalid question or answers for captcha");
+        if (!config('blogetc.captcha.basic_question') || !config('blogetc.captcha.basic_answers')) {
+            throw new DomainException('Invalid question or answers for captcha');
         }
     }
 
@@ -19,7 +20,7 @@ class Basic extends CaptchaAbstract
      *
      * @return string
      */
-    public function captcha_field_name()
+    public function captcha_field_name(): string
     {
         return 'captcha';
     }
@@ -29,7 +30,7 @@ class Basic extends CaptchaAbstract
      *
      * @return string
      */
-    public function view()
+    public function view(): string
     {
         return 'blogetc::captcha.basic';
     }
@@ -41,26 +42,27 @@ class Basic extends CaptchaAbstract
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
-        $check_func = function ($attribute, $value, $fail) {
-            $answers = config("blogetc.captcha.basic_answers");
-            // strtolower everything
+        $validAnswerCheck = static function ($attribute, $value, $fail) {
+            // get correct answers
+            $answers = config('blogetc.captcha.basic_answers');
+
+            // lower case submitted value and the answers
             $value = strtolower(trim($value));
             $answers = strtolower($answers);
-            $answers_array = array_map("trim", explode(",", $answers));
+
+            $answers_array = array_map('trim', explode(',', $answers));
+
             if (!in_array($value, $answers_array, true)) {
                 return $fail('The captcha field is incorrect.');
-
-            };
+            }
         };
 
         return [
-
             'required',
             'string',
-            $check_func
-
+            $validAnswerCheck,
         ];
     }
 }

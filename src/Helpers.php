@@ -1,7 +1,8 @@
 <?php
+
 namespace WebDevEtc\BlogEtc;
 
-use \Session;
+use Session;
 
 /**
  * Class Helpers
@@ -12,14 +13,14 @@ class Helpers
     /**
      * What key to use for the session::flash / pull / has
      */
-    const FLASH_MESSAGE_SESSION_KEY = "WEBDEVETC_FLASH";
+    const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
 
     /**
      * Set a new message
      *
      * @param string $message
      */
-    public static function flash_message(string $message)
+    public static function flash_message(string $message): void
     {
         Session::flash(Helpers::FLASH_MESSAGE_SESSION_KEY, $message);
     }
@@ -29,7 +30,7 @@ class Helpers
      *
      * @return bool
      */
-    public static function has_flashed_message()
+    public static function has_flashed_message(): bool
     {
         return Session::has(self::FLASH_MESSAGE_SESSION_KEY);
     }
@@ -48,15 +49,11 @@ class Helpers
      * to auto insert the links to rss feed
      * @return string
      */
-    public static function rss_html_tag()
+    public static function rss_html_tag(): string
     {
-
-
-        return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="' . e(route("blogetc.feed")) . '?type=atom" />
-  <link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="' . e(route("blogetc.feed")) . '?type=rss" />
+        return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="' . e(route('blogetc.feed')) . '?type=atom" />
+  <link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="' . e(route('blogetc.feed')) . '?type=rss" />
   ';
-
-
     }
 
     /**
@@ -64,8 +61,8 @@ class Helpers
      * @return array
      * @deprecated
      */
-    public static function image_sizes(){
-        return config("blogetc.image_sizes");
+    public static function image_sizes()
+    {
+        return config('blogetc.image_sizes');
     }
-
 }

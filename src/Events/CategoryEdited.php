@@ -2,9 +2,9 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 
 /**
@@ -24,7 +24,7 @@ class CategoryEdited
      */
     public function __construct(BlogEtcCategory $blogEtcCategory)
     {
-        $this->blogEtcCategory=$blogEtcCategory;
+        $this->blogEtcCategory = $blogEtcCategory;
     }
 
 }

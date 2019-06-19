@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito" crossorigin="anonymous">
 
     <!-- Styles -->
-    @if(file_exists(public_path("blogetc_admin_css.css")))
+    @if(file_exists(public_path('blogetc_admin_css.css')))
         <link href="{{ asset('blogetc_admin_css.css') }}" rel="stylesheet">
     @else
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -61,12 +61,12 @@
                     <!-- Authentication Links -->
 
 
-                    <li class='nav-item px-2'><a class='nav-link' href='{{route("blogetc.index")}}'>Blog home</a></li>
+                    <li class='nav-item px-2'><a class='nav-link' href='{{route('blogetc.index')}}'>Blog home</a></li>
 
 
                     <li class="nav-item ">
                         <a id="" class="nav-link " href="#" role="button"
-                           aria-haspopup="true" aria-expanded="false" >
+                           aria-haspopup="true" aria-expanded="false">
                             Logged in as {{ Auth::user()->name }}
                         </a>
 
@@ -81,7 +81,7 @@
         <div class='container'>
             <div class='row'>
                 <div class='col-md-3'>
-                    @include("blogetc_admin::layouts.sidebar")
+                    @include('blogetc_admin::layouts.sidebar')
                 </div>
                 <div class='col-md-9 '>
 
@@ -120,12 +120,12 @@
 </div>
 
 
-@if( config("blogetc.use_wysiwyg") && config("blogetc.echo_html") && (in_array( \Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
+@if( config('blogetc.use_wysiwyg') && config('blogetc.echo_html') && (in_array( Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
     <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"
             integrity="sha384-BpuqJd0Xizmp9PSp/NTwb/RSBCHK+rVdGWTrwcepj1ADQjNYPWT2GDfnfAr6/5dn"
             crossorigin="anonymous"></script>
     <script>
-        if( typeof(CKEDITOR) !== "undefined" ) {
+        if (typeof (CKEDITOR) !== 'undefined') {
             CKEDITOR.replace('post_body');
         }
     </script>

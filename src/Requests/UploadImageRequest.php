@@ -2,9 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
-
 /**
  * Class BaseRequest
  * @package WebDevEtc\BlogEtc\Requests

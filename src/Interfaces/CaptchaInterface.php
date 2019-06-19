@@ -8,21 +8,21 @@ interface CaptchaInterface
      *
      * @return string
      */
-    public function captcha_field_name();
+    public function captcha_field_name(): string;
 
     /**
      * What view file should we use for the captcha field?
      *
      * @return string
      */
-    public function view();
+    public function view(): string;
 
     /**
      * What rules should we use for the validation for this field?
      *
      * @return array
      */
-    public function rules();
+    public function rules(): array;
 
 
 //    // optional methods, which are run if method_exists($captcha,'...'):

@@ -1,13 +1,12 @@
-@if(\Auth::check() && \Auth::user()->canManageBlogEtcPosts())
-    <a href="{{$post->edit_url()}}" class="btn btn-outline-secondary btn-sm pull-right float-right">Edit
+@if(Auth::check() && Auth::user()->canManageBlogEtcPosts())
+    <a href="{{ $post->edit_url()}}" class="btn btn-outline-secondary btn-sm pull-right float-right">Edit
         Post</a>
 @endif
 
-<h2 class='blog_title'>{{$post->title}}</h2>
-<h5 class='blog_subtitle'>{{$post->subtitle}}</h5>
+<h2 class='blog_title'>{{ $post->title}}</h2>
+<h5 class='blog_subtitle'>{{ $post->subtitle}}</h5>
 
-
-<?=$post->image_tag("medium", false, 'd-block mx-auto'); ?>
+{!! $post->image_tag('medium', false, 'd-block mx-auto') !!}
 
 <p class="blog_body_content">
     {!! $post->post_body_output() !!}
@@ -23,7 +22,7 @@
 
 <hr/>
 
-Posted <strong>{{$post->posted_at->diffForHumans()}}</strong>
+Posted <strong>{{ $post->posted_at->diffForHumans()}}</strong>
 
-@includeWhen($post->author,"blogetc::partials.author",['post'=>$post])
-@includeWhen($post->categories,"blogetc::partials.categories",['post'=>$post])
+@includeWhen($post->author,'blogetc::partials.author',['post'=>$post])
+@includeWhen($post->categories,'blogetc::partials.categories',['post'=>$post])

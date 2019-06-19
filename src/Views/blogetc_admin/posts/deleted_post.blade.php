@@ -1,5 +1,5 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
+@extends('blogetc_admin::layouts.admin_layout')
+@section('content')
 
 
     <div class='alert alert-success'><b>Deleted that post</b>
@@ -7,7 +7,7 @@
 
     <?php
     $images_to_delete = [];
-    foreach ((array) config("blogetc.image_sizes") as $image_size => $image_size_info) {
+    foreach ((array)config('blogetc.image_sizes') as $image_size => $image_size_info) {
         if (!$deletedPost->$image_size) {
             continue;
         }
@@ -32,25 +32,26 @@
 
 
                     <td class='text-center'><a
-                                href='{{asset(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}'
+                                href='{{asset(config('blogetc.blog_upload_dir','blog_images').'/'.$deletedPost->$image_size) }}'
                                 target='_blank' class='btn btn-primary m-1'>view</a>
 
-                        <img src='{{asset(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}'
+                        <img src='{{asset(config('blogetc.blog_upload_dir','blog_images').'/'.$deletedPost->$image_size) }}'
                              width=100>
 
                     </td>
-                    <td><code>{{$deletedPost->$image_size}}</code>
+                    <td><code>{{ $deletedPost->$image_size}}</code>
 
-            {{--check filesize returns something, so we don't divide by 0--}}
-                        @if(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)))
+                        {{--check filesize returns something, so we don't divide by 0--}}
+                        @if(filesize(public_path(config('blogetc.blog_upload_dir','blog_images').'/'.$deletedPost->$image_size)))
 
-                        ({{ (round(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)) / 1000 ,1)). " kb"}})
+                            ({{ (round(filesize(public_path(config('blogetc.blog_upload_dir','blog_images').'/'.$deletedPost->$image_size)) / 1000 ,1)). ' kb'}}
+                            )
 
                         @endif
 
                     </td>
                     <td><code>
-                            <small>{{ public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}</small>
+                            <small>{{ public_path(config('blogetc.blog_upload_dir','blog_images').'/'.$deletedPost->$image_size) }}</small>
                         </code></td>
                 </tr>
 

@@ -6,8 +6,6 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
 abstract class CaptchaAbstract implements CaptchaInterface
 {
-
-
     /**
      * executed when viewing single post
      *
@@ -45,5 +43,4 @@ abstract class CaptchaAbstract implements CaptchaInterface
     {
         // no code here to run! Maybe in your subclass you can make use of this?
     }
-
 }

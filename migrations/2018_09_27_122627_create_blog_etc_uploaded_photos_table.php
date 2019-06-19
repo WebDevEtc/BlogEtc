@@ -1,28 +1,30 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBlogEtcUploadedPhotosTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Create the DB table for Blog Etc photos
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('blog_etc_uploaded_photos', function (Blueprint $table) {
+        Schema::create('blog_etc_uploaded_photos', static function (Blueprint $table) {
+
             $table->increments('id');
-            $table->text("uploaded_images")->nullable();
-            $table->string("image_title")->nullable();
-            $table->string("source")->default("unknown");
-            $table->unsignedInteger("uploader_id")->nullable()->index();
+            $table->text('uploaded_images')->nullable();
+            $table->string('image_title')->nullable();
+            $table->string('source')->default('unknown');
+            $table->unsignedInteger('uploader_id')->nullable()->index();
+
             $table->timestamps();
         });
-        Schema::table("blog_etc_posts",function(Blueprint $table) {
-            $table->string("seo_title")->nullable();
+        Schema::table('blog_etc_posts', static function (Blueprint $table) {
+            $table->string('seo_title')->nullable();
         });
     }
 
@@ -35,8 +37,8 @@ class CreateBlogEtcUploadedPhotosTable extends Migration
     {
         Schema::dropIfExists('blog_etc_uploaded_photos');
 
-        Schema::table("blog_etc_posts",function(Blueprint $table) {
-            $table->dropColumn("seo_title");
+        Schema::table('blog_etc_posts', static function (Blueprint $table) {
+            $table->dropColumn('seo_title');
         });
     }
 }

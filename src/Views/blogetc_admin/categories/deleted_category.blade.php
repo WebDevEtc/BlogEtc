@@ -1,7 +1,7 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
+@extends('blogetc_admin::layouts.admin_layout')
+@section('content')
 
 
-<div class='alert alert-success'><b>Deleted that category</b></div>
+    <div class='alert alert-success'><b>Deleted that category</b></div>
 
 @endsection

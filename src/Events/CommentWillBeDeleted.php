@@ -2,9 +2,9 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 
 /**
@@ -24,7 +24,7 @@ class CommentWillBeDeleted
      */
     public function __construct(BlogEtcComment $comment)
     {
-        $this->comment=$comment;
+        $this->comment = $comment;
     }
 
 }

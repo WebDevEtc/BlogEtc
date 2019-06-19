@@ -4,27 +4,44 @@ namespace WebDevEtc\BlogEtc\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WebDevEtc\BlogEtc\Scopes\BlogCommentApprovedAndDefaultOrderScope;
 
+/**
+ * @property string author_name
+ * @property User user
+ * @property int user_id
+ * @property mixed author_website
+ * @property string|null ip
+ * @property mixed author_email
+ * @property bool approved
+ */
 class BlogEtcComment extends Model
 {
+    /**
+     * Attributes which have specific casts
+     * @var array
+     */
     public $casts = [
         'approved' => 'boolean',
     ];
 
+    /**
+     * Fillable attributes
+     *
+     * @var array
+     */
     public $fillable = [
-
         'comment',
         'author_name',
     ];
-
 
     /**
      * The "booting" method of the model.
      *
      * @return void
      */
-    protected static function boot()
+    protected static function boot():void
     {
         parent::boot();
 
@@ -34,22 +51,21 @@ class BlogEtcComment extends Model
         static::addGlobalScope(new BlogCommentApprovedAndDefaultOrderScope());
     }
 
-
-
     /**
-     * The associated BlogEtcPost
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * The BlogEtcPost relationship
+     * @return BelongsTo
      */
-    public function post()
+    public function post(): BelongsTo
     {
-        return $this->belongsTo(BlogEtcPost::class,"blog_etc_post_id");
+        return $this->belongsTo(BlogEtcPost::class, 'blog_etc_post_id');
     }
 
     /**
-     * Comment author user (if set)
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Comment author relationship
+     *
+     * @return BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -59,10 +75,10 @@ class BlogEtcComment extends Model
      *
      * @return string
      */
-    public function author()
+    public function author():?string
     {
         if ($this->user_id) {
-            $field = config("blogetc.comments.user_field_for_author_name","name");
+            $field = config('blogetc.comments.user_field_for_author_name', 'name');
             return optional($this->user)->$field;
         }
 

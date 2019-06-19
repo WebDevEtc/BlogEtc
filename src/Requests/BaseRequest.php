@@ -2,6 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 
@@ -18,6 +19,6 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
      */
     public function authorize()
     {
-        return \Auth::check() && \Auth::user()->canManageBlogEtcPosts();
+        return Auth::check() && Auth::user()->canManageBlogEtcPosts();
     }
 }
