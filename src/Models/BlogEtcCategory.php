@@ -5,11 +5,18 @@ namespace WebDevEtc\BlogEtc\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+/**
+ * @property mixed category_name
+ * @property mixed id
+ * @property mixed slug
+ */
 class BlogEtcCategory extends Model
 {
     public $fillable = [
+        // todo - change to just name
         'category_name',
         'slug',
+        // todo - change to just description
         'category_description',
     ];
 
@@ -18,7 +25,7 @@ class BlogEtcCategory extends Model
      *
      * @return BelongsToMany
      */
-    public function posts()
+    public function posts(): BelongsToMany
     {
         return $this->belongsToMany(BlogEtcPost::class, 'blog_etc_post_categories');
     }
@@ -28,7 +35,7 @@ class BlogEtcCategory extends Model
      *
      * @return string
      */
-    public function url()
+    public function url(): string
     {
         return route('blogetc.view_category', $this->slug);
     }
@@ -38,7 +45,7 @@ class BlogEtcCategory extends Model
      *
      * @return string
      */
-    public function edit_url()
+    public function edit_url(): string
     {
         return route('blogetc.admin.categories.edit_category', $this->id);
     }

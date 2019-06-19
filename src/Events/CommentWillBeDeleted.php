@@ -13,7 +13,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcComment;
  */
 class CommentWillBeDeleted
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /** @var  BlogEtcComment */
     public $comment;
@@ -26,5 +26,4 @@ class CommentWillBeDeleted
     {
         $this->comment = $comment;
     }
-
 }

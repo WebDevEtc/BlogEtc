@@ -29,6 +29,7 @@ use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
  * @property string|null use_view_file
  * @property Carbon posted_at
  * @property bool is_published
+ * @property mixed author
  */
 class BlogEtcPost extends Model
 {
@@ -57,7 +58,6 @@ class BlogEtcPost extends Model
      * @var array
      */
     public $fillable = [
-
         'title',
         'subtitle',
         'short_description',
@@ -94,7 +94,7 @@ class BlogEtcPost extends Model
      *
      * @return array
      */
-    public function sluggable()
+    public function sluggable():array
     {
         return [
             'slug' => [
@@ -108,7 +108,7 @@ class BlogEtcPost extends Model
      *
      * @return BelongsTo
      */
-    public function author()
+    public function author():BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -118,7 +118,7 @@ class BlogEtcPost extends Model
      *
      * @return string
      */
-    public function author_string()
+    public function author_string():?string
     {
         if ($this->author) {
             return is_callable(self::$authorNameResolver)
@@ -300,7 +300,7 @@ class BlogEtcPost extends Model
      * @return string
      * @throws Throwable
      */
-    public function post_body_output()
+    public function post_body_output():string
     {
         if (config('blogetc.use_custom_view_files') && $this->use_view_file) {
             // using custom view files is enabled, and this post has a use_view_file set, so render it:

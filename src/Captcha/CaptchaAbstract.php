@@ -12,7 +12,7 @@ abstract class CaptchaAbstract implements CaptchaInterface
      * @param Request $request
      * @param BlogEtcPost $blogEtcPost
      *
-     * @return void
+     * @return mixed|void
      */
     public function runCaptchaBeforeShowingPosts(Request $request, BlogEtcPost $blogEtcPost)
     {
@@ -37,7 +37,7 @@ abstract class CaptchaAbstract implements CaptchaInterface
      * @param Request $request
      * @param BlogEtcPost $blogEtcPost
      *
-     * @return void
+     * @return void|mixed
      */
     public function runCaptchaBeforeAddingComment(Request $request, BlogEtcPost $blogEtcPost)
     {

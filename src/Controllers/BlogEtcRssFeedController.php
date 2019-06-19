@@ -27,13 +27,15 @@ class BlogEtcRssFeedController extends Controller
      */
     public function feed(FeedRequest $request, Feed $feed)
     {
-
-        // if a logged in user views the RSS feed it will get cached, and if they are an admin user then it'll show all posts (even if it is not set as published)
-        $user_or_guest = Auth::check() ? Auth::user()->id : 'guest';
+        // RSS feed is cached. Admin/writer users might see different content, so use a different cache for different users.
+        // This should not be a problem unless your site has many logged in users.
+        $userOrGuest = Auth::check()
+            ? Auth::user()->id
+            : 'guest';
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
-            'blogetc-' . $request->getFeedType() . $user_or_guest
+            'blogetc-' . $request->getFeedType() . $userOrGuest
         );
 
         if (!$feed->isCached()) {
@@ -46,7 +48,7 @@ class BlogEtcRssFeedController extends Controller
     /**
      * @param $feed
      */
-    protected function makeFreshFeed(Feed $feed)
+    protected function makeFreshFeed(Feed $feed): void
     {
         $posts = BlogEtcPost::orderBy('posted_at', 'desc')
             ->limit(config('blogetc.rssfeed.posts_to_show_in_rss_feed', 10))
@@ -68,9 +70,10 @@ class BlogEtcRssFeedController extends Controller
     }
 
     /**
+     * Basic set up of the Feed object
+     *
      * @param Feed $feed
      * @param $posts
-     * @return mixed
      */
     protected function setupFeed(Feed $feed, $posts)
     {
@@ -83,5 +86,4 @@ class BlogEtcRssFeedController extends Controller
         $feed->setShortening(config('blogetc.rssfeed.should_shorten_text', true)); // true or false
         $feed->setTextLimit(config('blogetc.rssfeed.text_limit', 100));
     }
-
 }

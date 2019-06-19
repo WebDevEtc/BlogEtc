@@ -9,8 +9,14 @@ use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 class AddNewCommentRequest extends FormRequest
 {
 
-    public function authorize()
+    /**
+     * Can user add new comments?
+     *
+     * @return bool
+     */
+    public function authorize():bool
     {
+        // TODO - use constants
         if (config('blogetc.comments.type_of_comments_to_show') === 'built_in') {
             // anyone is allowed to submit a comment, to return true always.
             return true;
@@ -25,7 +31,7 @@ class AddNewCommentRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules():array
     {
         // basic rules
         $return = [

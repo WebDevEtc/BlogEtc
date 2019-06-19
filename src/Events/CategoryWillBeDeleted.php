@@ -13,7 +13,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
  */
 class CategoryWillBeDeleted
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /** @var  BlogEtcCategory */
     public $blogEtcCategory;
@@ -26,5 +26,4 @@ class CategoryWillBeDeleted
     {
         $this->blogEtcCategory = $blogEtcCategory;
     }
-
 }

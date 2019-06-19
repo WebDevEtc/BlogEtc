@@ -6,11 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use WebDevEtc\BlogEtc\Events\CategoryEdited;
-use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\StoreBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
@@ -29,6 +26,7 @@ class BlogEtcCategoryAdminController extends Controller
 
     /**
      * BlogEtcCategoryAdminController constructor.
+     * @param BlogEtcCategoriesService $service
      */
     public function __construct(BlogEtcCategoriesService $service)
     {
@@ -44,7 +42,7 @@ class BlogEtcCategoryAdminController extends Controller
      */
     public function index(): View
     {
-        $categories = $this->service->repository()->indexPaginated();
+        $categories = $this->service->indexPaginated();
 
         return view(
             'blogetc_admin::categories.index',
@@ -59,7 +57,7 @@ class BlogEtcCategoryAdminController extends Controller
      *
      * @return View
      */
-    public function create()
+    public function create():View
     {
         return view('blogetc_admin::categories.add_category');
     }
@@ -70,7 +68,7 @@ class BlogEtcCategoryAdminController extends Controller
      * @param StoreBlogEtcCategoryRequest $request
      * @return RedirectResponse
      */
-    public function store(StoreBlogEtcCategoryRequest $request)
+    public function store(StoreBlogEtcCategoryRequest $request): RedirectResponse
     {
         $this->service->create($request->validated());
 
@@ -85,9 +83,9 @@ class BlogEtcCategoryAdminController extends Controller
      * @param $categoryID
      * @return View
      */
-    public function edit($categoryID)
+    public function edit($categoryID): View
     {
-        $category = $this->service->repository()->find($categoryID);
+        $category = $this->service->find($categoryID);
 
         return view(
             'blogetc_admin::categories.edit_category',
@@ -104,7 +102,7 @@ class BlogEtcCategoryAdminController extends Controller
      * @param $categoryID
      * @return RedirectResponse
      */
-    public function update(UpdateBlogEtcCategoryRequest $request, $categoryID)
+    public function update(UpdateBlogEtcCategoryRequest $request, $categoryID): RedirectResponse
     {
         $category = $this->service->update($categoryID, $request->validated());
 

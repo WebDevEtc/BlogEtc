@@ -2,30 +2,18 @@
 
 namespace WebDevEtc\BlogEtc\Services;
 
-use Carbon\Carbon;
-use Exception;
-use WebDevEtc\BlogEtc\Events\BlogPostAdded;
-use WebDevEtc\BlogEtc\Events\BlogPostEdited;
-use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
 use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
-use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Repositories\BlogEtcCategoriesRepository;
-use WebDevEtc\BlogEtc\Repositories\BlogEtcPostsRepository;
-use WebDevEtc\BlogEtc\Requests\BaseBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
 
 /**
  * Class BlogEtcCategoriesService
  *
  * Service class to handle most logic relating to BlogEtcCategory entries.
- *
- * Some Eloquent/DB things are in here - but query heavy method belong in the repository, accessible
- * as $this->repository, or publicly via repository()
  *
  * @package WebDevEtc\BlogEtc\Services
  */
@@ -43,15 +31,34 @@ class BlogEtcCategoriesService
     }
 
     /**
-     * BlogEtcCategoriesRepository repository - for query heavy method.
-     *
-     * I don't stick 100% to all queries belonging in the repo - some Eloquent
-     * things are fine to have in the service where it makes sense.
-     *
+     * @param int $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function repository(): BlogEtcCategoriesRepository
+    public function indexPaginated(int $perPage = 25): LengthAwarePaginator
     {
-        return $this->repository;
+        return $this->repository->indexPaginated($perPage);
+    }
+
+    /**
+     * Find and return a blog etc category from it's ID
+     *
+     * @param int $categoryID
+     * @return BlogEtcCategory
+     */
+    public function find(int $categoryID): BlogEtcCategory
+    {
+        return $this->repository->find($categoryID);
+    }
+
+    /**
+     * Find and return a blog etc category, based on its slug
+     *
+     * @param string $categorySlug
+     * @return BlogEtcCategory
+     */
+    public function findBySlug(string $categorySlug):BlogEtcCategory
+    {
+        return $this->repository->findBySlug($categorySlug);
     }
 
     /**
@@ -65,7 +72,6 @@ class BlogEtcCategoriesService
         $new_category = new BlogEtcCategory($attributes);
         $new_category->save();
 
-
         event(new CategoryAdded($new_category));
     }
 
@@ -76,7 +82,7 @@ class BlogEtcCategoriesService
      * @param array $attributes
      * @return BlogEtcCategory
      */
-    public function update(int $categoryID, array $attributes):BlogEtcCategory
+    public function update(int $categoryID, array $attributes): BlogEtcCategory
     {
         /** @var BlogEtcCategory $category */
         $category = BlogEtcCategory::findOrFail($categoryID);
@@ -93,7 +99,7 @@ class BlogEtcCategoriesService
      *
      * @param int $categoryID
      */
-    public function delete(int $categoryID):void
+    public function delete(int $categoryID): void
     {
         $category = BlogEtcCategory::findOrFail($categoryID);
         event(new CategoryWillBeDeleted($category));

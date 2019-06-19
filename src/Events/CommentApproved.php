@@ -13,7 +13,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcComment;
  */
 class CommentApproved
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /** @var  BlogEtcComment */
     public $comment;
@@ -27,5 +27,4 @@ class CommentApproved
         $this->comment = $comment;
         // you can get the blog post via $comment->post
     }
-
 }

@@ -13,7 +13,7 @@ class UploadImageRequest extends BaseRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules():array
     {
         $rules = [
             'sizes_to_upload' => [

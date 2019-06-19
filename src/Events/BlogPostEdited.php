@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
@@ -13,7 +12,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class BlogPostEdited
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /** @var  BlogEtcPost */
     public $blogEtcPost;
@@ -26,5 +25,4 @@ class BlogPostEdited
     {
         $this->blogEtcPost = $blogEtcPost;
     }
-
 }

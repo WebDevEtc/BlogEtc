@@ -25,6 +25,7 @@ class BlogEtcCommentsAdminController extends Controller
 
     /**
      * BlogEtcCommentsAdminController constructor.
+     * @param BlogEtcCommentsService $service
      */
     public function __construct(BlogEtcCommentsService $service)
     {
@@ -61,7 +62,7 @@ class BlogEtcCommentsAdminController extends Controller
      * @param $blogCommentId
      * @return RedirectResponse
      */
-    public function approve($blogCommentId)
+    public function approve($blogCommentId): RedirectResponse
     {
         $comment = BlogEtcComment::withoutGlobalScopes()->findOrFail($blogCommentId);
         $comment->approved = true;
@@ -79,7 +80,7 @@ class BlogEtcCommentsAdminController extends Controller
      * @param $blogCommentId
      * @return RedirectResponse
      */
-    public function destroy($blogCommentId)
+    public function destroy($blogCommentId): RedirectResponse
     {
         $comment = BlogEtcComment::withoutGlobalScopes()->findOrFail($blogCommentId);
         event(new CommentWillBeDeleted($comment));

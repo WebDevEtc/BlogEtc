@@ -13,9 +13,9 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class BlogPostWillBeDeleted
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
-    /** @var  BlogEtcPost */
+    /** @var BlogEtcPost */
     public $blogEtcPost;
 
     /**
@@ -26,5 +26,4 @@ class BlogPostWillBeDeleted
     {
         $this->blogEtcPost = $blogEtcPost;
     }
-
 }

@@ -14,7 +14,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class CommentAdded
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /** @var  BlogEtcPost */
     public $blogEtcPost;
@@ -31,5 +31,4 @@ class CommentAdded
         $this->blogEtcPost = $blogEtcPost;
         $this->newComment = $newComment;
     }
-
 }

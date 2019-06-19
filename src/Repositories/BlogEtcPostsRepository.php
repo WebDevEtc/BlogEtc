@@ -26,11 +26,16 @@ class BlogEtcPostsRepository
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function indexPaginated(int $perPage = 10): LengthAwarePaginator
+    public function indexPaginated(int $perPage = 10, int $categoryID): LengthAwarePaginator
     {
-        return $this->query(true)
-            ->orderBy('posted_at', 'desc')
-            ->paginate($perPage);
+        $query = $this->query(true)
+            ->orderBy('posted_at', 'desc');
+
+        if ($categoryID) {
+            $query = $query->where('blog_etc_post_categories.blog_etc_category_id', $categoryID);
+        }
+
+        return $query->paginate($perPage);
     }
 
     /**
@@ -76,7 +81,10 @@ class BlogEtcPostsRepository
     public function findBySlug(string $slug): BlogEtcPost
     {
         try {
-            return $this->query(true)->where('slug', $slug)->firstOrFail();
+            // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manage log posts
+            return $this->query(true)
+                ->where('slug', $slug)
+                ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new BlogEtcPostNotFoundException('Unable to find blog post with slug: ' . $slug);
         }

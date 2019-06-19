@@ -28,7 +28,7 @@ return [
     'memory_limit' => '2048M',
     // This is used when uploading images :
     //                              @ini_set('memory_limit', config("blogetc.memory_limit"));
-    //                            See PHP.net for detailso
+    //                            See PHP.net for details
     //                            Set to false to not set any value.
 
     //if true it will echo out  (with {!! !!}) the blog post with NO escaping! This is not safe if you don't trust your blog post writers! Understand the risks by leaving this to true
@@ -48,7 +48,7 @@ return [
     'auto_nl2br' => true,
     // Default: true.
 
-    // use the ckeditor WYWIWYG (rich text editor) for formatting your HTML blog posts.
+    // use the ckeditor WYSIWYG (rich text editor) for formatting your HTML blog posts.
     // This will load scripts from https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js
     // echo_html must be set to true for this to have an effect.
     'use_wysiwyg' => true,
@@ -106,7 +106,7 @@ return [
         // They must be in the same format as the default ones - image_xxxxx (and this db column must exist on the blog_etc_posts table)
 
         /*
-        'image_custom_example_size' => [ // << MAKE A DB COLUM WITH THIS NAME.
+        'image_custom_example_size' => [ // << MAKE A DB COLUMN WITH THIS NAME.
                                          //   You can name it whatever you want, but it must start with image_
             'w' => 123,                  // << DEFINE YOUR CUSTOM WIDTH/HEIGHT
             'h' => 456,
@@ -138,7 +138,6 @@ return [
     ],
 
     ////////// RSS FEED
-
     'rssfeed' => [
 
         'should_shorten_text' => true, // boolean. Default: true. Should we shorten the text in rss feed?
@@ -150,7 +149,6 @@ return [
     ],
 
     ////////// comments:
-
     'comments' => [
 
         // What type (if any) of comments/comment form to show.

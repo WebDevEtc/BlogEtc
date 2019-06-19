@@ -36,7 +36,7 @@ class BlogEtcImageUploadController extends Controller
             throw new RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
 
-        if (!app()->runningInConsole() && !config('blogetc.image_upload_enabled')) {
+        if (!config('blogetc.image_upload_enabled') && !app()->runningInConsole() ) {
             throw new RuntimeException('The blogetc.php config option has not enabled image uploading');
         }
     }
@@ -61,7 +61,7 @@ class BlogEtcImageUploadController extends Controller
      */
     public function create()
     {
-        return view('blogetc_admin::imageupload.create', []);
+        return view('blogetc_admin::imageupload.create');
     }
 
     /**

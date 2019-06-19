@@ -2,24 +2,11 @@
 
 namespace WebDevEtc\BlogEtc\Services;
 
-use Carbon\Carbon;
-use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use WebDevEtc\BlogEtc\Events\BlogPostAdded;
-use WebDevEtc\BlogEtc\Events\BlogPostEdited;
-use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
-use WebDevEtc\BlogEtc\Events\CategoryAdded;
-use WebDevEtc\BlogEtc\Events\CategoryEdited;
-use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
-use WebDevEtc\BlogEtc\Helpers;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
+use WebDevEtc\BlogEtc\Events\CommentAdded;
+use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
-use WebDevEtc\BlogEtc\Repositories\BlogEtcCategoriesRepository;
 use WebDevEtc\BlogEtc\Repositories\BlogEtcCommentsRepository;
-use WebDevEtc\BlogEtc\Repositories\BlogEtcPostsRepository;
-use WebDevEtc\BlogEtc\Requests\BaseBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
 
 /**
  * Class BlogEtcCategoriesService
@@ -59,10 +46,11 @@ class BlogEtcCommentsService
      * @param bool $includeUnapproved
      * @return Collection
      */
-    public function all($includeUnapproved = false):Collection
+    public function all($includeUnapproved = false): Collection
     {
 
     }
+
 //
 //    /**
 //     * Create a new BlogEtcCategory entry
@@ -109,5 +97,60 @@ class BlogEtcCommentsService
 //        event(new CategoryWillBeDeleted($category));
 //        $category->delete();
 //    }
+
+    public function create(
+        BlogEtcPost $blogEtcPost,
+        array $attributes,
+        string $ip = null,
+        int $userID = null
+    ): BlogEtcComment {
+        // TODO - inject the model object, put into repo, generate $attributes
+        // fill it with fillable attributes
+        $newComment = new BlogEtcComment($attributes);
+
+        // then some additional attributes
+        if (config('blogetc.comments.save_ip_address')) {
+            $newComment->ip = $ip;
+        }
+        if (config('blogetc.comments.ask_for_author_website')) {
+            $newComment->author_website = $attributes['author_website'] ?? '';
+        }
+        if (config('blogetc.comments.ask_for_author_website')) {
+            $newComment->author_email = $attributes['author_email'] ?? '';
+        }
+        if (config('blogetc.comments.save_user_id_if_logged_in')) {
+            $newComment->user_id = $userID;
+        }
+
+        // are comments auto approved?
+        $newComment->approved = $this->autoApproved();
+
+        $blogEtcPost->comments()->save($newComment);
+
+        event(new CommentAdded($blogEtcPost, $newComment));
+
+        return $newComment;
+    }
+
+    /**
+     * Are comments auto approved?
+     * @return bool
+     */
+    protected function autoApproved(): bool
+    {
+        return config('blogetc.comments.auto_approve_comments', true) === true;
+    }
+
+
+//    public function create()
+//    {
+//
+//
+//
+//
+//
+//        $new_comment = $this->createNewComment($request, $blogPost);
+//
+//}
 
 }

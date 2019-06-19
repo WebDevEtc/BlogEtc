@@ -3,15 +3,14 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use LogicException;
 use Swis\LaravelFulltext\Search;
 use View;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Requests\SearchRequest;
+use WebDevEtc\BlogEtc\Services\BlogEtcCategoriesService;
+use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
 
 /**
  * Class BlogEtcReaderController
@@ -23,12 +22,28 @@ class BlogEtcReaderController extends Controller
     use UsesCaptcha;
 
     /**
+     * @var BlogEtcPostsService
+     */
+    private $postsService;
+    /**
+     * @var BlogEtcCategoriesService
+     */
+    private $categoriesService;
+
+    public function __construct(BlogEtcPostsService $postsService, BlogEtcCategoriesService $categoriesService)
+    {
+
+        $this->postsService = $postsService;
+        $this->categoriesService = $categoriesService;
+    }
+
+    /**
      * Show the search results
      *
      * @param SearchRequest $request
      * @return \Illuminate\View\View
      */
-    public function search(SearchRequest $request):\Illuminate\View\View
+    public function search(SearchRequest $request): \Illuminate\View\View
     {
         if (!config('blogetc.search.search_enabled')) {
             throw new LogicException('Search is disabled');
@@ -59,35 +74,33 @@ class BlogEtcReaderController extends Controller
 
     /**
      * Show blog posts
-     * If category_slug is set, then only show from that category
+     * If $categorySlug is set, then only show from that category
      *
-     * @param null $category_slug
+     * @param string $categorySlug
      * @return mixed
      */
-    public function index($category_slug = null)
+    public function index(string $categorySlug = null)
     {
         // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged
         // in user can manage log posts
-        $title = 'Viewing blog'; // default title...
+        // todo - set these in config
+        $title = 'Viewing Blog'; // default title...
 
-        if ($category_slug) {
-            $category = BlogEtcCategory::where('slug', $category_slug)->firstOrFail();
-            $posts = $category->posts()->where('blog_etc_post_categories.blog_etc_category_id', $category->id);
+        if ($categorySlug) {
+            // get the category
+            $category = $this->categoriesService->findBySlug($categorySlug);
 
-            // at the moment we handle this special case (viewing a category) by hard coding in the following two lines.
-            // You can easily override this in the view files.
-            View::share('blogetc_category',
-                $category); // so the view can say "You are viewing $CATEGORY_NAME category posts"
-            $title = 'Viewing posts in ' . $category->category_name . ' category'; // hardcode title here...
-        } else {
-            $posts = BlogEtcPost::query();
+            // get category ID to send to service
+            $categoryID = $category->id;
+
+            $title = 'Viewing blog posts in ' . $category->category_name;
         }
 
-        $posts = $posts->orderBy('posted_at', 'desc')
-            ->paginate(config('blogetc.per_page', 10));
+        $posts = $this->postsService->indexPaginated(10, $categoryID ?? null);
 
         return view('blogetc::index', [
             'posts' => $posts,
+            'category' => $category ?? null,
             'title' => $title,
         ]);
     }
@@ -96,27 +109,25 @@ class BlogEtcReaderController extends Controller
      * View a single post and (if enabled) it's comments
      *
      * @param Request $request
-     * @param $blogPostSlug
+     * @param $postSlug
      * @return mixed
      */
-    public function show(Request $request, $blogPostSlug): \Illuminate\View\View
+    public function show(Request $request, $postSlug): \Illuminate\View\View
     {
-        // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manage log posts
-        $blog_post = BlogEtcPost::where('slug', $blogPostSlug)
-            ->firstOrFail();
+        $post = $this->postsService->findBySlug($postSlug);
 
-        $usingCaptcha = $usingCaptcha = $this->getCaptchaObject();
+        $usingCaptcha = $this->getCaptchaObject();
 
         if ($usingCaptcha !== null) {
-            $usingCaptcha->runCaptchaBeforeShowingPosts($request, $blog_post);
+            $usingCaptcha->runCaptchaBeforeShowingPosts($request, $post);
         }
 
         return view(
             'blogetc::single_post',
             [
-                'post' => $blog_post,
+                'post' => $post,
                 // the default scope only selects approved comments, ordered by id
-                'comments' => $blog_post->comments()->with('user')->get(),
+                'comments' => $post->comments()->with('user')->get(),
                 'captcha' => $usingCaptcha,
             ]
         );

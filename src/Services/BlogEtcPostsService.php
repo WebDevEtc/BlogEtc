@@ -10,6 +10,7 @@ use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
+use WebDevEtc\BlogEtc\Repositories\BlogEtcCategoriesRepository;
 use WebDevEtc\BlogEtc\Repositories\BlogEtcPostsRepository;
 use WebDevEtc\BlogEtc\Requests\BaseBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
@@ -30,10 +31,15 @@ class BlogEtcPostsService
      * @var BlogEtcPostsRepository
      */
     private $repository;
+    /**
+     * @var BlogEtcCategoriesRepository
+     */
+    private $categoriesRepository;
 
-    public function __construct(BlogEtcPostsRepository $repository)
+    public function __construct(BlogEtcPostsRepository $repository, BlogEtcCategoriesRepository $categoriesRepository)
     {
         $this->repository = $repository;
+        $this->categoriesRepository = $categoriesRepository;
     }
 
     /**
@@ -92,9 +98,9 @@ class BlogEtcPostsService
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function indexPaginated($perPage = 10):LengthAwarePaginator
+    public function indexPaginated($perPage = 10, int $categoryID=null): LengthAwarePaginator
     {
-        return $this->repository->indexPaginated($perPage);
+        return $this->repository->indexPaginated($perPage, $categoryID);
     }
 
     /**
@@ -187,5 +193,17 @@ class BlogEtcPostsService
         $post->delete();
 
         return $post;
+    }
+
+    /**
+     * Find and return a blog post based on slug
+     *
+     * @param string $slug
+     * @return BlogEtcPost
+     */
+    public function findBySlug(string $slug):BlogEtcPost
+    {
+        return $this->repository->findBySlug($slug);
+
     }
 }

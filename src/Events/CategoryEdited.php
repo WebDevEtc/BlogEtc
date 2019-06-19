@@ -13,9 +13,9 @@ use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
  */
 class CategoryEdited
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
-    /** @var  BlogEtcCategory */
+    /** @var BlogEtcCategory */
     public $blogEtcCategory;
 
     /**
@@ -26,5 +26,4 @@ class CategoryEdited
     {
         $this->blogEtcCategory = $blogEtcCategory;
     }
-
 }
