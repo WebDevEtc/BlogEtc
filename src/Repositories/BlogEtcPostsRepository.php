@@ -24,9 +24,10 @@ class BlogEtcPostsRepository
      * Return blog posts ordered by posted_at, paginated
      *
      * @param int $perPage
+     * @param int $categoryID
      * @return LengthAwarePaginator
      */
-    public function indexPaginated(int $perPage = 10, int $categoryID): LengthAwarePaginator
+    public function indexPaginated(int $perPage = 10, int $categoryID = null): LengthAwarePaginator
     {
         $query = $this->query(true)
             ->orderBy('posted_at', 'desc');
@@ -40,6 +41,7 @@ class BlogEtcPostsRepository
 
     /**
      * Return new instance of the Query Builder for this model
+     * @param bool $eagerLoad
      * @return Builder
      */
     public function query(bool $eagerLoad = false): Builder

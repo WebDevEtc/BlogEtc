@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property mixed category_name
  * @property mixed id
  * @property mixed slug
+ * @method static findOrFail(int $categoryID)
  */
 class BlogEtcCategory extends Model
 {

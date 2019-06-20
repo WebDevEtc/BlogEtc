@@ -21,18 +21,13 @@ class BlogEtcReaderController extends Controller
 {
     use UsesCaptcha;
 
-    /**
-     * @var BlogEtcPostsService
-     */
+    /** @var BlogEtcPostsService */
     private $postsService;
-    /**
-     * @var BlogEtcCategoriesService
-     */
+    /** @var BlogEtcCategoriesService */
     private $categoriesService;
 
     public function __construct(BlogEtcPostsService $postsService, BlogEtcCategoriesService $categoriesService)
     {
-
         $this->postsService = $postsService;
         $this->categoriesService = $categoriesService;
     }

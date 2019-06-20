@@ -17,7 +17,7 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
     protected function baseBlogPostRules()
     {
         // setup some anon functions for some of the validation rules:
-        $check_valid_posted_at = function ($attribute, $value, $fail) {
+        $check_valid_posted_at = static function ($attribute, $value, $fail) {
             // just the 'date' validation can cause errors ("2018-01-01 a" passes the validation, but causes a carbon error).
             try {
                 Carbon::createFromFormat('Y-m-d H:i:s', $value);
@@ -27,14 +27,14 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
             }
         };
 
-        $show_error_if_has_value = function ($attribute, $value, $fail) {
+        $show_error_if_has_value = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value...
                 return $fail($attribute . ' must be empty');
             }
         };
 
-        $disabled_use_view_file = function ($attribute, $value, $fail) {
+        $disabled_use_view_file = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value
                 return $fail('The use of custom view files is not enabled for this site, so you cannot submit a value for it');

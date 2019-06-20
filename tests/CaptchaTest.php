@@ -6,7 +6,7 @@ use WebDevEtc\BlogEtc\Captcha\Basic;
 class CaptchaTest extends TestCase
 {
 
-    public function testBasicCaptchaMethodsReturnCorrectType()
+    public function testBasicCaptchaMethodsReturnCorrectType(): void
     {
 
         $captcha = new Basic();
@@ -15,7 +15,7 @@ class CaptchaTest extends TestCase
         $this->assertEquals(gettype($captcha->rules()), 'array');
     }
 
-    public function testRuleCustomValidationFunctionReturnsCorrectly()
+    public function testRuleCustomValidationFunctionReturnsCorrectly(): void
     {
 
         $captcha = new Basic();

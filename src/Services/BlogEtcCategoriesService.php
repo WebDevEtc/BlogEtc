@@ -3,7 +3,6 @@
 namespace WebDevEtc\BlogEtc\Services;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
 use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
@@ -32,7 +31,7 @@ class BlogEtcCategoriesService
 
     /**
      * @param int $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function indexPaginated(int $perPage = 25): LengthAwarePaginator
     {
@@ -56,7 +55,7 @@ class BlogEtcCategoriesService
      * @param string $categorySlug
      * @return BlogEtcCategory
      */
-    public function findBySlug(string $categorySlug):BlogEtcCategory
+    public function findBySlug(string $categorySlug): BlogEtcCategory
     {
         return $this->repository->findBySlug($categorySlug);
     }

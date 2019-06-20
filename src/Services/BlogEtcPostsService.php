@@ -31,15 +31,10 @@ class BlogEtcPostsService
      * @var BlogEtcPostsRepository
      */
     private $repository;
-    /**
-     * @var BlogEtcCategoriesRepository
-     */
-    private $categoriesRepository;
 
-    public function __construct(BlogEtcPostsRepository $repository, BlogEtcCategoriesRepository $categoriesRepository)
+    public function __construct(BlogEtcPostsRepository $repository)
     {
         $this->repository = $repository;
-        $this->categoriesRepository = $categoriesRepository;
     }
 
     /**
@@ -66,7 +61,7 @@ class BlogEtcPostsService
      * @return BlogEtcPost
      * @throws Exception
      */
-    public function create(BaseBlogEtcPostRequest $request, ?int $userID)
+    public function create(BaseBlogEtcPostRequest $request, ?int $userID): BlogEtcPost
     {
         $attributes = $request->validated() + ['user_id' => $userID];
 
@@ -96,6 +91,7 @@ class BlogEtcPostsService
      * Return all results, paginated
      *
      * @param int $perPage
+     * @param int|null $categoryID
      * @return LengthAwarePaginator
      */
     public function indexPaginated($perPage = 10, int $categoryID=null): LengthAwarePaginator
@@ -117,7 +113,8 @@ class BlogEtcPostsService
             return;
         }
 
-        $this->increaseMemoryLimit();
+        // TODO - add this method - remove the comment and put this back into code
+//        $this->increaseMemoryLimit();
 
         // to save in db later
         $uploaded_image_details = [];
@@ -184,7 +181,7 @@ class BlogEtcPostsService
      * @return BlogEtcPost (deleted post)
      * @throws Exception
      */
-    public function delete(int $blogPostEtcID)
+    public function delete(int $blogPostEtcID): BlogEtcPost
     {
         $post = $this->repository->find($blogPostEtcID);
 

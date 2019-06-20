@@ -4,7 +4,6 @@ namespace WebDevEtc\BlogEtc\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcCategoryNotFoundException;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
@@ -38,7 +37,7 @@ class BlogEtcCategoriesRepository
      */
     public function indexPaginated(int $perPage = 25): LengthAwarePaginator
     {
-        return $this->query(true)
+        return $this->query()
             ->orderBy('category_name')
             ->paginate($perPage);
     }
@@ -64,14 +63,13 @@ class BlogEtcCategoriesRepository
      * @param string $categorySlug
      * @return BlogEtcCategory
      */
-    public function findBySlug(string $categorySlug):BlogEtcCategory
+    public function findBySlug(string $categorySlug): BlogEtcCategory
     {
         try {
             return $this->query()->where('slug', $categorySlug)->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new BlogEtcCategoryNotFoundException('Unable to find a blog category with slug: ' . $categorySlug);
         }
-
     }
 
 }
