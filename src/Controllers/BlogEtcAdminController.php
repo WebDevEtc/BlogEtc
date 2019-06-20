@@ -81,7 +81,7 @@ class BlogEtcAdminController extends Controller
 
         Helpers::flash_message('Added post');
 
-        return redirect($newBlogPost->edit_url());
+        return redirect($newBlogPost->editUrl());
     }
 
     /**
@@ -110,7 +110,7 @@ class BlogEtcAdminController extends Controller
 
         Helpers::flash_message('Updated post');
 
-        return redirect($post->edit_url());
+        return redirect($post->editUrl());
     }
 
     /**

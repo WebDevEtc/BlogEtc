@@ -13,6 +13,7 @@ use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;
 use WebDevEtc\BlogEtc\Services\BlogEtcCommentsService;
 use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
+use WebDevEtc\BlogEtc\Services\CaptchaService;
 
 /**
  * Class BlogEtcCommentWriterController
@@ -33,11 +34,16 @@ class BlogEtcCommentWriterController extends Controller
      * @var BlogEtcCommentsService
      */
     private $commentsService;
+    /**
+     * @var CaptchaService
+     */
+    private $captchaService;
 
-    public function __construct(BlogEtcPostsService $postsService, BlogEtcCommentsService $commentsService)
+    public function __construct(BlogEtcPostsService $postsService, BlogEtcCommentsService $commentsService, CaptchaService $captchaService)
     {
         $this->postsService = $postsService;
         $this->commentsService = $commentsService;
+        $this->captchaService = $captchaService;
     }
 
     /**
@@ -55,8 +61,7 @@ class BlogEtcCommentWriterController extends Controller
         }
         $blogPost = $this->postsService->repository()->findBySlug($slug);
 
-        /** @var CaptchaAbstract $captcha */
-        $captcha = $this->getCaptchaObject();
+        $captcha = $this->captchaService->getCaptchaObject();
         if ($captcha) {
             $captcha->runCaptchaBeforeAddingComment($request, $blogPost);
         }

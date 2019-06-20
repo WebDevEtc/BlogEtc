@@ -11,6 +11,7 @@ use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Requests\SearchRequest;
 use WebDevEtc\BlogEtc\Services\BlogEtcCategoriesService;
 use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
+use WebDevEtc\BlogEtc\Services\CaptchaService;
 
 /**
  * Class BlogEtcReaderController
@@ -25,11 +26,16 @@ class BlogEtcReaderController extends Controller
     private $postsService;
     /** @var BlogEtcCategoriesService */
     private $categoriesService;
+    /**
+     * @var CaptchaService
+     */
+    private $captchaService;
 
-    public function __construct(BlogEtcPostsService $postsService, BlogEtcCategoriesService $categoriesService)
+    public function __construct(BlogEtcPostsService $postsService, BlogEtcCategoriesService $categoriesService,CaptchaService $captchaService)
     {
         $this->postsService = $postsService;
         $this->categoriesService = $categoriesService;
+        $this->captchaService = $captchaService;
     }
 
     /**
@@ -111,7 +117,7 @@ class BlogEtcReaderController extends Controller
     {
         $post = $this->postsService->findBySlug($postSlug);
 
-        $usingCaptcha = $this->getCaptchaObject();
+        $usingCaptcha = $this->captchaService->getCaptchaObject();
 
         if ($usingCaptcha !== null) {
             $usingCaptcha->runCaptchaBeforeShowingPosts($request, $post);

@@ -4,6 +4,9 @@ use DomainException;
 
 /**
  * Class Basic
+ *
+ * Basic anti spam captcha
+ *
  * @package WebDevEtc\BlogEtc\Captcha
  */
 class Basic extends CaptchaAbstract

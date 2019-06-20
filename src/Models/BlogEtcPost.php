@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use RuntimeException;
@@ -94,7 +95,7 @@ class BlogEtcPost extends Model
      *
      * @return array
      */
-    public function sluggable():array
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -108,7 +109,7 @@ class BlogEtcPost extends Model
      *
      * @return BelongsTo
      */
-    public function author():BelongsTo
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -118,7 +119,7 @@ class BlogEtcPost extends Model
      *
      * @return string
      */
-    public function author_string():?string
+    public function author_string(): ?string
     {
         if ($this->author) {
             return is_callable(self::$authorNameResolver)
@@ -154,9 +155,19 @@ class BlogEtcPost extends Model
      *
      * @return string
      */
-    public function edit_url(): string
+    public function editUrl(): string
     {
         return route('blogetc.admin.edit_post', $this->id);
+    }
+
+    /**
+     * @return string
+     * @deprecated - use editUrl()
+     *
+     */
+    public function edit_url(): string
+    {
+        return $this->editUrl();
     }
 
     /**
@@ -183,9 +194,9 @@ class BlogEtcPost extends Model
      * @param null|string $img_class - if you want any additional CSS classes for this tag for the <IMG>
      * @param null|string $anchor_class - is you want any additional CSS classes in the <a> anchor tag
      *
-     * @return string
+     * @return HtmlString
      */
-    public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null): string
+    public function imageTag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null): HtmlString
     {
         if (!$this->has_image($size)) {
             // return an empty string if this image does not exist.
@@ -194,8 +205,9 @@ class BlogEtcPost extends Model
         $url = e($this->image_url($size));
         $alt = e($this->title);
         $img = "<img src='$url' alt='$alt' class='" . e($img_class) . "' >";
-        return $auto_link ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img;
+        return new HtmlString($auto_link ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img);
     }
+
 
     /**
      * Does this object have an uploaded image of that size...?
@@ -204,12 +216,13 @@ class BlogEtcPost extends Model
      *
      * @return bool
      */
-    public function has_image($size = 'medium'): bool
+    public function hasImage($size = 'medium'): bool
     {
         $this->check_valid_image_size($size);
 
-        return $this->{'image_' . $size} != '';
+        return array_key_exists('image_' . $size, $this->getAttributes());
     }
+
 
     /**
      * Throws an exception if $size is not valid
@@ -297,10 +310,10 @@ class BlogEtcPost extends Model
     /**
      * Return post body HTML, ready for output
      *
-     * @return string
+     * @return HtmlString
      * @throws Throwable
      */
-    public function post_body_output():string
+    public function renderBody(): HtmlString
     {
         if (config('blogetc.use_custom_view_files') && $this->use_view_file) {
             // using custom view files is enabled, and this post has a use_view_file set, so render it:
@@ -322,7 +335,20 @@ class BlogEtcPost extends Model
             }
         }
 
-        return $return;
+        return new HtmlString($return);
+    }
+
+    /**
+     * @deprecated - use renderBody() instead
+     *
+     * (post_body_output used to return a string, renderBody() now returns HtmlString)
+     *
+     * @return string
+     * @throws Throwable
+     */
+    public function post_body_output(): string
+    {
+        return $this->renderBody();
     }
 
     /**
@@ -341,4 +367,28 @@ class BlogEtcPost extends Model
 
         return $this->title;
     }
+
+    /**
+     * @param mixed ...$args
+     * @return string
+     * @deprecated - use imageTag() instead, which returns a HtmlString
+     *
+     */
+    public function image_tag(...$args)
+    {
+        return $this->imageTag(...$args);
+    }
+
+
+    /**
+     * @param string $size
+     * @return bool
+     * @deprecated  - use hasImage() intsead
+     *
+     */
+    public function has_image($size = 'medium'): bool
+    {
+        return $this->hasImage($size);
+    }
+
 }
