@@ -41,10 +41,16 @@ class BlogEtcCommentsRepository
      * @param int $blogEtcCommentID
      * @return BlogEtcComment
      */
-    public function find(int $blogEtcCommentID): BlogEtcComment
+    public function find(int $blogEtcCommentID, bool $onlyApproved = true): BlogEtcComment
     {
         try {
-            return $this->query(true)->findOrFail($blogEtcCommentID);
+            $queryBuilder = $this->query(true);
+
+            if ($onlyApproved === false) {
+                $queryBuilder->withoutGlobalScopes();
+            }
+
+            return $queryBuilder->findOrFail($blogEtcCommentID);
         } catch (ModelNotFoundException $e) {
             throw new BlogEtcCommentNotFoundException('Unable to find blog post comment with ID: ' . $blogEtcCommentID);
         }

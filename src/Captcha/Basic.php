@@ -1,4 +1,6 @@
-<?php namespace WebDevEtc\BlogEtc\Captcha;
+<?php /** @noinspection PhpInconsistentReturnPointsInspection */
+
+namespace WebDevEtc\BlogEtc\Captcha;
 
 use DomainException;
 

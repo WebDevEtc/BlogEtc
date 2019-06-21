@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use WebDevEtc\BlogEtc\Captcha\Basic;
 
 //config for webdevetc/blogetc
@@ -40,7 +41,7 @@ return [
     'blog_upload_dir' => 'blog_images',
 
     // The user model - this is often moved to \App\Models namespace
-    'user_model' => \App\User::class,
+    'user_model' => User::class,
 
     // Memory limit - used when uploading images. Set to a high value to avoid out of memory issues
     // Set to false to not set any value
@@ -82,13 +83,19 @@ return [
         'image_large' => [ // this key must start with 'image_'. This is what the DB column must be named
             // width in pixels
             'w' => 1000,
+
             // height in pixels
             'h' => 700,
+
             // same as the main key, but WITHOUT 'image_'.
             'basic_key' => 'large',
+
             // description, used in the admin panel
             'name' => 'Large',
+
+            // is this size enabled?
             'enabled' => true,
+
             // if true then we will crop and resize to exactly w/h.
             // If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
             'crop' => true,
@@ -237,7 +244,7 @@ return [
         // Disqus options:
         'disqus' => [
             // This only applies if comments.type_of_comments_to_show is set to 'disqus'. The following config option
-            // can be found by looking for the following line on the embed code of your disqus code:
+            // can be found by looking for the following line on the embed code of your Disqus code:
             //     s.src = 'https://yourusername_or_sitename.disqus.com/embed.js';
             // You must enter the whole url
             'src_url' => 'https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js',
