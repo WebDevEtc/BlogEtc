@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BlogEtcUploadedPhoto extends Model
 {
@@ -21,6 +22,7 @@ class BlogEtcUploadedPhoto extends Model
     public $casts = [
         'uploaded_images' => 'array',
     ];
+
     /**
      * Fillable attributes
      *
@@ -32,4 +34,14 @@ class BlogEtcUploadedPhoto extends Model
         'source',
         'uploaded_images',
     ];
+
+    /**
+     * Relationship for the user
+     *
+     * @return BelongsTo
+     */
+    public function uploader():BelongsTo
+    {
+        return $this->belongsTo(config('blogetc.user_model'), 'uploader_id');
+    }
 }

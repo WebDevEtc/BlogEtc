@@ -64,7 +64,6 @@ class BlogEtcAdminController extends Controller
      */
     public function create(): View
     {
-        // show the create new post form
         return view('blogetc_admin::posts.add_post');
     }
 

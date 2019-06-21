@@ -2,13 +2,8 @@
 
 namespace WebDevEtc\BlogEtc\Services;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
-use WebDevEtc\BlogEtc\Events\CategoryAdded;
-use WebDevEtc\BlogEtc\Events\CategoryEdited;
-use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
-use WebDevEtc\BlogEtc\Repositories\BlogEtcCategoriesRepository;
+use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 
 class CaptchaService
 {
@@ -18,7 +13,7 @@ class CaptchaService
      *
      * @return null|CaptchaAbstract
      */
-    public function getCaptchaObject(): ?CaptchaAbstract
+    public function getCaptchaObject(): ?CaptchaInterface
     {
         if (!config('blogetc.captcha.captcha_enabled')) {
             return null;

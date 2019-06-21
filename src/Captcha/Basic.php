@@ -57,7 +57,7 @@ class Basic extends CaptchaAbstract
 
             $answers_array = array_map('trim', explode(',', $answers));
 
-            if (!in_array($value, $answers_array, true)) {
+            if (!$value || !in_array($value, $answers_array, true)) {
                 return $fail('The captcha field is incorrect.');
             }
         };

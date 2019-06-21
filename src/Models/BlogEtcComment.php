@@ -20,6 +20,7 @@ class BlogEtcComment extends Model
 {
     /**
      * Attributes which have specific casts
+     *
      * @var array
      */
     public $casts = [
@@ -41,7 +42,7 @@ class BlogEtcComment extends Model
      *
      * @return void
      */
-    protected static function boot():void
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -53,6 +54,7 @@ class BlogEtcComment extends Model
 
     /**
      * The BlogEtcPost relationship
+     *
      * @return BelongsTo
      */
     public function post(): BelongsTo
@@ -67,21 +69,23 @@ class BlogEtcComment extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(config('blogetc.user_model'));
     }
 
     /**
      * Return author string (either from the User (via ->user_id), or the submitted author_name value
      *
-     * @return string
+     * @return string|null
      */
-    public function author():?string
+    public function author(): ?string
     {
         if ($this->user_id) {
+            // a user is associated with this
             $field = config('blogetc.comments.user_field_for_author_name', 'name');
             return optional($this->user)->$field;
         }
 
+        // otherwise return the string value of 'author_name' which guests can submit:
         return $this->author_name;
     }
 }

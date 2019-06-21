@@ -13,16 +13,16 @@ class Helpers
     /**
      * What key to use for the session::flash / pull / has
      */
-    const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
+    public const FLASH_MESSAGE_SESSION_KEY = 'BLOGETC_FLASH';
 
     /**
      * Set a new message
      *
      * @param string $message
      */
-    public static function flash_message(string $message): void
+    public static function flashMessage(string $message): void
     {
-        Session::flash(Helpers::FLASH_MESSAGE_SESSION_KEY, $message);
+        Session::flash(self::FLASH_MESSAGE_SESSION_KEY, $message);
     }
 
     /**
@@ -30,7 +30,7 @@ class Helpers
      *
      * @return bool
      */
-    public static function has_flashed_message(): bool
+    public static function hasFlashedMessage(): bool
     {
         return Session::has(self::FLASH_MESSAGE_SESSION_KEY);
     }
@@ -39,30 +39,71 @@ class Helpers
      * return the flashed message. Use with ::has_flashed_message() if you need to check if it has a value...
      * @return string
      */
-    public static function pull_flashed_message()
+    public static function pullFlashedMessage(): ?string
     {
         return Session::pull(self::FLASH_MESSAGE_SESSION_KEY);
     }
 
     /**
-     * Use this (Helpers::rss_html_tag()) in your blade/template files, within <head>
-     * to auto insert the links to rss feed
+     * Use this in your blade/template files, within <head> to auto insert the links to rss feed
+     *
      * @return string
      */
-    public static function rss_html_tag(): string
+    public static function rssHtmlTag(): string
     {
         return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="' . e(route('blogetc.feed')) . '?type=atom" />
   <link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="' . e(route('blogetc.feed')) . '?type=rss" />
   ';
     }
 
+
     /**
      * This method is depreciated. Just use the config() directly.
      * @return array
      * @deprecated
      */
-    public static function image_sizes()
+    public static function image_sizes(): array
     {
         return config('blogetc.image_sizes');
+    }
+
+    /**
+     * @return string|null
+     * @deprecated use pullFlashedMessage() instead
+     *
+     */
+    public static function pull_flashed_message(): ?string
+    {
+        return self::pullFlashedMessage();
+    }
+
+    /**
+     * @return bool
+     * @deprecated use hasFlashedMessage() instead
+     *
+     */
+    public static function has_flashed_message(): bool
+    {
+        return self::hasFlashedMessage();
+    }
+
+    /**
+     * @param string $message
+     * @deprecated use flashMessage() instead
+     *
+     */
+    public static function flash_message(string $message): void
+    {
+        self::flashMessage($message);
+    }
+
+    /**
+     * @return string
+     *
+     * @deprecated use rssHtmlTag() instead
+     */
+    public static function rss_html_tag(): string
+    {
+        return self::rssHtmlTag();
     }
 }

@@ -103,7 +103,7 @@ Route::group(['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Contro
 
 
         // Manage comments (Admin Panel)
-        Route::group(['prefix' => 'comments',], function () {
+        Route::group(['prefix' => 'comments',], static function () {
             // show all comments:
             Route::get(
                 '/',

@@ -26,13 +26,14 @@ class BlogEtcReaderController extends Controller
     private $postsService;
     /** @var BlogEtcCategoriesService */
     private $categoriesService;
-    /**
-     * @var CaptchaService
-     */
+    /** @var CaptchaService */
     private $captchaService;
 
-    public function __construct(BlogEtcPostsService $postsService, BlogEtcCategoriesService $categoriesService,CaptchaService $captchaService)
-    {
+    public function __construct(
+        BlogEtcPostsService $postsService,
+        BlogEtcCategoriesService $categoriesService,
+        CaptchaService $captchaService
+    ) {
         $this->postsService = $postsService;
         $this->categoriesService = $categoriesService;
         $this->captchaService = $captchaService;
@@ -42,9 +43,8 @@ class BlogEtcReaderController extends Controller
      * Show the search results
      *
      * @param SearchRequest $request
-     * @return \Illuminate\View\View
      */
-    public function search(SearchRequest $request): \Illuminate\View\View
+    public function search(SearchRequest $request): \Illuminate\Contracts\View
     {
         if (!config('blogetc.search.search_enabled')) {
             throw new LogicException('Search is disabled');
@@ -65,12 +65,12 @@ class BlogEtcReaderController extends Controller
     /**
      * View all posts in $category_slug category
      *
-     * @param $category_slug
-     * @return mixed
+     * @param $categorySlug
+     * @return \Illuminate\Contracts\View\View
      */
-    public function showCategory($category_slug)
+    public function showCategory($categorySlug):\Illuminate\Contracts\View\View
     {
-        return $this->index($category_slug);
+        return $this->index($categorySlug);
     }
 
     /**
@@ -101,22 +101,23 @@ class BlogEtcReaderController extends Controller
 
         return view('blogetc::index', [
             'posts' => $posts,
-            'category' => $category ?? null,
             'title' => $title,
+            'category' => $category ?? null,
         ]);
     }
 
     /**
-     * View a single post and (if enabled) it's comments
+     * View a single post and (if enabled) comments
      *
      * @param Request $request
      * @param $postSlug
-     * @return mixed
+     * @return \Illuminate\View\View
      */
     public function show(Request $request, $postSlug): \Illuminate\View\View
     {
         $post = $this->postsService->findBySlug($postSlug);
 
+        // if using captcha, there might be some code to run now or to echo in the view:
         $usingCaptcha = $this->captchaService->getCaptchaObject();
 
         if ($usingCaptcha !== null) {

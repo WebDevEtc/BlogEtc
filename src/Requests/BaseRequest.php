@@ -4,13 +4,12 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 
 /**
  * Class BaseRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-abstract class BaseRequest extends FormRequest implements BaseRequestInterface
+abstract class BaseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
