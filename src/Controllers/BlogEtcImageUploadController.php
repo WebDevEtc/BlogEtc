@@ -38,6 +38,9 @@ class BlogEtcImageUploadController extends Controller
 
         if (!config('blogetc.image_upload_enabled') && !app()->runningInConsole() ) {
             throw new RuntimeException('The blogetc.php config option has not enabled image uploading');
+
+        if (!app()->runningInConsole() && !config("blogetc.image_upload_enabled")) {
+            throw new \RuntimeException("The blogetc.php config option has not enabled image uploading");
         }
     }
 

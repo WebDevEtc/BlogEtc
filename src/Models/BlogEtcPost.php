@@ -3,46 +3,20 @@
 namespace WebDevEtc\BlogEtc\Models;
 
 use App\User;
-use Carbon\Carbon;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
-use InvalidArgumentException;
-use RuntimeException;
+
 use Swis\LaravelFulltext\Indexable;
-use Throwable;
+use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
+use WebDevEtc\BlogEtc\Interfaces\SearchResultInterface;
 
 /**
- * Class BlogEtcPost.
- * @property string|null title
- * @property string|null subtitle
- * @property string|null short_description
- * @property string|null post_body
- * @property string|null seo_title
- * @property string|null meta_desc
- * @property string|null slug
- * @property string|null use_view_file
- * @property Carbon posted_at
- * @property bool is_published
- * @property mixed author
  */
 class BlogEtcPost extends Model
 {
     use Sluggable;
     use Indexable;
 
-    /**
-     * The callback or user property to be used when resolving author name.
-     *
-     * @var string|callable
-     */
-    protected static $authorNameResolver;
     /**
      * @var array
      */
@@ -70,8 +44,37 @@ class BlogEtcPost extends Model
         'is_published',
         'posted_at',
     ];
-    protected $indexContentColumns = ['post_body', 'short_description', 'meta_desc'];
-    protected $indexTitleColumns = ['title', 'subtitle', 'seo_title'];
+
+    /**
+     * The callback or user property to be used when resolving author name.
+     *
+     * @var string|callable
+     */
+    protected static $authorNameResolver;
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'title',
+            ],
+        ];
+    }
+
+    public function search_result_page_url()
+    {
+        return $this->url();
+    }
+
+    public function search_result_page_title()
+    {
+        return $this->title;
+    }
 
     /**
      * The "booting" method of the model.
@@ -81,6 +84,7 @@ class BlogEtcPost extends Model
     protected static function boot()
     {
         parent::boot();
+        static::$authorNameResolver = config('blogetc.comments.user_field_for_author_name');
 
         static::$authorNameResolver = config('blogetc.comments.user_field_for_author_name');
 
@@ -125,13 +129,17 @@ class BlogEtcPost extends Model
             return is_callable(self::$authorNameResolver)
                 ? call_user_func(self::$authorNameResolver, $this->author)
                 : $this->author->{self::$authorNameResolver};
+                ? call_user_func_array(self::$authorNameResolver, [$this->author])
+                : $this->author->{self::$authorNameResolver};
+        } else {
+            return 'Unknown Author';
         }
 
         return 'Unknown Author';
     }
 
     /**
-     * The associated categories relationship for this blog post.
+     * The associated categories for this blog post.
      *
      * @return BelongsToMany
      */
@@ -142,6 +150,7 @@ class BlogEtcPost extends Model
 
     /**
      * Comments relationship for this post.
+     * Comments for this post.
      *
      * @return HasMany
      */
@@ -152,6 +161,7 @@ class BlogEtcPost extends Model
 
     /**
      * Return the URL for editing the post (used for admin users).
+     * Returns the public facing URL to view this blog post.
      *
      * @return string
      */
@@ -161,13 +171,16 @@ class BlogEtcPost extends Model
     }
 
     /**
-     * @return string
-     * @deprecated - use editUrl()
+        return route('blogetc.single', $this->slug);
+    }
+
+    /**
+     * Return the URL for editing the post (used for admin users).
+     *
      *
      */
     public function edit_url(): string
     {
-        return $this->editUrl();
     }
 
     /**
@@ -176,6 +189,9 @@ class BlogEtcPost extends Model
      * @return string
      * @throws Exception
      *
+     * @throws \Exception
+     *
+     * @return string
      */
     public function full_view_file_path(): string
     {
@@ -207,7 +223,12 @@ class BlogEtcPost extends Model
         $img = "<img src='$url' alt='$alt' class='" . e($img_class) . "' >";
         return new HtmlString($auto_link ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img);
     }
+        if (! $this->use_view_file) {
+            throw new \RuntimeException('use_view_file was empty, so cannot use '.__METHOD__);
+        }
 
+        return 'custom_blog_posts.'.$this->use_view_file;
+    }
 
     /**
      * Does this object have an uploaded image of that size...?
@@ -215,6 +236,7 @@ class BlogEtcPost extends Model
      * @param string $size
      *
      * @return bool
+     * @return int
      */
     public function hasImage($size = 'medium'): bool
     {
@@ -262,6 +284,7 @@ class BlogEtcPost extends Model
             "BlogEtcPost image size should be 'large','medium','thumbnail'" .
             " or another field as defined in config/blogetc.php. Provided size ($size) is not valid"
         );
+        return strlen($this->{'image_'.$size});
     }
 
     /**
@@ -283,11 +306,33 @@ class BlogEtcPost extends Model
     /**
      * Returns the public facing URL to view this blog post.
      *
+        $filename = $this->{'image_'.$size};
+
+        return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
+    }
+
+    /**
+     * Generate a full <img src='' alt=''> img tag.
+     *
+     * @param string $size - large, medium, thumbnail
+     * @param bool $auto_link - if true then itll add <a href=''>...</a> around the <img> tag
+     * @param null|string $img_class - if you want any additional CSS classes for this tag for the <IMG>
+     * @param null|string $anchor_class - is you want any additional CSS classes in the <a> anchor tag
+     *
      * @return string
      */
     public function url(): string
     {
         return route('blogetc.single', $this->slug);
+        if (! $this->has_image($size)) {
+            // return an empty string if this image does not exist.
+            return '';
+        }
+        $url = e($this->image_url($size));
+        $alt = e($this->title);
+        $img = "<img src='$url' alt='$alt' class='".e($img_class)."' >";
+        return $auto_link ? "<a class='".e($anchor_class)."' href='".e($this->url())."'>$img</a>" : $img;
+
     }
 
     /**
@@ -299,12 +344,15 @@ class BlogEtcPost extends Model
     public function generate_introduction($max_len = 500): string
     {
         $base_text_to_use = $this->short_description;
-        if (!trim($base_text_to_use)) {
+        if (! trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
         $base_text_to_use = strip_tags($base_text_to_use);
 
         return Str::limit($base_text_to_use, (int)$max_len);
+        $intro = str_limit($base_text_to_use, (int) $max_len);
+
+        return nl2br(e($intro));
     }
 
     /**
@@ -324,6 +372,7 @@ class BlogEtcPost extends Model
         }
 
         if (!config('blogetc.echo_html')) {
+        if (! config('blogetc.echo_html')) {
             // if this is not true, then we should escape the output
             if (config('blogetc.strip_html')) {
                 $return = strip_tags($return);
@@ -345,10 +394,38 @@ class BlogEtcPost extends Model
      *
      * @return string
      * @throws Throwable
+     * Throws an exception if $size is not valid
+     * It should be either 'large','medium','thumbnail'.
+     *
+     * @param string $size
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return bool
      */
     public function post_body_output(): string
     {
         return $this->renderBody();
+        if (array_key_exists('image_'.$size, config('blogetc.image_sizes'))) {
+            return true;
+        }
+
+        // was an error!
+
+        if (starts_with($size, 'image_')) {
+            // $size starts with image_, which is an error
+            /* the config/blogetc.php and the DB columns SHOULD have keys that start with image_$size
+            however when using methods such as image_url() or has_image() it SHOULD NOT start with 'image_'
+
+            To put another way: :
+                in the config/blogetc.php : config("blogetc.image_sizes.image_medium")
+                in the database table:    : blogetc_posts.image_medium
+                when calling image_url()  : image_url("medium")
+            */
+            throw new \InvalidArgumentException("Invalid image size ($size). BlogEtcPost image size should not begin with 'image_'. Remove this from the start of $size. It *should* be in the blogetc.image_sizes config though!");
+        }
+
+        throw new \InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
     }
 
     /**
