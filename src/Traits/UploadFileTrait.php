@@ -7,6 +7,7 @@ use File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Image;
+use Intervention\Image\Constraint;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Events\UploadedImage;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
@@ -27,56 +28,56 @@ trait UploadFileTrait
      * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
      * This is needed though because if you upload a large image it'll not work
      */
-    protected function increaseMemoryLimit():void
+    protected function increaseMemoryLimit(): void
     {
         // increase memory - change this setting in config file
         if (config('blogetc.memory_limit')) {
-            @ini_set('memory_limit', config('blogetc.memory_limit'));
+            ini_set('memory_limit', config('blogetc.memory_limit'));
         }
     }
 
     /**
      * @param BlogEtcPost $new_blog_post
      * @param $suggested_title - used to help generate the filename
-     * @param $image_size_details - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
+     * @param $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
      * @param $photo
      * @return array
      * @throws Exception
      */
-    protected function uploadAndResize(?BlogEtcPost $new_blog_post, $suggested_title, $image_size_details, $photo)
+    protected function uploadAndResize(?BlogEtcPost $new_blog_post, $suggested_title, $imageSizeDetails,UploadedFile $photo): array
     {
         // get the filename/filepath
-        $image_filename = $this->getImageFilename($suggested_title, $image_size_details, $photo);
+        $image_filename = $this->getImageFilename($suggested_title, $imageSizeDetails, $photo);
         $destinationPath = $this->imageDestinationPath();
 
         // make image
         $resizedImage = Image::make($photo->getRealPath());
 
-        if (is_array($image_size_details)) {
+        if (is_array($imageSizeDetails)) {
             // resize to these dimensions:
-            $w = $image_size_details['w'];
-            $h = $image_size_details['h'];
+            $w = $imageSizeDetails['w'];
+            $h = $imageSizeDetails['h'];
 
-            if (isset($image_size_details['crop']) && $image_size_details['crop']) {
+            if (isset($imageSizeDetails['crop']) && $imageSizeDetails['crop']) {
                 $resizedImage = $resizedImage->fit($w, $h);
             } else {
-                $resizedImage = $resizedImage->resize($w, $h, function ($constraint) {
+                $resizedImage = $resizedImage->resize($w, $h, static function (Constraint $constraint) {
                     $constraint->aspectRatio();
                 });
             }
-        } elseif ($image_size_details === 'fullsize') {
+        } elseif ($imageSizeDetails === 'fullsize') {
             // nothing to do here - no resizing needed.
             // We just need to set $w/$h with the original w/h values
             $w = $resizedImage->width();
             $h = $resizedImage->height();
         } else {
-            throw new Exception('Invalid image_size_details value');
+            throw new RuntimeException('Invalid image_size_details value of ' . $imageSizeDetails);
         }
 
         // save image
         $resizedImage->save($destinationPath . '/' . $image_filename, config('blogetc.image_quality', 80));
 
-        // fireevent
+        // fire event
         event(new UploadedImage($image_filename, $resizedImage, $new_blog_post, __METHOD__));
 
         // return the filename and w/h details
@@ -98,7 +99,7 @@ trait UploadFileTrait
      * @return string
      * @throws RuntimeException
      */
-    protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo)
+    protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo): string
     {
         $base = $this->baseFilename($suggested_title);
 
@@ -109,7 +110,7 @@ trait UploadFileTrait
         for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
 
             // add suffix if $i>1
-            $suffix = $i > 1 ? '-' . str_random(5) : '';
+            $suffix = $i > 1 ? '-' . Str::random(5) : '';
 
             $attempt = Str::slug($base . $suffix . $wh) . $ext;
 
@@ -127,15 +128,10 @@ trait UploadFileTrait
      * @param string $suggestedTitle
      * @return string
      */
-    protected function baseFilename(string $suggestedTitle)
+    protected function baseFilename(string $suggestedTitle): string
     {
         $base = substr($suggestedTitle, 0, 100);
-        if (!$base) {
-            // if we have an empty string then we should use a random one:
-            $base = 'image-' . Str::random(5);
-            return $base;
-        }
-        return $base;
+        return $base ?: 'image-' . Str::random(5);
     }
 
     /**
@@ -159,7 +155,7 @@ trait UploadFileTrait
      * @return string
      * @throws RuntimeException
      */
-    protected function getDimensions($imageSize):string
+    protected function getDimensions($imageSize): string
     {
         if (is_array($imageSize)) {
             return '-' . $imageSize['w'] . 'x' . $imageSize['h'];
@@ -177,7 +173,7 @@ trait UploadFileTrait
      * @return string
      * @throws RuntimeException
      */
-    protected function imageDestinationPath()
+    protected function imageDestinationPath(): string
     {
         $path = public_path('/' . config('blogetc.blog_upload_dir'));
 
@@ -192,7 +188,7 @@ trait UploadFileTrait
      * @param $path
      * @throws RuntimeException
      */
-    protected function checkDestinationWritable(string $path)
+    protected function checkDestinationWritable(string $path): void
     {
         if (!$this->checked_blog_image_dir_is_writable) {
             if (!is_writable($path)) {

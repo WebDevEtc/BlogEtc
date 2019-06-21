@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Models;
 
-use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Exception;
@@ -31,6 +30,7 @@ use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
  * @property Carbon posted_at
  * @property bool is_published
  * @property mixed author
+ * @property int id
  */
 class BlogEtcPost extends Model
 {
@@ -70,8 +70,22 @@ class BlogEtcPost extends Model
         'is_published',
         'posted_at',
     ];
-    protected $indexContentColumns = ['post_body', 'short_description', 'meta_desc'];
-    protected $indexTitleColumns = ['title', 'subtitle', 'seo_title'];
+
+    // index content columns, used for full text search:
+    protected $indexContentColumns =
+        [
+            'post_body',
+            'short_description',
+            'meta_desc',
+        ];
+
+    // index title columns, used for full text search:
+    protected $indexTitleColumns =
+        [
+            'title',
+            'subtitle',
+            'seo_title',
+        ];
 
     /**
      * The "booting" method of the model.
@@ -198,16 +212,15 @@ class BlogEtcPost extends Model
      */
     public function imageTag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null): HtmlString
     {
-        if (!$this->has_image($size)) {
+        if (!$this->hasImage($size)) {
             // return an empty string if this image does not exist.
-            return '';
+            return new HtmlString('');
         }
         $url = e($this->image_url($size));
         $alt = e($this->title);
         $img = "<img src='$url' alt='$alt' class='" . e($img_class) . "' >";
         return new HtmlString($auto_link ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img);
     }
-
 
     /**
      * Does this object have an uploaded image of that size...?
@@ -222,7 +235,6 @@ class BlogEtcPost extends Model
 
         return array_key_exists('image_' . $size, $this->getAttributes());
     }
-
 
     /**
      * Throws an exception if $size is not valid
@@ -270,6 +282,7 @@ class BlogEtcPost extends Model
      *
      * @param string $size - should be 'medium' , 'large' or 'thumbnail'
      *
+     * TODO - rename
      * @return string
      */
     public function image_url($size = 'medium'): string
@@ -315,13 +328,9 @@ class BlogEtcPost extends Model
      */
     public function renderBody(): HtmlString
     {
-        if (config('blogetc.use_custom_view_files') && $this->use_view_file) {
-            // using custom view files is enabled, and this post has a use_view_file set, so render it:
-            $body = view('blogetc::partials.use_view_file', ['post' => $this])->render();
-        } else {
-            // just use the plain->post_body
-            $body = $this->post_body;
-        }
+        $body = $this->use_view_file && config('blogetc.use_custom_view_files')
+            ? view('blogetc::partials.use_view_file', ['post' => $this])->render()
+            : $this->post_body;
 
         if (!config('blogetc.echo_html')) {
             // if this is not true, then we should escape the output
@@ -341,12 +350,12 @@ class BlogEtcPost extends Model
     }
 
     /**
+     * @return string
+     * @throws Throwable
      * @deprecated - use renderBody() instead
      *
      * (post_body_output used to return a string, renderBody() now returns HtmlString)
      *
-     * @return string
-     * @throws Throwable
      */
     public function post_body_output(): string
     {
@@ -372,20 +381,18 @@ class BlogEtcPost extends Model
 
     /**
      * @param mixed ...$args
-     * @return string
+     * @return HtmlString
      * @deprecated - use imageTag() instead, which returns a HtmlString
-     *
      */
     public function image_tag(...$args)
     {
         return $this->imageTag(...$args);
     }
 
-
     /**
      * @param string $size
      * @return bool
-     * @deprecated  - use hasImage() intsead
+     * @deprecated  - use hasImage() instead
      *
      */
     public function has_image($size = 'medium'): bool

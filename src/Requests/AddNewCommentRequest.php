@@ -17,13 +17,7 @@ class AddNewCommentRequest extends FormRequest
     public function authorize():bool
     {
         // TODO - use constants
-        if (config('blogetc.comments.type_of_comments_to_show') === 'built_in') {
-            // anyone is allowed to submit a comment, to return true always.
-            return true;
-        }
-
-        //comments are disabled so just return false to disallow everyone.
-        return false;
+        return config('blogetc.comments.type_of_comments_to_show') === 'built_in';
     }
 
     /**

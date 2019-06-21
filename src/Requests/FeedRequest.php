@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 class FeedRequest extends FormRequest
 {
     /**
-     *
+     * Rules for requesting the feed
      *
      * @return array
      */

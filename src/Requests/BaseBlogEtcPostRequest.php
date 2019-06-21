@@ -7,14 +7,13 @@ use Exception;
 
 abstract class BaseBlogEtcPostRequest extends BaseRequest
 {
-
     /**
      * Shared rules for blog posts
      *
      * @return array
-     * @todo tidy this up! It is a bit of a mess!
+     * @todo - Refactor! This is a mess.
      */
-    protected function baseBlogPostRules()
+    protected function baseBlogPostRules(): array
     {
         // setup some anon functions for some of the validation rules:
         $check_valid_posted_at = static function ($attribute, $value, $fail) {

@@ -38,7 +38,11 @@ class BlogEtcCommentsRepository
     /**
      * Find and return a comment by ID
      *
+     * If $onlyApproved is true, then it will only return an approved comment
+     * If it is false then it can return it even if not yet approved
+     *
      * @param int $blogEtcCommentID
+     * @param bool $onlyApproved
      * @return BlogEtcComment
      */
     public function find(int $blogEtcCommentID, bool $onlyApproved = true): BlogEtcComment

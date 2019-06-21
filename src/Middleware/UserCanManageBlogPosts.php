@@ -23,14 +23,14 @@ class UserCanManageBlogPosts
     {
         if (!Auth::check()) {
             // user not logged in
-            abort(
+            return abort(
                 Response::HTTP_FORBIDDEN,
                 'User not authorised to manage blog posts: You are not logged in'
             );
         }
         if (!Auth::user()->canManageBlogEtcPosts()) {
             // user lacking correct permission
-            abort(
+            return abort(
                 Response::HTTP_FORBIDDEN,
                 'User not authorised to manage blog posts: Your account is not authorised to edit blog posts'
             );
