@@ -177,21 +177,54 @@ class BlogEtcPostsService
     }
 
     /**
-     * Delete a blog etc post, return the deleted post
+     * Delete a blog etc post, return the deleted post and an array of featured images which were assoicated
+     * to the blog post (but which were not deleted form the filesystem)
      *
      * @param int $blogPostEtcID
-     * @return BlogEtcPost (deleted post)
+     * @return array - [BlogEtcPost (deleted post), array (remaining featured photos)
      * @throws Exception
      */
-    public function delete(int $blogPostEtcID): BlogEtcPost
+    public function delete(int $blogPostEtcID): array
     {
+        // delete the DB entry:
         $post = $this->repository->find($blogPostEtcID);
 
         event(new BlogPostWillBeDeleted($post));
 
         $post->delete();
 
-        return $post;
+        // now return an array of image files that are not deleted (so we can tell the user that these featured photos
+        // still exist on the filesystem
+
+        $remainingFeaturedPhotos = [];
+
+        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+            if ($post->$imageSize) {
+                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $imageSize);
+
+                if (file_exists($fullPath)) {
+                    // there was record of this size in the db, so push it to array of featured photos which remain
+                    // (Note: there is no check here to see if they actually exist on the filesystem).
+                    $fileSize = filesize($fullPath);
+
+                    // TODO - refactor to use Laravel filesystem/disks
+                    if ($fileSize) {
+                        // get file gt
+                        //size in human readable (kb)
+                        $fileSize = round(filesize($fileSize) / 1000, 1) . ' kb';
+                    }
+
+                    $remainingFeaturedPhotos[] = [
+                        'filename' => $post->$imageSize,
+                        'full_path' => $fullPath,
+                        'file_size' => $fileSize,
+                        'url' => asset(config('blogetc.blog_upload_dir','blog_images').'/'.$post->$imageSize),
+                    ];
+                }
+            }
+        }
+
+        return [$post, $remainingFeaturedPhotos];
     }
 
     /**

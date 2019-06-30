@@ -24,9 +24,8 @@ use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 class BlogEtcAdminController extends Controller
 {
     use UploadFileTrait;
-    /**
-     * @var BlogEtcPostsService
-     */
+
+    /** @var BlogEtcPostsService */
     private $service;
 
     /**
@@ -50,7 +49,7 @@ class BlogEtcAdminController extends Controller
     /**
      * View all posts (paginated)
      *
-     * @return mixed
+     * @return View
      */
     public function index(): View
     {
@@ -61,6 +60,8 @@ class BlogEtcAdminController extends Controller
 
     /**
      * Show form for creating new post
+     *
+     * @return View
      */
     public function create(): View
     {
@@ -71,10 +72,10 @@ class BlogEtcAdminController extends Controller
      * Save a new post
      *
      * @param CreateBlogEtcPostRequest $request
-     * @return RedirectResponse|Redirector
+     * @return RedirectResponse
      * @throws Exception
      */
-    public function store(CreateBlogEtcPostRequest $request)
+    public function store(CreateBlogEtcPostRequest $request) : RedirectResponse
     {
         $newBlogPost = $this->service->create($request, Auth::id());
 
@@ -87,9 +88,9 @@ class BlogEtcAdminController extends Controller
      * Show form to edit post
      *
      * @param $blogPostId
-     * @return mixed
+     * @return View
      */
-    public function edit($blogPostId)
+    public function edit($blogPostId) :View
     {
         $post = $this->service->repository()->find($blogPostId);
 
@@ -101,9 +102,9 @@ class BlogEtcAdminController extends Controller
      *
      * @param UpdateBlogEtcPostRequest $request
      * @param $blogPostID
-     * @return RedirectResponse|Redirector
+     * @return RedirectResponse
      */
-    public function update(UpdateBlogEtcPostRequest $request, $blogPostID)
+    public function update(UpdateBlogEtcPostRequest $request, $blogPostID):RedirectResponse
     {
         $post = $this->service->update($blogPostID, $request);
 
@@ -113,20 +114,19 @@ class BlogEtcAdminController extends Controller
     }
 
     /**
-     * Delete a post
+     * Delete a post - removes it from the database, does not remove any featured images associated with the blog post.
      *
      * @param DeleteBlogEtcPostRequest $request
      * @param $blogPostID
-     * @return mixed
+     * @return View
      * @throws Exception
      */
     public function destroy(DeleteBlogEtcPostRequest $request, $blogPostID)
     {
-        $post = $this->service->delete($blogPostID);
+       [ $post, $remainingFeaturedPhotos ]  = $this->service->delete($blogPostID);
 
-        // todo - delete the featured images?
-        // At the moment it just issues a warning saying the images are still on the server.
 
-        return view('blogetc_admin::posts.deleted_post', ['deletedPost' => $post]);
+
+        return view('blogetc_admin::posts.deleted_post', ['deletedPost' => $post, 'remainingFeaturedPhotos' => $remainingFeaturedPhotos]);
     }
 }
