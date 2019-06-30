@@ -10,7 +10,6 @@
 
     <title>Blog Admin - {{ config('app.name', 'Laravel') }}</title>
 
-
     <!-- jQuery is only used for hide(), show() and slideDown(). All other features use vanilla JS -->
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -106,8 +105,6 @@
                         </div>
                     @endif
 
-
-
                     @yield('content')
                 </div>
             </div>
@@ -130,6 +127,9 @@
         }
     </script>
 @endif
+
+@stack('js')
+
 
 
 </body>

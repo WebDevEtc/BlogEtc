@@ -1,7 +1,7 @@
 @extends('blogetc_admin::layouts.admin_layout')
+@section('title','Category Deleted')
 @section('content')
-
-
-    <div class='alert alert-success'><b>Deleted that category</b></div>
-
+    <p class="alert alert-success">
+        <b>Category deleted</b>
+    </p>
 @endsection

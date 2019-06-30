@@ -1,4 +1,4 @@
 <?php
-/** @var BlogEtcPost $post */
-?>use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-by <strong>{{ $post->author->name}}</strong>
+/** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+?>
+by <strong>{{ $post->author->name }}</strong>
