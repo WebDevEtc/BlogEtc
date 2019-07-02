@@ -2,6 +2,9 @@
 ## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app
 ### 5 minutes to install! Quick and easy!
 
+## July 2019 - 
+I'm currently rewriting it, a v4 release will be coming approx first week of July 2019. It will be a Laravel 5.8 release. I'm doing a big overhaul of the package with must better coding standards. 
+
 ## Introduction
 
 This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything you need to quickly and easily add a blog to your laravel app.
