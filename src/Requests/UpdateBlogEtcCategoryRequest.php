@@ -4,6 +4,10 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Illuminate\Validation\Rule;
 
+/**
+ * Class UpdateBlogEtcCategoryRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 class UpdateBlogEtcCategoryRequest extends BaseBlogEtcCategoryRequest
 {
 

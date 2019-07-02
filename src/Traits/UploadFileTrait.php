@@ -39,13 +39,18 @@ trait UploadFileTrait
     /**
      * @param BlogEtcPost $new_blog_post
      * @param $suggested_title - used to help generate the filename
-     * @param $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
+     * @param $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
+     * no size reduction, but will use this string to generate the filename)
      * @param $photo
      * @return array
      * @throws Exception
      */
-    protected function uploadAndResize(?BlogEtcPost $new_blog_post, $suggested_title, $imageSizeDetails,UploadedFile $photo): array
-    {
+    protected function uploadAndResize(
+        ?BlogEtcPost $new_blog_post,
+        $suggested_title,
+        $imageSizeDetails,
+        UploadedFile $photo
+    ): array {
         // get the filename/filepath
         $image_filename = $this->getImageFilename($suggested_title, $imageSizeDetails, $photo);
         $destinationPath = $this->imageDestinationPath();
@@ -108,7 +113,6 @@ trait UploadFileTrait
         $ext = '.' . $photo->getClientOriginalExtension();
 
         for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
-
             // add suffix if $i>1
             $suffix = $i > 1 ? '-' . Str::random(5) : '';
 

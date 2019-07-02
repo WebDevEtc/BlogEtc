@@ -31,7 +31,7 @@ class MainTest extends TestCase
         blogetc.index                       YES
         blogetc.feed                        YES
         blogetc.view_category               no - but this is basically blogetc.index
-        blogetc.single                      YES
+        blogetc.show                      YES
         blogetc.comments.add_new_comment    YES - tested multiple times with/without basic captcha on/off/correct/incorrect.
                                                 Also tested with diff configs for comment form:
                                                     disabled
@@ -71,19 +71,21 @@ class MainTest extends TestCase
 
     public function testFilesArePresent()
     {
-        $this->assertFileExists(config_path('blogetc.php'),
-            '/config/blogetc.php should exist - currently no file with that filename is found');
-        $this->assertTrue(is_array(include config_path('blogetc.php')),
-            '/config/blogetc.php should exist - currently no file with that filename is found');
+        $this->assertFileExists(
+            config_path('blogetc.php'),
+            '/config/blogetc.php should exist - currently no file with that filename is found'
+        );
+        $this->assertTrue(
+            is_array(include config_path('blogetc.php')),
+            '/config/blogetc.php should exist - currently no file with that filename is found'
+        );
     }
 
     public function testImageSizesAreSane()
     {
-
         $this->assertTrue(count(config('blogetc.image_sizes')) >= 3);
 
         foreach (config('blogetc.image_sizes') as $image_key => $image_info) {
-
             $this->assertArrayHasKey('w', $image_info);
             $this->assertArrayHasKey('h', $image_info);
             $this->assertArrayHasKey('name', $image_info);
@@ -101,9 +103,10 @@ class MainTest extends TestCase
 
     public function testUserHasNanManageBlogEtcPostsMethod()
     {
-
-        $this->assertTrue(method_exists(User::class, 'canManageBlogEtcPosts'),
-            'Your User model must have the canManageBlogEtcPosts method');
+        $this->assertTrue(
+            method_exists(User::class, 'canManageBlogEtcPosts'),
+            'Your User model must have the canManageBlogEtcPosts method'
+        );
 
         $user = new User();
         $this->assertTrue(is_bool($user->canManageBlogEtcPosts()));
@@ -113,7 +116,6 @@ class MainTest extends TestCase
 
     public function testCanSeeAdminPanel()
     {
-
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
 
         Auth::logout();
@@ -171,7 +173,6 @@ class MainTest extends TestCase
      */
     protected function create_admin_user()
     {
-
         $user = $this->getMockBuilder(User::class)
             ->getMock();
         // make sure the user can see admin panel
@@ -214,7 +215,6 @@ class MainTest extends TestCase
 
     public function testCanCreatePost()
     {
-
         $user = $this->create_admin_user();
 
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
@@ -241,7 +241,6 @@ class MainTest extends TestCase
 
     public function testCanCreatePostThenEditIt()
     {
-
         $user = $this->create_admin_user();
 
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
@@ -277,7 +276,6 @@ class MainTest extends TestCase
 
     public function testCreatePostThenCheckIsViewableToPublic()
     {
-
         $user = $this->create_admin_user();
 
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
@@ -338,7 +336,6 @@ class MainTest extends TestCase
 
     public function testCreatePostWithNotPublishedThenCheckIsNotViewableToPublic()
     {
-
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         list($newObjectAttributes, $search_for_obj) = $this->prepare_post_creation();
 
@@ -395,7 +392,6 @@ class MainTest extends TestCase
 
     public function testCreatePostWithFuturePostedAtThenCheckIsNotViewableToPublic()
     {
-
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         list($newObjectAttributes, $search_for_obj) = $this->prepare_post_creation();
 
@@ -424,7 +420,6 @@ class MainTest extends TestCase
 
     public function testCreatePostThenCheckCanCreateCommentThenApproveCommentWithBasicCaptchaEnabledAndWrongAnswer()
     {
-
         Config::set('blogetc.comments.auto_approve_comments', false);
         Config::set('blogetc.captcha.captcha_enabled', true);
         Config::set('blogetc.captcha.captcha_type', Basic::class);
@@ -458,11 +453,13 @@ class MainTest extends TestCase
             '_token' => csrf_token(),
             'author_name' => str_random(),
             'comment' => str_random(),
-            $captcha->captcha_field_name() => 'wronganswer1', // << WRONG CAPTCHA
+            $captcha->captchaFieldName() => 'wronganswer1', // << WRONG CAPTCHA
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
-        $response = $this->post(config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
-            $comment_detail);
+        $response = $this->post(
+            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            $comment_detail
+        );
         $response->assertStatus(302);
 
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
@@ -474,8 +471,10 @@ class MainTest extends TestCase
             // << NO CAPTCHA FIELD
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
-        $response = $this->post(config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
-            $comment_detail);
+        $response = $this->post(
+            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            $comment_detail
+        );
         $response->assertStatus(302);
 
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
@@ -483,7 +482,6 @@ class MainTest extends TestCase
 
     public function testCreatePostThenSetCommentsToDisabledAndCheckNoneShow()
     {
-
         Config::set('blogetc.comments.type_of_comments_to_show', 'disabled');
 
         $this->create_admin_user();
@@ -491,7 +489,7 @@ class MainTest extends TestCase
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         $newObjectAttributes = $this->generate_basic_blog_post_with_random_data();
 
-        $newblogpost = new BlogEtcPost;
+        $newblogpost = new BlogEtcPost();
 
         $newblogpost->title = __METHOD__ . ' ' . time();
 
@@ -522,7 +520,7 @@ class MainTest extends TestCase
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         $newObjectAttributes = $this->generate_basic_blog_post_with_random_data();
 
-        $newblogpost = new BlogEtcPost;
+        $newblogpost = new BlogEtcPost();
 
         $newblogpost->title = __METHOD__ . ' ' . time();
 
@@ -541,7 +539,6 @@ class MainTest extends TestCase
 
     public function testCreatePostThenSetCommentsToCustomAndCheckCustomErrorShows()
     {
-
         Config::set('blogetc.comments.type_of_comments_to_show', 'custom');
 
         $this->create_admin_user();
@@ -549,7 +546,7 @@ class MainTest extends TestCase
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         $newObjectAttributes = $this->generate_basic_blog_post_with_random_data();
 
-        $newblogpost = new BlogEtcPost;
+        $newblogpost = new BlogEtcPost();
 
         $newblogpost->title = __METHOD__ . ' ' . time();
 
@@ -568,7 +565,6 @@ class MainTest extends TestCase
 
     public function testCreatePostThenCheckCanCreateCommentThenApproveCommentWithBasicCaptchaEnabled()
     {
-
         Config::set('blogetc.comments.auto_approve_comments', false);
         Config::set('blogetc.captcha.captcha_enabled', true);
         Config::set('blogetc.captcha.captcha_type', Basic::class);
@@ -601,17 +597,21 @@ class MainTest extends TestCase
             '_token' => csrf_token(),
             'author_name' => str_random(),
             'comment' => str_random(),
-            $captcha->captcha_field_name() => 'AnsWer2',
+            $captcha->captchaFieldName() => 'AnsWer2',
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
-        $response = $this->post(config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
-            $comment_detail);
+        $response = $this->post(
+            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            $comment_detail
+        );
         $response->assertStatus(200);
 
         Config::set('blogetc.captcha.auto_approve_comments', false);
 
-        $this->assertDatabaseHas('blog_etc_comments',
-            ['approved' => false, 'author_name' => $comment_detail['author_name']]);
+        $this->assertDatabaseHas(
+            'blog_etc_comments',
+            ['approved' => false, 'author_name' => $comment_detail['author_name']]
+        );
 
         $justAddedRow = BlogEtcComment::withoutGlobalScopes()
             ->where('author_name', $comment_detail['author_name'])->firstOrFail();
@@ -661,15 +661,19 @@ class MainTest extends TestCase
             'comment' => str_random(),
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
-        $response = $this->post(config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
-            $comment_detail);
+        $response = $this->post(
+            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            $comment_detail
+        );
 
         $response->assertStatus(200);
 
         Config::set('blogetc.captcha.auto_approve_comments', false);
 
-        $this->assertDatabaseHas('blog_etc_comments',
-            ['approved' => false, 'author_name' => $comment_detail['author_name']]);
+        $this->assertDatabaseHas(
+            'blog_etc_comments',
+            ['approved' => false, 'author_name' => $comment_detail['author_name']]
+        );
 
         $justAddedRow = BlogEtcComment::withoutGlobalScopes()
             ->where('author_name', $comment_detail['author_name'])->firstOrFail();
@@ -717,8 +721,10 @@ class MainTest extends TestCase
                 'comment' => str_random(),
             ];
             $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
-            $response = $this->post(config('blogetc.blog_prefix',
-                    'blog') . '/save_comment/' . $newObjectAttributes['slug'], $comment_detail);
+            $response = $this->post(config(
+                'blogetc.blog_prefix',
+                'blog'
+            ) . '/save_comment/' . $newObjectAttributes['slug'], $comment_detail);
             $response->assertSessionHasNoErrors();
             $response->assertStatus(200);
 
@@ -747,7 +753,6 @@ class MainTest extends TestCase
 
     public function testCanCreateThenDeletePost()
     {
-
         $user = $this->create_admin_user();
 
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
@@ -803,7 +808,6 @@ class MainTest extends TestCase
 
     public function testCanCreateCategoryThenEditIt()
     {
-
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
 
         $this->create_admin_user();
@@ -848,8 +852,10 @@ class MainTest extends TestCase
         $response->assertStatus(302); // check it was a redirect
 
         // check that the edited category name is in the database.
-        $this->assertDatabaseHas('blog_etc_categories',
-            ['slug' => $newObjectAttributes['slug'], 'category_name' => $newObjectAttributes['category_name']]);
+        $this->assertDatabaseHas(
+            'blog_etc_categories',
+            ['slug' => $newObjectAttributes['slug'], 'category_name' => $newObjectAttributes['category_name']]
+        );
     }
 
     public function testCanDeleteCategory()
@@ -883,8 +889,10 @@ class MainTest extends TestCase
     public function testUserModelHasCanManageBlogEtcPostsMethod()
     {
         $u = new User();
-        $this->assertTrue(method_exists($u, 'canManageBlogEtcPosts'),
-            'canManageBlogEtcPosts() must be added to User model. Please see WebDevEtc BlogEtc docs for details. It should return true ONLY for the admin users');
+        $this->assertTrue(
+            method_exists($u, 'canManageBlogEtcPosts'),
+            'canManageBlogEtcPosts() must be added to User model. Please see WebDevEtc BlogEtc docs for details. It should return true ONLY for the admin users'
+        );
     }
 
     public function testUserModelCanManageBlogEtcPostsMethodDoesntAlwaysReturnTrue()
@@ -897,9 +905,9 @@ class MainTest extends TestCase
         $this->assertTrue(method_exists($u, 'canManageBlogEtcPosts'));
 
         // because this user is just a randomly made one, it probably should not be allowed to edit blog posts.
-        $this->assertFalse($u->canManageBlogEtcPosts(),
-            "User::canManageBlogEtcPosts() returns true, but it PROBABLY should return false! Otherwise every single user on your site has access to the blog admin panel! This might not be an error though, if your system doesn't allow public registration. But you should look into this. I know this isn't a good way to handle this test, but it seems to make sense.");
+        $this->assertFalse(
+            $u->canManageBlogEtcPosts(),
+            "User::canManageBlogEtcPosts() returns true, but it PROBABLY should return false! Otherwise every single user on your site has access to the blog admin panel! This might not be an error though, if your system doesn't allow public registration. But you should look into this. I know this isn't a good way to handle this test, but it seems to make sense."
+        );
     }
-
 }
-

@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
+/**
+ * Class BlogEtcPublishedScope
+ * @package WebDevEtc\BlogEtc\Scopes
+ */
 class BlogEtcPublishedScope implements Scope
 {
     /**

@@ -6,6 +6,10 @@ use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 
+/**
+ * Class AddNewCommentRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 class AddNewCommentRequest extends FormRequest
 {
 
@@ -50,16 +54,16 @@ class AddNewCommentRequest extends FormRequest
             $captcha_class = config('blogetc.captcha.captcha_type');
 
             /** @var CaptchaInterface $captcha */
-            $captcha = new $captcha_class;
+            $captcha = new $captcha_class();
 
-            $return[$captcha->captcha_field_name()] = $captcha->rules();
+            $return[$captcha->captchaFieldName()] = $captcha->rules();
         }
 
         // in case you need to implement something custom, you can use this...
         if (config('blogetc.comments.rules') && is_callable(config('blogetc.comments.rules'))) {
-            /** @var callable $func */
-            $func = config('blogetc.comments.rules');
-            $return = $func($return);
+            /** @var callable $function */
+            $function = config('blogetc.comments.rules');
+            $return = $function($return);
         }
 
         if (config('blogetc.comments.require_author_email')) {
@@ -68,5 +72,4 @@ class AddNewCommentRequest extends FormRequest
 
         return $return;
     }
-
 }

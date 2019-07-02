@@ -4,6 +4,10 @@ use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
+/**
+ * Class CaptchaAbstract
+ * @package WebDevEtc\BlogEtc\Captcha
+ */
 abstract class CaptchaAbstract implements CaptchaInterface
 {
     /**
@@ -22,10 +26,10 @@ abstract class CaptchaAbstract implements CaptchaInterface
         But you could put something like this -
         $some_question = ...
         $correct_captcha = ...
-        \View::share("correct_captcha",$some_question); // << reference this in the view file.
-        \Session::put("correct_captcha",$correct_captcha);
+        View::share("correct_captcha", $someQuestion); // << reference this in the view file.
+        Session::put("correct_captcha",$correctCaptcha);
 
-        then in the validation rules you can check if the submitted value matched the above value. You will have to implement this.
+        ...then in the validation rules you can check if the submitted value matched the above value.
         */
     }
 

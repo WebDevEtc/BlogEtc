@@ -25,5 +25,4 @@ class BlogPostAdded
     {
         $this->blogEtcPost = $blogEtcPost;
     }
-
 }

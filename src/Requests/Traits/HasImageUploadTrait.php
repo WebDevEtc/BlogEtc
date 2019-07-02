@@ -2,13 +2,19 @@
 
 use Illuminate\Http\UploadedFile;
 
+//TODO - remoe/replace this
+
+/**
+ * Trait HasImageUploadTrait
+ * @package WebDevEtc\BlogEtc\Requests\Traits
+ */
 trait HasImageUploadTrait
 {
     /**
      * @param $size
      * @return UploadedFile|null
      */
-    public function get_image_file($size)
+    public function get_image_file($size): ?UploadedFile
     {
 
         if ($this->file($size)) {
@@ -24,5 +30,4 @@ trait HasImageUploadTrait
 
         return null;
     }
-
 }

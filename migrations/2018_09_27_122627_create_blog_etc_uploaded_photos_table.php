@@ -4,6 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Class CreateBlogEtcUploadedPhotosTable
+ */
 class CreateBlogEtcUploadedPhotosTable extends Migration
 {
     /**
@@ -11,7 +14,7 @@ class CreateBlogEtcUploadedPhotosTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('blog_etc_uploaded_photos', static function (Blueprint $table) {
 
@@ -33,7 +36,7 @@ class CreateBlogEtcUploadedPhotosTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('blog_etc_uploaded_photos');
 

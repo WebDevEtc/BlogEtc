@@ -2,6 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+/**
+ * Class DeleteBlogEtcPostRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 class DeleteBlogEtcPostRequest extends BaseRequest
 {
 

@@ -1,6 +1,6 @@
 <?php
-/** @var \WebDevEtc\BlogEtc\Models\BlogEtcComment[] $comments */
-?>
+/** @var BlogEtcComment[] $comments */
+?>use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 @forelse($comments as $comment)
     <div class="card bg-light mb-3">
         <div class="card-header">

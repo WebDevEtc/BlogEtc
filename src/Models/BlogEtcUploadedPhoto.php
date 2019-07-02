@@ -5,6 +5,10 @@ namespace WebDevEtc\BlogEtc\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class BlogEtcUploadedPhoto
+ * @package WebDevEtc\BlogEtc\Models
+ */
 class BlogEtcUploadedPhoto extends Model
 {
     /**

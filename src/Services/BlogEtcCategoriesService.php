@@ -2,6 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Services;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
@@ -85,7 +86,7 @@ class BlogEtcCategoriesService
      */
     public function update(int $categoryID, array $attributes): BlogEtcCategory
     {
-        $category= $this->find($categoryID);
+        $category = $this->find($categoryID);
         $category->fill($attributes);
         $category->save();
 
@@ -98,15 +99,14 @@ class BlogEtcCategoriesService
      * Delete a BlogEtcCategory
      *
      * @param int $categoryID
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $categoryID): void
     {
-        $category= $this->find($categoryID);
+        $category = $this->find($categoryID);
 
         event(new CategoryWillBeDeleted($category));
 
         $category->delete();
     }
-
 }

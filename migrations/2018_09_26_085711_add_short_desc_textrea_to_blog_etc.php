@@ -5,6 +5,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 // (ignore typo! Don't want to change in case it breaks some people's migrations!)
+
+/**
+ * Class AddShortDescTextreaToBlogEtc
+ */
 class AddShortDescTextreaToBlogEtc extends Migration
 {
     /**
@@ -12,7 +16,7 @@ class AddShortDescTextreaToBlogEtc extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('blog_etc_posts', static function (Blueprint $table) {
             $table->text('short_description')->nullable();
@@ -24,7 +28,7 @@ class AddShortDescTextreaToBlogEtc extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
 
         Schema::table('blog_etc_posts', static function (Blueprint $table) {

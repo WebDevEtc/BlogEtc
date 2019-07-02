@@ -22,7 +22,9 @@ trait HasCategoriesTrait
         }
 
         // check they are valid, return the IDs
-        // limit to 1000 ... just in case someone submits with too many for the web server. No error is given if they submit more than 1k.
+        // limit to 1000 ... just in case someone submits with too many for the web server.
+        // No error is given if they submit more than 1k.
+        // TODO move to repo calls
         return BlogEtcCategory::whereIn('id', array_keys($this->get('category')))
             ->select('id')
             ->limit(1000)

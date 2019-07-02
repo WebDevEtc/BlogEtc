@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcCommentNotFoundException;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 
+/**
+ * Class BlogEtcCommentsRepository
+ * @package WebDevEtc\BlogEtc\Repositories
+ */
 class BlogEtcCommentsRepository
 {
     /**
@@ -14,6 +18,10 @@ class BlogEtcCommentsRepository
      */
     private $model;
 
+    /**
+     * BlogEtcCommentsRepository constructor.
+     * @param BlogEtcComment $model
+     */
     public function __construct(BlogEtcComment $model)
     {
         $this->model = $model;

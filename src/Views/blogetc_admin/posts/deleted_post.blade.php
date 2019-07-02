@@ -1,34 +1,40 @@
 @extends('blogetc_admin::layouts.admin_layout')
 @section('content')
     <div class="alert alert-success">
-        <b>Deleted that post</b>
+        <b>
+            Deleted that post
+        </b>
         <br/>
         <a href="{{ route('blogetc.admin.index') }}" class="btn btn-primary">
             &laquo; Back to posts overview
         </a>
     </div>
 
-    @if(count($remainingFeaturedPhotos))
-        <p>However, the following featured images were <strong>not</strong> deleted:</p>
+    @if(count($remainingPhotos))
+        <p>
+            However, the following featured images were <strong>not</strong> deleted:
+        </p>
 
         <table class="table">
             <thead>
             <tr>
                 <th>Image</th>
                 <th>Filename</th>
-                <th>Fil esize</th>
+                <th>File size</th>
                 <th>Full location</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($remainingFeaturedPhotos as $remainingPhoto)
+            @foreach($remainingPhotos as $remainingPhoto)
                 <tr>
                     <td>
                         <a href="{{ $remainingPhoto['url'] }}" target="_blank">
                             <img src="{{ $remainingPhoto['url'] }}" width="100" alt="Image preview">
                         </a>
                     </td>
-                    <td><code>{{ $remainingPhoto['filename'] }}</code></td>
+                    <td>
+                        <code>{{ $remainingPhoto['filename'] }}</code>
+                    </td>
                     <td>
                         @if(!empty($remainingPhoto['file_size']))
                             {{ $remainingPhoto['file_size'] }}

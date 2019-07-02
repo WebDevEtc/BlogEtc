@@ -5,6 +5,10 @@ namespace WebDevEtc\BlogEtc\Requests;
 use Carbon\Carbon;
 use Exception;
 
+/**
+ * Class BaseBlogEtcPostRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 abstract class BaseBlogEtcPostRequest extends BaseRequest
 {
     /**
@@ -16,8 +20,9 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
     protected function baseBlogPostRules(): array
     {
         // setup some anon functions for some of the validation rules:
-        $check_valid_posted_at = static function ($attribute, $value, $fail) {
-            // just the 'date' validation can cause errors ("2018-01-01 a" passes the validation, but causes a carbon error).
+        $checkValidPostedAt = static function ($attribute, $value, $fail) {
+            // just the 'date' validation can cause errors ("2018-01-01 a" passes
+            // the validation, but causes a carbon error).
             try {
                 Carbon::createFromFormat('Y-m-d H:i:s', $value);
             } catch (Exception $e) {
@@ -26,14 +31,14 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
             }
         };
 
-        $show_error_if_has_value = static function ($attribute, $value, $fail) {
+        $showErrorIfHasValue = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value...
                 return $fail($attribute . ' must be empty');
             }
         };
 
-        $disabled_use_view_file = static function ($attribute, $value, $fail) {
+        $disabledUseViewFile = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value
                 return $fail('The use of custom view files is not enabled for this site, so you cannot submit a value for it');
@@ -42,7 +47,7 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
 
         // generate the main set of rules:
         $return = [
-            'posted_at' => ['nullable', $check_valid_posted_at],
+            'posted_at' => ['nullable', $checkValidPostedAt],
             'title' => ['required', 'string', 'min:1', 'max:255'],
             'subtitle' => ['nullable', 'string', 'min:1', 'max:255'],
             'post_body' => ['required_without:use_view_file', 'max:2000000'], //medium text
@@ -63,7 +68,7 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
             $return['use_view_file'] = ['nullable', 'string', 'alpha_num', 'min:1', 'max:75',];
         } else {
             // use_view_file is disabled, so give an empty if anything is submitted via this function:
-            $return['use_view_file'] = ['string', $disabled_use_view_file];
+            $return['use_view_file'] = ['string', $disabledUseViewFile];
         }
 
         // some additional rules for uploaded images
@@ -72,7 +77,7 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
                 $return[$size] = ['nullable', 'image',];
             } else {
                 // was not enabled (or all images are disabled), so show an error if it was submitted:
-                $return[$size] = $show_error_if_has_value;
+                $return[$size] = $showErrorIfHasValue;
             }
         }
         return $return;

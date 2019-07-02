@@ -30,10 +30,12 @@ class BlogEtcRssFeedController extends Controller
      */
     public function feed(FeedRequest $request, Feed $feed)
     {
-        // RSS feed is cached. Admin/writer users might see different content, so use a different cache for different users.
+        // RSS feed is cached. Admin/writer users might see different content, so
+        // use a different cache for different users.
+
         // This should not be a problem unless your site has many logged in users.
         $userOrGuest = Auth::check()
-            ? Auth::user()->id
+            ? Auth::id()
             : 'guest';
 
         $feed->setCache(
@@ -55,22 +57,22 @@ class BlogEtcRssFeedController extends Controller
      */
     protected function makeFreshFeed(Feed $feed): void
     {
-        $posts = BlogEtcPost::orderBy('posted_at', 'desc')
+        $blogPosts = BlogEtcPost::orderBy('posted_at', 'desc')
             ->limit(config('blogetc.rssfeed.posts_to_show_in_rss_feed'))
                 ->with('author')
                 ->get();
 
-        $this->setupFeed($feed, $posts);
+        $this->setupFeed($feed, $blogPosts);
 
-        /** @var BlogEtcPost $post */
-        foreach ($posts as $post) {
+        /** @var BlogEtcPost $blogPost */
+        foreach ($blogPosts as $blogPost) {
             $feed->add(
-                $post->title,
-                $post->author_string(),
-                $post->url(),
-                $post->posted_at,
-                $post->short_description,
-                $post->generate_introduction()
+                $blogPost->title,
+                $blogPost->authorString(),
+                $blogPost->url(),
+                $blogPost->posted_at,
+                $blogPost->short_description,
+                $blogPost->generateIntroduction()
             );
         }
     }

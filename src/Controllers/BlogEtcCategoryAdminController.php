@@ -3,7 +3,7 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\View\Factory;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use WebDevEtc\BlogEtc\Helpers;
@@ -57,7 +57,7 @@ class BlogEtcCategoryAdminController extends Controller
      *
      * @return View
      */
-    public function create():View
+    public function create(): View
     {
         return view('blogetc_admin::categories.add_category');
     }
@@ -116,9 +116,10 @@ class BlogEtcCategoryAdminController extends Controller
      *
      * @param DeleteBlogEtcCategoryRequest $request
      * @param $categoryID
-     * @return Factory|View
+     * @return View
+     * @throws Exception
      */
-    public function destroy(DeleteBlogEtcCategoryRequest $request, $categoryID)
+    public function destroy(DeleteBlogEtcCategoryRequest $request, $categoryID): View
     {
         $this->service->delete($categoryID);
 

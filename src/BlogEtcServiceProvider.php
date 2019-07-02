@@ -49,8 +49,8 @@ class BlogEtcServiceProvider extends ServiceProvider
         if (config('blogetc.search.search_enabled')) {
             return;
         }
-            // if search is disabled, don't allow it to sync full text.
-            ModelObserver::disableSyncingFor(BlogEtcPost::class);
+        // if search is disabled, don't allow it to sync full text.
+        ModelObserver::disableSyncingFor(BlogEtcPost::class);
     }
 
     /**
@@ -62,7 +62,7 @@ class BlogEtcServiceProvider extends ServiceProvider
         if (!config('blogetc.include_default_routes', true)) {
             return;
         }
-            include __DIR__ . '/routes.php';
+        include __DIR__ . '/routes.php';
     }
 
     /**
@@ -77,7 +77,6 @@ class BlogEtcServiceProvider extends ServiceProvider
                      '2018_09_26_085711_add_short_desc_textrea_to_blog_etc.php',
                      '2018_09_27_122627_create_blog_etc_uploaded_photos_table.php',
                  ] as $migration) {
-
             $this->publishes([
                 __DIR__ . '/../migrations/' . $migration => database_path('migrations/' . $migration),
             ]);

@@ -23,21 +23,19 @@ use WebDevEtc\BlogEtc\Services\CaptchaService;
  */
 class BlogEtcCommentWriterController extends Controller
 {
-    use UsesCaptcha;
-
-    /**
-     * @var BlogEtcPostsService
-     */
+    /** @var BlogEtcPostsService */
     private $postsService;
-    /**
-     * @var BlogEtcCommentsService
-     */
+    /** @var BlogEtcCommentsService */
     private $commentsService;
-    /**
-     * @var CaptchaService
-     */
+    /** @var CaptchaService */
     private $captchaService;
 
+    /**
+     * BlogEtcCommentWriterController constructor.
+     * @param BlogEtcPostsService $postsService
+     * @param BlogEtcCommentsService $commentsService
+     * @param CaptchaService $captchaService
+     */
     public function __construct(
         BlogEtcPostsService $postsService,
         BlogEtcCommentsService $commentsService,
@@ -64,11 +62,12 @@ class BlogEtcCommentWriterController extends Controller
         $blogPost = $this->postsService->repository()->findBySlug($slug);
 
         $captcha = $this->captchaService->getCaptchaObject();
+
         if ($captcha) {
             $captcha->runCaptchaBeforeAddingComment($request, $blogPost);
         }
 
-        $newComment = $this->commentsService->create(
+        $comment = $this->commentsService->create(
             $blogPost,
             $request->validated(),
             $request->ip(),
@@ -78,7 +77,7 @@ class BlogEtcCommentWriterController extends Controller
         return view('blogetc::saved_comment', [
             'captcha' => $captcha,
             'blog_post' => $blogPost,
-            'new_comment' => $newComment,
+            'new_comment' => $comment,
         ]);
     }
 }

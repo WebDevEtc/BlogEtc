@@ -4,8 +4,12 @@
 
 Route::group(['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Controllers'], static function () {
 
-    /** The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the add comment route */
-    Route::group(['prefix' => config('blogetc.blog_prefix', 'blog')],
+    /**
+     * The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the
+     * add comment route
+     */
+    Route::group(
+        ['prefix' => config('blogetc.blog_prefix', 'blog')],
         static function () {
             // Public blog index:
             Route::get('/', 'BlogEtcReaderController@index')
@@ -20,13 +24,17 @@ Route::group(['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Contro
                 ->name('blogetc.feed'); //RSS feed
 
             // Public show category
-            Route::get('/category/{categorySlug}',
-                'BlogEtcReaderController@showCategory')
+            Route::get(
+                '/category/{categorySlug}',
+                'BlogEtcReaderController@showCategory'
+            )
                 ->name('blogetc.view_category');
 
             // Public show single blog post
-            Route::get('/{blogPostSlug}',
-                'BlogEtcReaderController@show')
+            Route::get(
+                '/{blogPostSlug}',
+                'BlogEtcReaderController@show'
+            )
                 ->name('blogetc.show');
 
             // Public save new blog comment (throttle to a max of 10 attempts in 3 minutes):
@@ -36,13 +44,14 @@ Route::group(['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Contro
                     'BlogEtcCommentWriterController@addNewComment'
                 )->name('blogetc.comments.add_new_comment');
             });
-        });
+        }
+    );
 
     /* Admin backend routes - CRUD for posts, categories, and approving/deleting submitted comments */
     Route::group(['prefix' => config('blogetc.admin_prefix', 'blog_admin')], static function () {
 
         // Manage blog posts (admin panel)
-        Route::group(['prefix'=> 'posts',], static function() {
+        Route::group(['prefix' => 'posts',], static function () {
             // Show all blog posts:
             Route::get(
                 '/',
@@ -163,4 +172,3 @@ Route::group(['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Contro
         });
     });
 });
-

@@ -5,7 +5,7 @@
 
     <p>You can use this to upload images.</p>
 
-    <form method="post" action="{{route('blogetc.admin.images.store')}}" enctype="multipart/form-data">
+    <form method="post" action="{{ route('blogetc.admin.images.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="form-group mb-4 p-2">
             <label for="image_title">
@@ -37,13 +37,13 @@
                 <label for="size_blogetc_full_size">Full size (no resizing)</label>
             </div>
 
-            @foreach((array)config('blogetc.image_sizes') as $size => $image_size_details)
+            @foreach($imageSizes as $size => $imageSizeDetails)
                 <div>
-                    <input type="checkbox" name="sizes_to_upload[{{ $size }}]" value="true" checked
-                           id="size_{{ $size }}">
+                    <input type="checkbox" name="sizes_to_upload[{{ $size }}]"
+                           value="true" checked id="size_{{ $size }}">
                     <label for="size_{{ $size }}">
-                        {{ $image_size_details['name'] }} -
-                        {{ $image_size_details['w'] . ' × ' .$image_size_details['h'] . 'px' }}</label>
+                        {{ $imageSizeDetails['name'] }} -
+                        {{ $imageSizeDetails['w'] . ' × ' .$imageSizeDetails['h'] . 'px' }}</label>
                 </div>
             @endforeach
         </div>

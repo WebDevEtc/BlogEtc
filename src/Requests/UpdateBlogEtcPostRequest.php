@@ -6,6 +6,10 @@ use Illuminate\Validation\Rule;
 use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
+/**
+ * Class UpdateBlogEtcPostRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 class UpdateBlogEtcPostRequest extends BaseBlogEtcPostRequest
 {
 

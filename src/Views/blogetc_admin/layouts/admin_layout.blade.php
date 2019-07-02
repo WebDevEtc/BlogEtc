@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Blog Admin - {{ config('app.name', 'Laravel') }}</title>
+    <title>Blog Admin - {{ config('app.name') }}</title>
 
     <!-- jQuery is only used for hide(), show() and slideDown(). All other features use vanilla JS -->
     <script
@@ -34,14 +34,13 @@
         {{--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">--}}
     @endif
 
-
 </head>
 <body>
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }} WebDevEtc Blog Admin
+            <a class="navbar-brand" href="{{ config('app.url') }}">
+                {{ config('app.name') }} WebDevEtc Blog Admin
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -59,12 +58,14 @@
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
 
-
-                    <li class='nav-item px-2'><a class='nav-link' href='{{route('blogetc.index')}}'>Blog home</a></li>
-
+                    <li class="nav-item px-2">
+                        <a class="nav-link" href="{{route('blogetc.index')}}">
+                            Blog home
+                        </a>
+                    </li>
 
                     <li class="nav-item ">
-                        <a id="" class="nav-link " href="#" role="button"
+                        <a class="nav-link" href="#" role="button"
                            aria-haspopup="true" aria-expanded="false">
                             Logged in as {{ Auth::user()->name }}
                         </a>
@@ -77,18 +78,16 @@
 
     <main class="py-4">
 
-        <div class='container'>
-            <div class='row'>
-                <div class='col-md-3'>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
                     @include('blogetc_admin::layouts.sidebar')
                 </div>
-                <div class='col-md-9 '>
-
-
+                <div class="col-md-9 ">
                     @if (isset($errors) && count($errors))
                         <div class="alert alert-danger">
                             <b>Sorry, but there was an error:</b>
-                            <ul class='m-0'>
+                            <ul class="m-0">
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -96,12 +95,11 @@
                         </div>
                     @endif
 
-
                     {{--REPLACING THIS FILE WITH YOUR OWN LAYOUT FILE? Don't forget to include the following section!--}}
 
                     @if(\WebDevEtc\BlogEtc\Helpers::has_flashed_message())
-                        <div class='alert alert-info'>
-                            <h3>{{\WebDevEtc\BlogEtc\Helpers::pull_flashed_message() }}</h3>
+                        <div class="alert alert-info">
+                            <h3>{{ \WebDevEtc\BlogEtc\Helpers::pullFlashedMessage() }}</h3>
                         </div>
                     @endif
 
@@ -112,12 +110,18 @@
     </main>
 </div>
 
-<div class='text-center mt-5 pt-5 mb-3 text-muted'>
-    <small><a href='https://webdevetc.com/'>Laravel Blog Package provided by Webdevetc</a></small>
+<div class="text-center mt-5 pt-5 mb-3 text-muted">
+    <small>
+        <a href="https://webdevetc.com/">
+            Laravel Blog Package provided by Webdevetc
+        </a>
+    </small>
 </div>
 
-
-@if( config('blogetc.use_wysiwyg') && config('blogetc.echo_html') && (in_array( Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
+{{--TODO - move to controller--}}
+@if( config('blogetc.use_wysiwyg')
+        && config('blogetc.echo_html')
+        && (in_array( Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
     <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"
             integrity="sha384-BpuqJd0Xizmp9PSp/NTwb/RSBCHK+rVdGWTrwcepj1ADQjNYPWT2GDfnfAr6/5dn"
             crossorigin="anonymous"></script>
@@ -129,8 +133,6 @@
 @endif
 
 @stack('js')
-
-
 
 </body>
 </html>

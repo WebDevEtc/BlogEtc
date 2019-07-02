@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use LogicException;
 use Swis\LaravelFulltext\Search;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
@@ -19,8 +20,6 @@ use WebDevEtc\BlogEtc\Services\CaptchaService;
  */
 class BlogEtcReaderController extends Controller
 {
-    use UsesCaptcha;
-
     /** @var BlogEtcPostsService */
     private $postsService;
     /** @var BlogEtcCategoriesService */
@@ -28,6 +27,12 @@ class BlogEtcReaderController extends Controller
     /** @var CaptchaService */
     private $captchaService;
 
+    /**
+     * BlogEtcReaderController constructor.
+     * @param BlogEtcPostsService $postsService
+     * @param BlogEtcCategoriesService $categoriesService
+     * @param CaptchaService $captchaService
+     */
     public function __construct(
         BlogEtcPostsService $postsService,
         BlogEtcCategoriesService $categoriesService,
@@ -111,28 +116,27 @@ class BlogEtcReaderController extends Controller
      *
      * @param Request $request
      * @param $postSlug
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function show(Request $request, $postSlug): \Illuminate\View\View
+    public function show(Request $request, $postSlug): View
     {
-        $post = $this->postsService->findBySlug($postSlug);
+        $blogPost = $this->postsService->findBySlug($postSlug);
 
         // if using captcha, there might be some code to run now or to echo in the view:
         $usingCaptcha = $this->captchaService->getCaptchaObject();
 
         if ($usingCaptcha !== null) {
-            $usingCaptcha->runCaptchaBeforeShowingPosts($request, $post);
+            $usingCaptcha->runCaptchaBeforeShowingPosts($request, $blogPost);
         }
 
         return view(
             'blogetc::single_post',
             [
-                'post' => $post,
+                'post' => $blogPost,
                 // the default scope only selects approved comments, ordered by id
-                'comments' => $post->comments()->with('user')->get(),
+                'comments' => $blogPost->comments->load('user'),
                 'captcha' => $usingCaptcha,
             ]
         );
     }
-
 }

@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcPostNotFoundException;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
+/**
+ * Class BlogEtcPostsRepository
+ * @package WebDevEtc\BlogEtc\Repositories
+ */
 class BlogEtcPostsRepository
 {
     /**
@@ -15,6 +19,10 @@ class BlogEtcPostsRepository
      */
     private $model;
 
+    /**
+     * BlogEtcPostsRepository constructor.
+     * @param BlogEtcPost $model
+     */
     public function __construct(BlogEtcPost $model)
     {
         $this->model = $model;
@@ -83,7 +91,8 @@ class BlogEtcPostsRepository
     public function findBySlug(string $slug): BlogEtcPost
     {
         try {
-            // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manage log posts
+            // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the
+            // logged in user can manage log posts
             return $this->query(true)
                 ->where('slug', $slug)
                 ->firstOrFail();
@@ -91,5 +100,4 @@ class BlogEtcPostsRepository
             throw new BlogEtcPostNotFoundException('Unable to find blog post with slug: ' . $slug);
         }
     }
-
 }

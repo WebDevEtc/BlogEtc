@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Helpers;
@@ -75,7 +74,7 @@ class BlogEtcAdminController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function store(CreateBlogEtcPostRequest $request) : RedirectResponse
+    public function store(CreateBlogEtcPostRequest $request): RedirectResponse
     {
         $newBlogPost = $this->service->create($request, Auth::id());
 
@@ -90,11 +89,11 @@ class BlogEtcAdminController extends Controller
      * @param $blogPostId
      * @return View
      */
-    public function edit($blogPostId) :View
+    public function edit($blogPostId): View
     {
-        $post = $this->service->repository()->find($blogPostId);
+        $blogPost = $this->service->repository()->find($blogPostId);
 
-        return view('blogetc_admin::posts.edit_post', ['post' => $post]);
+        return view('blogetc_admin::posts.edit_post', ['post' => $blogPost]);
     }
 
     /**
@@ -104,13 +103,13 @@ class BlogEtcAdminController extends Controller
      * @param $blogPostID
      * @return RedirectResponse
      */
-    public function update(UpdateBlogEtcPostRequest $request, $blogPostID):RedirectResponse
+    public function update(UpdateBlogEtcPostRequest $request, $blogPostID): RedirectResponse
     {
-        $post = $this->service->update($blogPostID, $request);
+        $blogpost = $this->service->update($blogPostID, $request);
 
         Helpers::flashMessage('Updated post');
 
-        return redirect($post->editUrl());
+        return redirect($blogpost->editUrl());
     }
 
     /**
@@ -121,12 +120,13 @@ class BlogEtcAdminController extends Controller
      * @return View
      * @throws Exception
      */
-    public function destroy(DeleteBlogEtcPostRequest $request, $blogPostID)
+    public function destroy(DeleteBlogEtcPostRequest $request, $blogPostID): View
     {
-       [ $post, $remainingFeaturedPhotos ]  = $this->service->delete($blogPostID);
+        [$blogPost, $remainingPhotos] = $this->service->delete($blogPostID);
 
-
-
-        return view('blogetc_admin::posts.deleted_post', ['deletedPost' => $post, 'remainingFeaturedPhotos' => $remainingFeaturedPhotos]);
+        return view(
+            'blogetc_admin::posts.deleted_post',
+            ['deletedPost' => $blogPost, 'remainingPhotos' => $remainingPhotos]
+        );
     }
 }

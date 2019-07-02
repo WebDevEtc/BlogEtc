@@ -1,6 +1,10 @@
 <?php
-/** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
-/** @var \WebDevEtc\BlogEtc\Captcha\CaptchaAbstract $captcha */
+/** @var BlogEtcPost $post */
+
+use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
+use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+
+/** @var CaptchaAbstract $captcha */
 ?>
 <div class="add_comment_area">
     <h5 class="text-center">Add a comment</h5>

@@ -25,7 +25,7 @@ class Basic extends CaptchaAbstract
      *
      * @return string
      */
-    public function captcha_field_name(): string
+    public function captchaFieldName(): string
     {
         return 'captcha';
     }
@@ -49,7 +49,7 @@ class Basic extends CaptchaAbstract
      */
     public function rules(): array
     {
-        $validAnswerCheck = static function ($attribute, $value, $fail) {
+        $checkAnswer = static function ($attribute, $value, $fail) {
             // get correct answers
             $answers = config('blogetc.captcha.basic_answers');
 
@@ -67,7 +67,16 @@ class Basic extends CaptchaAbstract
         return [
             'required',
             'string',
-            $validAnswerCheck,
+            $checkAnswer,
         ];
+    }
+
+    /**
+     * @return string
+     * @deprecated - please use captchaFieldName() instead
+     */
+    public function captcha_field_name(): string
+    {
+        return $this->captchaFieldName();
     }
 }

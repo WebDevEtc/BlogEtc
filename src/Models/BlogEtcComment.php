@@ -9,12 +9,14 @@ use WebDevEtc\BlogEtc\Scopes\BlogCommentApprovedAndDefaultOrderScope;
 
 /**
  * @property string author_name
- * @property User user
  * @property int user_id
  * @property mixed author_website
  * @property string|null ip
  * @property mixed author_email
  * @property bool approved
+ * @property BlogEtcPost post
+ * @property User user
+ * @property User author
  */
 class BlogEtcComment extends Model
 {

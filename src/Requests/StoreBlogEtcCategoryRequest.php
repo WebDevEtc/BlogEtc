@@ -4,9 +4,12 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Illuminate\Validation\Rule;
 
+/**
+ * Class StoreBlogEtcCategoryRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 class StoreBlogEtcCategoryRequest extends BaseBlogEtcCategoryRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *

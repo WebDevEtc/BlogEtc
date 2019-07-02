@@ -3,7 +3,7 @@
 use App\User;
 use WebDevEtc\BlogEtc\Captcha\Basic;
 
-//config for webdevetc/blogetc
+// config for webdevetc/blogetc
 // There are lots of options here, but all have comments. For further documentation please see webdevetc.com/blogetc
 
 return [
@@ -198,7 +198,8 @@ return [
         // options:
         //      'built_in' (default, uses own database for comments),
         //      'disqus' (uses https://disqus.com/, please enter further config options below),
-        //      'custom' (will load blogetc::partials.custom_comments, which you can copy to your vendor view dir to customise
+        //      'custom' (will load blogetc::partials.custom_comments, which you can copy to your vendor view
+        //                  dir to customise
         //      'disabled' (turn comments off)
         // Default: built_in
         'type_of_comments_to_show' => 'built_in',

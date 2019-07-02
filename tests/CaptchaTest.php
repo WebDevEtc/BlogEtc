@@ -10,7 +10,7 @@ class CaptchaTest extends TestCase
     {
 
         $captcha = new Basic();
-        $this->assertEquals(gettype($captcha->captcha_field_name()), 'string');
+        $this->assertEquals(gettype($captcha->captchaFieldName()), 'string');
         $this->assertEquals(gettype($captcha->view()), 'string');
         $this->assertEquals(gettype($captcha->rules()), 'array');
     }

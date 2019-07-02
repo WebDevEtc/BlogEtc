@@ -4,6 +4,10 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class SearchRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 class SearchRequest extends FormRequest
 {
     /**

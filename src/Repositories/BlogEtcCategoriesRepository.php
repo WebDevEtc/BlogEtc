@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcCategoryNotFoundException;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 
+/**
+ * Class BlogEtcCategoriesRepository
+ * @package WebDevEtc\BlogEtc\Repositories
+ */
 class BlogEtcCategoriesRepository
 {
     /**
@@ -15,6 +19,10 @@ class BlogEtcCategoriesRepository
      */
     private $model;
 
+    /**
+     * BlogEtcCategoriesRepository constructor.
+     * @param BlogEtcCategory $model
+     */
     public function __construct(BlogEtcCategory $model)
     {
         $this->model = $model;
@@ -71,5 +79,4 @@ class BlogEtcCategoriesRepository
             throw new BlogEtcCategoryNotFoundException('Unable to find a blog category with slug: ' . $categorySlug);
         }
     }
-
 }

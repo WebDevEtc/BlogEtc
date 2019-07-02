@@ -120,15 +120,18 @@ class BlogEtcPostsService
         $uploaded_image_details = [];
 
         foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
-
             // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
             if ($image_size_details['enabled'] && $photo = $request->get_image_file($size)) {
                 // this image size is enabled, and
                 // we have an uploaded image that we can use
 
                 // TODO - this method does not exist
-                $uploaded_image = $this->UploadAndResize($new_blog_post, $new_blog_post->title, $image_size_details,
-                    $photo);
+                $uploaded_image = $this->UploadAndResize(
+                    $new_blog_post,
+                    $new_blog_post->title,
+                    $image_size_details,
+                    $photo
+                );
 
                 $new_blog_post->$size = $uploaded_image['filename'];
                 $uploaded_image_details[$size] = $uploaded_image;
@@ -196,7 +199,7 @@ class BlogEtcPostsService
         // now return an array of image files that are not deleted (so we can tell the user that these featured photos
         // still exist on the filesystem
 
-        $remainingFeaturedPhotos = [];
+        $remainingPhotos = [];
 
         foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
@@ -214,17 +217,17 @@ class BlogEtcPostsService
                         $fileSize = round(filesize($fileSize) / 1000, 1) . ' kb';
                     }
 
-                    $remainingFeaturedPhotos[] = [
+                    $remainingPhotos[] = [
                         'filename' => $post->$imageSize,
                         'full_path' => $fullPath,
                         'file_size' => $fileSize,
-                        'url' => asset(config('blogetc.blog_upload_dir','blog_images').'/'.$post->$imageSize),
+                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize),
                     ];
                 }
             }
         }
 
-        return [$post, $remainingFeaturedPhotos];
+        return [$post, $remainingPhotos];
     }
 
     /**

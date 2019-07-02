@@ -23,7 +23,7 @@
                    name="slug" value="{{old('slug',$post->slug)}}">
             <small id="blog_slug_help" class="form-text text-muted">
                 The slug (leave blank to auto generate)
-                - i.e. {{route('blogetc.single','')}}/<u><em>this_part</em></u>
+                - i.e. {{ route('blogetc.show','' )}}/<u><em>this_part</em></u>
             </small>
         </div>
 
@@ -135,7 +135,7 @@
                 @if($post->hasImage($size_info['basic_key']))
                     <div style="max-width:55px;  " class="float-right m-2">
                         <a style="cursor: zoom-in;" target="_blank"
-                           href="{{ $post->image_url($size_info['basic_key'])}}">
+                           href="{{ $post->imageUrl($size_info['basic_key'])}}">
                             {!! $post->image_tag($size_info['basic_key'], false, 'd-block mx-auto img-fluid ') !!}
                         </a>
                     </div>

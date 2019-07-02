@@ -29,7 +29,7 @@
                                 class="fa fa-file-text-o"
                                 aria-hidden="true"></i>
                         View Post</a>
-                    <a href="{{ $comment->post->edit_url()}}" class="card-link btn btn-primary">
+                    <a href="{{ $comment->post->edit_url() }}" class="card-link btn btn-primary">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         Edit Post</a>
 
@@ -40,7 +40,7 @@
 
                 @if(!$comment->approved)
                     {{--APPROVE BUTTON--}}
-                    <form method="post" action="{{route('blogetc.admin.comments.approve', $comment->id)}}"
+                    <form method="post" action="{{ route('blogetc.admin.comments.approve', $comment->id) }}"
                           class="float-right">
                         @csrf
                         @method('PATCH')
@@ -66,6 +66,6 @@
     @endforelse
 
     <div class="text-center">
-        {{ $comments->appends( [] )->links()}}
+        {{ $comments->appends( [] )->links() }}
     </div>
 @endsection

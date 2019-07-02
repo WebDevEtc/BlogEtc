@@ -1,6 +1,6 @@
 <?php
-/** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
-?>
+/** @var BlogEtcPost $post */
+?>use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 <div>
     @foreach($post->categories as $category)
         <a class="btn btn-outline-secondary btn-sm m-1" href="{{ $category->url() }}">

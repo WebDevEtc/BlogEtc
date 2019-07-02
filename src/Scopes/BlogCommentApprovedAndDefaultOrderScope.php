@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
+/**
+ * Class BlogCommentApprovedAndDefaultOrderScope
+ * @package WebDevEtc\BlogEtc\Scopes
+ */
 class BlogCommentApprovedAndDefaultOrderScope implements Scope
 {
     /**

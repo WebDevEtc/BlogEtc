@@ -5,7 +5,8 @@ namespace WebDevEtc\BlogEtc;
 use Session;
 
 /**
- * Class Helpers
+ * Small little helper class of static methods
+ *
  * @package WebDevEtc\BlogEtc
  */
 class Helpers
@@ -16,7 +17,8 @@ class Helpers
     public const FLASH_MESSAGE_SESSION_KEY = 'BLOGETC_FLASH';
 
     /**
-     * Set a new message
+     * Set a new flash message - used in the BlogEtc Admin panel to flash messages to user
+     * such as 'post created'.
      *
      * @param string $message
      */
@@ -56,16 +58,7 @@ class Helpers
   ';
     }
 
-
-    /**
-     * This method is depreciated. Just use the config() directly.
-     * @return array
-     * @deprecated
-     */
-    public static function image_sizes(): array
-    {
-        return config('blogetc.image_sizes');
-    }
+    ### Depreciated methods:
 
     /**
      * @return string|null
@@ -105,5 +98,15 @@ class Helpers
     public static function rss_html_tag(): string
     {
         return self::rssHtmlTag();
+    }
+
+    /**
+     * This method is depreciated. Just use the config() directly.
+     * @return array
+     * @deprecated
+     */
+    public static function image_sizes(): array
+    {
+        return config('blogetc.image_sizes');
     }
 }

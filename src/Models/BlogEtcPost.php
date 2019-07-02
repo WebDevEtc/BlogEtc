@@ -2,6 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Models;
 
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Exception;
@@ -29,7 +30,8 @@ use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
  * @property string|null use_view_file
  * @property Carbon posted_at
  * @property bool is_published
- * @property mixed author
+ * @property User|null author
+ * @property BlogEtcCategory[] categories
  * @property int id
  */
 class BlogEtcPost extends Model
@@ -133,7 +135,7 @@ class BlogEtcPost extends Model
      *
      * @return string
      */
-    public function author_string(): ?string
+    public function authorString(): ?string
     {
         if ($this->author) {
             return is_callable(self::$authorNameResolver)
@@ -175,29 +177,31 @@ class BlogEtcPost extends Model
     }
 
     /**
-     * @return string
-     * @deprecated - use editUrl()
-     *
-     */
-    public function edit_url(): string
-    {
-        return $this->editUrl();
-    }
-
-    /**
-     * If $this->user_view_file is not empty, then it'll return the dot syntax location of the blade file it should look for.
+     * If $this->user_view_file is not empty, then it'll return the dot syntax
+     * location of the blade file it should look for.
      *
      * @return string
      * @throws Exception
      *
      */
-    public function full_view_file_path(): string
+    public function fullViewFilePath(): string
     {
         if (!$this->use_view_file) {
             throw new RuntimeException('use_view_file was empty, so cannot use ' . __METHOD__);
         }
 
         return 'custom_blog_posts.' . $this->use_view_file;
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     *
+     * @deprecated - use fullViewFilePath() instead
+     */
+    public function full_view_file_path(): string
+    {
+        return $this->fullViewFilePath();
     }
 
     /**
@@ -216,10 +220,13 @@ class BlogEtcPost extends Model
             // return an empty string if this image does not exist.
             return new HtmlString('');
         }
-        $url = e($this->image_url($size));
-        $alt = e($this->title);
-        $img = "<img src='$url' alt='$alt' class='" . e($img_class) . "' >";
-        return new HtmlString($auto_link ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$img</a>" : $img);
+        $imageUrl = e($this->imageUrl($size));
+        $imageAltText = e($this->title);
+        $imgTag = '<img src="' . $imageUrl . '" alt="' . $imageAltText . '" class="' . e($img_class) . '">';
+
+        return new HtmlString($auto_link
+            ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$imgTag</a>"
+            : $imgTag);
     }
 
     /**
@@ -282,15 +289,24 @@ class BlogEtcPost extends Model
      *
      * @param string $size - should be 'medium' , 'large' or 'thumbnail'
      *
-     * TODO - rename
      * @return string
      */
-    public function image_url($size = 'medium'): string
+    public function imageUrl($size = 'medium'): string
     {
         $this->check_valid_image_size($size);
         $filename = $this->{'image_' . $size};
 
         return asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $filename);
+    }
+
+    /**
+     * @param string $size
+     * @return string
+     * @deprecated - use imageUrl() instead
+     */
+    public function image_url($size = 'medium'): string
+    {
+        return $this->iamgeUrl($size);
     }
 
     /**
@@ -300,16 +316,16 @@ class BlogEtcPost extends Model
      */
     public function url(): string
     {
-        return route('blogetc.single', $this->slug);
+        return route('blogetc.show', $this->slug);
     }
 
     /**
      * Generate an introduction, max length $max_len characters
      *
-     * @param int $max_len
+     * @param int $maxLen
      * @return string
      */
-    public function generate_introduction($max_len = 500): string
+    public function generateIntroduction(int $maxLen = 500): string
     {
         $base_text_to_use = $this->short_description;
         if (!trim($base_text_to_use)) {
@@ -317,7 +333,17 @@ class BlogEtcPost extends Model
         }
         $base_text_to_use = strip_tags($base_text_to_use);
 
-        return Str::limit($base_text_to_use, (int)$max_len);
+        return Str::limit($base_text_to_use, $maxLen);
+    }
+
+    /**
+     * @param int $maxLen
+     * @return string
+     * @deprecated - use generateIntroduction() instead
+     */
+    public function generate_introduction(int $maxLen = 500): string
+    {
+        return $this->generateIntroduction($maxLen);
     }
 
     /**
@@ -368,15 +394,25 @@ class BlogEtcPost extends Model
      *
      * Basically return $this->seo_title ?? $this->title;
      *
+     * TODO - what convention do we use for gen/generate/etc for naming of this.
      * @return string
      */
-    public function gen_seo_title()
+    public function genSeoTitle(): ?string
     {
         if ($this->seo_title) {
             return $this->seo_title;
         }
 
         return $this->title;
+    }
+
+    /**
+     * @return string|null
+     * @deprecated - use genSeoTitle() instead
+     */
+    public function gen_seo_title(): ?string
+    {
+        return $this->genSeoTitle();
     }
 
     /**
@@ -398,6 +434,24 @@ class BlogEtcPost extends Model
     public function has_image($size = 'medium'): bool
     {
         return $this->hasImage($size);
+    }
+
+    /**
+     * @return string|null
+     * @deprecated - use authorString() instead
+     */
+    public function author_string(): ?string
+    {
+        return $this->authorString();
+    }
+
+    /**
+     * @return string
+     * @deprecated - use editUrl() instead
+     */
+    public function edit_url(): string
+    {
+        return $this->editUrl();
     }
 
 }

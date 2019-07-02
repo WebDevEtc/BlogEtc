@@ -46,8 +46,17 @@ class BlogEtcCategory extends Model
      *
      * @return string
      */
-    public function edit_url(): string
+    public function editUrl(): string
     {
         return route('blogetc.admin.categories.edit_category', $this->id);
+    }
+
+    /**
+     * @return string
+     * @deprecated - use editUrl() instead
+     */
+    public function edit_url(): string
+    {
+        return $this->editUrl();
     }
 }

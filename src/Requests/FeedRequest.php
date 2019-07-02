@@ -5,6 +5,10 @@ namespace WebDevEtc\BlogEtc\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+/**
+ * Class FeedRequest
+ * @package WebDevEtc\BlogEtc\Requests
+ */
 class FeedRequest extends FormRequest
 {
     /**
@@ -12,7 +16,7 @@ class FeedRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'type' => [Rule::in(['rss', 'atom'])],

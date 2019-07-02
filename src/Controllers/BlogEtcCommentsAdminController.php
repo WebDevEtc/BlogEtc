@@ -42,7 +42,8 @@ class BlogEtcCommentsAdminController extends Controller
     public function index(Request $request)
     {
         //TODO - use service
-        $comments = BlogEtcComment::withoutGlobalScopes()->orderBy('created_at', 'desc')
+        $comments = BlogEtcComment::withoutGlobalScopes()
+            ->orderBy('created_at', 'desc')
             ->with('post');
 
         if ($request->get('waiting_for_approval')) {
@@ -51,7 +52,7 @@ class BlogEtcCommentsAdminController extends Controller
 
         $comments = $comments->paginate(100);
 
-        return view('blogetc_admin::comments.index', ['comments'=>$comments]);
+        return view('blogetc_admin::comments.index', ['comments' => $comments]);
     }
 
     /**
@@ -64,7 +65,7 @@ class BlogEtcCommentsAdminController extends Controller
     {
         $this->service->approve($blogCommentID);
 
-        Helpers::flashMessage('Approved!');
+        Helpers::flashMessage('Approved comment!');
 
         return back();
     }
@@ -79,7 +80,8 @@ class BlogEtcCommentsAdminController extends Controller
     public function destroy($blogCommentID): RedirectResponse
     {
         $this->service->delete($blogCommentID);
-        Helpers::flashMessage('Deleted!');
+
+        Helpers::flashMessage('Deleted comment!');
 
         return back();
     }
