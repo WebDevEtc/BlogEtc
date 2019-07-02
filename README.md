@@ -3,7 +3,7 @@
 ### 5 minutes to install! Quick and easy!
 
 ## July 2019 - 
-I'm currently rewriting it, a v4 release will be coming approx first week of July 2019. It will be a Laravel 5.8 release. I'm doing a big overhaul of the package with must better coding standards. 
+I'm currently rewriting it, a v4 release will be coming approx first week of July 2019. It will be a Laravel 5.8 release. I'm doing a big overhaul of the package with must better coding standards. Please only install from a release, the files in this repo are currently in a work in progress state and it is not ready yet! Check out the packagist links.
 
 ## Introduction
 
@@ -151,6 +151,7 @@ Try adding this to config/app.php:
 ## Version History
 
 
+-4.x - Currently work in progress. Will be released start of July 2019. For Laravel 5.8.
 
 - 3.1                   - minor fixes
 - 3.0.3                 - fixed RSS feed cache issue
