@@ -89,8 +89,10 @@ class BlogEtcReaderController extends Controller
     {
         // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged
         // in user can manage log posts
-        // todo - set these in config
-        $title = 'Viewing Blog'; // default title...
+        $title = config('blogetc.blog_index_title'); // default title...
+
+        // default category ID
+        $categoryID = null;
 
         if ($categorySlug) {
             // get the category
@@ -99,10 +101,11 @@ class BlogEtcReaderController extends Controller
             // get category ID to send to service
             $categoryID = $category->id;
 
+            // TODO - make configurable
             $title = 'Viewing blog posts in ' . $category->category_name;
         }
 
-        $posts = $this->postsService->indexPaginated(10, $categoryID ?? null);
+        $posts = $this->postsService->indexPaginated(10, $categoryID);
 
         return view('blogetc::index', [
             'posts' => $posts,
@@ -133,9 +136,9 @@ class BlogEtcReaderController extends Controller
             'blogetc::single_post',
             [
                 'post' => $blogPost,
+                'captcha' => $usingCaptcha,
                 // the default scope only selects approved comments, ordered by id
                 'comments' => $blogPost->comments->load('user'),
-                'captcha' => $usingCaptcha,
             ]
         );
     }

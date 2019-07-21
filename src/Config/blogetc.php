@@ -7,6 +7,9 @@ use WebDevEtc\BlogEtc\Captcha\Basic;
 // There are lots of options here, but all have comments. For further documentation please see webdevetc.com/blogetc
 
 return [
+    // Default title for blog index page
+    // Default: Our blog
+    'blog_index_title' => 'Our Blog',
 
     // Set to false to not include routes.php for BlogEtcReaderController and admin related routes.
     // If you disable this, you will have to manually copy over the data from routes.php and add it to your web.php.

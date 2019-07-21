@@ -6,6 +6,7 @@ use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,6 +34,7 @@ use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
  * @property User|null author
  * @property BlogEtcCategory[] categories
  * @property int id
+ * @property Collection|BlogEtcComment[] comments
  */
 class BlogEtcPost extends Model
 {

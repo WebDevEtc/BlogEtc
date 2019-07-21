@@ -3,8 +3,8 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
-use Auth;
 use Exception;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
@@ -86,15 +86,15 @@ class BlogEtcImageUploadController extends Controller
 
         $sizeToUpload = $request->get('sizes_to_upload');
 
-        $processed_images =$this->uploadsService->processUpload(
+        $processed_images = $this->uploadsService->processUpload(
             $request,
             $request->get('image_title'),
             $sizeToUpload
 
         );
 
-
-
-        return view('blogetc_admin::imageupload.uploaded', ['images' => $processed_images]);
+        return response()
+            ->view('blogetc_admin::imageupload.uploaded', ['images' => $processed_images])
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 }

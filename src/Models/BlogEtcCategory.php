@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * @property string category_name
  * @property string slug
- * @property id id
+ * @property int id
  * @property Collection|BlogEtcPost[] posts
  *
  * @method static findOrFail(int $categoryID)

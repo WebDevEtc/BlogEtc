@@ -8,7 +8,8 @@ use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 class CaptchaService
 {
     /**
-     * Return either null (if captcha is not enabled), or the captcha object (which should implement CaptchaInterface interface / extend the CaptchaAbstract class)
+     * Return either null (if captcha is not enabled), or the captcha object (which should implement
+     * CaptchaInterface interface / extend the CaptchaAbstract class)
      *
      *
      * @return null|CaptchaAbstract
@@ -23,7 +24,6 @@ class CaptchaService
         /** @var string $captcha_class */
         $captcha_class = config('blogetc.captcha.captcha_type');
 
-        return new $captcha_class;
+        return new $captcha_class();
     }
 }
-
