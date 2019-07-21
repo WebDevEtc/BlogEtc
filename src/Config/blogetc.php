@@ -186,6 +186,10 @@ return [
         // Default: Our blog post RSS feed
         'description' => 'Our blog post RSS feed',
 
+        // Title for the RSS Feed
+        // Default: BlogEtc Blog Feed
+        'title' => 'BlogEtc Blog Feed',
+
         // What language to use in the feed
         // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
         // Default: en

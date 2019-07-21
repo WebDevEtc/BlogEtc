@@ -82,35 +82,19 @@ class BlogEtcImageUploadController extends Controller
      */
     public function store(UploadImageRequest $request): View
     {
-        $processed_images = $this->processUploadedImages($request);
+//        $processed_images = $this->processUploadedImages($request);
 
-        return view('blogetc_admin::imageupload.uploaded', ['images' => $processed_images]);
-    }
-
-    /**
-     * Process any uploaded images (for featured image)
-     *
-     * @param UploadImageRequest $request
-     *
-     * @return array returns an array of details about each file resized.
-     * @throws Exception
-     * @todo - This class was added after the other main features, so this duplicates some code from the main blog post
-     *         admin controller (BlogEtcAdminController). For next full release this should be tided up.
-     */
-    protected function processUploadedImages(UploadImageRequest $request): array
-    {
         $sizeToUpload = $request->get('sizes_to_upload');
 
-        $this->uploadsService->processUpload(
+        $processed_images =$this->uploadsService->processUpload(
             $request,
             $request->get('image_title'),
             $sizeToUpload
 
         );
-        // TODO check response, probably redirect it
-//        $photo = $request->file('upload');
 
 
-        return $uploadedImageDetails;
+
+        return view('blogetc_admin::imageupload.uploaded', ['images' => $processed_images]);
     }
 }

@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcPostNotFoundException;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
@@ -41,10 +42,23 @@ class BlogEtcPostsRepository
             ->orderBy('posted_at', 'desc');
 
         if ($categoryID) {
-            $query = $query->where('blog_etc_post_categories.blog_etc_category_id', $categoryID);
+            $query->where('blog_etc_post_categories.blog_etc_category_id', $categoryID);
         }
 
         return $query->paginate($perPage);
+    }
+
+    /**
+     * Return posts for RSS feed
+     * @return Builder[]|Collection
+     */
+    public function rssItems():Collection
+    {
+        return  $this->query(false)
+            ->orderBy('posted_at', 'desc')
+            ->limit(config('blogetc.rssfeed.posts_to_show_in_rss_feed'))
+            ->with('author')
+            ->get();
     }
 
     /**

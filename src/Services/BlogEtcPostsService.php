@@ -5,6 +5,7 @@ namespace WebDevEtc\BlogEtc\Services;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use WebDevEtc\BlogEtc\Events\BlogPostAdded;
 use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
@@ -113,6 +114,15 @@ class BlogEtcPostsService
         return $this->repository->indexPaginated($perPage, $categoryID);
     }
 
+    /**
+     * Return posts for rss feed
+     *
+     * @return Collection
+     */
+    public function rssItems():Collection
+    {
+        return $this->repository->rssItems();
+    }
 
     /**
      * Process any uploaded images (for featured image)
@@ -181,6 +191,7 @@ class BlogEtcPostsService
         $post->fill($request->validated());
 
         // save any uploaded image:
+        // TODO - copy logic from create! this is now wrong
         $this->processUploadedImages($request, $post);
 
         // save changes:

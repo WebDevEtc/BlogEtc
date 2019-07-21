@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
@@ -74,10 +75,10 @@ class BlogEtcCommentWriterController extends Controller
             Auth::id()
         );
 
-        return view('blogetc::saved_comment', [
+        return response()->view('blogetc::saved_comment', [
             'captcha' => $captcha,
             'blog_post' => $blogPost,
             'new_comment' => $comment,
-        ]);
+        ])->setStatusCode(Response::HTTP_CREATED);
     }
 }

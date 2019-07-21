@@ -5,9 +5,11 @@ namespace WebDevEtc\BlogEtc\Controllers;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Laravelium\Feed\Feed;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Requests\FeedRequest;
+use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
 
 /**
  * Class BlogEtcRssFeedController.php
@@ -19,6 +21,13 @@ use WebDevEtc\BlogEtc\Requests\FeedRequest;
  */
 class BlogEtcRssFeedController extends Controller
 {
+    /** @var BlogEtcPostsService */
+    private $postsService;
+
+    public function __construct(BlogEtcPostsService $postsService)
+    {
+        $this->postsService = $postsService;
+    }
     /**
      * RSS Feed
      * This is a long (but quite simple) method to show an RSS feed
@@ -57,10 +66,7 @@ class BlogEtcRssFeedController extends Controller
      */
     protected function makeFreshFeed(Feed $feed): void
     {
-        $blogPosts = BlogEtcPost::orderBy('posted_at', 'desc')
-            ->limit(config('blogetc.rssfeed.posts_to_show_in_rss_feed'))
-                ->with('author')
-                ->get();
+        $blogPosts = $this->postsService->rssItems();
 
         $this->setupFeed($feed, $blogPosts);
 
@@ -81,19 +87,21 @@ class BlogEtcRssFeedController extends Controller
      * Basic set up of the Feed object
      *
      * @param Feed $feed
-     * @param $posts
+     * @param BlogEtcPostsService[]|Collection $posts
      * @return Feed
      */
-    protected function setupFeed(Feed $feed, $posts): Feed
+    protected function setupFeed(Feed $feed, Collection $posts): Feed
     {
-        $feed->title = config('app.name') . ' Blog';
+        $feed->title = config('blogetc.rssfeed.title');
         $feed->description = config('blogetc.rssfeed.description');
         $feed->link = route('blogetc.index');
         $feed->lang = config('blogetc.rssfeed.language');
-        $feed->pubdate = isset($posts[0]) ? $posts[0]->posted_at : Carbon::now();
-        $feed->setDateFormat('carbon');
         $feed->setShortening(config('blogetc.rssfeed.should_shorten_text'));
         $feed->setTextLimit(config('blogetc.rssfeed.text_limit'));
+        $feed->setDateFormat('carbon');
+        $feed->pubdate = $posts->first()
+            ? $posts->first()->posted_at // use first post if we have any...
+            : Carbon::now(); // ... or default to now
 
         return $feed;
     }

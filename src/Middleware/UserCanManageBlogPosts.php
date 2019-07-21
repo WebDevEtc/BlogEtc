@@ -12,7 +12,6 @@ use Illuminate\Http\Response;
  */
 class UserCanManageBlogPosts
 {
-
     /**
      * Show 401 error if \Auth::user()->canManageBlogEtcPosts() == false
      * @param $request
