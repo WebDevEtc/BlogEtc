@@ -10,13 +10,13 @@ use WebDevEtc\BlogEtc\Scopes\BlogCommentApprovedAndDefaultOrderScope;
 /**
  * @property string author_name
  * @property int user_id
- * @property mixed author_website
+ * @property string|null author_website
  * @property string|null ip
- * @property mixed author_email
+ * @property string|null author_email
  * @property bool approved
  * @property BlogEtcPost post
  * @property User user
- * @property User author
+ * @property string author
  */
 class BlogEtcComment extends Model
 {
@@ -76,6 +76,8 @@ class BlogEtcComment extends Model
 
     /**
      * Return author string (either from the User (via ->user_id), or the submitted author_name value
+     *
+     * TODO - rename this as it looks like a relationship
      *
      * @return string|null
      */

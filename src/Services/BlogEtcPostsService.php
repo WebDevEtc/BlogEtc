@@ -30,10 +30,15 @@ class BlogEtcPostsService
      * @var BlogEtcPostsRepository
      */
     private $repository;
+    /**
+     * @var BlogEtcUploadsService
+     */
+    private $uploadsService;
 
-    public function __construct(BlogEtcPostsRepository $repository)
+    public function __construct(BlogEtcPostsRepository $repository, BlogEtcUploadsService $uploadsService)
     {
         $this->repository = $repository;
+        $this->uploadsService = $uploadsService;
     }
 
     /**
@@ -72,11 +77,20 @@ class BlogEtcPostsService
         // create new instance of BlogEtcPost, hydrate it with submitted attributes:
         $newBlogPost = new BlogEtcPost($request->validated());
 
-        // process any submitted images:
-        $this->processUploadedImages($request, $newBlogPost);
-
+        // TODO - add reasons why it works with the two saves/updates
+        // TODO - use repo
         // save it:
         $newBlogPost->save();
+
+        // process any submitted images:
+        if (config('blogetc.image_upload_enabled')) {
+            // image upload was enabled - handle uploading of any new images:
+            $uploadedImages = $this->uploadsService->processFeaturedUpload($request , $newBlogPost);
+
+            if (count($uploadedImages)) {
+                $newBlogPost->update($uploadedImages);
+            }
+        }
 
         // sync submitted categories:
         // TODO - add interface, or add to base request b/c categories() isn't technically always be there
@@ -99,6 +113,7 @@ class BlogEtcPostsService
         return $this->repository->indexPaginated($perPage, $categoryID);
     }
 
+
     /**
      * Process any uploaded images (for featured image)
      *
@@ -114,7 +129,7 @@ class BlogEtcPostsService
         }
 
         // TODO - add this method - remove the comment and put this back into code
-//        $this->increaseMemoryLimit();
+        $this->increaseMemoryLimit();
 
         // to save in db later
         $uploaded_image_details = [];

@@ -2,13 +2,16 @@
 
 namespace WebDevEtc\BlogEtc\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * @property mixed category_name
- * @property mixed id
- * @property mixed slug
+ * @property string category_name
+ * @property string slug
+ * @property id id
+ * @property Collection|BlogEtcPost[] posts
+ *
  * @method static findOrFail(int $categoryID)
  */
 class BlogEtcCategory extends Model
@@ -28,6 +31,7 @@ class BlogEtcCategory extends Model
      */
     public function posts(): BelongsToMany
     {
+        $this->posts;
         return $this->belongsToMany(BlogEtcPost::class, 'blog_etc_post_categories');
     }
 

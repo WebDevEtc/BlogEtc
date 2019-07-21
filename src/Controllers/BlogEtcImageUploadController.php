@@ -10,6 +10,7 @@ use RuntimeException;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
+use WebDevEtc\BlogEtc\Services\BlogEtcUploadsService;
 use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 
 /**
@@ -20,23 +21,32 @@ use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 class BlogEtcImageUploadController extends Controller
 {
     use UploadFileTrait;
+    /**
+     * @var BlogEtcUploadsService
+     */
+    private $uploadsService;
 
     /**
      * BlogEtcAdminController constructor.
+     * @param BlogEtcUploadsService $uploadsService
      */
-    public function __construct()
+    public function __construct(BlogEtcUploadsService $uploadsService)
     {
+        $this->uploadsService = $uploadsService;
+
+        // ensure that the logged in user has correct permission
         $this->middleware(UserCanManageBlogPosts::class);
 
+        // ensure the config file exists
         if (!is_array(config('blogetc'))) {
             throw new RuntimeException(
-                'The config/blogetc.php does not exist.' .
-                ' Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command'
+                'The config/blogetc.php does not exist. ' .
+                'Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command'
             );
         }
 
         if (!config('blogetc.image_upload_enabled') && !app()->runningInConsole()) {
-            throw new RuntimeException('The blogetc.php config option has not enabled image uploading');
+            throw new RuntimeException('Image uploads in BlogEtc are disabled in the configuration');
         }
     }
 
@@ -89,47 +99,17 @@ class BlogEtcImageUploadController extends Controller
      */
     protected function processUploadedImages(UploadImageRequest $request): array
     {
-        $this->increaseMemoryLimit();
-        $photo = $request->file('upload');
-
-        // to save in db later
-        $uploadedImageDetails = [];
-
         $sizeToUpload = $request->get('sizes_to_upload');
 
-        // now upload a full size - this is a special case, not in the config file. We only store full size images in
-        // this class, not as part of the featured blog image uploads.
-        if (isset($sizeToUpload['blogetc_full_size']) && $sizeToUpload['blogetc_full_size'] === 'true') {
-            $uploadedImageDetails['blogetc_full_size'] = $this->uploadAndResize(
-                null,
-                $request->get('image_title'),
-                'fullsize',
-                $photo
-            );
-        }
+        $this->uploadsService->processUpload(
+            $request,
+            $request->get('image_title'),
+            $sizeToUpload
 
-        foreach ((array)config('blogetc.image_sizes') as $size => $imageSizeDetails) {
-            if (!isset($sizeToUpload[$size]) || !$sizeToUpload[$size] || !$imageSizeDetails['enabled']) {
-                continue;
-            }
+        );
+        // TODO check response, probably redirect it
+//        $photo = $request->file('upload');
 
-            // this image size is enabled, and
-            // we have an uploaded image that we can use
-            $uploadedImageDetails[$size] = $this->uploadAndResize(
-                null,
-                $request->get('image_title'),
-                $imageSizeDetails,
-                $photo
-            );
-        }
-
-        // store the image upload.
-        BlogEtcUploadedPhoto::create([
-            'image_title' => $request->get('image_title'),
-            'source' => 'ImageUpload',
-            'uploader_id' => optional(Auth::user())->id,
-            'uploaded_images' => $uploadedImageDetails,
-        ]);
 
         return $uploadedImageDetails;
     }
