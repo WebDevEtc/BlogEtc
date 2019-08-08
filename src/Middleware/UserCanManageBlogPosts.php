@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 /**
  * Class UserCanManageBlogPosts
  * @package WebDevEtc\BlogEtc\Middleware
+ * @todo - use gates/policy. This will get removed in next version
  */
 class UserCanManageBlogPosts
 {

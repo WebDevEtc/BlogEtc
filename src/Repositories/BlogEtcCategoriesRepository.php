@@ -14,9 +14,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
  */
 class BlogEtcCategoriesRepository
 {
-    /**
-     * @var BlogEtcCategory
-     */
+    /** @var BlogEtcCategory */
     private $model;
 
     /**
@@ -61,7 +59,9 @@ class BlogEtcCategoriesRepository
         try {
             return $this->query()->findOrFail($categoryID);
         } catch (ModelNotFoundException $e) {
-            throw new BlogEtcCategoryNotFoundException('Unable to find a blog category with ID: ' . $categoryID);
+            throw new BlogEtcCategoryNotFoundException(
+                'Unable to find a blog category with ID: ' . $categoryID
+            );
         }
     }
 
@@ -76,7 +76,9 @@ class BlogEtcCategoriesRepository
         try {
             return $this->query()->where('slug', $categorySlug)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new BlogEtcCategoryNotFoundException('Unable to find a blog category with slug: ' . $categorySlug);
+            throw new BlogEtcCategoryNotFoundException(
+                'Unable to find a blog category with slug: ' . $categorySlug
+            );
         }
     }
 }

@@ -5,7 +5,7 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <h2>Search Results for {{ $query}}</h2>
+            <h2>Search Results for {{ $query }}</h2>
 
             @forelse($search_results as $result)
 

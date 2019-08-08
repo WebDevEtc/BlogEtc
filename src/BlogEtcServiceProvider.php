@@ -46,11 +46,10 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     protected function disableFulltextSyncing(): void
     {
-        if (config('blogetc.search.search_enabled')) {
-            return;
+        if (!config('blogetc.search.search_enabled')) {
+            // if search is disabled, don't allow it to sync full text.
+            ModelObserver::disableSyncingFor(BlogEtcPost::class);
         }
-        // if search is disabled, don't allow it to sync full text.
-        ModelObserver::disableSyncingFor(BlogEtcPost::class);
     }
 
     /**
@@ -59,10 +58,9 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     protected function includeRoutes(): void
     {
-        if (!config('blogetc.include_default_routes', true)) {
-            return;
+        if (config('blogetc.include_default_routes', true)) {
+            include __DIR__ . '/routes.php';
         }
-        include __DIR__ . '/routes.php';
     }
 
     /**

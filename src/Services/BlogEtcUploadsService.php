@@ -16,6 +16,8 @@ use WebDevEtc\BlogEtc\Requests\BaseBlogEtcPostRequest;
 
 class BlogEtcUploadsService
 {
+    private static $num_of_attempts_to_find_filename = 10;
+    private  $checked_blog_image_dir_is_writable = false;
 
     /**
      * Store new image upload meta data in database
@@ -96,7 +98,7 @@ class BlogEtcUploadsService
 
 
         // store the image data in db:
-        $this->create($imageTitle, BlogEtcUploadedPhoto::SOURCE_IMAGE_UPLOAD, Auth::id(), $uploadedImageDetails);
+        $this->create(null, $imageTitle, BlogEtcUploadedPhoto::SOURCE_IMAGE_UPLOAD, Auth::id(), $uploadedImageDetails);
 
         return $uploadedImageDetails;
     }
@@ -112,11 +114,11 @@ class BlogEtcUploadsService
      * @param BlogEtcPost $new_blog_post
      * @todo - next full release, tidy this up!
      */
-    public function processFeaturedUpload(BaseBlogEtcPostRequest $request, BlogEtcPost $new_blog_post): void
+    public function processFeaturedUpload(BaseBlogEtcPostRequest $request, BlogEtcPost $new_blog_post):? array
     {
         if (!config('blogetc.image_upload_enabled')) {
             // image upload was disabled
-            return;
+            return null;
         }
 
         $newSizes = [];
@@ -128,7 +130,7 @@ class BlogEtcUploadsService
 
         foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
             // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
-            if ($image_size_details['enabled'] && $photo = $request->get_image_file($size)) {
+            if ($image_size_details['enabled'] && $photo = $request->getImageSize($size)) {
                 // this image size is enabled, and
                 // we have an uploaded image that we can use
 
@@ -157,6 +159,8 @@ class BlogEtcUploadsService
                 $uploaded_image_details
             );
         }
+
+        return $newSizes;
     }
 
 

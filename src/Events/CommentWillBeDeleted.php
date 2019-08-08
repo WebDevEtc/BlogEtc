@@ -14,7 +14,7 @@ class CommentWillBeDeleted
 {
     use Dispatchable, SerializesModels;
 
-    /** @var  BlogEtcComment */
+    /** @var BlogEtcComment */
     public $comment;
 
     /**

@@ -88,7 +88,7 @@ class BlogEtcPostsService
             // image upload was enabled - handle uploading of any new images:
             $uploadedImages = $this->uploadsService->processFeaturedUpload($request , $newBlogPost);
 
-            if (count($uploadedImages)) {
+            if ($uploadedImages && count($uploadedImages)) {
                 $newBlogPost->update($uploadedImages);
             }
         }
@@ -146,7 +146,7 @@ class BlogEtcPostsService
 
         foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
             // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
-            if ($image_size_details['enabled'] && $photo = $request->get_image_file($size)) {
+            if ($image_size_details['enabled'] && $photo = $request->getImageSize($size)) {
                 // this image size is enabled, and
                 // we have an uploaded image that we can use
 

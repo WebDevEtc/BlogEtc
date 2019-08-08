@@ -202,6 +202,7 @@
 
 {{--    "--}}
 <script>
+    // TODO
     (function setupShowOtherSizes() {
         var showAllSizesContainer = document.getElementById('show-all-sizes-container');
         var showAllSizesBtn = document.getElementById('show-all-sizes-btn');

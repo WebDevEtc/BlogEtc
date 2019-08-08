@@ -11,7 +11,7 @@
                 @include('blogetc::partials.show_errors')
                 @include('blogetc::partials.full_post_details')
 
-                @if(config('blogetc.comments.type_of_comments_to_show','built_in') !== 'disabled')
+                @if(config('blogetc.comments.type_of_comments_to_show') !== 'disabled')
                     <div id="maincommentscontainer">
                         <h2 class="text-center">
                             Comments

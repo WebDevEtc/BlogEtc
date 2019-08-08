@@ -1,19 +1,17 @@
 <?php
-/** @var BlogEtcPost $post */
-
 use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-
+/** @var BlogEtcPost $post */
 /** @var CaptchaAbstract $captcha */
 ?>
 <div class="add_comment_area">
     <h5 class="text-center">Add a comment</h5>
-    <form method='post' action='{{route('blogetc.comments.add_new_comment', $post->slug)}}'>
+    <form method='post' action='{{ route('blogetc.comments.add_new_comment', $post->slug) }}'>
         @csrf
 
-        <div class="form-group ">
+        <div class="form-group">
 
-            <label id="comment_label" for="comment">Your Comment </label>
+            <label id="comment_label" for="comment">Your Comment</label>
             <textarea
                     class="form-control"
                     name="comment"
@@ -27,7 +25,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
         <div class="container-fluid">
             <div class="row">
 
-                @if(config('blogetc.comments.save_user_id_if_logged_in', true) == false || !Auth::check())
+                @if(!config('blogetc.comments.save_user_id_if_logged_in', true) || !Auth::check())
 
                     <div class="col">
                         <div class="form-group ">

@@ -14,7 +14,7 @@ class CategoryWillBeDeleted
 {
     use Dispatchable, SerializesModels;
 
-    /** @var  BlogEtcCategory */
+    /** @var BlogEtcCategory */
     public $blogEtcCategory;
 
     /**

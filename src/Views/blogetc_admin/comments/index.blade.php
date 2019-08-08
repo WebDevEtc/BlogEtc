@@ -5,38 +5,33 @@
 @section('title', 'BlogEtc Manage Comments')
 @section('content')
     @forelse ($comments as $comment)
-
         <div class="card m-4">
             <div class="card-body">
-
                 <h5 class="card-title">
-                    {{ $comment->author()}} commented on:
+                    {{ $comment->author() }} commented on:
 
                     @if($comment->post)
-                        <a href="{{ $comment->post->url()}}">{{ $comment->post->title}}</a>
+                        <a href="{{ $comment->post->url()}}">{{ $comment->post->title }}</a>
                     @else
                         Unknown blog post
 
                     @endif
 
-                    on {{ $comment->created_at}} </h5>
+                    on {{ $comment->created_at }} </h5>
 
-                <p class="m-3 p-2">{{ $comment->comment}}</p>
+                <p class="m-3 p-2">{{ $comment->comment }}</p>
 
                 @if($comment->post)
                     {{--VIEW + EDIT POST LINKS--}}
-                    <a href="{{ $comment->post->url()}}" class="card-link btn btn-outline-secondary"><i
-                                class="fa fa-file-text-o"
-                                aria-hidden="true"></i>
-                        View Post</a>
+                    <a href="{{ $comment->post->url()}}" class="card-link btn btn-outline-secondary">
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                        View Post
+                    </a>
                     <a href="{{ $comment->post->edit_url() }}" class="card-link btn btn-primary">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        Edit Post</a>
-
-
+                        Edit Post
+                    </a>
                 @endif
-
-
 
                 @if(!$comment->approved)
                     {{--APPROVE BUTTON--}}

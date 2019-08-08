@@ -1,6 +1,9 @@
 <?php
 use Illuminate\Support\Str;
-//        todo - this needs lots of work
+use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
+use WebDevEtc\BlogEtc\Models\BlogEtcComment;
+use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+// todo - this needs lots of work
 ?>
 <h2>
     <a href="https://webdevetc.com/">
@@ -17,10 +20,8 @@ use Illuminate\Support\Str;
                     BlogEtc Admin Home
                 </a>
                 <span class="text-muted">(<?php
-                    use WebDevEtc\BlogEtc\Models\BlogEtcCategory;use WebDevEtc\BlogEtc\Models\BlogEtcComment;use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-                    //                    TODO get count from controller (or view composer?)
+                    // TODO get count from controller (or view composer?)
                     $categoryCount = BlogEtcPost::count();
-                    //                    TODO - test the str::
                     echo $categoryCount . ' ' . Str::plural('Post', $categoryCount);
 
                     ?>)</span>
@@ -50,8 +51,7 @@ use Illuminate\Support\Str;
                 <span class="text-muted">(<?php
                     $commentCount = BlogEtcComment::withoutGlobalScopes()->count();
 
-                    // TOdO str::
-                    echo $commentCount . ' ' . str_plural('Comment', $commentCount);
+                    echo $commentCount . ' ' . Str::plural('Comment', $commentCount);
 
                     ?>)</span>
             </h6>
@@ -59,9 +59,10 @@ use Illuminate\Support\Str;
 
             <div class="list-group ">
                 <a href="{{ route('blogetc.admin.comments.index') }}"
-                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.comments.index' && !Request::get('waiting_for_approval')) active @endif"><i
-                            class="fa  fa-fw fa-comments" aria-hidden="true"></i>
-                    All Comments</a>
+                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.comments.index' && !Request::get('waiting_for_approval')) active @endif">
+                    <i class="fa fa-fw fa-comments" aria-hidden="true"></i>
+                    All Comments
+                </a>
 
                 <?php $comment_approval_count = BlogEtcComment::withoutGlobalScopes()
                     ->where('approved', false)->count(); ?>
@@ -110,7 +111,7 @@ use Illuminate\Support\Str;
                 <div class="list-group ">
                     <a href="{{ route('blogetc.admin.images.all') }}"
                        class="list-group-item list-group-item-action
-                                {{ Request::route()->getName() === 'blogetc.admin.images.all' ? 'active' : '' }}"
+                       {{ Request::route()->getName() === 'blogetc.admin.images.all' ? 'active' : '' }}"
                     >
                         <i class="fa fa-picture-o fa-fw" aria-hidden="true"></i>
                         View All

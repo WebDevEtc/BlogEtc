@@ -203,13 +203,20 @@ return [
     'comments' => [
         // What type (if any) of comments/comment form to show.
         // options:
-        //      'built_in' (default, uses own database for comments),
-        //      'disqus' (uses https://disqus.com/, please enter further config options below),
-        //      'custom' (will load blogetc::partials.custom_comments, which you can copy to your vendor view
+        //      \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_BUILT_IN
+        //           (default, uses own database for comments),
+
+        //      \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_DISQUS
+        //           (uses https://disqus.com/, please enter further config options below),
+
+        //      \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_CUSTOM
+        //           (will load blogetc::partials.custom_comments, which you can copy to your vendor view
         //                  dir to customise
-        //      'disabled' (turn comments off)
+
+        //      \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_DISABLED
+        //           (turn comments off)
         // Default: built_in
-        'type_of_comments_to_show' => 'built_in',
+        'type_of_comments_to_show' => \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_BUILT_IN,
 
         // Max num of comments to show on a single blog post.
         // Set to a lower number for smaller page sizes.

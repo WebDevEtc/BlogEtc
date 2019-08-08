@@ -22,9 +22,13 @@ use WebDevEtc\BlogEtc\Repositories\BlogEtcCommentsRepository;
  */
 class BlogEtcCommentsService
 {
-    /**
-     * @var BlogEtcCommentsRepository
-     */
+    // comment system types. Set these in config file
+    public const COMMENT_TYPE_BUILT_IN = 'built_in';
+    public const COMMENT_TYPE_DISQUS = 'disqus';
+    public const COMMENT_TYPE_CUSTOM = 'custom';
+    public const COMMENT_TYPE_DISABLED = 'disabled';
+
+    /** @var BlogEtcCommentsRepository */
     private $repository;
 
     public function __construct(BlogEtcCommentsRepository $repository)

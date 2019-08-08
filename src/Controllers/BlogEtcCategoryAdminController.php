@@ -19,9 +19,7 @@ use WebDevEtc\BlogEtc\Services\BlogEtcCategoriesService;
  */
 class BlogEtcCategoryAdminController extends Controller
 {
-    /**
-     * @var BlogEtcCategoriesService
-     */
+    /** @var BlogEtcCategoriesService */
     private $service;
 
     /**

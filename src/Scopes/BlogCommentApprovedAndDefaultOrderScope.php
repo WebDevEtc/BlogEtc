@@ -23,7 +23,7 @@ class BlogCommentApprovedAndDefaultOrderScope implements Scope
      * @param Model $model
      * @return void
      */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
         $builder->orderBy('id');
         // set a sane limit on num of comments. No pagination. Maybe a feature in the future.

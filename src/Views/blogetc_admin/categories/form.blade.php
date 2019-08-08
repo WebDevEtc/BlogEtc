@@ -57,9 +57,9 @@
              */
             var slug = function (value) {
                 return value.toLowerCase()
-                            .replace(/[^\w-_ ]+/g, '') // replace with nothing ('')
+                            .replace(/[^\w-_ ]+/g, '') // replace invalid characters with nothing ('')
                             .replace(/[_ ]+/g, '-') // replace _ and spaces with -
-                            .substring(0, 99); // limit str length
+                            .substring(0, 99); // limit str length to 99 chars
             };
 
             /**

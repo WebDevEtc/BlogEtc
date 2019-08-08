@@ -1,6 +1,6 @@
 <?php
 /** @var BlogEtcPost $post */
-?>use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+?>
 <div id="disqus_thread"></div>
 <script>
 

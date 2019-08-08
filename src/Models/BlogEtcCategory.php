@@ -31,7 +31,6 @@ class BlogEtcCategory extends Model
      */
     public function posts(): BelongsToMany
     {
-        $this->posts;
         return $this->belongsToMany(BlogEtcPost::class, 'blog_etc_post_categories');
     }
 

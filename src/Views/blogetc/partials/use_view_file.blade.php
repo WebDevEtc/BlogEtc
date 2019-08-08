@@ -1,6 +1,6 @@
 <?php
 /** @var BlogEtcPost $post */
-?>use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+?>
 {{--This is used if a blog post has a 'use_view_file' value.--}}{{--It will (attempt to) load the view from /resources/views/custom_blog_posts/$use_view_file.blade.php. If that file doesn't exist, it'll show an error. --}}
 @if(View::exists($post->fullViewFilePath()))
 

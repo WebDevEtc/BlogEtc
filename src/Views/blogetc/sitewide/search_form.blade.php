@@ -1,4 +1,4 @@
-<div style="max-width:500px;margin:50px auto;" class="search-form-outer">
+<div style="max-width:500px; margin:50px auto;" class="search-form-outer">
     <form method="get" action="{{ route('blogetc.search') }}" class="text-center">
         <h4>Search for something in our blog:</h4>
         <input type="text" name="s" placeholder="Search..." class="form-control" value="{{ Request::get('s') }}">

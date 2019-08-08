@@ -57,9 +57,10 @@ class BlogEtcCommentWriterController extends Controller
      */
     public function addNewComment(AddNewCommentRequest $request, string $slug)
     {
-        if (config('blogetc.comments.type_of_comments_to_show', 'built_in') !== 'built_in') {
+        if (config('blogetc.comments.type_of_comments_to_show') !== \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_BUILT_IN) {
             throw new RuntimeException('Built in comments are disabled');
         }
+
         $blogPost = $this->postsService->repository()->findBySlug($slug);
 
         $captcha = $this->captchaService->getCaptchaObject();

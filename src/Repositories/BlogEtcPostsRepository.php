@@ -42,7 +42,9 @@ class BlogEtcPostsRepository
             ->orderBy('posted_at', 'desc');
 
         if ($categoryID) {
-            $query->where('blog_etc_post_categories.blog_etc_category_id', $categoryID);
+            $query->whereHas('categories', function (Builder $query) use ($categoryID){
+                $query->where('blog_etc_post_categories.blog_etc_category_id', $categoryID);
+            })->get();
         }
 
         return $query->paginate($perPage);

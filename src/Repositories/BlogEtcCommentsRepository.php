@@ -20,6 +20,7 @@ class BlogEtcCommentsRepository
 
     /**
      * BlogEtcCommentsRepository constructor.
+     *
      * @param BlogEtcComment $model
      */
     public function __construct(BlogEtcComment $model)
@@ -29,6 +30,7 @@ class BlogEtcCommentsRepository
 
     /**
      * Return new instance of the Query Builder for this model
+     *
      * @param bool $eagerLoad
      * @return Builder
      */
@@ -37,7 +39,7 @@ class BlogEtcCommentsRepository
         $queryBuilder = $this->model->newQuery();
 
         if ($eagerLoad === true) {
-            $queryBuilder->with(['post',]);
+            $queryBuilder->with('post');
         }
 
         return $queryBuilder;
@@ -58,7 +60,7 @@ class BlogEtcCommentsRepository
         try {
             $queryBuilder = $this->query(true);
 
-            if ($onlyApproved === false) {
+            if (!$onlyApproved) {
                 $queryBuilder->withoutGlobalScopes();
             }
 

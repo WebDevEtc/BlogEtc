@@ -11,7 +11,6 @@ use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
 use WebDevEtc\BlogEtc\Services\BlogEtcUploadsService;
-use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 
 /**
  * Class BlogEtcAdminController
@@ -20,10 +19,7 @@ use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
  */
 class BlogEtcImageUploadController extends Controller
 {
-    use UploadFileTrait;
-    /**
-     * @var BlogEtcUploadsService
-     */
+    /** @var BlogEtcUploadsService */
     private $uploadsService;
 
     /**
@@ -80,17 +76,14 @@ class BlogEtcImageUploadController extends Controller
      * @return View
      * @throws Exception
      */
-    public function store(UploadImageRequest $request): View
+    public function store(UploadImageRequest $request): Response
     {
-//        $processed_images = $this->processUploadedImages($request);
-
         $sizeToUpload = $request->get('sizes_to_upload');
 
         $processed_images = $this->uploadsService->processUpload(
-            $request,
+            $request->file('upload'),
             $request->get('image_title'),
             $sizeToUpload
-
         );
 
         return response()

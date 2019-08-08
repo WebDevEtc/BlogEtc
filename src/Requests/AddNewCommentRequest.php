@@ -5,6 +5,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
+use WebDevEtc\BlogEtc\Services\BlogEtcCommentsService;
 
 /**
  * Class AddNewCommentRequest
@@ -12,7 +13,6 @@ use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
  */
 class AddNewCommentRequest extends FormRequest
 {
-
     /**
      * Can user add new comments?
      *
@@ -20,8 +20,7 @@ class AddNewCommentRequest extends FormRequest
      */
     public function authorize():bool
     {
-        // TODO - use constants
-        return config('blogetc.comments.type_of_comments_to_show') === 'built_in';
+        return config('blogetc.comments.type_of_comments_to_show') === BlogEtcCommentsService::COMMENT_TYPE_BUILT_IN;
     }
 
     /**

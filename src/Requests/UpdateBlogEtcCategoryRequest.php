@@ -18,9 +18,9 @@ class UpdateBlogEtcCategoryRequest extends BaseBlogEtcCategoryRequest
      */
     public function rules():array
     {
-        $return = $this->baseCategoryRules();
-        $return['slug'] [] = Rule::unique('blog_etc_categories', 'slug')->ignore($this->route()
+        $rules = $this->baseCategoryRules();
+        $rules['slug'] [] = Rule::unique('blog_etc_categories', 'slug')->ignore($this->route()
             ->parameter('categoryId'));
-        return $return;
+        return $rules;
     }
 }

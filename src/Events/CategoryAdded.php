@@ -14,7 +14,7 @@ class CategoryAdded
 {
     use Dispatchable, SerializesModels;
 
-    /** @var  BlogEtcCategory */
+    /** @var BlogEtcCategory */
     public $blogEtcCategory;
 
     /**

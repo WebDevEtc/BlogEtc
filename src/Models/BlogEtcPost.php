@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use Swis\LaravelFulltext\Indexable;
 use Throwable;
+use WebDevEtc\BlogEtc\Exceptions\InvalidImageSizeException;
 use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
 
 /**
@@ -47,21 +48,18 @@ class BlogEtcPost extends Model
      * @var string|callable
      */
     protected static $authorNameResolver;
-    /**
-     * @var array
-     */
+
+    /** @var array */
     public $casts = [
         'is_published' => 'boolean',
     ];
-    /**
-     * @var array
-     */
+
+    /** @var array */
     public $dates = [
         'posted_at',
     ];
-    /**
-     * @var array
-     */
+
+    /** @var array */
     public $fillable = [
         'title',
         'subtitle',
@@ -210,25 +208,31 @@ class BlogEtcPost extends Model
      * Generate a full <img src='' alt=''> img tag.
      *
      * @param string $size - large, medium, thumbnail
-     * @param bool $auto_link - if true then it will add <a href=''>...</a> around the <img> tag
-     * @param null|string $img_class - if you want any additional CSS classes for this tag for the <IMG>
-     * @param null|string $anchor_class - is you want any additional CSS classes in the <a> anchor tag
+     * @param bool $addAHref - if true then it will add <a href=''>...</a> around the <img> tag
+     * @param null|string $imgTagClass - if you want any additional CSS classes for this tag for the <IMG>
+     * @param null|string $anchorTagClass - is you want any additional CSS classes in the <a> anchor tag
      *
      * @return HtmlString
      */
-    public function imageTag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null): HtmlString
-    {
+    public function imageTag(
+        $size = 'medium',
+        $addAHref = true,
+        $imgTagClass = null,
+        $anchorTagClass = null
+    ): HtmlString {
         if (!$this->hasImage($size)) {
             // return an empty string if this image does not exist.
             return new HtmlString('');
         }
         $imageUrl = e($this->imageUrl($size));
         $imageAltText = e($this->title);
-        $imgTag = '<img src="' . $imageUrl . '" alt="' . $imageAltText . '" class="' . e($img_class) . '">';
+        $imgTag = '<img src="' . $imageUrl . '" alt="' . $imageAltText . '" class="' . e($imgTagClass) . '">';
 
-        return new HtmlString($auto_link
-            ? "<a class='" . e($anchor_class) . "' href='" . e($this->url()) . "'>$imgTag</a>"
-            : $imgTag);
+        return new HtmlString(
+            $addAHref
+                ? '<a class="' . e($anchorTagClass) . '" href="' . e($this->url()) . '">' . $imgTag . '</a>'
+                : $imgTag
+        );
     }
 
     /**
@@ -240,7 +244,7 @@ class BlogEtcPost extends Model
      */
     public function hasImage($size = 'medium'): bool
     {
-        $this->check_valid_image_size($size);
+        $this->checkValidImageSize($size);
 
         return array_key_exists('image_' . $size, $this->getAttributes());
     }
@@ -253,15 +257,16 @@ class BlogEtcPost extends Model
      *
      * @return bool
      * @throws InvalidArgumentException
-     *
      */
-    protected function check_valid_image_size(string $size = 'medium')
+    protected function checkValidImageSize(string $size = 'medium'): bool
     {
         if (array_key_exists('image_' . $size, config('blogetc.image_sizes'))) {
+            // correct size string - just return
             return true;
         }
 
-        // was an error!
+        // if it got this far then the size was not valid. As this error will probably be seen by whoever set up the
+        // blog, return a useful message to help with debugging.
 
         if (Str::startsWith($size, 'image_')) {
             // $size starts with image_, which is an error
@@ -273,15 +278,16 @@ class BlogEtcPost extends Model
                 in the database table:    : blogetc_posts.image_medium
                 when calling image_url()  : image_url("medium")
             */
-            throw new InvalidArgumentException(
-                "Invalid image size ($size). BlogEtcPost image size should not begin with 'image_'." .
-                " Remove this from the start of $size. It *should* be in the blogetc.image_sizes config though!"
+            throw new InvalidImageSizeException(
+                'Invalid image size (' . e($size) . '). BlogEtcPost image size should not begin with' .
+                ' \'image_\'. Remove this from the start of ' . e($size) . '. It *should* be in the' .
+                ' blogetc.image_sizes config though'
             );
         }
 
-        throw new InvalidArgumentException(
-            "BlogEtcPost image size should be 'large','medium','thumbnail'" .
-            " or another field as defined in config/blogetc.php. Provided size ($size) is not valid"
+        throw new InvalidImageSizeException(
+            'BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\'' .
+            ' or another field as defined in config/blogetc.php. Provided size (' . e($size) . ') is not valid'
         );
     }
 
@@ -295,7 +301,7 @@ class BlogEtcPost extends Model
      */
     public function imageUrl($size = 'medium'): string
     {
-        $this->check_valid_image_size($size);
+        $this->checkValidImageSize($size);
         $filename = $this->{'image_' . $size};
 
         return asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $filename);
@@ -456,4 +462,12 @@ class BlogEtcPost extends Model
         return $this->editUrl();
     }
 
+    /**
+     * @param string $size
+     * @deprecated - use checkValidImageSize()
+     */
+    protected function check_valid_image_size(string $size = 'medium')
+    {
+        return $this->checkValidImageSize($size);
+    }
 }

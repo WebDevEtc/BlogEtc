@@ -14,7 +14,7 @@ trait HasImageUploadTrait
      * @param $size
      * @return UploadedFile|null
      */
-    public function get_image_file($size): ?UploadedFile
+    public function getImageSize($size): ?UploadedFile
     {
 
         if ($this->file($size)) {
@@ -29,5 +29,15 @@ trait HasImageUploadTrait
         }
 
         return null;
+    }
+
+    /**
+     * @param $size
+     * @return UploadedFile|null
+     * @deprecated - use getImageSize() instead
+     */
+    public function get_image_file($size): ?UploadedFile
+    {
+        return $this->getImageFile($size);
     }
 }

@@ -10,11 +10,11 @@ use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
+use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
-use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 
 /**
  * Class BlogEtcAdminController
@@ -22,8 +22,6 @@ use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
  */
 class BlogEtcAdminController extends Controller
 {
-    use UploadFileTrait;
-
     /** @var BlogEtcPostsService */
     private $service;
 
@@ -64,7 +62,7 @@ class BlogEtcAdminController extends Controller
      */
     public function create(): View
     {
-        return view('blogetc_admin::posts.add_post');
+        return view('blogetc_admin::posts.add_post', ['post' => new BlogEtcPost()]);
     }
 
     /**
@@ -105,11 +103,11 @@ class BlogEtcAdminController extends Controller
      */
     public function update(UpdateBlogEtcPostRequest $request, $blogPostID): RedirectResponse
     {
-        $blogpost = $this->service->update($blogPostID, $request);
+        $blogPost = $this->service->update($blogPostID, $request);
 
         Helpers::flashMessage('Updated post');
 
-        return redirect($blogpost->editUrl());
+        return redirect($blogPost->editUrl());
     }
 
     /**

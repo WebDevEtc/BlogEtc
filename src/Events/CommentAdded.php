@@ -15,9 +15,10 @@ class CommentAdded
 {
     use Dispatchable, SerializesModels;
 
-    /** @var  BlogEtcPost */
+    /** @var BlogEtcPost */
     public $blogEtcPost;
-    /** @var  BlogEtcComment */
+
+    /** @var BlogEtcComment */
     public $newComment;
 
     /**

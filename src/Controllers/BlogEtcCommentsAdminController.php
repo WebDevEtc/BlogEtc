@@ -17,9 +17,7 @@ use WebDevEtc\BlogEtc\Services\BlogEtcCommentsService;
  */
 class BlogEtcCommentsAdminController extends Controller
 {
-    /**
-     * @var BlogEtcCommentsService
-     */
+    /** @var BlogEtcCommentsService */
     private $service;
 
     /**

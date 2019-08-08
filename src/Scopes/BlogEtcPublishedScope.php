@@ -22,7 +22,7 @@ class BlogEtcPublishedScope implements Scope
      * @param Model $model
      * @return void
      */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
         if (!Auth::check() || !Auth::user()->canManageBlogEtcPosts()) {
             // user is a guest, or if logged in they can't manage blog posts
