@@ -123,11 +123,7 @@
 @if(config('blogetc.image_upload_enabled',true))
 
     <div class="bg-white pt-4 px-4 pb-0 my-2 mb-4 rounded border">
-        <style>
-            .image_upload_other_sizes {
-                display: none;
-            }
-        </style>
+
         <h4>Featured Images</h4>
 
         @foreach(config('blogetc.image_sizes') as $size_key =>$size_info)
@@ -148,8 +144,6 @@
                 </small>
                 <input class="form-control" type="file" name="{{ $size_key}}" id="blog_{{ $size_key}}"
                        aria-describedby="blog_{{ $size_key}}_help">
-
-
             </div>
         @endforeach
 
@@ -194,28 +188,19 @@
 </div>
 
 @push('js')
-
-{{--    onclick="--}}
-
-
-{{--    $(this).parent().hide(); $(' .image_upload_other_sizes').slideDown();--}}
-
-{{--    "--}}
 <script>
-    // TODO
     (function setupShowOtherSizes() {
         var showAllSizesContainer = document.getElementById('show-all-sizes-container');
-        var showAllSizesBtn = document.getElementById('show-all-sizes-btn');
-
-        var otherSizes = document.querySelectorAll('.image_upload_other_sizes');
 
         if (!showAllSizesContainer) {
             // missing element
             return;
         }
+        var showAllSizesBtn = document.getElementById('show-all-sizes-btn');
+        var otherSizes = document.querySelectorAll('.image_upload_other_sizes');
+
 
         var onClickListener = function (event) {
-
             // hide button:
             event.target.style.display = 'none';
 
@@ -223,12 +208,16 @@
             [].forEach.call(otherSizes, function (otherSize) {
                 otherSize.style.display = 'block';
             });
-
         };
 
-        // todo - change logic here...
         showAllSizesBtn.addEventListener('click', onClickListener);
     })()
 </script>
+
+<style>
+    .image_upload_other_sizes {
+        display: none;
+    }
+</style>
 
 @endpush

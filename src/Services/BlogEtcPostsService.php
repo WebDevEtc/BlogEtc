@@ -10,7 +10,6 @@ use WebDevEtc\BlogEtc\Events\BlogPostAdded;
 use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Repositories\BlogEtcPostsRepository;
 use WebDevEtc\BlogEtc\Requests\BaseBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
@@ -27,13 +26,10 @@ use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
  */
 class BlogEtcPostsService
 {
-    /**
-     * @var BlogEtcPostsRepository
-     */
+    /** @var BlogEtcPostsRepository */
     private $repository;
-    /**
-     * @var BlogEtcUploadsService
-     */
+
+    /** @var BlogEtcUploadsService */
     private $uploadsService;
 
     public function __construct(BlogEtcPostsRepository $repository, BlogEtcUploadsService $uploadsService)
@@ -76,25 +72,18 @@ class BlogEtcPostsService
         }
 
         // create new instance of BlogEtcPost, hydrate it with submitted attributes:
-        $newBlogPost = new BlogEtcPost($request->validated());
-
-        // TODO - add reasons why it works with the two saves/updates
-        // TODO - use repo
-        // save it:
-        $newBlogPost->save();
+        // Must save it first, then process images (so they can be linked to the blog post) then update again with
+        // the featured images. This isn't ideal, but seeing as blog posts are not created very often it isn't too bad...
+        $newBlogPost = $this->repository->create($request->validated());
 
         // process any submitted images:
         if (config('blogetc.image_upload_enabled')) {
             // image upload was enabled - handle uploading of any new images:
-            $uploadedImages = $this->uploadsService->processFeaturedUpload($request , $newBlogPost);
-
-            if ($uploadedImages && count($uploadedImages)) {
-                $newBlogPost->update($uploadedImages);
-            }
+            $uploadedImages = $this->uploadsService->processFeaturedUpload($request, $newBlogPost);
+            $this->repository->updateImageSizes($newBlogPost, $uploadedImages);
         }
 
         // sync submitted categories:
-        // TODO - add interface, or add to base request b/c categories() isn't technically always be there
         $newBlogPost->categories()->sync($request->categories());
 
         event(new BlogPostAdded($newBlogPost));
@@ -119,58 +108,9 @@ class BlogEtcPostsService
      *
      * @return Collection
      */
-    public function rssItems():Collection
+    public function rssItems(): Collection
     {
         return $this->repository->rssItems();
-    }
-
-    /**
-     * Process any uploaded images (for featured image)
-     *
-     * @param BaseBlogEtcPostRequest $request
-     * @param BlogEtcPost $new_blog_post
-     * @todo - next full release, tidy this up!
-     */
-    protected function processUploadedImages(BaseBlogEtcPostRequest $request, BlogEtcPost $new_blog_post): void
-    {
-        if (!config('blogetc.image_upload_enabled')) {
-            // image upload was disabled
-            return;
-        }
-
-        // TODO - add this method - remove the comment and put this back into code
-        $this->increaseMemoryLimit();
-
-        // to save in db later
-        $uploaded_image_details = [];
-
-        foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
-            // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
-            if ($image_size_details['enabled'] && $photo = $request->getImageSize($size)) {
-                // this image size is enabled, and
-                // we have an uploaded image that we can use
-
-                // TODO - this method does not exist
-                $uploaded_image = $this->UploadAndResize(
-                    $new_blog_post,
-                    $new_blog_post->title,
-                    $image_size_details,
-                    $photo
-                );
-
-                $new_blog_post->$size = $uploaded_image['filename'];
-                $uploaded_image_details[$size] = $uploaded_image;
-            }
-        }
-
-        // store the image upload.
-        // todo: link this to the blogetc_post row.
-        if (count(array_filter($uploaded_image_details)) > 0) {
-            BlogEtcUploadedPhoto::create([
-                'source' => 'BlogFeaturedImage',
-                'uploaded_images' => $uploaded_image_details,
-            ]);
-        }
     }
 
     /**
@@ -192,7 +132,7 @@ class BlogEtcPostsService
 
         // save any uploaded image:
         // TODO - copy logic from create! this is now wrong
-        $this->processUploadedImages($request, $post);
+        $this->uploadsService->processFeaturedUpload($request, $post);
 
         // save changes:
         $post->save();

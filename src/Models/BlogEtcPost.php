@@ -246,7 +246,7 @@ class BlogEtcPost extends Model
     {
         $this->checkValidImageSize($size);
 
-        return array_key_exists('image_' . $size, $this->getAttributes());
+        return array_key_exists('image_' . $size, $this->getAttributes()) && $this->$size;
     }
 
     /**

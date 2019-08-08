@@ -42,7 +42,7 @@ class BlogEtcPostsRepository
             ->orderBy('posted_at', 'desc');
 
         if ($categoryID) {
-            $query->whereHas('categories', function (Builder $query) use ($categoryID){
+            $query->whereHas('categories', function (Builder $query) use ($categoryID) {
                 $query->where('blog_etc_post_categories.blog_etc_category_id', $categoryID);
             })->get();
         }
@@ -54,9 +54,9 @@ class BlogEtcPostsRepository
      * Return posts for RSS feed
      * @return Builder[]|Collection
      */
-    public function rssItems():Collection
+    public function rssItems(): Collection
     {
-        return  $this->query(false)
+        return $this->query(false)
             ->orderBy('posted_at', 'desc')
             ->limit(config('blogetc.rssfeed.posts_to_show_in_rss_feed'))
             ->with('author')
@@ -115,5 +115,37 @@ class BlogEtcPostsRepository
         } catch (ModelNotFoundException $e) {
             throw new BlogEtcPostNotFoundException('Unable to find blog post with slug: ' . $slug);
         }
+    }
+
+    /**
+     * Create a new BlogEtcPost post
+     *
+     * @param array $attributes
+     * @return BlogEtcPost
+     */
+    public function create(array $attributes): BlogEtcPost
+    {
+        return $this->query()->create($attributes);
+    }
+
+    /**
+     * Update image sizes (or in theory any attribute) on a blog etc post
+     *
+     * @param BlogEtcPost $post
+     * @param array $uploadedImages
+     * @return BlogEtcPost
+     */
+    public function updateImageSizes(BlogEtcPost $post, ?array $uploadedImages): BlogEtcPost
+    {
+        if ($uploadedImages && count($uploadedImages)) {
+            // does not use update() here as it would require fillable for each field - and in theory someone
+            // might want to add more image sizes.
+            foreach ($uploadedImages as $size => $imageName) {
+                $post->$size = $imageName;
+            }
+            $post->save();
+        }
+
+        return $post;
     }
 }

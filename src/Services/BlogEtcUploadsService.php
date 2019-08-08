@@ -46,7 +46,7 @@ class BlogEtcUploadsService
      * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
      * This is needed though because if you upload a large image it'll not work
      */
-    protected function increaseMemoryLimit(): void
+    public function increaseMemoryLimit(): void
     {
         // increase memory - change this setting in config file
         if (config('blogetc.memory_limit')) {
@@ -122,7 +122,6 @@ class BlogEtcUploadsService
         }
 
         $newSizes = [];
-
         $this->increaseMemoryLimit();
 
         // to save in db later

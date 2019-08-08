@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Carbon\Carbon;
 use Exception;
+use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
 /**
@@ -13,6 +14,8 @@ use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 abstract class BaseBlogEtcPostRequest extends BaseRequest
 {
     use HasImageUploadTrait;
+    use HasCategoriesTrait;
+
     /**
      * Shared rules for blog posts
      *
