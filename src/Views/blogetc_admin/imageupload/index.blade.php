@@ -72,7 +72,7 @@
                                         img tag
                                     </small>
                                     <input type="text" readonly="readonly" class="form-control"
-                                           value="{{"<img src='".asset(     config('blogetc.blog_upload_dir') . '/'. $file['filename'])."' alt='" . e($uploadedPhoto->image_title) . "' >"}}">
+                                           value="{{'<img src="' . asset(config('blogetc.blog_upload_dir') . '/'. $file['filename']) . '" alt="' . e($uploadedPhoto->image_title) . '" >' }}">
                                 </div>
                             </div>
 

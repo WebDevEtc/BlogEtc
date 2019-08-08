@@ -6,7 +6,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 ?>
 <div class="add_comment_area">
     <h5 class="text-center">Add a comment</h5>
-    <form method='post' action='{{ route('blogetc.comments.add_new_comment', $post->slug) }}'>
+    <form method="post" action="{{ route('blogetc.comments.add_new_comment', $post->slug) }}">
         @csrf
 
         <div class="form-group">

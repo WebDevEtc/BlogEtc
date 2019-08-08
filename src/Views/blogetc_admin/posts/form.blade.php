@@ -207,20 +207,27 @@
         var showAllSizesContainer = document.getElementById('show-all-sizes-container');
         var showAllSizesBtn = document.getElementById('show-all-sizes-btn');
 
-        if (!showAllSizes) {
+        var otherSizes = document.querySelectorAll('.image_upload_other_sizes');
+
+        if (!showAllSizesContainer) {
             // missing element
             return;
         }
 
         var onClickListener = function (event) {
 
+            // hide button:
+            event.target.style.display = 'none';
+
+            // show all otherSizes
+            [].forEach.call(otherSizes, function (otherSize) {
+                otherSize.style.display = 'block';
+            });
 
         };
 
         // todo - change logic here...
         showAllSizesBtn.addEventListener('click', onClickListener);
-
-
     })()
 </script>
 

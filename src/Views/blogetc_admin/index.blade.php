@@ -70,7 +70,8 @@
                         </small>
 
                         @if(!file_exists($viewfile))
-                            <div class='alert alert-danger'>Warning! The custom view file does not exist. Create the
+                            <div class="alert alert-danger">
+                                Warning! The custom view file does not exist. Create the
                                 file for this post to display correctly.
                             </div>
                         @endif

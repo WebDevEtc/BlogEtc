@@ -18,7 +18,7 @@
             <input type="text" readonly="readonly" class="form-control"
                    value="{{ asset( config('blogetc.blog_upload_dir') . '/' . $image['filename']) }}">
             <input type="text" readonly="readonly" class="form-control"
-                   value="{{ "<img src='" . asset( config('blogetc.blog_upload_dir') . '/'. $image['filename'])."' alt='' >" }}">
+                   value="{{ '<img src="' . asset( config('blogetc.blog_upload_dir') . '/'. $image['filename']) . '" alt="" >' }}">
         </div>
     @empty
         <div class="alert alert-danger">

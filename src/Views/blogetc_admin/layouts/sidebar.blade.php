@@ -82,21 +82,24 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
             <h6 class="my-0"><a href="{{ route('blogetc.admin.categories.index') }}">Categories</a>
                 <span class="text-muted">(<?php
                     $postCount = BlogEtcCategory::count();
-                    echo $postCount . ' ' . str_plural('Category', $postCount);
-                    ?>)</span>
+                    echo $postCount . ' ' . \Illuminate\Support\Str::plural('Category', $postCount);
+                    ?>)
+                </span>
             </h6>
 
             <small class="text-muted">Blog post categories</small>
 
             <div class="list-group ">
-                <a href='{{ route('blogetc.admin.categories.index') }}'
-                   class='list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.categories.index') active @endif  '><i
+                <a href="{{ route('blogetc.admin.categories.index') }}"
+                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.categories.index') active @endif"><i
                             class="fa fa-object-group fa-fw" aria-hidden="true"></i>
-                    All Categories</a>
-                <a href='{{ route('blogetc.admin.categories.create_category') }}'
-                   class='list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.categories.create_category') active @endif  '><i
+                    All Categories
+                </a>
+                <a href="{{ route('blogetc.admin.categories.create_category') }}"
+                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.categories.create_category') active @endif"><i
                             class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                    Add Category</a>
+                    Add Category
+                </a>
             </div>
         </div>
 

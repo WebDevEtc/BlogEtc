@@ -14,8 +14,8 @@
         {{--is logged in + canManageBlogEtcPosts() == true, so show a detailed error--}}
         <div class="alert alert-danger">
             Custom blog post blade view file (<code>{{ $post->fullViewFilePath() }}</code>) not found.
-            <a href='https://webdevetc.com/laravel/packages/help-documentation/laravel-blog-package-blogetc'
-               target='_blank'>See Laravel Blog Package help here</a>.
+            <a href="https://webdevetc.com/laravel/packages/help-documentation/laravel-blog-package-blogetc"
+               target="_blank">See Laravel Blog Package help here</a>.
         </div>
 
     @else

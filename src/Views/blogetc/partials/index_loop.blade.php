@@ -10,7 +10,7 @@
         {{ $post->imageTag('medium', true, '') }}
     </div>
     <div style="padding:10px;">
-        <h3><a href='{{ $post->url()}}'>{{ $post->title }}</a></h3>
+        <h3><a href="{{ $post->url()}}">{{ $post->title }}</a></h3>
         @if($post->subtitle)
         <h5>{{ $post->subtitle}}</h5>
         @endif
