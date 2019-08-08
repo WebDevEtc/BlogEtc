@@ -2,18 +2,13 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-/**
- * Class BaseBlogEtcCategoryRequest
- * @package WebDevEtc\BlogEtc\Requests
- */
 abstract class BaseBlogEtcCategoryRequest extends BaseRequest
 {
-    // todo - redo both of the subclasses and just do it once! this is silly at the moment.
     /**
      * Shared rules for categories
      * @return array
      */
-    protected function baseCategoryRules():array
+    protected function baseCategoryRules()
     {
         $return = [
             'category_name' => ['required', 'string', 'min:1', 'max:200'],

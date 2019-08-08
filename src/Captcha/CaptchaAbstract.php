@@ -4,32 +4,32 @@ use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
-/**
- * Class CaptchaAbstract
- * @package WebDevEtc\BlogEtc\Captcha
- */
 abstract class CaptchaAbstract implements CaptchaInterface
 {
+
+
     /**
      * executed when viewing single post
      *
      * @param Request $request
      * @param BlogEtcPost $blogEtcPost
      *
-     * @return mixed|void
+     * @return void
      */
     public function runCaptchaBeforeShowingPosts(Request $request, BlogEtcPost $blogEtcPost)
     {
+        // no code here to run! Maybe in your subclass you can make use of this?
         /*
-        No code here to run! Maybe in your subclass you can make use of this?
 
         But you could put something like this -
         $some_question = ...
         $correct_captcha = ...
-        View::share("correct_captcha", $someQuestion); // << reference this in the view file.
-        Session::put("correct_captcha",$correctCaptcha);
+        \View::share("correct_captcha",$some_question); // << reference this in the view file.
+        \Session::put("correct_captcha",$correct_captcha);
 
-        ...then in the validation rules you can check if the submitted value matched the above value.
+
+        then in the validation rules you can check if the submitted value matched the above value. You will have to implement this.
+
         */
     }
 
@@ -39,10 +39,11 @@ abstract class CaptchaAbstract implements CaptchaInterface
      * @param Request $request
      * @param BlogEtcPost $blogEtcPost
      *
-     * @return void|mixed
+     * @return void
      */
     public function runCaptchaBeforeAddingComment(Request $request, BlogEtcPost $blogEtcPost)
     {
         // no code here to run! Maybe in your subclass you can make use of this?
     }
+
 }

@@ -2,10 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
 /**
  * Class CommentApproved
@@ -13,13 +13,10 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class CommentApproved
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var BlogEtcComment */
+    /** @var  BlogEtcComment */
     public $comment;
-
-    /** @var BlogEtcPost */
-    public $blogEtcPost;
 
     /**
      * CommentApproved constructor.
@@ -27,7 +24,8 @@ class CommentApproved
      */
     public function __construct(BlogEtcComment $comment)
     {
-        $this->comment = $comment;
-        $this->blogEtcPost = $comment->post;
+        $this->comment=$comment;
+        // you can get the blog post via $comment->post
     }
+
 }

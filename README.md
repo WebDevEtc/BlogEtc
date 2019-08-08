@@ -1,9 +1,10 @@
+# August 2019 -
+
+I am currently rewriting a lot of the code base (better quality, better coding standards, etc). Laravel 5.8 is supported on the old version (3.x) - please see packagist. I will release v4 soon.
+
 # WebDevEtc BlogEtc
 ## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app
 ### 5 minutes to install! Quick and easy!
-
-## July 2019 - 
-I'm currently rewriting it, a v4 release will be coming approx first week of July 2019. It will be a Laravel 5.8 release. I'm doing a big overhaul of the package with must better coding standards. Please only install from a release, the files in this repo are currently in a work in progress state and it is not ready yet! Check out the packagist links.
 
 ## Introduction
 
@@ -12,7 +13,7 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
 
 ## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
 
-[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) • [Packagist](https://packagist.org/packages/webdevetc/blogetc) << MAKE SURE YOU FOLLOW THE INSTRUCTIONS. They're simple, but must be followed.
+[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) • [Packagist](https://packagist.org/packages/webdevetc/blogetc) << MAKE SURE YOU FOLLOW THE INSTURCTIONS. They're simple, but must be followed.
 
 ## Features
 
@@ -151,7 +152,6 @@ Try adding this to config/app.php:
 ## Version History
 
 
--4.x - Currently work in progress. Will be released start of July 2019. For Laravel 5.8.
 
 - 3.1                   - minor fixes
 - 3.0.3                 - fixed RSS feed cache issue

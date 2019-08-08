@@ -2,8 +2,9 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
 /**
@@ -12,9 +13,9 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class BlogPostAdded
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var BlogEtcPost */
+    /** @var  BlogEtcPost */
     public $blogEtcPost;
 
     /**
@@ -23,6 +24,7 @@ class BlogPostAdded
      */
     public function __construct(BlogEtcPost $blogEtcPost)
     {
-        $this->blogEtcPost = $blogEtcPost;
+        $this->blogEtcPost=$blogEtcPost;
     }
+
 }

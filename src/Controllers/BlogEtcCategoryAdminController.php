@@ -3,15 +3,15 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
-use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use WebDevEtc\BlogEtc\Events\CategoryAdded;
+use WebDevEtc\BlogEtc\Events\CategoryEdited;
+use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
+use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\StoreBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcCategoriesService;
 
 /**
  * Class BlogEtcCategoryAdminController
@@ -20,18 +20,10 @@ use WebDevEtc\BlogEtc\Services\BlogEtcCategoriesService;
 class BlogEtcCategoryAdminController extends Controller
 {
     /**
-     * @var BlogEtcCategoriesService
-     */
-    private $service;
-
-    /**
      * BlogEtcCategoryAdminController constructor.
-     * @param BlogEtcCategoriesService $service
      */
-    public function __construct(BlogEtcCategoriesService $service)
+    public function __construct()
     {
-        $this->service = $service;
-
         $this->middleware(UserCanManageBlogPosts::class);
     }
 
@@ -40,74 +32,63 @@ class BlogEtcCategoryAdminController extends Controller
      *
      * @return mixed
      */
-    public function index(): View
-    {
-        $categories = $this->service->indexPaginated();
+    public function index(){
 
-        return view(
-            'blogetc_admin::categories.index',
-            [
-                'categories' => $categories,
-            ]
-        );
+        $categories = BlogEtcCategory::orderBy("category_name")->paginate(25);
+        return view("blogetc_admin::categories.index")->withCategories($categories);
     }
 
     /**
      * Show the form for creating new category
-     *
-     * @return View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(): View
-    {
-        return view('blogetc_admin::categories.add_category');
+    public function create_category(){
+
+        return view("blogetc_admin::categories.add_category");
+
     }
 
     /**
      * Store a new category
      *
      * @param StoreBlogEtcCategoryRequest $request
-     * @return RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(StoreBlogEtcCategoryRequest $request): RedirectResponse
-    {
-        $this->service->create($request->validated());
+    public function store_category(StoreBlogEtcCategoryRequest $request){
+        $new_category = new BlogEtcCategory($request->all());
+        $new_category->save();
 
-        Helpers::flashMessage('Saved new category');
+        Helpers::flash_message("Saved new category");
 
-        return redirect(route('blogetc.admin.categories.index'));
+        event(new CategoryAdded($new_category));
+        return redirect( route('blogetc.admin.categories.index') );
     }
 
     /**
      * Show the edit form for category
-     *
-     * @param $categoryID
-     * @return View
+     * @param $categoryId
+     * @return mixed
      */
-    public function edit($categoryID): View
-    {
-        $category = $this->service->find($categoryID);
-
-        return view(
-            'blogetc_admin::categories.edit_category',
-            [
-                'category' => $category,
-            ]
-        );
+    public function edit_category($categoryId){
+        $category = BlogEtcCategory::findOrFail($categoryId);
+        return view("blogetc_admin::categories.edit_category")->withCategory($category);
     }
 
     /**
-     * Update a blog category attributes
+     * Save submitted changes
      *
      * @param UpdateBlogEtcCategoryRequest $request
-     * @param $categoryID
-     * @return RedirectResponse
+     * @param $categoryId
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(UpdateBlogEtcCategoryRequest $request, $categoryID): RedirectResponse
-    {
-        $category = $this->service->update($categoryID, $request->validated());
+    public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId){
+        /** @var BlogEtcCategory $category */
+        $category = BlogEtcCategory::findOrFail($categoryId);
+        $category->fill($request->all());
+        $category->save();
 
-        Helpers::flashMessage('Saved category changes');
-
+        Helpers::flash_message("Saved category changes");
+        event(new CategoryEdited($category));
         return redirect($category->edit_url());
     }
 
@@ -115,14 +96,20 @@ class BlogEtcCategoryAdminController extends Controller
      * Delete the category
      *
      * @param DeleteBlogEtcCategoryRequest $request
-     * @param $categoryID
-     * @return View
-     * @throws Exception
+     * @param $categoryId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function destroy(DeleteBlogEtcCategoryRequest $request, $categoryID): View
-    {
-        $this->service->delete($categoryID);
+    public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId){
 
-        return view('blogetc_admin::categories.deleted_category');
+        /* Please keep this in, so code inspections don't say $request was unused. Of course it might now get marked as left/right parts are equal */
+        $request=$request;
+
+        $category = BlogEtcCategory::findOrFail($categoryId);
+        event(new CategoryWillBeDeleted($category));
+        $category->delete();
+
+        return view ("blogetc_admin::categories.deleted_category");
+
     }
+
 }

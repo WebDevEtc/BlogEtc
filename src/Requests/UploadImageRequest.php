@@ -2,6 +2,9 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
+use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
+
 /**
  * Class BaseRequest
  * @package WebDevEtc\BlogEtc\Requests
@@ -13,7 +16,7 @@ class UploadImageRequest extends BaseRequest
      *
      * @return array
      */
-    public function rules():array
+    public function rules()
     {
         $rules = [
             'sizes_to_upload' => [

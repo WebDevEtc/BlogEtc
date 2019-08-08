@@ -2,14 +2,11 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+
 use Illuminate\Validation\Rule;
 use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
-/**
- * Class CreateBlogEtcPostRequest
- * @package WebDevEtc\BlogEtc\Requests
- */
 class CreateBlogEtcPostRequest extends BaseBlogEtcPostRequest
 {
     use HasCategoriesTrait;
@@ -20,10 +17,11 @@ class CreateBlogEtcPostRequest extends BaseBlogEtcPostRequest
      *
      * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         $return = $this->baseBlogPostRules();
-        $return['slug'] [] = Rule::unique('blog_etc_posts', 'slug');
+        $return['slug'] [] = Rule::unique("blog_etc_posts", "slug");
         return $return;
     }
+
 }

@@ -1,24 +1,22 @@
 <?php
 
-use Tests\TestCase;
-use WebDevEtc\BlogEtc\Captcha\Basic;
-
-class CaptchaTest extends TestCase
+class CaptchaTest extends \Tests\TestCase
 {
 
-    public function testBasicCaptchaMethodsReturnCorrectType(): void
+    public function testBasicCaptchaMethodsReturnCorrectType()
     {
 
-        $captcha = new Basic();
-        $this->assertEquals(gettype($captcha->captchaFieldName()), 'string');
-        $this->assertEquals(gettype($captcha->view()), 'string');
-        $this->assertEquals(gettype($captcha->rules()), 'array');
+        $captcha = new \WebDevEtc\BlogEtc\Captcha\Basic();
+        $this->assertEquals(gettype($captcha->captcha_field_name()), "string");
+        $this->assertEquals(gettype($captcha->view()), "string");
+        $this->assertEquals(gettype($captcha->rules()), "array");
+
     }
 
-    public function testRuleCustomValidationFunctionReturnsCorrectly(): void
+    public function testRuleCustomValidationFunctionReturnsCorrectly()
     {
 
-        $captcha = new Basic();
+        $captcha = new \WebDevEtc\BlogEtc\Captcha\Basic();
 
         foreach ($captcha->rules() as $rule) {
 
@@ -28,37 +26,39 @@ class CaptchaTest extends TestCase
 
                 // testing WRONG answer
                 $this->assertEquals($rule('wrong1', 'wrong2', function () {
-                    return 'lookingforthis';
-                }), 'lookingforthis');
+                    return "lookingforthis";
+                }), "lookingforthis");
+
 
                 // testing CORRECT answer (should return null)
-                Config::set('blogetc.captcha.basic_answers', 'ignoreme,dark,ignoreme2');
+                \Config::set('blogetc.captcha.basic_answers', "ignoreme,dark,ignoreme2");
                 $this->assertNull($rule('correct1', 'dark', function () {
-                    return 'lookingforthis';
+                    return "lookingforthis";
                 }));
 
                 // testing WRONG answer
-                Config::set('blogetc.captcha.basic_answers', 'ignoreme,dark,ignoreme2');
+                \Config::set('blogetc.captcha.basic_answers', "ignoreme,dark,ignoreme2");
                 $this->assertEquals($rule('wrong1', 'light', function () {
-                    return 'lookingforthis';
-                }), 'lookingforthis');
+                    return "lookingforthis";
+                }), "lookingforthis");
 
                 // testing CORRECT answer
-                Config::set('blogetc.captcha.basic_answers', 'bLAcK');
+                \Config::set('blogetc.captcha.basic_answers', "bLAcK");
                 $this->assertNull($rule('wrong1', 'black', function () {
-                    return 'lookingforthis';
+                    return "lookingforthis";
                 }));
 
                 // testing CORRECT answer
-                Config::set('blogetc.captcha.basic_answers', 'bLAcK');
+                \Config::set('blogetc.captcha.basic_answers', "bLAcK");
                 $this->assertNull($rule('wrong1', ' black', function () {
-                    return 'lookingforthis';
+                    return "lookingforthis";
                 }));
 
+
                 // testing CORRECT answer
-                Config::set('blogetc.captcha.basic_answers', 'ignoreme, BLACK , jgnoreme2');
+                \Config::set('blogetc.captcha.basic_answers', "ignoreme, BLACK , jgnoreme2");
                 $this->assertNull($rule('wrong1', ' black', function () {
-                    return 'lookingforthis';
+                    return "lookingforthis";
                 }));
             }
         }

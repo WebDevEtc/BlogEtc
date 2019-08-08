@@ -3,98 +3,126 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
-use Exception;
-use Illuminate\Http\Response;
-use Illuminate\View\View;
-use RuntimeException;
+use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
+use File;
 use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcUploadsService;
 use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 
 /**
  * Class BlogEtcAdminController
  * @package WebDevEtc\BlogEtc\Controllers
- * @todo - a lot of this will be refactored. The public API won't change.
  */
 class BlogEtcImageUploadController extends Controller
 {
+
     use UploadFileTrait;
-    /**
-     * @var BlogEtcUploadsService
-     */
-    private $uploadsService;
 
     /**
      * BlogEtcAdminController constructor.
-     * @param BlogEtcUploadsService $uploadsService
      */
-    public function __construct(BlogEtcUploadsService $uploadsService)
+    public function __construct()
     {
-        $this->uploadsService = $uploadsService;
-
-        // ensure that the logged in user has correct permission
         $this->middleware(UserCanManageBlogPosts::class);
 
-        // ensure the config file exists
-        if (!is_array(config('blogetc'))) {
-            throw new RuntimeException(
-                'The config/blogetc.php does not exist. ' .
-                'Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command'
-            );
+        if (!is_array(config("blogetc"))) {
+            throw new \RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
 
-        if (!config('blogetc.image_upload_enabled') && !app()->runningInConsole()) {
-            throw new RuntimeException('Image uploads in BlogEtc are disabled in the configuration');
+
+        if (!config("blogetc.image_upload_enabled")) {
+            throw new \RuntimeException("The blogetc.php config option has not enabled image uploading");
         }
+
+
     }
 
     /**
      * Show the main listing of uploaded images
+     * @return mixed
      */
-    public function index(): View
+
+
+    public function index()
     {
-        return view(
-            'blogetc_admin::imageupload.index',
-            [
-                'uploaded_photos' => BlogEtcUploadedPhoto::orderBy('id', 'desc')->paginate(10),
-            ]
-        );
+        return view("blogetc_admin::imageupload.index", ['uploaded_photos' => BlogEtcUploadedPhoto::orderBy("id", "desc")->paginate(10)]);
     }
 
     /**
      * show the form for uploading a new image
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(): View
+    public function create()
     {
-        return view('blogetc_admin::imageupload.create', [
-            'imageSizes' => (array)config('blogetc.image_sizes'),
-        ]);
+        return view("blogetc_admin::imageupload.create", []);
     }
 
     /**
      * Save a new uploaded image
      *
      * @param UploadImageRequest $request
-     * @return View
-     * @throws Exception
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
      */
-    public function store(UploadImageRequest $request): View
+    public function store(UploadImageRequest $request)
     {
-//        $processed_images = $this->processUploadedImages($request);
+        $processed_images = $this->processUploadedImages($request);
 
-        $sizeToUpload = $request->get('sizes_to_upload');
-
-        $processed_images = $this->uploadsService->processUpload(
-            $request,
-            $request->get('image_title'),
-            $sizeToUpload
-
-        );
-
-        return response()
-            ->view('blogetc_admin::imageupload.uploaded', ['images' => $processed_images])
-            ->setStatusCode(Response::HTTP_CREATED);
+        return view("blogetc_admin::imageupload.uploaded", ['images' => $processed_images]);
     }
+
+    /**
+     * Process any uploaded images (for featured image)
+     *
+     * @param UploadImageRequest $request
+     *
+     * @return array returns an array of details about each file resized.
+     * @throws \Exception
+     * @todo - This class was added after the other main features, so this duplicates some code from the main blog post admin controller (BlogEtcAdminController). For next full release this should be tided up.
+     */
+    protected function processUploadedImages(UploadImageRequest $request)
+    {
+        $this->increaseMemoryLimit();
+        $photo = $request->file('upload');
+
+        // to save in db later
+        $uploaded_image_details = [];
+
+        $sizes_to_upload = $request->get("sizes_to_upload");
+
+        // now upload a full size - this is a special case, not in the config file. We only store full size images in this class, not as part of the featured blog image uploads.
+        if (isset($sizes_to_upload['blogetc_full_size']) && $sizes_to_upload['blogetc_full_size'] === 'true') {
+
+            $uploaded_image_details['blogetc_full_size'] = $this->UploadAndResize(null, $request->get("image_title"), 'fullsize', $photo);
+
+        }
+
+        foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
+
+            if (!isset($sizes_to_upload[$size]) || !$sizes_to_upload[$size] || !$image_size_details['enabled']) {
+                continue;
+            }
+
+            // this image size is enabled, and
+            // we have an uploaded image that we can use
+            $uploaded_image_details[$size] = $this->UploadAndResize(null, $request->get("image_title"), $image_size_details, $photo);
+        }
+
+
+        // store the image upload.
+        BlogEtcUploadedPhoto::create([
+            'image_title' => $request->get("image_title"),
+            'source' => "ImageUpload",
+            'uploader_id' => optional(\Auth::user())->id,
+            'uploaded_images' => $uploaded_image_details,
+        ]);
+
+
+        return $uploaded_image_details;
+
+    }
+
+
 }

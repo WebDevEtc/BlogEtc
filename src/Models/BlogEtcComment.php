@@ -4,47 +4,27 @@ namespace WebDevEtc\BlogEtc\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use WebDevEtc\BlogEtc\Scopes\BlogCommentApprovedAndDefaultOrderScope;
 
-/**
- * @property string author_name
- * @property int user_id
- * @property string|null author_website
- * @property string|null ip
- * @property string|null author_email
- * @property bool approved
- * @property BlogEtcPost post
- * @property User user
- * @property string author
- */
 class BlogEtcComment extends Model
 {
-    /**
-     * Attributes which have specific casts
-     *
-     * @var array
-     */
     public $casts = [
         'approved' => 'boolean',
     ];
 
-    /**
-     * Fillable attributes
-     *
-     * @var array
-     */
     public $fillable = [
+
         'comment',
         'author_name',
     ];
+
 
     /**
      * The "booting" method of the model.
      *
      * @return void
      */
-    protected static function boot(): void
+    protected static function boot()
     {
         parent::boot();
 
@@ -54,42 +34,38 @@ class BlogEtcComment extends Model
         static::addGlobalScope(new BlogCommentApprovedAndDefaultOrderScope());
     }
 
+
+
     /**
-     * The BlogEtcPost relationship
-     *
-     * @return BelongsTo
+     * The associated BlogEtcPost
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function post(): BelongsTo
+    public function post()
     {
-        return $this->belongsTo(BlogEtcPost::class, 'blog_etc_post_id');
+        return $this->belongsTo(BlogEtcPost::class,"blog_etc_post_id");
     }
 
     /**
-     * Comment author relationship
-     *
-     * @return BelongsTo
+     * Comment author user (if set)
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(config('blogetc.user_model'));
+        return $this->belongsTo(User::class);
     }
 
     /**
      * Return author string (either from the User (via ->user_id), or the submitted author_name value
      *
-     * TODO - rename this as it looks like a relationship
-     *
-     * @return string|null
+     * @return string
      */
-    public function author(): ?string
+    public function author()
     {
         if ($this->user_id) {
-            // a user is associated with this
-            $field = config('blogetc.comments.user_field_for_author_name', 'name');
+            $field = config("blogetc.comments.user_field_for_author_name","name");
             return optional($this->user)->$field;
         }
 
-        // otherwise return the string value of 'author_name' which guests can submit:
         return $this->author_name;
     }
 }

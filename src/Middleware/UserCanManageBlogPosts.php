@@ -2,9 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Middleware;
 
-use Auth;
 use Closure;
-use Illuminate\Http\Response;
 
 /**
  * Class UserCanManageBlogPosts
@@ -12,6 +10,7 @@ use Illuminate\Http\Response;
  */
 class UserCanManageBlogPosts
 {
+
     /**
      * Show 401 error if \Auth::user()->canManageBlogEtcPosts() == false
      * @param $request
@@ -20,22 +19,12 @@ class UserCanManageBlogPosts
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::check()) {
-            // user not logged in
-            return abort(
-                Response::HTTP_FORBIDDEN,
-                'User not authorised to manage blog posts: You are not logged in'
-            );
+        if (!\Auth::check()) {
+            abort(401,"User not authorised to manage blog posts: You are not logged in");
         }
-        if (!Auth::user()->canManageBlogEtcPosts()) {
-            // user lacking correct permission
-            return abort(
-                Response::HTTP_FORBIDDEN,
-                'User not authorised to manage blog posts: Your account is not authorised to edit blog posts'
-            );
+        if (!\Auth::user()->canManageBlogEtcPosts()) {
+            abort(401,"User not authorised to manage blog posts: Your account is not authorised to edit blog posts");
         }
-
-        // continue!
         return $next($request);
     }
 }
