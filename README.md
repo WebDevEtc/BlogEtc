@@ -3,7 +3,7 @@
 ### 5 minutes to install! Quick and easy!
 
 ## Aug 2019 
-Updated for Laravel 5.8. Currently working on a slight rewrite for a v4 release of this package. Will be released soon.
+Updated for Laravel 5.8. Currently working on a slight rewrite for a v4 release of this package. Will be released soon. A large code cleanup, refactoring. Will be released soon.
 
 ## Introduction
 
