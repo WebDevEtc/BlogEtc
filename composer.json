@@ -31,9 +31,9 @@
   "require": {
     "swisnl/laravel-fulltext": "0.13.0",
     "intervention/image": "2.*",
-    "cviebrock/eloquent-sluggable": "4.5.*|4.6.*|4.8.*",
-    "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0",
-    "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0",
+    "cviebrock/eloquent-sluggable": "4.5.*|4.6.*|4.8.*|6.*",
+    "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|~6.*",
+    "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|~6.*",
     "laravelium/feed" : "~2.12.0|~3.0.0|3.1.*"
   },
   "require-dev": {
