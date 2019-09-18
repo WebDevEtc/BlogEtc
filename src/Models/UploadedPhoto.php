@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class BlogEtcUploadedPhoto
- * @property BlogEtcPost blogPost
+ * @property Post blogPost
  * @property User|\App\Models\User uploader
  * @property int|null blog_etc_post_id
  * @property string image_title
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @package WebDevEtc\BlogEtc\Models
  */
-class BlogEtcUploadedPhoto extends Model
+class UploadedPhoto extends Model
 {
     public const SOURCE_IMAGE_UPLOAD = 'ImageUpload';
     public const SOURCE_FEATURED_IMAGE = 'BlogFeaturedImage';
@@ -71,6 +71,6 @@ class BlogEtcUploadedPhoto extends Model
      */
     public function blogPost(): BelongsTo
     {
-        return $this->belongsTo(BlogEtcPost::class);
+        return $this->belongsTo(Post::class);
     }
 }

@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
 {{--Used on the index page (so shows a small summary--}}
 {{--See the guide on webdevetc.com for how to copy these files to your /resources/views/ directory--}}

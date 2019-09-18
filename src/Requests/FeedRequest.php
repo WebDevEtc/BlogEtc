@@ -20,6 +20,7 @@ class FeedRequest extends FormRequest
     {
         return [
             'type' => [Rule::in(['rss', 'atom'])],
+
         ];
     }
 
@@ -28,7 +29,7 @@ class FeedRequest extends FormRequest
      *
      * @return string
      */
-    public function getFeedType():string
+    public function getFeedType(): string
     {
         return $this->get('type') === 'rss' ? 'rss' : 'atom';
     }

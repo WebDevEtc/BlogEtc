@@ -37,7 +37,7 @@ class SearchRequest extends FormRequest
      *
      * @return string
      */
-    public function query(): string
+    public function searchQuery(): string
     {
         return $this->get('s', '');
     }

@@ -103,6 +103,7 @@ class Helpers
     /**
      * This method is depreciated. Just use the config() directly.
      * @return array
+     *
      * @deprecated
      */
     public static function image_sizes(): array

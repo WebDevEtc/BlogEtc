@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
 use Swis\LaravelFulltext\ModelObserver;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Composers\AdminSidebarViewComposer;
+use WebDevEtc\BlogEtc\Models\Post;
 
 /**
  * Class BlogEtcServiceProvider
@@ -34,6 +35,19 @@ class BlogEtcServiceProvider extends ServiceProvider
 
         // Set up default gates to allow/disallow access to features.
         $this->setupDefaultGates();
+
+        // Set up view composer for admin views.
+        $this->setupViewComposer();
+    }
+
+    /**
+     * Set up view composers so admin views have required view params.
+     */
+    protected function setupViewComposer()
+    {
+        \View::composer(
+            'blogetc_admin::layouts.admin_layout', AdminSidebarViewComposer::class
+        );
     }
 
     /**
@@ -59,7 +73,7 @@ class BlogEtcServiceProvider extends ServiceProvider
     {
         if (!config('blogetc.search.search_enabled')) {
             // if search is disabled, don't allow it to sync full text.
-            ModelObserver::disableSyncingFor(BlogEtcPost::class);
+            ModelObserver::disableSyncingFor(Post::class);
         }
     }
 
@@ -113,6 +127,11 @@ class BlogEtcServiceProvider extends ServiceProvider
         // This is provided only as a backup, which will restrict all access to BlogEtc admin.
         Gate::define('blog-etc-admin', function ($user) {
             throw new LogicException('You must implement your own gate in AuthServiceProvider for the "blog-etc-admin" gate.');
+        });
+
+        // Used for the search results
+        \Gate::define('view-blog-etc-post', function (?Model $user, Post $post) {
+            return $post->is_published && $post->posted_at->isPast();
         });
 
         // Some defaults which allow everything through - you can override these and add your own logic.

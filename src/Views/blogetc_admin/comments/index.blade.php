@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcComment[] $comments */
+    /** @var \WebDevEtc\BlogEtc\Models\Comment[] $comments */
 @endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('title', 'BlogEtc Manage Comments')

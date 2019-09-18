@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('content')

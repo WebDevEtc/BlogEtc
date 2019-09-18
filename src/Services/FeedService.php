@@ -1,43 +1,37 @@
 <?php
 
-namespace WebDevEtc\BlogEtc\Controllers;
+namespace WebDevEtc\BlogEtc\Services;
 
-use App\Http\Controllers\Controller;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Laravelium\Feed\Feed;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Requests\FeedRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
+use Laravelium\Feed\view;
+use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class BlogEtcRssFeedController.php
- * All RSS feed viewing methods.
- *
- * A lot of this belongs in a service - for now it lives in this file...
- *
- * @package WebDevEtc\BlogEtc\Controllers
+ * Class BlogEtcFeedService
+ * @package WebDevEtc\BlogEtc\Services
  */
-class BlogEtcRssFeedController extends Controller
+class FeedService
 {
-    /** @var BlogEtcPostsService */
+    /**
+     * @var PostsService
+     */
     private $postsService;
 
-    public function __construct(BlogEtcPostsService $postsService)
+    public function __construct(PostsService $postsService)
     {
         $this->postsService = $postsService;
     }
+
     /**
-     * RSS Feed
-     * This is a long (but quite simple) method to show an RSS feed
-     * It makes use of Laravelium\Feed\Feed.
+     * Build the Feed object and populate it with blog posts.
      *
-     * @param FeedRequest $request
      * @param Feed $feed
-     * @return mixed
+     * @param string $feedType
+     * @return view
      */
-    public function feed(FeedRequest $request, Feed $feed)
+    public function getFeed(Feed $feed, string $feedType): view
     {
         // RSS feed is cached. Admin/writer users might see different content, so
         // use a different cache for different users.
@@ -49,14 +43,27 @@ class BlogEtcRssFeedController extends Controller
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
-            'blogetc-' . $request->getFeedType() . $userOrGuest
+            'blogetc-' . $feedType . $userOrGuest
         );
 
         if (!$feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 
-        return $feed->render($request->getFeedType());
+        return $feed->render($feedType);
+    }
+
+    /**
+     * Return the first post posted_at date, or if none exist then return today.
+     *
+     * @param Collection $blogPosts
+     * @return Carbon
+     */
+    protected function pubDate(Collection $blogPosts): Carbon
+    {
+        return $blogPosts->first()
+            ? $blogPosts->first()->posted_at
+            : Carbon::now();
     }
 
     /**
@@ -68,9 +75,12 @@ class BlogEtcRssFeedController extends Controller
     {
         $blogPosts = $this->postsService->rssItems();
 
-        $this->setupFeed($feed, $blogPosts);
+        $this->setupFeed(
+            $feed,
+            $this->pubDate($feed)
+        );
 
-        /** @var BlogEtcPost $blogPost */
+        /** @var Post $blogPost */
         foreach ($blogPosts as $blogPost) {
             $feed->add(
                 $blogPost->title,
@@ -87,10 +97,10 @@ class BlogEtcRssFeedController extends Controller
      * Basic set up of the Feed object
      *
      * @param Feed $feed
-     * @param BlogEtcPostsService[]|Collection $posts
+     * @param Carbon $pubDate
      * @return Feed
      */
-    protected function setupFeed(Feed $feed, Collection $posts): Feed
+    protected function setupFeed(Feed $feed, Carbon $pubDate): Feed
     {
         $feed->title = config('blogetc.rssfeed.title');
         $feed->description = config('blogetc.rssfeed.description');
@@ -99,9 +109,7 @@ class BlogEtcRssFeedController extends Controller
         $feed->setShortening(config('blogetc.rssfeed.should_shorten_text'));
         $feed->setTextLimit(config('blogetc.rssfeed.text_limit'));
         $feed->setDateFormat('carbon');
-        $feed->pubdate = $posts->first()
-            ? $posts->first()->posted_at // use first post if we have any...
-            : Carbon::now(); // ... or default to now
+        $feed->pubdate = $pubDate;
 
         return $feed;
     }

@@ -7,8 +7,11 @@
         <div class="col-sm-12">
             <h2>Search Results for {{ $query }}</h2>
 
-            @forelse($search_results as $result)
-                @if($result->indexable && is_a($result->indexable,\WebDevEtc\BlogEtc\Models\BlogEtcPost::class))
+            @forelse($searchResults as $result)
+                @if($result->indexable &&
+                is_a($result->indexable,\WebDevEtc\BlogEtc\Models\Post::class)
+                && \Gate::allows('view-blog-etc-post', $result->indexable)
+                )
                     <h2>Search result #{{ $loop->count}}</h2>
                     @include('blogetc::partials.index_loop', ['post' => $result->indexable])
                 @else

@@ -6,22 +6,22 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcCategoryNotFoundException;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
+use WebDevEtc\BlogEtc\Models\Category;
 
 /**
  * Class BlogEtcCategoriesRepository
  * @package WebDevEtc\BlogEtc\Repositories
  */
-class BlogEtcCategoriesRepository
+class CategoriesRepository
 {
-    /** @var BlogEtcCategory */
+    /** @var Category */
     private $model;
 
     /**
      * BlogEtcCategoriesRepository constructor.
-     * @param BlogEtcCategory $model
+     * @param Category $model
      */
-    public function __construct(BlogEtcCategory $model)
+    public function __construct(Category $model)
     {
         $this->model = $model;
     }
@@ -52,9 +52,9 @@ class BlogEtcCategoriesRepository
      * Find and return a blog etc category
      *
      * @param int $categoryID
-     * @return BlogEtcCategory
+     * @return Category
      */
-    public function find(int $categoryID): BlogEtcCategory
+    public function find(int $categoryID): Category
     {
         try {
             return $this->query()->findOrFail($categoryID);
@@ -69,9 +69,9 @@ class BlogEtcCategoriesRepository
      * Find and return a blog etc category, based on its slug
      *
      * @param string $categorySlug
-     * @return BlogEtcCategory
+     * @return Category
      */
-    public function findBySlug(string $categorySlug): BlogEtcCategory
+    public function findBySlug(string $categorySlug): Category
     {
         try {
             return $this->query()->where('slug', $categorySlug)->firstOrFail();

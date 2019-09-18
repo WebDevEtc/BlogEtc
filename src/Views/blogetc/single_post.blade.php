@@ -1,5 +1,5 @@
 @php
-/** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+/** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
 @extends('layouts.app',['title' => $post->genSeoTitle() ])
 @section('content')
@@ -11,7 +11,7 @@
                 @include('blogetc::partials.show_errors')
                 @include('blogetc::partials.full_post_details')
 
-                @if(config('blogetc.comments.type_of_comments_to_show') !== \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_DISABLED)
+                @if(config('blogetc.comments.type_of_comments_to_show') !== \WebDevEtc\BlogEtc\Services\CommentsService::COMMENT_TYPE_DISABLED)
                     <div id="maincommentscontainer">
                         <h2 class="text-center">
                             Comments

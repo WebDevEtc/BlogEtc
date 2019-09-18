@@ -3,19 +3,73 @@
 namespace WebDevEtc\BlogEtc\Requests;
 
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Foundation\Http\FormRequest;
-use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Validation\Rule;
+use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
 /**
- * Class BaseBlogEtcPostRequest
+ * Class CreateBlogEtcPostRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-abstract class BaseBlogEtcPostRequest extends FormRequest
+class PostRequest extends FormRequest
 {
-    use HasImageUploadTrait;
-    use HasCategoriesTrait;
+    /**
+     * If $_GET['category'] slugs were submitted, then it should return an array of the IDs
+     *
+     * @return array
+     */
+    public function categories(): array
+    {
+        // check if categories were submitted, it not return an empty array
+        if (!$this->get('category') || !is_array($this->get('category'))) {
+            return [];
+        }
+
+        // check they are valid, return the IDs
+        // limit to 1000 ... just in case someone submits with too many for the web server.
+        // No error is given if they submit more than 1k.
+        // TODO move to repo calls
+        return Category::whereIn('id', array_keys($this->get('category')))
+            ->select('id')
+            ->limit(1000)
+            ->get()
+            ->pluck('id')
+            ->toArray();
+    }
+
+    /**
+     * @param $size
+     * @return UploadedFile|null
+     */
+    public function getImageSize($size): ?UploadedFile
+    {
+
+        if ($this->file($size)) {
+            return $this->file($size);
+        }
+
+        // not found? lets cycle through all the images and see if anything was submitted, and use that instead
+        foreach (config('blogetc.image_sizes') as $image_size_name => $image_size_info) {
+            if ($this->file($image_size_name)) {
+                return $this->file($image_size_name);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $size
+     * @return UploadedFile|null
+     * @deprecated - use getImageSize() instead
+     */
+    public function get_image_file($size): ?UploadedFile
+    {
+        return $this->getImageFile($size);
+    }
 
     /**
      * Shared rules for blog posts
@@ -23,7 +77,7 @@ abstract class BaseBlogEtcPostRequest extends FormRequest
      * @return array
      * @todo - Refactor! This is a mess.
      */
-    protected function baseBlogPostRules(): array
+    protected function sharedRules(): array
     {
         // setup some anon functions for some of the validation rules:
         $checkValidPostedAt = static function ($attribute, $value, $fail) {
@@ -89,4 +143,29 @@ abstract class BaseBlogEtcPostRequest extends FormRequest
         return $return;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        if ($this->method() === Request::METHOD_DELETE) {
+            // No rules are required for deleting.
+            return [];
+        }
+
+        $rules = $this->sharedRules();
+
+        if ($this->method() === Request::METHOD_POST) {
+            $rules['slug'] [] = Rule::unique('blog_etc_posts', 'slug');
+        }
+
+        if (in_array($this->method(), [Request::METHOD_PATCH, Request::METHOD_PUT], true)) {
+            $rules['slug'][] = Rule::unique('blog_etc_posts', 'slug')
+                ->ignore($this->route()->parameter('blogPostId'));
+        }
+
+        return $rules;
+    }
 }

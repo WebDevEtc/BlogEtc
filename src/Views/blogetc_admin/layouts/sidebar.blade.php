@@ -1,9 +1,9 @@
 @php
-use Illuminate\Support\Str;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-// todo - this needs lots of work
+    use Illuminate\Support\Str;
+    use WebDevEtc\BlogEtc\Models\Category;
+    use WebDevEtc\BlogEtc\Models\Comment;
+    use WebDevEtc\BlogEtc\Models\Post;
+    // todo - this needs lots of work
 @endphp
 <h2>
     <a href="https://webdevetc.com/">
@@ -19,25 +19,22 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
                 <a href="{{ route('blogetc.admin.index') }}">
                     BlogEtc Admin Home
                 </a>
-                <span class="text-muted">(<?php
-                    // TODO get count from controller (or view composer?)
-                    $categoryCount = BlogEtcPost::count();
-                    echo $categoryCount . ' ' . Str::plural('Post', $categoryCount);
-
-                    ?>)</span>
+                <span class="text-muted">
+                    ({{ $postCount }} {{ Str::plural('Post', $postCount) }})
+                </span>
             </h6>
             <small class="text-muted">Overview of your posts</small>
 
             <div class="list-group ">
 
                 <a href="{{ route('blogetc.admin.index') }}"
-                   class="list-group-item list-group-item-action @if(Request::route()->getName() === 'blogetc.admin.index') active @endif  "><i
-                            class="fa fa-th fa-fw"
-                            aria-hidden="true"></i>
+                   class="list-group-item list-group-item-action @if(Request::routeIs('blogetc.admin.index')) active @endif  "><i
+                        class="fa fa-th fa-fw"
+                        aria-hidden="true"></i>
                     All Posts</a>
                 <a href="{{ route('blogetc.admin.create_post') }}"
-                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.create_post') active @endif  "><i
-                            class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                   class="list-group-item list-group-item-action  @if(Request::routeIs('blogetc.admin.create_post')) active @endif  "><i
+                        class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     Add Post</a>
             </div>
         </div>
@@ -48,29 +45,24 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.comments.index') }}">Comments</a>
 
-                <span class="text-muted">(<?php
-                    $commentCount = BlogEtcComment::withoutGlobalScopes()->count();
+                <span class="text-muted">
+                    ({{ $commentCount }} {{ Str::plural('Comment', $commentCount) }})
+                </span>
 
-                    echo $commentCount . ' ' . Str::plural('Comment', $commentCount);
-
-                    ?>)</span>
             </h6>
             <small class="text-muted">Manage your comments</small>
 
             <div class="list-group ">
                 <a href="{{ route('blogetc.admin.comments.index') }}"
-                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.comments.index' && !Request::get('waiting_for_approval')) active @endif">
+                   class="list-group-item list-group-item-action  @if(Request::routeIs('blogetc.admin.comments.index') && !Request::get('waiting_for_approval')) active @endif">
                     <i class="fa fa-fw fa-comments" aria-hidden="true"></i>
                     All Comments
                 </a>
 
-                <?php $comment_approval_count = BlogEtcComment::withoutGlobalScopes()
-                    ->where('approved', false)->count(); ?>
-
                 <a href="{{ route('blogetc.admin.comments.index') }}?waiting_for_approval=true"
-                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.comments.index' && Request::get('waiting_for_approval')) active @elseif($comment_approval_count>0) list-group-item-warning @endif">
+                   class="list-group-item list-group-item-action  @if(Request::routeIs( 'blogetc.admin.comments.index') && Request::get('waiting_for_approval')) active @elseif($commentApprovalCount>0) list-group-item-warning @endif">
                     <i class="fa  fa-fw fa-comments" aria-hidden="true"></i>
-                    {{ $comment_approval_count }}
+                    {{ $commentApprovalCount }}
                     Waiting for approval
                 </a>
             </div>
@@ -80,10 +72,8 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
     <li class="list-group-item justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.categories.index') }}">Categories</a>
-                <span class="text-muted">(<?php
-                    $postCount = BlogEtcCategory::count();
-                    echo $postCount . ' ' . \Illuminate\Support\Str::plural('Category', $postCount);
-                    ?>)
+                <span class="text-muted">
+                    ({{ $categoryCount }} {{ Str::plural('Category', $categoryCount) }})
                 </span>
             </h6>
 
@@ -91,13 +81,13 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
             <div class="list-group ">
                 <a href="{{ route('blogetc.admin.categories.index') }}"
-                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.categories.index') active @endif"><i
-                            class="fa fa-object-group fa-fw" aria-hidden="true"></i>
+                   class="list-group-item list-group-item-action  @if(Request::routeIs( 'blogetc.admin.categories.index')) active @endif"><i
+                        class="fa fa-object-group fa-fw" aria-hidden="true"></i>
                     All Categories
                 </a>
                 <a href="{{ route('blogetc.admin.categories.create_category') }}"
-                   class="list-group-item list-group-item-action  @if(Request::route()->getName() === 'blogetc.admin.categories.create_category') active @endif"><i
-                            class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                   class="list-group-item list-group-item-action  @if(Request::routeIs('blogetc.admin.categories.create_category')) active @endif"><i
+                        class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     Add Category
                 </a>
             </div>
@@ -109,12 +99,16 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
         <li class="list-group-item  justify-content-between lh-condensed">
             <div>
                 <h6 class="my-0">
-                    <a href="{{ route('blogetc.admin.images.upload') }}">Upload images</a></h6>
+                    <a href="{{ route('blogetc.admin.images.upload') }}">Upload images</a>
+                    <span class="text-muted">
+                        ({{ $imageCount }} {{ Str::plural('Image', $imageCount) }})
+                    </span>
+                </h6>
 
                 <div class="list-group ">
                     <a href="{{ route('blogetc.admin.images.all') }}"
                        class="list-group-item list-group-item-action
-                       {{ Request::route()->getName() === 'blogetc.admin.images.all' ? 'active' : '' }}"
+                       {{ Request::routeIs('blogetc.admin.images.all') ? 'active' : '' }}"
                     >
                         <i class="fa fa-picture-o fa-fw" aria-hidden="true"></i>
                         View All
@@ -122,7 +116,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
                     <a href="{{ route('blogetc.admin.images.upload') }}"
                        class="list-group-item list-group-item-action
-                {{ (Request::route()->getName() === 'blogetc.admin.images.upload') ? 'active' : '' }} ">
+                        {{ Request::routeIs('blogetc.admin.images.upload') ? 'active' : '' }} ">
                         <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
                         Upload</a>
                 </div>

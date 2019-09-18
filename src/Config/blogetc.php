@@ -216,7 +216,7 @@ return [
         //      \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_DISABLED
         //           (turn comments off)
         // Default: built_in
-        'type_of_comments_to_show' => \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_BUILT_IN,
+        'type_of_comments_to_show' => \WebDevEtc\BlogEtc\Services\CommentsService::COMMENT_TYPE_BUILT_IN,
 
         // Max num of comments to show on a single blog post.
         // Set to a lower number for smaller page sizes.
@@ -270,6 +270,6 @@ return [
     'search' => [
         // Is search enabled? By default this is disabled, but you can easily turn it on.
         // Default: false
-        'search_enabled' => false,
+        'search_enabled' => true,
     ],
 ];

@@ -4,9 +4,9 @@ use App\User;
 use Carbon\Carbon;
 use Tests\TestCase;
 use WebDevEtc\BlogEtc\Captcha\Basic;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\Category;
+use WebDevEtc\BlogEtc\Models\Comment;
+use WebDevEtc\BlogEtc\Models\Post;
 
 class MainTest extends TestCase
 {
@@ -264,7 +264,7 @@ class MainTest extends TestCase
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
 
-        $justCreatedRow = BlogEtcPost::where('slug', $newObjectAttributes['slug'])
+        $justCreatedRow = Post::where('slug', $newObjectAttributes['slug'])
             ->firstOrFail();
 
         $newObjectAttributes['title'] = 'New title ' . str_random();
@@ -489,7 +489,7 @@ class MainTest extends TestCase
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         $newObjectAttributes = $this->generate_basic_blog_post_with_random_data();
 
-        $newblogpost = new BlogEtcPost();
+        $newblogpost = new Post();
 
         $newblogpost->title = __METHOD__ . ' ' . time();
 
@@ -520,7 +520,7 @@ class MainTest extends TestCase
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         $newObjectAttributes = $this->generate_basic_blog_post_with_random_data();
 
-        $newblogpost = new BlogEtcPost();
+        $newblogpost = new Post();
 
         $newblogpost->title = __METHOD__ . ' ' . time();
 
@@ -546,7 +546,7 @@ class MainTest extends TestCase
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
         $newObjectAttributes = $this->generate_basic_blog_post_with_random_data();
 
-        $newblogpost = new BlogEtcPost();
+        $newblogpost = new Post();
 
         $newblogpost->title = __METHOD__ . ' ' . time();
 
@@ -613,7 +613,7 @@ class MainTest extends TestCase
             ['approved' => false, 'author_name' => $comment_detail['author_name']]
         );
 
-        $justAddedRow = BlogEtcComment::withoutGlobalScopes()
+        $justAddedRow = Comment::withoutGlobalScopes()
             ->where('author_name', $comment_detail['author_name'])->firstOrFail();
 
         $response = $this->get(route('blogetc.admin.comments.index'));
@@ -675,7 +675,7 @@ class MainTest extends TestCase
             ['approved' => false, 'author_name' => $comment_detail['author_name']]
         );
 
-        $justAddedRow = BlogEtcComment::withoutGlobalScopes()
+        $justAddedRow = Comment::withoutGlobalScopes()
             ->where('author_name', $comment_detail['author_name'])->firstOrFail();
 
         $response = $this->get(route('blogetc.admin.comments.index'));
@@ -730,7 +730,7 @@ class MainTest extends TestCase
 
             $this->assertDatabaseHas('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
 
-            $justAddedRow = BlogEtcComment::withoutGlobalScopes()
+            $justAddedRow = Comment::withoutGlobalScopes()
                 ->where('author_name', $comment_detail['author_name'])->firstOrFail();
 
             // check the just added row exists...
@@ -777,7 +777,7 @@ class MainTest extends TestCase
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
 
-        $justCreatedRow = BlogEtcPost::where('slug', $newObjectAttributes['slug'])
+        $justCreatedRow = Post::where('slug', $newObjectAttributes['slug'])
             ->firstOrFail();
         $id = $justCreatedRow->id;
         $delete_url = $admin_panel_url . '/delete_post/' . $id;
@@ -827,7 +827,7 @@ class MainTest extends TestCase
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
 
         // get the just inserted row
-        $justCreatedRow = BlogEtcCategory::where('slug', $new_cat_vals['slug'])
+        $justCreatedRow = Category::where('slug', $new_cat_vals['slug'])
             ->firstOrFail();
 
         // get the edit page (form)
@@ -875,7 +875,7 @@ class MainTest extends TestCase
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
 
-        $justCreatedRow = BlogEtcCategory::where('slug', $new_cat_vals['slug'])
+        $justCreatedRow = Category::where('slug', $new_cat_vals['slug'])
             ->firstOrFail();
         $id = $justCreatedRow->id;
 

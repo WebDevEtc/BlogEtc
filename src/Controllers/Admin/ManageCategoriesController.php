@@ -1,6 +1,6 @@
 <?php
 
-namespace WebDevEtc\BlogEtc\Controllers;
+namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Exception;
@@ -8,25 +8,24 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcCategoryRequest;
-use WebDevEtc\BlogEtc\Requests\StoreBlogEtcCategoryRequest;
+use WebDevEtc\BlogEtc\Requests\CategoryRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcCategoriesService;
+use WebDevEtc\BlogEtc\Services\CategoriesService;
 
 /**
  * Class BlogEtcCategoryAdminController
  * @package WebDevEtc\BlogEtc\Controllers
  */
-class BlogEtcCategoryAdminController extends Controller
+class ManageCategoriesController extends Controller
 {
-    /** @var BlogEtcCategoriesService */
+    /** @var CategoriesService */
     private $service;
 
     /**
      * BlogEtcCategoryAdminController constructor.
-     * @param BlogEtcCategoriesService $service
+     * @param CategoriesService $service
      */
-    public function __construct(BlogEtcCategoriesService $service)
+    public function __construct(CategoriesService $service)
     {
         $this->service = $service;
 
@@ -63,10 +62,10 @@ class BlogEtcCategoryAdminController extends Controller
     /**
      * Store a new category
      *
-     * @param StoreBlogEtcCategoryRequest $request
+     * @param CategoryRequest $request
      * @return RedirectResponse
      */
-    public function store(StoreBlogEtcCategoryRequest $request): RedirectResponse
+    public function store(CategoryRequest $request): RedirectResponse
     {
         $this->service->create($request->validated());
 
@@ -96,11 +95,11 @@ class BlogEtcCategoryAdminController extends Controller
     /**
      * Update a blog category attributes
      *
-     * @param UpdateBlogEtcCategoryRequest $request
+     * @param CategoryRequest $request
      * @param $categoryID
      * @return RedirectResponse
      */
-    public function update(UpdateBlogEtcCategoryRequest $request, $categoryID): RedirectResponse
+    public function update(CategoryRequest $request, $categoryID): RedirectResponse
     {
         $category = $this->service->update($categoryID, $request->validated());
 
@@ -112,12 +111,12 @@ class BlogEtcCategoryAdminController extends Controller
     /**
      * Delete the category
      *
-     * @param DeleteBlogEtcCategoryRequest $request
+     * @param CategoryRequest $request
      * @param $categoryID
      * @return View
      * @throws Exception
      */
-    public function destroy(DeleteBlogEtcCategoryRequest $request, $categoryID): View
+    public function destroy(CategoryRequest $request, $categoryID): View
     {
         $this->service->delete($categoryID);
 

@@ -9,10 +9,9 @@ use Illuminate\Database\Eloquent\Collection;
 use WebDevEtc\BlogEtc\Events\BlogPostAdded;
 use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Repositories\BlogEtcPostsRepository;
-use WebDevEtc\BlogEtc\Requests\BaseBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
+use WebDevEtc\BlogEtc\Models\Post;
+use WebDevEtc\BlogEtc\Repositories\PostsRepository;
+use WebDevEtc\BlogEtc\Requests\PostRequest;
 
 /**
  * Class BlogEtcPostsService
@@ -24,15 +23,15 @@ use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
  *
  * @package WebDevEtc\BlogEtc\Services
  */
-class BlogEtcPostsService
+class PostsService
 {
-    /** @var BlogEtcPostsRepository */
+    /** @var PostsRepository */
     private $repository;
 
-    /** @var BlogEtcUploadsService */
+    /** @var UploadsService */
     private $uploadsService;
 
-    public function __construct(BlogEtcPostsRepository $repository, BlogEtcUploadsService $uploadsService)
+    public function __construct(PostsRepository $repository, UploadsService $uploadsService)
     {
         $this->repository = $repository;
         $this->uploadsService = $uploadsService;
@@ -44,9 +43,9 @@ class BlogEtcPostsService
      * I don't stick 100% to all queries belonging in the repo - some Eloquent
      * things are fine to have in the service where it makes sense.
      *
-     * @return BlogEtcPostsRepository
+     * @return PostsRepository
      */
-    public function repository(): BlogEtcPostsRepository
+    public function repository(): PostsRepository
     {
         return $this->repository;
     }
@@ -57,12 +56,11 @@ class BlogEtcPostsService
      * (I'm never keen on passing around entire Request objects - this will get
      * refactored out)
      *
-     * @param BaseBlogEtcPostRequest $request
+     * @param PostRequest $request
      * @param int|null $userID
-     * @return BlogEtcPost
-     * @throws Exception
+     * @return Post
      */
-    public function create(BaseBlogEtcPostRequest $request, ?int $userID): BlogEtcPost
+    public function create(PostRequest $request, ?int $userID): Post
     {
         $attributes = $request->validated() + ['user_id' => $userID];
 
@@ -104,9 +102,9 @@ class BlogEtcPostsService
     }
 
     /**
-     * Return posts for rss feed
+     * Return posts for rss feed.
      *
-     * @return Collection
+     * @return Collection|Post[]
      */
     public function rssItems(): Collection
     {
@@ -119,10 +117,11 @@ class BlogEtcPostsService
      * N.B. I dislike sending the whole Request object around, this will get refactored.
      *
      * @param int $blogPostID
-     * @param UpdateBlogEtcPostRequest $request
-     * @return BlogEtcPost
+     * @param PostRequest $request
+     * @return Post
+     * @throws Exception
      */
-    public function update(int $blogPostID, UpdateBlogEtcPostRequest $request): BlogEtcPost
+    public function update(int $blogPostID, PostRequest $request): Post
     {
         // get the post:
         $post = $this->repository->find($blogPostID);
@@ -200,9 +199,9 @@ class BlogEtcPostsService
      * Find and return a blog post based on slug
      *
      * @param string $slug
-     * @return BlogEtcPost
+     * @return Post
      */
-    public function findBySlug(string $slug): BlogEtcPost
+    public function findBySlug(string $slug): Post
     {
         return $this->repository->findBySlug($slug);
     }

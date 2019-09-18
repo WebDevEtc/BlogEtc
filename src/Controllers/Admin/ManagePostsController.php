@@ -1,6 +1,6 @@
 <?php
 
-namespace WebDevEtc\BlogEtc\Controllers;
+namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Auth;
@@ -10,26 +10,24 @@ use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
+use WebDevEtc\BlogEtc\Models\Post;
+use WebDevEtc\BlogEtc\Requests\PostRequest;
+use WebDevEtc\BlogEtc\Services\PostsService;
 
 /**
  * Class BlogEtcAdminController
  * @package WebDevEtc\BlogEtc\Controllers
  */
-class BlogEtcAdminController extends Controller
+class ManagePostsController extends Controller
 {
-    /** @var BlogEtcPostsService */
+    /** @var PostsService */
     private $service;
 
     /**
      * BlogEtcAdminController constructor.
-     * @param BlogEtcPostsService $blogEtcPostsService
+     * @param PostsService $blogEtcPostsService
      */
-    public function __construct(BlogEtcPostsService $blogEtcPostsService)
+    public function __construct(PostsService $blogEtcPostsService)
     {
         $this->service = $blogEtcPostsService;
 
@@ -40,6 +38,7 @@ class BlogEtcAdminController extends Controller
             );
         }
     }
+
 
     /**
      * View all posts (paginated)
@@ -60,17 +59,17 @@ class BlogEtcAdminController extends Controller
      */
     public function create(): View
     {
-        return view('blogetc_admin::posts.add_post', ['post' => new BlogEtcPost()]);
+        return view('blogetc_admin::posts.add_post', ['post' => new Post()]);
     }
 
     /**
      * Save a new post.
      *
-     * @param CreateBlogEtcPostRequest $request
+     * @param PostRequest $request
      * @return RedirectResponse
      * @throws Exception
      */
-    public function store(CreateBlogEtcPostRequest $request): RedirectResponse
+    public function store(PostRequest $request): RedirectResponse
     {
         $newBlogPost = $this->service->create($request, Auth::id());
 
@@ -95,11 +94,12 @@ class BlogEtcAdminController extends Controller
     /**
      * Save changes to a post
      *
-     * @param UpdateBlogEtcPostRequest $request
+     * @param PostRequest $request
      * @param $blogPostID
      * @return RedirectResponse
+     * @throws Exception
      */
-    public function update(UpdateBlogEtcPostRequest $request, $blogPostID): RedirectResponse
+    public function update(PostRequest $request, $blogPostID): RedirectResponse
     {
         $blogPost = $this->service->update($blogPostID, $request);
 
@@ -111,12 +111,12 @@ class BlogEtcAdminController extends Controller
     /**
      * Delete a post - removes it from the database, does not remove any featured images associated with the blog post.
      *
-     * @param DeleteBlogEtcPostRequest $request
+     * @param PostRequest $request
      * @param $blogPostID
      * @return View
      * @throws Exception
      */
-    public function destroy(DeleteBlogEtcPostRequest $request, $blogPostID): View
+    public function destroy(PostRequest $request, $blogPostID): View
     {
         [$blogPost, $remainingPhotos] = $this->service->delete($blogPostID);
 

@@ -4,8 +4,8 @@ namespace WebDevEtc\BlogEtc\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\Comment;
+use WebDevEtc\BlogEtc\Models\Post;
 
 /**
  * Class CommentApproved
@@ -15,17 +15,17 @@ class CommentApproved
 {
     use Dispatchable, SerializesModels;
 
-    /** @var BlogEtcComment */
+    /** @var Comment */
     public $comment;
 
-    /** @var BlogEtcPost */
+    /** @var Post */
     public $blogEtcPost;
 
     /**
      * CommentApproved constructor.
-     * @param BlogEtcComment $comment
+     * @param Comment $comment
      */
-    public function __construct(BlogEtcComment $comment)
+    public function __construct(Comment $comment)
     {
         $this->comment = $comment;
         $this->blogEtcPost = $comment->post;

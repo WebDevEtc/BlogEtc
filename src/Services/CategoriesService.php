@@ -7,8 +7,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
 use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
-use WebDevEtc\BlogEtc\Repositories\BlogEtcCategoriesRepository;
+use WebDevEtc\BlogEtc\Models\Category;
+use WebDevEtc\BlogEtc\Repositories\CategoriesRepository;
 
 /**
  * Class BlogEtcCategoriesService
@@ -17,15 +17,15 @@ use WebDevEtc\BlogEtc\Repositories\BlogEtcCategoriesRepository;
  *
  * @package WebDevEtc\BlogEtc\Services
  */
-class BlogEtcCategoriesService
+class CategoriesService
 {
 
     /**
-     * @var BlogEtcCategoriesRepository
+     * @var CategoriesRepository
      */
     private $repository;
 
-    public function __construct(BlogEtcCategoriesRepository $repository)
+    public function __construct(CategoriesRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -43,9 +43,9 @@ class BlogEtcCategoriesService
      * Find and return a blog etc category from it's ID
      *
      * @param int $categoryID
-     * @return BlogEtcCategory
+     * @return Category
      */
-    public function find(int $categoryID): BlogEtcCategory
+    public function find(int $categoryID): Category
     {
         return $this->repository->find($categoryID);
     }
@@ -54,9 +54,9 @@ class BlogEtcCategoriesService
      * Find and return a blog etc category, based on its slug
      *
      * @param string $categorySlug
-     * @return BlogEtcCategory
+     * @return Category
      */
-    public function findBySlug(string $categorySlug): BlogEtcCategory
+    public function findBySlug(string $categorySlug): Category
     {
         return $this->repository->findBySlug($categorySlug);
     }
@@ -65,11 +65,11 @@ class BlogEtcCategoriesService
      * Create a new BlogEtcCategory entry
      *
      * @param array $attributes
-     * @return BlogEtcCategory
+     * @return Category
      */
-    public function create(array $attributes): BlogEtcCategory
+    public function create(array $attributes): Category
     {
-        $newCategory = new BlogEtcCategory($attributes);
+        $newCategory = new Category($attributes);
         $newCategory->save();
 
         event(new CategoryAdded($newCategory));
@@ -82,9 +82,9 @@ class BlogEtcCategoriesService
      *
      * @param int $categoryID
      * @param array $attributes
-     * @return BlogEtcCategory
+     * @return Category
      */
-    public function update(int $categoryID, array $attributes): BlogEtcCategory
+    public function update(int $categoryID, array $attributes): Category
     {
         $category = $this->find($categoryID);
         $category->fill($attributes);

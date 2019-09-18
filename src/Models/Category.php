@@ -10,12 +10,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string category_name
  * @property string slug
  * @property int id
- * @property Collection|BlogEtcPost[] posts
+ * @property Collection|Post[] posts
  *
  * @method static findOrFail(int $categoryID)
  */
-class BlogEtcCategory extends Model
+class Category extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    public $table = 'blog_etc_categories';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $fillable = [
         // todo - change to just name
         'category_name',
@@ -31,7 +43,12 @@ class BlogEtcCategory extends Model
      */
     public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(BlogEtcPost::class, 'blog_etc_post_categories');
+        return $this->belongsToMany(
+            Post::class,
+            'blog_etc_post_categories',
+            'blog_etc_category_id',
+            'blog_etc_post_id'
+            );
     }
 
     /**

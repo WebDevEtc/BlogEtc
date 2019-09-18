@@ -1,6 +1,6 @@
 <?php
 
-namespace WebDevEtc\BlogEtc\Controllers;
+namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Exception;
@@ -8,23 +8,23 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Services\BlogEtcCommentsService;
+use WebDevEtc\BlogEtc\Models\Comment;
+use WebDevEtc\BlogEtc\Services\CommentsService;
 
 /**
  * Class BlogEtcCommentsAdminController
  * @package WebDevEtc\BlogEtc\Controllers
  */
-class BlogEtcCommentsAdminController extends Controller
+class ManageCommentsController extends Controller
 {
-    /** @var BlogEtcCommentsService */
+    /** @var CommentsService */
     private $service;
 
     /**
      * BlogEtcCommentsAdminController constructor.
-     * @param BlogEtcCommentsService $service
+     * @param CommentsService $service
      */
-    public function __construct(BlogEtcCommentsService $service)
+    public function __construct(CommentsService $service)
     {
         $this->service = $service;
 
@@ -40,7 +40,7 @@ class BlogEtcCommentsAdminController extends Controller
     public function index(Request $request)
     {
         //TODO - use service
-        $comments = BlogEtcComment::withoutGlobalScopes()
+        $comments = Comment::withoutGlobalScopes()
             ->orderBy('created_at', 'desc')
             ->with('post');
 
@@ -59,7 +59,7 @@ class BlogEtcCommentsAdminController extends Controller
      * @param $blogCommentID
      * @return RedirectResponse
      */
-    public function approve($blogCommentID): RedirectResponse
+    public function approve(int $blogCommentID): RedirectResponse
     {
         $this->service->approve($blogCommentID);
 
@@ -75,7 +75,7 @@ class BlogEtcCommentsAdminController extends Controller
      * @return RedirectResponse
      * @throws Exception
      */
-    public function destroy($blogCommentID): RedirectResponse
+    public function destroy(int $blogCommentID): RedirectResponse
     {
         $this->service->delete($blogCommentID);
 

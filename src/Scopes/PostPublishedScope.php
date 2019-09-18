@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Scopes;
 
 use Auth;
 use Carbon\Carbon;
+use Gate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -12,11 +13,10 @@ use Illuminate\Database\Eloquent\Scope;
  * Class BlogEtcPublishedScope
  * @package WebDevEtc\BlogEtc\Scopes
  */
-class BlogEtcPublishedScope implements Scope
+class PostPublishedScope implements Scope
 {
     /**
-     * For
-     * But for everyone else then it should only show PUBLISHED posts with a POSTED_AT < NOW()
+     * For normal users, add a global scope for BlogEtcPosts to never return unpublished posts.
      *
      * @param Builder $builder
      * @param Model $model
@@ -24,16 +24,10 @@ class BlogEtcPublishedScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if (/*!Auth::check() ||*/ !Gate::allows('blog-etc-admin')) {
-            dump("A");
+        if (Gate::denies('blog-etc-admin')) {
             // user is a guest, or if logged in they can't manage blog posts
             $builder->where('is_published', true);
             $builder->where('posted_at', '<=', Carbon::now());
-        }
-        else {
-
-            dump("B");
-
         }
     }
 }

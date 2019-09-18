@@ -4,7 +4,7 @@ namespace WebDevEtc\BlogEtc\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
+use WebDevEtc\BlogEtc\Models\Comment;
 
 /**
  * Class CommentWillBeDeleted
@@ -14,14 +14,14 @@ class CommentWillBeDeleted
 {
     use Dispatchable, SerializesModels;
 
-    /** @var BlogEtcComment */
+    /** @var Comment */
     public $comment;
 
     /**
      * CommentWillBeDeleted constructor.
-     * @param BlogEtcComment $comment
+     * @param Comment $comment
      */
-    public function __construct(BlogEtcComment $comment)
+    public function __construct(Comment $comment)
     {
         $this->comment = $comment;
     }

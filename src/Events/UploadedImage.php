@@ -5,7 +5,7 @@ namespace WebDevEtc\BlogEtc\Events;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Intervention\Image\Image;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\Post;
 
 /**
  * Class UploadedImage
@@ -18,7 +18,7 @@ class UploadedImage
     private $imageFilename;
     /** @var Image */
     private $image;
-    /** @var BlogEtcPost */
+    /** @var Post */
     private $blogEtcPost;
     /** @var string|null */
     private $source;
@@ -28,14 +28,14 @@ class UploadedImage
      *
      * $source =  the method name which was firing this event (or other string)
      * @param string $imageFilename - the new filename
-     * @param BlogEtcPost $blogEtcPost
+     * @param Post $blogEtcPost
      * @param Image $image
      * @param string|null $source
      */
     public function __construct(
         string $imageFilename,
         Image $image,
-        BlogEtcPost $blogEtcPost = null,
+        Post $blogEtcPost = null,
         ?string $source = 'other'
     ) {
         $this->imageFilename = $imageFilename;

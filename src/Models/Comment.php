@@ -14,11 +14,11 @@ use WebDevEtc\BlogEtc\Scopes\BlogCommentApprovedAndDefaultOrderScope;
  * @property string|null ip
  * @property string|null author_email
  * @property bool approved
- * @property BlogEtcPost post
+ * @property Post post
  * @property User user
  * @property string author
  */
-class BlogEtcComment extends Model
+class Comment extends Model
 {
     /**
      * Attributes which have specific casts
@@ -30,7 +30,14 @@ class BlogEtcComment extends Model
     ];
 
     /**
-     * Fillable attributes
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    public $table = 'blog_etc_comments';
+
+    /**
+     * The attributes that are mass assignable.
      *
      * @var array
      */
@@ -61,7 +68,7 @@ class BlogEtcComment extends Model
      */
     public function post(): BelongsTo
     {
-        return $this->belongsTo(BlogEtcPost::class, 'blog_etc_post_id');
+        return $this->belongsTo(Post::class, 'blog_etc_post_id');
     }
 
     /**

@@ -18,7 +18,7 @@ use RuntimeException;
 use Swis\LaravelFulltext\Indexable;
 use Throwable;
 use WebDevEtc\BlogEtc\Exceptions\InvalidImageSizeException;
-use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
+use WebDevEtc\BlogEtc\Scopes\PostPublishedScope;
 
 /**
  * Class BlogEtcPost.
@@ -33,11 +33,11 @@ use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
  * @property Carbon posted_at
  * @property bool is_published
  * @property User|null author
- * @property BlogEtcCategory[] categories
+ * @property Category[] categories
  * @property int id
- * @property Collection|BlogEtcComment[] comments
+ * @property Collection|Comment[] comments
  */
-class BlogEtcPost extends Model
+class Post extends Model
 {
     use Sluggable;
     use Indexable;
@@ -49,7 +49,18 @@ class BlogEtcPost extends Model
      */
     protected static $authorNameResolver;
 
-    /** @var array */
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    public $table = 'blog_etc_posts';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public $casts = [
         'is_published' => 'boolean',
     ];
@@ -103,7 +114,7 @@ class BlogEtcPost extends Model
         /* If user is logged in and \Auth::user()->canManageBlogEtcPosts() == true, show any/all posts.
            otherwise (which will be for most users) it should only show published posts that have a posted_at
            time <= Carbon::now(). This sets it up: */
-        static::addGlobalScope(new BlogEtcPublishedScope());
+        static::addGlobalScope(new PostPublishedScope());
     }
 
     /**
@@ -153,7 +164,12 @@ class BlogEtcPost extends Model
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(BlogEtcCategory::class, 'blog_etc_post_categories');
+        return $this->belongsToMany(
+            Category::class,
+            'blog_etc_post_categories',
+            'blog_etc_post_id',
+            'blog_etc_category_id'
+        );
     }
 
     /**
@@ -163,7 +179,7 @@ class BlogEtcPost extends Model
      */
     public function comments(): HasMany
     {
-        return $this->hasMany(BlogEtcComment::class);
+        return $this->hasMany(Comment::class);
     }
 
     /**
@@ -187,7 +203,7 @@ class BlogEtcPost extends Model
     public function fullViewFilePath(): string
     {
         if (!$this->use_view_file) {
-            throw new RuntimeException('use_view_file was empty, so cannot use ' . __METHOD__);
+            throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
         }
 
         return 'custom_blog_posts.' . $this->use_view_file;
@@ -315,6 +331,7 @@ class BlogEtcPost extends Model
     public function generateIntroduction(int $maxLen = 500): string
     {
         $base_text_to_use = $this->short_description;
+
         if (!trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
@@ -322,6 +339,7 @@ class BlogEtcPost extends Model
 
         return Str::limit($base_text_to_use, $maxLen);
     }
+
     /**
      * Return post body HTML, ready for output
      *

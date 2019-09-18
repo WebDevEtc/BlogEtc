@@ -7,24 +7,24 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcPostNotFoundException;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\Post;
 
 /**
  * Class BlogEtcPostsRepository
  * @package WebDevEtc\BlogEtc\Repositories
  */
-class BlogEtcPostsRepository
+class PostsRepository
 {
     /**
-     * @var BlogEtcPost
+     * @var Post
      */
     private $model;
 
     /**
      * BlogEtcPostsRepository constructor.
-     * @param BlogEtcPost $model
+     * @param Post $model
      */
-    public function __construct(BlogEtcPost $model)
+    public function __construct(Post $model)
     {
         $this->model = $model;
     }
@@ -86,9 +86,9 @@ class BlogEtcPostsRepository
      * If cannot find, throw exception
      *
      * @param int $blogEtcPostID
-     * @return BlogEtcPost
+     * @return Post
      */
-    public function find(int $blogEtcPostID): BlogEtcPost
+    public function find(int $blogEtcPostID): Post
     {
         try {
             return $this->query(true)->findOrFail($blogEtcPostID);
@@ -102,9 +102,9 @@ class BlogEtcPostsRepository
      * If cannot find, throw exception
      *
      * @param string $slug
-     * @return BlogEtcPost
+     * @return Post
      */
-    public function findBySlug(string $slug): BlogEtcPost
+    public function findBySlug(string $slug): Post
     {
         try {
             // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the
@@ -121,9 +121,9 @@ class BlogEtcPostsRepository
      * Create a new BlogEtcPost post
      *
      * @param array $attributes
-     * @return BlogEtcPost
+     * @return Post
      */
-    public function create(array $attributes): BlogEtcPost
+    public function create(array $attributes): Post
     {
         return $this->query()->create($attributes);
     }
@@ -131,11 +131,11 @@ class BlogEtcPostsRepository
     /**
      * Update image sizes (or in theory any attribute) on a blog etc post
      *
-     * @param BlogEtcPost $post
+     * @param Post $post
      * @param array $uploadedImages
-     * @return BlogEtcPost
+     * @return Post
      */
-    public function updateImageSizes(BlogEtcPost $post, ?array $uploadedImages): BlogEtcPost
+    public function updateImageSizes(Post $post, ?array $uploadedImages): Post
     {
         if ($uploadedImages && count($uploadedImages)) {
             // does not use update() here as it would require fillable for each field - and in theory someone

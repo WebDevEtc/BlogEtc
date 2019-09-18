@@ -5,25 +5,21 @@ namespace WebDevEtc\BlogEtc\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\BlogEtcCommentNotFoundException;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
+use WebDevEtc\BlogEtc\Models\Comment;
 
-/**
- * Class BlogEtcCommentsRepository
- * @package WebDevEtc\BlogEtc\Repositories
- */
-class BlogEtcCommentsRepository
+class CommentsRepository
 {
     /**
-     * @var BlogEtcComment
+     * @var Comment
      */
     private $model;
 
     /**
      * BlogEtcCommentsRepository constructor.
      *
-     * @param BlogEtcComment $model
+     * @param Comment $model
      */
-    public function __construct(BlogEtcComment $model)
+    public function __construct(Comment $model)
     {
         $this->model = $model;
     }
@@ -53,9 +49,9 @@ class BlogEtcCommentsRepository
      *
      * @param int $blogEtcCommentID
      * @param bool $onlyApproved
-     * @return BlogEtcComment
+     * @return Comment
      */
-    public function find(int $blogEtcCommentID, bool $onlyApproved = true): BlogEtcComment
+    public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
     {
         try {
             $queryBuilder = $this->query(true);

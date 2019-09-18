@@ -1,32 +1,30 @@
 <?php
 
-namespace WebDevEtc\BlogEtc\Controllers;
+namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use RuntimeException;
-use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
+use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcUploadsService;
+use WebDevEtc\BlogEtc\Services\UploadsService;
 
 /**
  * Class BlogEtcAdminController
  * @package WebDevEtc\BlogEtc\Controllers
  * @todo - a lot of this will be refactored. The public API won't change.
  */
-class BlogEtcImageUploadController extends Controller
+class UploadsController extends Controller
 {
-    /** @var BlogEtcUploadsService */
+    /** @var UploadsService */
     private $uploadsService;
 
     /**
      * BlogEtcAdminController constructor.
-     * @param BlogEtcUploadsService $uploadsService
+     * @param UploadsService $uploadsService
      */
-    public function __construct(BlogEtcUploadsService $uploadsService)
+    public function __construct(UploadsService $uploadsService)
     {
         $this->uploadsService = $uploadsService;
 
@@ -54,7 +52,7 @@ class BlogEtcImageUploadController extends Controller
         return view(
             'blogetc_admin::imageupload.index',
             [
-                'uploaded_photos' => BlogEtcUploadedPhoto::orderBy('id', 'desc')->paginate(10),
+                'uploaded_photos' => UploadedPhoto::orderBy('id', 'desc')->paginate(10),
             ]
         );
     }
@@ -73,8 +71,7 @@ class BlogEtcImageUploadController extends Controller
      * Save a new uploaded image
      *
      * @param UploadImageRequest $request
-     * @return View
-     * @throws Exception
+     * @return Response
      */
     public function store(UploadImageRequest $request): Response
     {

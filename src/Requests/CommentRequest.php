@@ -5,22 +5,22 @@ namespace WebDevEtc\BlogEtc\Requests;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
-use WebDevEtc\BlogEtc\Services\BlogEtcCommentsService;
+use WebDevEtc\BlogEtc\Services\CommentsService;
 
 /**
  * Class AddNewCommentRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-class AddNewCommentRequest extends FormRequest
+class CommentRequest extends FormRequest
 {
     /**
      * Can user add new comments?
      *
      * @return bool
      */
-    public function authorize():bool
+    public function authorize(): bool
     {
-        return config('blogetc.comments.type_of_comments_to_show') === BlogEtcCommentsService::COMMENT_TYPE_BUILT_IN;
+        return config('blogetc.comments.type_of_comments_to_show') === CommentsService::COMMENT_TYPE_BUILT_IN;
     }
 
     /**
@@ -28,7 +28,7 @@ class AddNewCommentRequest extends FormRequest
      *
      * @return array
      */
-    public function rules():array
+    public function rules(): array
     {
         // basic rules
         $return = [
@@ -38,16 +38,13 @@ class AddNewCommentRequest extends FormRequest
             'author_website' => ['string', 'nullable', 'min:' . strlen('http://a.b'), 'max:175', 'active_url',],
         ];
 
-        // do we need author name?
-        if (Auth::check() && config('blogetc.comments.save_user_id_if_logged_in', true)) {
-            // is logged in, so we don't need an author name (it won't get used)
-            $return['author_name'][] = 'nullable';
-        } else {
-            // is a guest - so we require this
-            $return['author_name'][] = 'required';
-        }
+        // Do we need author name?
+        // If logged in and save_user_id_if_logged_in is true then it is not required. Otherwise it is required.
+        $return['author_name'][] = Auth::check() && config('blogetc.comments.save_user_id_if_logged_in', true)
+            ? 'nullable'
+            : 'required';
 
-        // is captcha enabled? If so, get the rules from its class.
+        // Is captcha enabled? If so, get the rules from its class.
         if (config('blogetc.captcha.captcha_enabled')) {
             /** @var string $captcha_class */
             $captcha_class = config('blogetc.captcha.captcha_type');

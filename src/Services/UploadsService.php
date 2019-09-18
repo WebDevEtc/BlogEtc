@@ -1,4 +1,5 @@
 <?php
+
 namespace WebDevEtc\BlogEtc\Services;
 
 use Auth;
@@ -10,14 +11,18 @@ use Image;
 use Intervention\Image\Constraint;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Events\UploadedImage;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
-use WebDevEtc\BlogEtc\Requests\BaseBlogEtcPostRequest;
+use WebDevEtc\BlogEtc\Models\Post;
+use WebDevEtc\BlogEtc\Models\UploadedPhoto;
+use WebDevEtc\BlogEtc\Requests\PostRequest;
 
-class BlogEtcUploadsService
+/**
+ * Class UploadsService
+ * @package WebDevEtc\BlogEtc\Services
+ */
+class UploadsService
 {
     private static $num_of_attempts_to_find_filename = 10;
-    private  $checked_blog_image_dir_is_writable = false;
+    private $checked_blog_image_dir_is_writable = false;
 
     /**
      * Store new image upload meta data in database
@@ -28,10 +33,15 @@ class BlogEtcUploadsService
      * @param int|null $uploaderID
      * @param array $uploadedImages
      */
-    protected function create(?int $blogPostID, string $imageTitle, string $source, ?int $uploaderID, array $uploadedImages)
-    {
+    protected function create(
+        ?int $blogPostID,
+        string $imageTitle,
+        string $source,
+        ?int $uploaderID,
+        array $uploadedImages
+    ) {
         // store the image upload.
-        BlogEtcUploadedPhoto::create([
+        UploadedPhoto::create([
             'blog_etc_post_id' => $blogPostID,
             'image_title' => $imageTitle,
             'source' => $source,
@@ -39,7 +49,6 @@ class BlogEtcUploadsService
             'uploaded_images' => $uploadedImages,
         ]);
     }
-
 
     /**
      * Small method to increase memory limit.
@@ -62,12 +71,11 @@ class BlogEtcUploadsService
      * @param $sizesToUpload
      * @return array
      */
-    public function processUpload($uploadedImage, string $imageTitle,  $sizesToUpload )
+    public function processUpload($uploadedImage, string $imageTitle, $sizesToUpload)
     {
         // to save in db later
         $uploadedImageDetails = [];
         $this->increaseMemoryLimit();
-
 
         // now upload a full size - this is a special case, not in the config file. We only store full size images in
         // this class, not as part of the featured blog image uploads.
@@ -96,25 +104,22 @@ class BlogEtcUploadsService
             );
         }
 
-
         // store the image data in db:
-        $this->create(null, $imageTitle, BlogEtcUploadedPhoto::SOURCE_IMAGE_UPLOAD, Auth::id(), $uploadedImageDetails);
+        $this->create(null, $imageTitle, UploadedPhoto::SOURCE_IMAGE_UPLOAD, Auth::id(), $uploadedImageDetails);
 
         return $uploadedImageDetails;
     }
 
-
-
-
-
     /**
      * Process any uploaded images (for featured image)
      *
-     * @param BaseBlogEtcPostRequest $request
-     * @param BlogEtcPost $new_blog_post
+     * @param PostRequest $request
+     * @param Post $new_blog_post
+     * @return array|null
+     * @throws Exception
      * @todo - next full release, tidy this up!
      */
-    public function processFeaturedUpload(BaseBlogEtcPostRequest $request, BlogEtcPost $new_blog_post):? array
+    public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
     {
         if (!config('blogetc.image_upload_enabled')) {
             // image upload was disabled
@@ -153,7 +158,7 @@ class BlogEtcUploadsService
             $this->create(
                 $new_blog_post->id,
                 $new_blog_post->title,
-                BlogEtcUploadedPhoto::SOURCE_FEATURED_IMAGE,
+                UploadedPhoto::SOURCE_FEATURED_IMAGE,
                 \Auth::id(),
                 $uploaded_image_details
             );
@@ -162,30 +167,8 @@ class BlogEtcUploadsService
         return $newSizes;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-     * @param BlogEtcPost $new_blog_post
+     * @param Post $new_blog_post
      * @param $suggested_title - used to help generate the filename
      * @param $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
      * no size reduction, but will use this string to generate the filename)
@@ -194,7 +177,7 @@ class BlogEtcUploadsService
      * @throws Exception
      */
     protected function uploadAndResize(
-        ?BlogEtcPost $new_blog_post,
+        ?Post $new_blog_post,
         $suggested_title,
         $imageSizeDetails,
         UploadedFile $photo
@@ -349,9 +332,5 @@ class BlogEtcUploadsService
             $this->checked_blog_image_dir_is_writable = true;
         }
     }
-
-
-
-
 
 }

@@ -10,9 +10,9 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
-use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcCommentsService;
-use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
+use WebDevEtc\BlogEtc\Requests\CommentRequest;
+use WebDevEtc\BlogEtc\Services\CommentsService;
+use WebDevEtc\BlogEtc\Services\PostsService;
 use WebDevEtc\BlogEtc\Services\CaptchaService;
 
 /**
@@ -22,24 +22,24 @@ use WebDevEtc\BlogEtc\Services\CaptchaService;
  *
  * @package WebDevEtc\BlogEtc\Controllers
  */
-class BlogEtcCommentWriterController extends Controller
+class CommentsController extends Controller
 {
-    /** @var BlogEtcPostsService */
+    /** @var PostsService */
     private $postsService;
-    /** @var BlogEtcCommentsService */
+    /** @var CommentsService */
     private $commentsService;
     /** @var CaptchaService */
     private $captchaService;
 
     /**
      * BlogEtcCommentWriterController constructor.
-     * @param BlogEtcPostsService $postsService
-     * @param BlogEtcCommentsService $commentsService
+     * @param PostsService $postsService
+     * @param CommentsService $commentsService
      * @param CaptchaService $captchaService
      */
     public function __construct(
-        BlogEtcPostsService $postsService,
-        BlogEtcCommentsService $commentsService,
+        PostsService $postsService,
+        CommentsService $commentsService,
         CaptchaService $captchaService
     ) {
         $this->postsService = $postsService;
@@ -50,14 +50,14 @@ class BlogEtcCommentWriterController extends Controller
     /**
      * Let a guest (or logged in user) submit a new comment for a blog post
      *
-     * @param AddNewCommentRequest $request
+     * @param CommentRequest $request
      * @param $slug
      * @return Factory|View
      * @throws Exception
      */
-    public function addNewComment(AddNewCommentRequest $request, string $slug)
+    public function store(CommentRequest $request, string $slug)
     {
-        if (config('blogetc.comments.type_of_comments_to_show') !== \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_BUILT_IN) {
+        if (config('blogetc.comments.type_of_comments_to_show') !== \WebDevEtc\BlogEtc\Services\CommentsService::COMMENT_TYPE_BUILT_IN) {
             throw new RuntimeException('Built in comments are disabled');
         }
 

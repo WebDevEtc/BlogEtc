@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
 <div>
     @foreach($post->categories as $category)

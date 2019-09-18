@@ -97,9 +97,9 @@
 
                     {{--REPLACING THIS FILE WITH YOUR OWN LAYOUT FILE? Don't forget to include the following section!--}}
 
-                    @if(\WebDevEtc\BlogEtc\Helpers::hasFlashedMessage())
+                    @if($hasFlashedMessage)
                         <div class="alert alert-info">
-                            <h3>{{ \WebDevEtc\BlogEtc\Helpers::pullFlashedMessage() }}</h3>
+                            <h3>{{ $flashedMessage }}</h3>
                         </div>
                     @endif
 
@@ -118,10 +118,7 @@
     </small>
 </div>
 
-{{--TODO - move to controller--}}
-@if( config('blogetc.use_wysiwyg')
-        && config('blogetc.echo_html')
-        && (in_array( Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
+@if($includeRichTextEditor)
     <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"
             integrity="sha384-BpuqJd0Xizmp9PSp/NTwb/RSBCHK+rVdGWTrwcepj1ADQjNYPWT2GDfnfAr6/5dn"
             crossorigin="anonymous"></script>

@@ -1,7 +1,7 @@
 @php
     use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
-    use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-    /** @var BlogEtcPost $post */
+    use WebDevEtc\BlogEtc\Models\Post;
+    /** @var Post $post */
     /** @var CaptchaAbstract $captcha */
 @endphp
 <div class="add_comment_area">

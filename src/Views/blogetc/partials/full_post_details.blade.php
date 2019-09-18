@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
 @can('blog-etc-admin')
     <a href="{{ $post->editUrl() }}" class="btn btn-outline-secondary btn-sm pull-right float-right">

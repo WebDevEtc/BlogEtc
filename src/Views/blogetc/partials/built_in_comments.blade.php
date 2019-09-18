@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcComment[] $comments */
+    /** @var \WebDevEtc\BlogEtc\Models\Comment[] $comments */
 @endphp
 @forelse($comments as $comment)
     <div class="card bg-light mb-3">

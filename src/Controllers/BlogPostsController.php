@@ -9,8 +9,8 @@ use LogicException;
 use Swis\LaravelFulltext\Search;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Requests\SearchRequest;
-use WebDevEtc\BlogEtc\Services\BlogEtcCategoriesService;
-use WebDevEtc\BlogEtc\Services\BlogEtcPostsService;
+use WebDevEtc\BlogEtc\Services\CategoriesService;
+use WebDevEtc\BlogEtc\Services\PostsService;
 use WebDevEtc\BlogEtc\Services\CaptchaService;
 
 /**
@@ -18,24 +18,26 @@ use WebDevEtc\BlogEtc\Services\CaptchaService;
  * All of the main public facing methods for viewing blog content (index, single posts)
  * @package WebDevEtc\BlogEtc\Controllers
  */
-class BlogEtcReaderController extends Controller
+class BlogPostsController extends Controller
 {
-    /** @var BlogEtcPostsService */
+    /** @var PostsService */
     private $postsService;
-    /** @var BlogEtcCategoriesService */
+
+    /** @var CategoriesService */
     private $categoriesService;
+
     /** @var CaptchaService */
     private $captchaService;
 
     /**
      * BlogEtcReaderController constructor.
-     * @param BlogEtcPostsService $postsService
-     * @param BlogEtcCategoriesService $categoriesService
+     * @param PostsService $postsService
+     * @param CategoriesService $categoriesService
      * @param CaptchaService $captchaService
      */
     public function __construct(
-        BlogEtcPostsService $postsService,
-        BlogEtcCategoriesService $categoriesService,
+        PostsService $postsService,
+        CategoriesService $categoriesService,
         CaptchaService $captchaService
     ) {
         $this->postsService = $postsService;
@@ -43,40 +45,6 @@ class BlogEtcReaderController extends Controller
         $this->captchaService = $captchaService;
     }
 
-    /**
-     * Show the search results
-     *
-     * @param SearchRequest $request
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function search(SearchRequest $request): \Illuminate\Contracts\View\View
-    {
-        if (!config('blogetc.search.search_enabled')) {
-            throw new LogicException('Search is disabled');
-        }
-
-        $query = $request->query();
-
-        $search = new Search();
-        $search_results = $search->run($query);
-
-        return view('blogetc::search', [
-            'title' => 'Search results for ' . e($query),
-            'query' => $query,
-            'search_results' => $search_results,
-        ]);
-    }
-
-    /**
-     * View all posts in $category_slug category
-     *
-     * @param $categorySlug
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function showCategory($categorySlug): \Illuminate\Contracts\View\View
-    {
-        return $this->index($categorySlug);
-    }
 
     /**
      * Show blog posts
@@ -141,5 +109,40 @@ class BlogEtcReaderController extends Controller
                 'comments' => $blogPost->comments->load('user'),
             ]
         );
+    }
+
+    /**
+     * Show the search results.
+     *
+     * @param SearchRequest $request
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function search(SearchRequest $request): \Illuminate\Contracts\View\View
+    {
+        if (!config('blogetc.search.search_enabled')) {
+            throw new LogicException('Search is disabled');
+        }
+
+        $query = $request->searchQuery();
+
+        $search = new Search();
+        $searchResults = $search->run($query);
+
+        return view('blogetc::search', [
+            'title' => 'Search results for ' . e($query),
+            'query' => $query,
+            'searchResults' => $searchResults,
+        ]);
+    }
+
+    /**
+     * View all posts in $category_slug category.
+     *
+     * @param $categorySlug
+     * @return View
+     */
+    public function showCategory($categorySlug): \Illuminate\Contracts\View\View
+    {
+        return $this->index($categorySlug);
     }
 }

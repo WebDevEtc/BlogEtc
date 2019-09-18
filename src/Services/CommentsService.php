@@ -6,9 +6,9 @@ use Exception;
 use WebDevEtc\BlogEtc\Events\CommentAdded;
 use WebDevEtc\BlogEtc\Events\CommentApproved;
 use WebDevEtc\BlogEtc\Events\CommentWillBeDeleted;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Repositories\BlogEtcCommentsRepository;
+use WebDevEtc\BlogEtc\Models\Comment;
+use WebDevEtc\BlogEtc\Models\Post;
+use WebDevEtc\BlogEtc\Repositories\CommentsRepository;
 
 /**
  * Class BlogEtcCategoriesService
@@ -20,7 +20,7 @@ use WebDevEtc\BlogEtc\Repositories\BlogEtcCommentsRepository;
  *
  * @package WebDevEtc\BlogEtc\Services
  */
-class BlogEtcCommentsService
+class CommentsService
 {
     // comment system types. Set these in config file
     public const COMMENT_TYPE_BUILT_IN = 'built_in';
@@ -28,10 +28,10 @@ class BlogEtcCommentsService
     public const COMMENT_TYPE_CUSTOM = 'custom';
     public const COMMENT_TYPE_DISABLED = 'disabled';
 
-    /** @var BlogEtcCommentsRepository */
+    /** @var CommentsRepository */
     private $repository;
 
-    public function __construct(BlogEtcCommentsRepository $repository)
+    public function __construct(CommentsRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -42,20 +42,20 @@ class BlogEtcCommentsService
      * I don't stick 100% to all queries belonging in the repo - some Eloquent
      * things are fine to have in the service where it makes sense.
      */
-    public function repository(): BlogEtcCommentsRepository
+    public function repository(): CommentsRepository
     {
         return $this->repository;
     }
 
     public function create(
-        BlogEtcPost $blogEtcPost,
+        Post $blogEtcPost,
         array $attributes,
         string $ip = null,
         int $userID = null
-    ): BlogEtcComment {
+    ): Comment {
         // TODO - inject the model object, put into repo, generate $attributes
         // fill it with fillable attributes
-        $newComment = new BlogEtcComment($attributes);
+        $newComment = new Comment($attributes);
 
         // then some additional attributes
         if (config('blogetc.comments.save_ip_address')) {
@@ -95,9 +95,9 @@ class BlogEtcCommentsService
      *
      * @param int $blogEtcCommentID
      * @param bool $onlyApproved
-     * @return BlogEtcComment
+     * @return Comment
      */
-    public function find(int $blogEtcCommentID, bool $onlyApproved = true): BlogEtcComment
+    public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
     {
         return $this->repository->find($blogEtcCommentID, $onlyApproved);
     }
@@ -106,9 +106,9 @@ class BlogEtcCommentsService
      * Approve a blog comment
      *
      * @param int $blogCommentID
-     * @return BlogEtcComment
+     * @return Comment
      */
-    public function approve(int $blogCommentID): BlogEtcComment
+    public function approve(int $blogCommentID): Comment
     {
         // get comment
         $comment = $this->find($blogCommentID, false);
@@ -132,10 +132,10 @@ class BlogEtcCommentsService
      * Returns the now deleted comment object
      *
      * @param int $blogCommentID
-     * @return BlogEtcComment
+     * @return Comment
      * @throws Exception
      */
-    public function delete(int $blogCommentID): BlogEtcComment
+    public function delete(int $blogCommentID): Comment
     {
         // find the comment
         $comment = $this->find($blogCommentID, false);

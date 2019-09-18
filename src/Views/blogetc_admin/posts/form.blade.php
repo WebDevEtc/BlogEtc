@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
 <div class="form-group">
     <label for="blog_title">Blog Post Title</label>
@@ -161,7 +161,7 @@
     <h4>Categories:</h4>
     <div class="row">
 
-        @forelse(\WebDevEtc\BlogEtc\Models\BlogEtcCategory::orderBy('category_name','asc')->limit(1000)->get() as $category)
+        @forelse(\WebDevEtc\BlogEtc\Models\Category::orderBy('category_name','asc')->limit(1000)->get() as $category)
             <div class="form-check col-sm-6">
                 <input type="checkbox" value="1"
                        @if(old('category.'.$category->id, $post->categories->contains($category->id))) checked="checked"

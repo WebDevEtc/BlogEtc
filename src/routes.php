@@ -12,28 +12,28 @@ Route::group(
             ['prefix' => config('blogetc.blog_prefix', 'blog')],
             static function () {
                 // Public blog index:
-                Route::get('/', 'BlogEtcReaderController@index')
+                Route::get('/', 'BlogPostsController@index')
                     ->name('blogetc.index');
 
                 // Public search results:
-                Route::get('/search', 'BlogEtcReaderController@search')
+                Route::get('/search', 'BlogPostsController@search')
                     ->name('blogetc.search');
 
                 // Public RSS feed:
-                Route::get('/feed', 'BlogEtcRssFeedController@feed')
+                Route::get('/feed', 'FeedController@index')
                     ->name('blogetc.feed'); //RSS feed
 
                 // Public show category:
                 Route::get(
                     '/category/{categorySlug}',
-                    'BlogEtcReaderController@showCategory'
+                    'BlogPostsController@showCategory'
                 )
                     ->name('blogetc.view_category');
 
                 // Public show single blog post:
                 Route::get(
                     '/{blogPostSlug}',
-                    'BlogEtcReaderController@show'
+                    'BlogPostsController@show'
                 )
                     ->name('blogetc.show');
 
@@ -41,7 +41,7 @@ Route::group(
                 Route::group(['middleware' => ['throttle:10,3', 'can:blog-etc-add-comment'],], static function () {
                     Route::post(
                         'save_comment/{blogPostSlug}',
-                        'BlogEtcCommentWriterController@addNewComment'
+                        'CommentsController@store'
                     )->name('blogetc.comments.add_new_comment');
                 });
             }
@@ -52,6 +52,7 @@ Route::group(
             [
                 'middleware' => ['can:blog-etc-admin','auth',],
                 'prefix' => config('blogetc.admin_prefix', 'blog_admin'),
+                'namespace' => 'Admin',
             ],
             static function () {
                 // Manage blog posts (admin panel):
@@ -59,37 +60,37 @@ Route::group(
                     // Show all blog posts:
                     Route::get(
                         '/',
-                        'BlogEtcAdminController@index'
+                        'ManagePostsController@index'
                     )->name('blogetc.admin.index');
 
                     // Create a new blog post (form):
                     Route::get(
                         '/add_post',
-                        'BlogEtcAdminController@create'
+                        'ManagePostsController@create'
                     )->name('blogetc.admin.create_post');
 
                     // Store a new blog post entry:
                     Route::post(
                         '/add_post',
-                        'BlogEtcAdminController@store'
+                        'ManagePostsController@store'
                     )->name('blogetc.admin.store_post');
 
                     // Show the edit form:
                     Route::get(
                         '/edit_post/{blogPostId}',
-                        'BlogEtcAdminController@edit'
+                        'ManagePostsController@edit'
                     )->name('blogetc.admin.edit_post');
 
                     // Store the changes to a blog post in DB:
                     Route::patch(
                         '/edit_post/{blogPostID}',
-                        'BlogEtcAdminController@update'
+                        'ManagePostsController@update'
                     )->name('blogetc.admin.update_post');
 
                     // Delete a blog post:
                     Route::delete(
                         '/delete_post/{blogPostId}',
-                        'BlogEtcAdminController@destroy'
+                        'ManagePostsController@destroy'
                     )->name('blogetc.admin.destroy_post');
                 });
 
@@ -100,19 +101,19 @@ Route::group(
                         // show all uploaded images:
                         Route::get(
                             '/',
-                            'BlogEtcImageUploadController@index'
+                            'UploadsController@index'
                         )->name('blogetc.admin.images.all');
 
                         // upload new image (form):
                         Route::get(
                             '/upload',
-                            'BlogEtcImageUploadController@create'
+                            'UploadsController@create'
                         )->name('blogetc.admin.images.upload');
 
                         // store a new uploaded image:
                         Route::post(
                             '/upload',
-                            'BlogEtcImageUploadController@store'
+                            'UploadsController@store'
                         )->name('blogetc.admin.images.store');
                     }
                 );
@@ -124,20 +125,20 @@ Route::group(
                         // show all comments:
                         Route::get(
                             '/',
-                            'BlogEtcCommentsAdminController@index'
+                            'ManageCommentsController@index'
                         )->name('blogetc.admin.comments.index');
 
                         // approve a comment:
                         Route::patch(
                             '/{commentId}',
-                            'BlogEtcCommentsAdminController@approve'
+                            'ManageCommentsController@approve'
                         )->name('blogetc.admin.comments.approve')
                             ->middleware('can:blog-etc-approve-comments');
 
                         // delete a comment:
                         Route::delete(
                             '/{commentId}',
-                            'BlogEtcCommentsAdminController@destroy'
+                            'ManageCommentsController@destroy'
                         )->name('blogetc.admin.comments.delete')
                             ->middleware('can:blog-etc-approve-comments');
                     }
@@ -150,37 +151,37 @@ Route::group(
                         // show all categories:
                         Route::get(
                             '/',
-                            'BlogEtcCategoryAdminController@index'
+                            'ManageCategoriesController@index'
                         )->name('blogetc.admin.categories.index');
 
                         // create a new category (form):
                         Route::get(
                             '/add_category',
-                            'BlogEtcCategoryAdminController@create'
+                            'ManageCategoriesController@create'
                         )->name('blogetc.admin.categories.create_category');
 
                         // store a new category in DB:
                         Route::post(
                             '/add_category',
-                            'BlogEtcCategoryAdminController@store'
+                            'ManageCategoriesController@store'
                         )->name('blogetc.admin.categories.store_category');
 
                         // edit a category (form):
                         Route::get(
                             '/edit_category/{categoryId}',
-                            'BlogEtcCategoryAdminController@edit'
+                            'ManageCategoriesController@edit'
                         )->name('blogetc.admin.categories.edit_category');
 
                         // update a category:
                         Route::patch(
                             '/edit_category/{categoryId}',
-                            'BlogEtcCategoryAdminController@update'
+                            'ManageCategoriesController@update'
                         )->name('blogetc.admin.categories.update_category');
 
                         // delete a category:
                         Route::delete(
                             '/delete_category/{categoryId}',
-                            'BlogEtcCategoryAdminController@destroy'
+                            'ManageCategoriesController@destroy'
                         )->name('blogetc.admin.categories.destroy_category');
                     }
                 );
