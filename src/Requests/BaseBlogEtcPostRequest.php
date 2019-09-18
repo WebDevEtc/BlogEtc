@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
@@ -11,7 +12,7 @@ use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
  * Class BaseBlogEtcPostRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-abstract class BaseBlogEtcPostRequest extends BaseRequest
+abstract class BaseBlogEtcPostRequest extends FormRequest
 {
     use HasImageUploadTrait;
     use HasCategoriesTrait;

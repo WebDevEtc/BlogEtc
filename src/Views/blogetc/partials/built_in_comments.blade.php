@@ -1,10 +1,10 @@
-<?php
-/** @var BlogEtcComment[] $comments */
-?>
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcComment[] $comments */
+@endphp
 @forelse($comments as $comment)
     <div class="card bg-light mb-3">
         <div class="card-header">
-            {{ $comment->author()}}
+            {{ $comment->author() }}
             @if(config('blogetc.comments.ask_for_author_website') && $comment->author_website)
                 (<a href="{{ $comment->author_websitae }}" target="_blank" rel="noopener">website</a>)
             @endif

@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Scope;
 class BlogEtcPublishedScope implements Scope
 {
     /**
-     * If user is logged in and canManageBlogEtcPosts() == true, then don't add any scope
+     * For
      * But for everyone else then it should only show PUBLISHED posts with a POSTED_AT < NOW()
      *
      * @param Builder $builder
@@ -24,10 +24,16 @@ class BlogEtcPublishedScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if (!Auth::check() || !Auth::user()->canManageBlogEtcPosts()) {
+        if (/*!Auth::check() ||*/ !Gate::allows('blog-etc-admin')) {
+            dump("A");
             // user is a guest, or if logged in they can't manage blog posts
             $builder->where('is_published', true);
             $builder->where('posted_at', '<=', Carbon::now());
+        }
+        else {
+
+            dump("B");
+
         }
     }
 }

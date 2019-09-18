@@ -1,4 +1,4 @@
-@extends('layouts.app',['title'=>$title])
+@extends('layouts.app',['title' => $title])
 @section('content')
 
     {{--https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views--}}
@@ -8,11 +8,9 @@
             <h2>Search Results for {{ $query }}</h2>
 
             @forelse($search_results as $result)
-
-                <?php $post = $result->indexable; ?>
-                @if($post && is_a($post,\WebDevEtc\BlogEtc\Models\BlogEtcPost::class))
+                @if($result->indexable && is_a($result->indexable,\WebDevEtc\BlogEtc\Models\BlogEtcPost::class))
                     <h2>Search result #{{ $loop->count}}</h2>
-                    @include('blogetc::partials.index_loop')
+                    @include('blogetc::partials.index_loop', ['post' => $result->indexable])
                 @else
 
                     <div class="alert alert-danger">Unable to show this search result - unknown type</div>

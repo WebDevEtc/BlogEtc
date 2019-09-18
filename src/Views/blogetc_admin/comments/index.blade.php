@@ -1,6 +1,6 @@
-<?php
-/** @var \WebDevEtc\BlogEtc\Models\BlogEtcComment[] $comments */
-?>
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcComment[] $comments */
+@endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('title', 'BlogEtc Manage Comments')
 @section('content')
@@ -14,7 +14,6 @@
                         <a href="{{ $comment->post->url()}}">{{ $comment->post->title }}</a>
                     @else
                         Unknown blog post
-
                     @endif
 
                     on {{ $comment->created_at }} </h5>
@@ -23,11 +22,11 @@
 
                 @if($comment->post)
                     {{--VIEW + EDIT POST LINKS--}}
-                    <a href="{{ $comment->post->url()}}" class="card-link btn btn-outline-secondary">
+                    <a href="{{ $comment->post->url() }}" class="card-link btn btn-outline-secondary">
                         <i class="fa fa-file-text-o" aria-hidden="true"></i>
                         View Post
                     </a>
-                    <a href="{{ $comment->post->edit_url() }}" class="card-link btn btn-primary">
+                    <a href="{{ $comment->post->editUrl() }}" class="card-link btn btn-primary">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         Edit Post
                     </a>
@@ -45,10 +44,10 @@
 
                 {{--DELETE BUTTON--}}
                 <form
-                        {{--                        TODO--}}
-                        onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"
-                        method="post" action="{{route('blogetc.admin.comments.delete', $comment->id)}}"
-                        class="float-right">
+                    {{--                        TODO--}}
+                    onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"
+                    method="post" action="{{route('blogetc.admin.comments.delete', $comment->id)}}"
+                    class="float-right">
                     {{--                    TODO  float-right--}}
                     @csrf
                     @method('DELETE')

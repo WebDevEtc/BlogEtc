@@ -1,6 +1,6 @@
-<?php
+@php
 /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
-?>
+@endphp
 @extends('layouts.app',['title' => $post->genSeoTitle() ])
 @section('content')
     {{--https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views--}}
@@ -11,7 +11,7 @@
                 @include('blogetc::partials.show_errors')
                 @include('blogetc::partials.full_post_details')
 
-                @if(config('blogetc.comments.type_of_comments_to_show') !== 'disabled')
+                @if(config('blogetc.comments.type_of_comments_to_show') !== \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_DISABLED)
                     <div id="maincommentscontainer">
                         <h2 class="text-center">
                             Comments

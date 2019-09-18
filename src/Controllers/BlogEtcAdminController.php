@@ -33,8 +33,6 @@ class BlogEtcAdminController extends Controller
     {
         $this->service = $blogEtcPostsService;
 
-        $this->middleware(UserCanManageBlogPosts::class);
-
         if (!is_array(config('blogetc'))) {
             throw new RuntimeException(
                 'The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc' .
@@ -56,7 +54,7 @@ class BlogEtcAdminController extends Controller
     }
 
     /**
-     * Show form for creating new post
+     * Show form for creating new post.
      *
      * @return View
      */
@@ -66,7 +64,7 @@ class BlogEtcAdminController extends Controller
     }
 
     /**
-     * Save a new post
+     * Save a new post.
      *
      * @param CreateBlogEtcPostRequest $request
      * @return RedirectResponse

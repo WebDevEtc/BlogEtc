@@ -1,9 +1,9 @@
-<?php
-use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-/** @var BlogEtcPost $post */
-/** @var CaptchaAbstract $captcha */
-?>
+@php
+    use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
+    use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+    /** @var BlogEtcPost $post */
+    /** @var CaptchaAbstract $captcha */
+@endphp
 <div class="add_comment_area">
     <h5 class="text-center">Add a comment</h5>
     <form method="post" action="{{ route('blogetc.comments.add_new_comment', $post->slug) }}">
@@ -13,28 +13,26 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
             <label id="comment_label" for="comment">Your Comment</label>
             <textarea
-                    class="form-control"
-                    name="comment"
-                    required
-                    id="comment"
-                    placeholder="Write your comment here"
-                    rows="7">{{ old('comment') }}</textarea>
+                class="form-control"
+                name="comment"
+                required
+                id="comment"
+                placeholder="Write your comment here"
+                rows="7">{{ old('comment') }}</textarea>
 
         </div>
 
         <div class="container-fluid">
             <div class="row">
-
                 @if(!config('blogetc.comments.save_user_id_if_logged_in', true) || !Auth::check())
-
                     <div class="col">
                         <div class="form-group ">
                             <label id="author_name_label" for="author_name">
                                 Your Name
                             </label>
                             <input type="text" class="form-control" name="author_name"
-                                    id="author_name" placeholder="Your name" required
-                                    value="{{ old('author_name') }}">
+                                   id="author_name" placeholder="Your name" required
+                                   value="{{ old('author_name') }}">
                         </div>
                     </div>
 
@@ -46,8 +44,8 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
                                     <small>(won't be displayed publicly)</small>
                                 </label>
                                 <input type="email" class="form-control" name="author_email"
-                                        id="author_email" placeholder="Your Email" required
-                                        value="{{ old('author_email') }}">
+                                       id="author_email" placeholder="Your Email" required
+                                       value="{{ old('author_email') }}">
                             </div>
                         </div>
                     @endif
@@ -60,8 +58,8 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
                                 <small>(Will be displayed)</small>
                             </label>
                             <input type="url" class="form-control" name="author_website"
-                                    id="author_website" placeholder="Your Website URL"
-                                    value="{{ old('author_website') }}">
+                                   id="author_website" placeholder="Your Website URL"
+                                   value="{{ old('author_website') }}">
                         </div>
                     </div>
                 @endif
@@ -69,7 +67,7 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
         </div>
 
         @if($captcha)
-            {{--Captcha is enabled. Load the type class, and then include the view as defined in the captcha class --}}
+            {{-- Captcha is enabled. Load the type class and then include the view as defined in the captcha class. --}}
             @include($captcha->view())
         @endif
 

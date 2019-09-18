@@ -2,18 +2,20 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
+
 /**
- * Class BaseRequest
+ * Class UploadImageRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-class UploadImageRequest extends BaseRequest
+class UploadImageRequest extends FormRequest
 {
     /**
-     *  rules for uploads
+     * Rules for uploads.
      *
      * @return array
      */
-    public function rules():array
+    public function rules(): array
     {
         $rules = [
             'sizes_to_upload' => [

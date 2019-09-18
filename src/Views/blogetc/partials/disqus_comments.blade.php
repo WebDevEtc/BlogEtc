@@ -1,6 +1,6 @@
-<?php
-/** @var BlogEtcPost $post */
-?>
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+@endphp
 <div id="disqus_thread"></div>
 <script>
 

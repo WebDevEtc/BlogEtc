@@ -1,10 +1,10 @@
-<?php
+@php
 use Illuminate\Support\Str;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 // todo - this needs lots of work
-?>
+@endphp
 <h2>
     <a href="https://webdevetc.com/">
         WebDevEtc.com BlogEtc Admin Panel

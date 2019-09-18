@@ -2,10 +2,18 @@
 
 namespace WebDevEtc\BlogEtc;
 
+use Gate;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use LogicException;
 use Swis\LaravelFulltext\ModelObserver;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
+/**
+ * Class BlogEtcServiceProvider
+ *
+ * @package WebDevEtc\BlogEtc
+ */
 class BlogEtcServiceProvider extends ServiceProvider
 {
     /**
@@ -18,11 +26,14 @@ class BlogEtcServiceProvider extends ServiceProvider
         // if full text is not enabled, disable it:
         $this->disableFulltextSyncing();
 
-        // include routes:
+        // Include routes:
         $this->includeRoutes();
 
-        // for vendor:publish
+        // For vendor:publish:
         $this->publishFiles();
+
+        // Set up default gates to allow/disallow access to features.
+        $this->setupDefaultGates();
     }
 
     /**
@@ -85,5 +96,39 @@ class BlogEtcServiceProvider extends ServiceProvider
             __DIR__ . '/Config/blogetc.php' => config_path('blogetc.php'),
             __DIR__ . '/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
         ]);
+    }
+
+    /**
+     * Set up default gates.
+     * @see https://laravel.com/docs/5.8/authorization#authorizing-actions-via-gates
+     */
+    protected function setupDefaultGates(): void
+    {
+        // disable this function by adding undocumented config:
+        if (config('blogetc.default-gates', true) === false) {
+            return;
+        }
+
+        // You must add a gate with the ability name 'blog-etc-admin' to your AuthServiceProvider class.
+        // This is provided only as a backup, which will restrict all access to BlogEtc admin.
+        Gate::define('blog-etc-admin', function ($user) {
+            throw new LogicException('You must implement your own gate in AuthServiceProvider for the "blog-etc-admin" gate.');
+        });
+
+        // Some defaults which allow everything through - you can override these and add your own logic.
+
+        /**
+         * For people to add comments to your blog posts.
+         */
+        Gate::define('blog-etc-add-comment', function (?Model $user) {
+            return true;
+        });
+
+        /**
+         * For an admin-like user to approve comments.
+         */
+        Gate::define('blog-etc-approve-comments', function ($user) {
+            return true;
+        });
     }
 }

@@ -1,11 +1,12 @@
-@extends('layouts.app',['title'=>$title])
+@extends('layouts.app', ['title' => $title, ])
 @section('content')
     {{--https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views--}}
     <div class="row">
         <div class="col-sm-12 blogetc_container">
-            @if(Auth::check() && Auth::user()->canManageBlogEtcPosts())
+            @can('blog-etc-admin')
                 <div class="text-center">
-                    <p class="mb-1">You are logged in as a blog admin user.
+                    <p class="mb-1">
+                        You are logged in as a blog admin user.
                         <br>
                         <a href="{{ route('blogetc.admin.index') }}" class="btn border btn-outline-primary btn-sm">
                             <i class="fa fa-cogs" aria-hidden="true"></i>
@@ -13,7 +14,8 @@
                         </a>
                     </p>
                 </div>
-            @endif
+            @endcan
+
             @if(isset($blogetc_category) && $blogetc_category)
                 <h2 class="text-center">
                     Viewing Category: {{ $blogetc_category->category_name }}

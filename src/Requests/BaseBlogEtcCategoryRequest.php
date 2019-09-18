@@ -2,11 +2,13 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
+
 /**
  * Class BaseBlogEtcCategoryRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-abstract class BaseBlogEtcCategoryRequest extends BaseRequest
+abstract class BaseBlogEtcCategoryRequest extends FormRequest
 {
     // todo - redo both of the subclasses and just do it once! this is silly at the moment.
     /**

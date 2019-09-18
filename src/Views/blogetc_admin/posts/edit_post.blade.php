@@ -1,6 +1,6 @@
-<?php
-/** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
-?>
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\BlogEtcPost $post */
+@endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('content')
     <h5>Admin - Editing post

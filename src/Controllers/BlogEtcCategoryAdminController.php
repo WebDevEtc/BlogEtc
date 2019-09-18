@@ -106,7 +106,7 @@ class BlogEtcCategoryAdminController extends Controller
 
         Helpers::flashMessage('Saved category changes');
 
-        return redirect($category->edit_url());
+        return redirect($category->editUrl());
     }
 
     /**

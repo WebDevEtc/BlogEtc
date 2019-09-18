@@ -2,15 +2,16 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
+use Illuminate\Foundation\Http\FormRequest;
+
 /**
  * Class DeleteBlogEtcPostRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
-class DeleteBlogEtcPostRequest extends BaseRequest
+class DeleteBlogEtcPostRequest extends FormRequest
 {
-
     /**
-     * No rules needed for this DELETE request - we just need to implement it due to the interface requirement
+     * No rules needed for this DELETE request - we just need to implement it due to the interface requirement.
      *
      * @return array
      */

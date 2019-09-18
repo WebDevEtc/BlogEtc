@@ -194,17 +194,6 @@ class BlogEtcPost extends Model
     }
 
     /**
-     * @return string
-     * @throws Exception
-     *
-     * @deprecated - use fullViewFilePath() instead
-     */
-    public function full_view_file_path(): string
-    {
-        return $this->fullViewFilePath();
-    }
-
-    /**
      * Generate a full <img src='' alt=''> img tag.
      *
      * @param string $size - large, medium, thumbnail
@@ -308,16 +297,6 @@ class BlogEtcPost extends Model
     }
 
     /**
-     * @param string $size
-     * @return string
-     * @deprecated - use imageUrl() instead
-     */
-    public function image_url($size = 'medium'): string
-    {
-        return $this->iamgeUrl($size);
-    }
-
-    /**
      * Returns the public facing URL to view this blog post.
      *
      * @return string
@@ -343,17 +322,6 @@ class BlogEtcPost extends Model
 
         return Str::limit($base_text_to_use, $maxLen);
     }
-
-    /**
-     * @param int $maxLen
-     * @return string
-     * @deprecated - use generateIntroduction() instead
-     */
-    public function generate_introduction(int $maxLen = 500): string
-    {
-        return $this->generateIntroduction($maxLen);
-    }
-
     /**
      * Return post body HTML, ready for output
      *
@@ -381,19 +349,6 @@ class BlogEtcPost extends Model
         }
 
         return new HtmlString($body);
-    }
-
-    /**
-     * @return string
-     * @throws Throwable
-     * @deprecated - use renderBody() instead
-     *
-     * (post_body_output used to return a string, renderBody() now returns HtmlString)
-     *
-     */
-    public function post_body_output(): string
-    {
-        return $this->renderBody();
     }
 
     /**
@@ -470,4 +425,49 @@ class BlogEtcPost extends Model
     {
         return $this->checkValidImageSize($size);
     }
+
+    /**
+     * @return string
+     * @throws Exception
+     *
+     * @deprecated - use fullViewFilePath() instead
+     */
+    public function full_view_file_path(): string
+    {
+        return $this->fullViewFilePath();
+    }
+
+    /**
+     * @param string $size
+     * @return string
+     * @deprecated - use imageUrl() instead
+     */
+    public function image_url($size = 'medium'): string
+    {
+        return $this->iamgeUrl($size);
+    }
+
+    /**
+     * @param int $maxLen
+     * @return string
+     * @deprecated - use generateIntroduction() instead
+     */
+    public function generate_introduction(int $maxLen = 500): string
+    {
+        return $this->generateIntroduction($maxLen);
+    }
+
+    /**
+     * @return string
+     * @throws Throwable
+     * @deprecated - use renderBody() instead
+     *
+     * (post_body_output used to return a string, renderBody() now returns HtmlString)
+     *
+     */
+    public function post_body_output(): string
+    {
+        return $this->renderBody();
+    }
+
 }
