@@ -9,7 +9,7 @@
         </a>
     </h5>
 
-    <form method="post" action="{{ route('blogetc.admin.update_post',$post->id) }}" enctype="multipart/form-data">
+    <form method="post" action="{{ route('blogetc.admin.update_post', $post->id) }}" enctype="multipart/form-data">
 
         @csrf
         @method('patch')

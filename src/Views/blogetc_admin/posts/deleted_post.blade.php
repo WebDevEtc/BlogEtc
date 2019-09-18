@@ -54,13 +54,4 @@
             Please manually remove those files from the filesystem if desired.
         </p>
     @endif
-
-    <hr class="my-5 py-5">
-
-    <p>
-        Was deleting it a mistake? Here is some of the output from the deleted post, as JSON. Please use a JSON viewer
-        to retrieve the information.
-    </p>
-
-    <textarea readonly class="form-control">{{ $deletedPost->toJson() }}</textarea>
 @endsection

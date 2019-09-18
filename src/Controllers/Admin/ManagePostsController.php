@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Helpers;
-use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Requests\PostRequest;
 use WebDevEtc\BlogEtc\Services\PostsService;

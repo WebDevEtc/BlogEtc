@@ -163,7 +163,7 @@ class PostRequest extends FormRequest
 
         if (in_array($this->method(), [Request::METHOD_PATCH, Request::METHOD_PUT], true)) {
             $rules['slug'][] = Rule::unique('blog_etc_posts', 'slug')
-                ->ignore($this->route()->parameter('blogPostId'));
+                ->ignore($this->route()->parameter('blogPostID'));
         }
 
         return $rules;

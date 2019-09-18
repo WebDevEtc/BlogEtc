@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Helpers;
-use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Services\CommentsService;
 
@@ -27,8 +26,6 @@ class ManageCommentsController extends Controller
     public function __construct(CommentsService $service)
     {
         $this->service = $service;
-
-        $this->middleware(UserCanManageBlogPosts::class);
     }
 
     /**

@@ -28,9 +28,6 @@ class UploadsController extends Controller
     {
         $this->uploadsService = $uploadsService;
 
-        // ensure that the logged in user has correct permission
-        $this->middleware(UserCanManageBlogPosts::class);
-
         // ensure the config file exists
         if (!is_array(config('blogetc'))) {
             throw new RuntimeException(

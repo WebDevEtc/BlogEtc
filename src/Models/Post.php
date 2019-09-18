@@ -179,7 +179,7 @@ class Post extends Model
      */
     public function comments(): HasMany
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'blog_etc_post_id');
     }
 
     /**
@@ -193,6 +193,15 @@ class Post extends Model
     }
 
     /**
+     * @return string
+     * @throws Exception
+     */
+    public function fullViewFilePath(): string
+    {
+        return resource_path('views/custom_blog_posts/' . $this->use_view_file . '.blade.php');
+    }
+
+    /**
      * If $this->user_view_file is not empty, then it'll return the dot syntax
      * location of the blade file it should look for.
      *
@@ -200,13 +209,14 @@ class Post extends Model
      * @throws Exception
      *
      */
-    public function fullViewFilePath(): string
+    public function bladeViewFile() : string
     {
         if (!$this->use_view_file) {
             throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
         }
 
         return 'custom_blog_posts.' . $this->use_view_file;
+
     }
 
     /**
@@ -448,11 +458,11 @@ class Post extends Model
      * @return string
      * @throws Exception
      *
-     * @deprecated - use fullViewFilePath() instead
+     * @deprecated - use bladeViewFile() instead
      */
     public function full_view_file_path(): string
     {
-        return $this->fullViewFilePath();
+        return $this->bladeViewFile();
     }
 
     /**
@@ -487,5 +497,4 @@ class Post extends Model
     {
         return $this->renderBody();
     }
-
 }

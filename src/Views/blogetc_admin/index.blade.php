@@ -30,7 +30,9 @@
                         @if($post->is_published)
                             Yes
                         @else
-                            <span class="border border-danger rounded p-1">No</span>
+                            <span class="border border-danger rounded p-1">
+                                No
+                            </span>
                         @endif
                     </dd>
 
@@ -56,21 +58,17 @@
                     <h5>Uses Custom View file:</h5>
                     <div class="m-2 p-1">
                         <strong>View file:</strong><br>
-                        <code>{{ $post->use_view_file}}</code>
-                        @php
-                            //  TODO - put into controller/service
-                            $viewfile = resource_path('views/custom_blog_posts/' . $post->use_view_file . '.blade.php');
-                        @endphp
+                        <code>{{ $post->use_view_file }}</code>
                         <br>
                         <strong>
                             Full filename:
                         </strong>
                         <br>
                         <small>
-                            <code>{{ $viewfile }}</code>
+                            <code>{{ $post->fullViewFilePath() }}</code>
                         </small>
 
-                        @if(!file_exists($viewfile))
+                        @if(!file_exists($post->fullViewFilePath()))
                             <div class="alert alert-danger">
                                 Warning! The custom view file does not exist. Create the
                                 file for this post to display correctly.
@@ -86,7 +84,8 @@
                 </a>
                 <a href="{{ $post->editUrl() }}" class="card-link btn btn-primary">
                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    Edit Post</a>
+                    Edit Post
+                </a>
                 {{-- TODO--}}
                 <form
                     onsubmit="return confirm('Are you sure you want to delete this blog post?\n You cannot undo this action!');"

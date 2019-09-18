@@ -7,7 +7,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use WebDevEtc\BlogEtc\Helpers;
-use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Requests\CategoryRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Services\CategoriesService;
@@ -28,8 +27,6 @@ class ManageCategoriesController extends Controller
     public function __construct(CategoriesService $service)
     {
         $this->service = $service;
-
-        $this->middleware(UserCanManageBlogPosts::class);
     }
 
     /**
