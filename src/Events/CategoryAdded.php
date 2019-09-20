@@ -7,8 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\Category;
 
 /**
- * Class CategoryAdded
- * @package WebDevEtc\BlogEtc\Events
+ * Class CategoryAdded.
  */
 class CategoryAdded
 {
@@ -19,6 +18,7 @@ class CategoryAdded
 
     /**
      * CategoryAdded constructor.
+     *
      * @param Category $category
      */
     public function __construct(Category $category)

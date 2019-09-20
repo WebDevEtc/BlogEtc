@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 // (ignore typo! Don't want to change in case it breaks some people's migrations!)
 
 /**
- * Class AddShortDescTextreaToBlogEtc
+ * Class AddShortDescTextreaToBlogEtc.
  */
 class AddShortDescTextreaToBlogEtc extends Migration
 {
     /**
-     * Create the DB table changes to add TEXT short_description column
+     * Create the DB table changes to add TEXT short_description column.
      *
      * @return void
      */
@@ -30,7 +30,6 @@ class AddShortDescTextreaToBlogEtc extends Migration
      */
     public function down(): void
     {
-
         Schema::table('blog_etc_posts', static function (Blueprint $table) {
             $table->dropColumn('short_description');
         });

@@ -9,18 +9,15 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use RuntimeException;
-use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Requests\CommentRequest;
+use WebDevEtc\BlogEtc\Services\CaptchaService;
 use WebDevEtc\BlogEtc\Services\CommentsService;
 use WebDevEtc\BlogEtc\Services\PostsService;
-use WebDevEtc\BlogEtc\Services\CaptchaService;
 
 /**
- * Class BlogEtcCommentWriterController
+ * Class BlogEtcCommentWriterController.
  *
  * Let public write comments
- *
- * @package WebDevEtc\BlogEtc\Controllers
  */
 class CommentsController extends Controller
 {
@@ -33,9 +30,10 @@ class CommentsController extends Controller
 
     /**
      * BlogEtcCommentWriterController constructor.
-     * @param PostsService $postsService
+     *
+     * @param PostsService    $postsService
      * @param CommentsService $commentsService
-     * @param CaptchaService $captchaService
+     * @param CaptchaService  $captchaService
      */
     public function __construct(
         PostsService $postsService,
@@ -48,12 +46,14 @@ class CommentsController extends Controller
     }
 
     /**
-     * Let a guest (or logged in user) submit a new comment for a blog post
+     * Let a guest (or logged in user) submit a new comment for a blog post.
      *
      * @param CommentRequest $request
      * @param $slug
-     * @return Factory|View
+     *
      * @throws Exception
+     *
+     * @return Factory|View
      */
     public function store(CommentRequest $request, string $slug)
     {
@@ -77,8 +77,8 @@ class CommentsController extends Controller
         );
 
         return response()->view('blogetc::saved_comment', [
-            'captcha' => $captcha,
-            'blog_post' => $blogPost,
+            'captcha'     => $captcha,
+            'blog_post'   => $blogPost,
             'new_comment' => $comment,
         ])->setStatusCode(Response::HTTP_CREATED);
     }

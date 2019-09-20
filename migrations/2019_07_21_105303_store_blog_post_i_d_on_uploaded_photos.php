@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 /**
  * Class StoreBlogPostIDOnUploadedPhotos
  * Create the new column on blog_etc_uploaded_photos to store the blog post ID (if it was associated with a blog post
- * id when created)
+ * id when created).
  */
 class StoreBlogPostIDOnUploadedPhotos extends Migration
 {

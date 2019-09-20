@@ -25,9 +25,10 @@ class CommentsRepository
     }
 
     /**
-     * Return new instance of the Query Builder for this model
+     * Return new instance of the Query Builder for this model.
      *
      * @param bool $eagerLoad
+     *
      * @return Builder
      */
     public function query(bool $eagerLoad = false): Builder
@@ -42,13 +43,14 @@ class CommentsRepository
     }
 
     /**
-     * Find and return a comment by ID
+     * Find and return a comment by ID.
      *
      * If $onlyApproved is true, then it will only return an approved comment
      * If it is false then it can return it even if not yet approved
      *
-     * @param int $blogEtcCommentID
+     * @param int  $blogEtcCommentID
      * @param bool $onlyApproved
+     *
      * @return Comment
      */
     public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
@@ -62,7 +64,7 @@ class CommentsRepository
 
             return $queryBuilder->findOrFail($blogEtcCommentID);
         } catch (ModelNotFoundException $e) {
-            throw new CommentNotFoundException('Unable to find blog post comment with ID: ' . $blogEtcCommentID);
+            throw new CommentNotFoundException('Unable to find blog post comment with ID: '.$blogEtcCommentID);
         }
     }
 }

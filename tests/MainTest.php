@@ -10,7 +10,6 @@ use WebDevEtc\BlogEtc\Models\Post;
 
 class MainTest extends TestCase
 {
-
 //    use \Illuminate\Foundation\Testing\DatabaseTransactions;
 
     /*
@@ -159,7 +158,7 @@ class MainTest extends TestCase
         $newObjectAttributes['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
 
         $response->assertSessionHasNoErrors();
 //        dump($response);
@@ -182,9 +181,9 @@ class MainTest extends TestCase
             }));
 
         // set up some dummy info
-        $user->name = str_random() . 'testuser';
+        $user->name = str_random().'testuser';
         $user->password = str_random();
-        $user->email = str_random() . '@example.com';
+        $user->email = str_random().'@example.com';
 
         $this->actingAs($user);
 
@@ -210,6 +209,7 @@ class MainTest extends TestCase
                  ] as $field) {
             $newObjectAttributes[$field] = str_random();
         }
+
         return $newObjectAttributes;
     }
 
@@ -232,7 +232,7 @@ class MainTest extends TestCase
         $newObjectAttributes['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
         $response->assertSessionHasNoErrors();
 
         $response->assertStatus(302); // redirect
@@ -259,7 +259,7 @@ class MainTest extends TestCase
         $newObjectAttributes['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
@@ -267,9 +267,9 @@ class MainTest extends TestCase
         $justCreatedRow = Post::where('slug', $newObjectAttributes['slug'])
             ->firstOrFail();
 
-        $newObjectAttributes['title'] = 'New title ' . str_random();
+        $newObjectAttributes['title'] = 'New title '.str_random();
         $this->assertDatabaseMissing('blog_etc_posts', ['title' => $newObjectAttributes['title']]);
-        $response = $this->patch($admin_panel_url . '/edit_post/' . $justCreatedRow->id, $newObjectAttributes);
+        $response = $this->patch($admin_panel_url.'/edit_post/'.$justCreatedRow->id, $newObjectAttributes);
         $response->assertStatus(302);
         $this->assertDatabaseHas('blog_etc_posts', ['title' => $newObjectAttributes['title']]);
     }
@@ -284,7 +284,7 @@ class MainTest extends TestCase
 
         $newObjectAttributes = $this->generate_basic_blog_post_with_random_data();
 
-        $newObjectAttributes['slug'] = 'slug123' . str_random();
+        $newObjectAttributes['slug'] = 'slug123'.str_random();
 
         // to verify this was added to database. Use a different variable, so we can add things (like _token) and still be able to assertDatabaseHas later.
         $search_for_obj = $newObjectAttributes;
@@ -304,10 +304,10 @@ class MainTest extends TestCase
         // must clear the cache, as the /feed is cached
         Artisan::call('cache:clear');
 
-        $response = $this->get(config('blogetc.blog_prefix', 'blog') . '/feed');
+        $response = $this->get(config('blogetc.blog_prefix', 'blog').'/feed');
         $response->assertDontSee($newObjectAttributes['slug']);
 
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
         $response->assertSessionHasNoErrors();
 
         $response->assertStatus(302); // redirect
@@ -322,7 +322,7 @@ class MainTest extends TestCase
         // must clear the cache, as the /feed is cached
         Artisan::call('cache:clear');
 
-        $response = $this->get(config('blogetc.blog_prefix', 'blog') . '/feed');
+        $response = $this->get(config('blogetc.blog_prefix', 'blog').'/feed');
         $response->assertSee($newObjectAttributes['slug']);
         $response->assertSee($newObjectAttributes['title']);
 
@@ -341,7 +341,7 @@ class MainTest extends TestCase
 
         $newObjectAttributes['is_published'] = false;
 
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
         $response->assertSessionHasNoErrors();
 
         $response->assertStatus(302); // redirect
@@ -356,7 +356,7 @@ class MainTest extends TestCase
 
         // now check single post is viewable
 
-        $response = $this->get(config('blogetc.blog_prefix', 'blog') . '/' . $newObjectAttributes['slug']);
+        $response = $this->get(config('blogetc.blog_prefix', 'blog').'/'.$newObjectAttributes['slug']);
         $response->assertStatus(404);
         $response->assertDontSee($newObjectAttributes['slug']);
         $response->assertDontSee($newObjectAttributes['title']);
@@ -387,6 +387,7 @@ class MainTest extends TestCase
         // check we don't see it at moment
         $response = $this->get(config('blogetc.blog_prefix', 'blog'));
         $response->assertDontSee($newObjectAttributes['slug']);
+
         return [$newObjectAttributes, $search_for_obj];
     }
 
@@ -397,7 +398,7 @@ class MainTest extends TestCase
 
         $newObjectAttributes['posted_at'] = Carbon::now()->addMonths(12);
 
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
         $response->assertSessionHasNoErrors();
 
         $response->assertStatus(302); // redirect
@@ -412,7 +413,7 @@ class MainTest extends TestCase
 
         // now check single post is viewable
 
-        $response = $this->get(config('blogetc.blog_prefix', 'blog') . '/' . $newObjectAttributes['slug']);
+        $response = $this->get(config('blogetc.blog_prefix', 'blog').'/'.$newObjectAttributes['slug']);
         $response->assertStatus(404);
         $response->assertDontSee($newObjectAttributes['slug']);
         $response->assertDontSee($newObjectAttributes['title']);
@@ -441,7 +442,7 @@ class MainTest extends TestCase
 
         $newObjectAttributes['_token'] = csrf_token();
 
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
         $response->assertSessionHasNoErrors();
 
         $response->assertStatus(302); // redirect
@@ -450,14 +451,14 @@ class MainTest extends TestCase
         Config::set('blogetc.comments.type_of_comments_to_show', 'built_in');
 
         $comment_detail = [
-            '_token' => csrf_token(),
-            'author_name' => str_random(),
-            'comment' => str_random(),
+            '_token'                     => csrf_token(),
+            'author_name'                => str_random(),
+            'comment'                    => str_random(),
             $captcha->captchaFieldName() => 'wronganswer1', // << WRONG CAPTCHA
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
         $response = $this->post(
-            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            config('blogetc.blog_prefix', 'blog').'/save_comment/'.$newObjectAttributes['slug'],
             $comment_detail
         );
         $response->assertStatus(302);
@@ -465,14 +466,14 @@ class MainTest extends TestCase
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
 
         $comment_detail = [
-            '_token' => csrf_token(),
+            '_token'      => csrf_token(),
             'author_name' => str_random(),
-            'comment' => str_random(),
+            'comment'     => str_random(),
             // << NO CAPTCHA FIELD
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
         $response = $this->post(
-            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            config('blogetc.blog_prefix', 'blog').'/save_comment/'.$newObjectAttributes['slug'],
             $comment_detail
         );
         $response->assertStatus(302);
@@ -491,7 +492,7 @@ class MainTest extends TestCase
 
         $newblogpost = new Post();
 
-        $newblogpost->title = __METHOD__ . ' ' . time();
+        $newblogpost->title = __METHOD__.' '.time();
 
         $newObjectAttributes['is_published'] = 1;
         $newObjectAttributes['posted_at'] = Carbon::now();
@@ -522,7 +523,7 @@ class MainTest extends TestCase
 
         $newblogpost = new Post();
 
-        $newblogpost->title = __METHOD__ . ' ' . time();
+        $newblogpost->title = __METHOD__.' '.time();
 
         $newObjectAttributes['is_published'] = 1;
         $newObjectAttributes['posted_at'] = Carbon::now();
@@ -548,7 +549,7 @@ class MainTest extends TestCase
 
         $newblogpost = new Post();
 
-        $newblogpost->title = __METHOD__ . ' ' . time();
+        $newblogpost->title = __METHOD__.' '.time();
 
         $newObjectAttributes['is_published'] = 1;
         $newObjectAttributes['posted_at'] = Carbon::now();
@@ -586,7 +587,7 @@ class MainTest extends TestCase
 
         $newObjectAttributes['_token'] = csrf_token();
 
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
 
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
@@ -594,14 +595,14 @@ class MainTest extends TestCase
         Config::set('blogetc.comments.type_of_comments_to_show', 'built_in');
 
         $comment_detail = [
-            '_token' => csrf_token(),
-            'author_name' => str_random(),
-            'comment' => str_random(),
+            '_token'                     => csrf_token(),
+            'author_name'                => str_random(),
+            'comment'                    => str_random(),
             $captcha->captchaFieldName() => 'AnsWer2',
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
         $response = $this->post(
-            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            config('blogetc.blog_prefix', 'blog').'/save_comment/'.$newObjectAttributes['slug'],
             $comment_detail
         );
         $response->assertStatus(200);
@@ -647,7 +648,7 @@ class MainTest extends TestCase
 
         $newObjectAttributes['_token'] = csrf_token();
 
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
 
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
@@ -656,13 +657,13 @@ class MainTest extends TestCase
         Config::set('blogetc.captcha.captcha_enabled', false);
 
         $comment_detail = [
-            '_token' => csrf_token(),
+            '_token'      => csrf_token(),
             'author_name' => str_random(),
-            'comment' => str_random(),
+            'comment'     => str_random(),
         ];
         $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
         $response = $this->post(
-            config('blogetc.blog_prefix', 'blog') . '/save_comment/' . $newObjectAttributes['slug'],
+            config('blogetc.blog_prefix', 'blog').'/save_comment/'.$newObjectAttributes['slug'],
             $comment_detail
         );
 
@@ -709,22 +710,22 @@ class MainTest extends TestCase
 
         $newObjectAttributes['_token'] = csrf_token();
 
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
 
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_posts', $search_for_obj);
 
         if (config('blogetc.comments.type_of_comments_to_show') === 'built_in') {
             $comment_detail = [
-                '_token' => csrf_token(),
+                '_token'      => csrf_token(),
                 'author_name' => str_random(),
-                'comment' => str_random(),
+                'comment'     => str_random(),
             ];
             $this->assertDatabaseMissing('blog_etc_comments', ['author_name' => $comment_detail['author_name']]);
             $response = $this->post(config(
                 'blogetc.blog_prefix',
                 'blog'
-            ) . '/save_comment/' . $newObjectAttributes['slug'], $comment_detail);
+            ).'/save_comment/'.$newObjectAttributes['slug'], $comment_detail);
             $response->assertSessionHasNoErrors();
             $response->assertStatus(200);
 
@@ -745,7 +746,7 @@ class MainTest extends TestCase
             $response->assertStatus(302);
 
             //check it doesnt exist in database
-            $this->assertDatabaseMissing('blog_etc_comments', ['id' => $justAddedRow->id,]);
+            $this->assertDatabaseMissing('blog_etc_comments', ['id' => $justAddedRow->id]);
         } else {
             dump("NOT TESTING COMMENT FEATURE, as config(\"blogetc.comments.type_of_comments_to_show\") is not set to 'built_in')");
         }
@@ -771,7 +772,7 @@ class MainTest extends TestCase
         $newObjectAttributes['_token'] = csrf_token();
 
         $this->assertDatabaseMissing('blog_etc_posts', $search_for_obj);
-        $response = $this->post($admin_panel_url . '/add_post', $newObjectAttributes);
+        $response = $this->post($admin_panel_url.'/add_post', $newObjectAttributes);
         $response->assertSessionHasNoErrors();
 
         $response->assertStatus(302); // redirect
@@ -780,7 +781,7 @@ class MainTest extends TestCase
         $justCreatedRow = Post::where('slug', $newObjectAttributes['slug'])
             ->firstOrFail();
         $id = $justCreatedRow->id;
-        $delete_url = $admin_panel_url . '/delete_post/' . $id;
+        $delete_url = $admin_panel_url.'/delete_post/'.$id;
 
         $response = $this->delete($delete_url, ['_token' => csrf_token()]);
         $response->assertStatus(200);
@@ -795,12 +796,12 @@ class MainTest extends TestCase
         // now lets create a category
         $new_cat_vals = [
             'category_name' => str_random(),
-            'slug' => str_random(),
+            'slug'          => str_random(),
         ];
         $search_for_new_cat = $new_cat_vals;
         $new_cat_vals['_token'] = csrf_token();
         $this->assertDatabaseMissing('blog_etc_categories', $search_for_new_cat);
-        $response = $this->post($admin_panel_url . '/categories/add_category', $new_cat_vals);
+        $response = $this->post($admin_panel_url.'/categories/add_category', $new_cat_vals);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
@@ -814,14 +815,14 @@ class MainTest extends TestCase
         // now lets create a category
         $new_cat_vals = [
             'category_name' => str_random(),
-            'slug' => str_random(),
+            'slug'          => str_random(),
         ];
 
         // create a post so we can edit it later
         $search_for_new_cat = $new_cat_vals;
         $new_cat_vals['_token'] = csrf_token();
         $this->assertDatabaseMissing('blog_etc_categories', $search_for_new_cat);
-        $response = $this->post($admin_panel_url . '/categories/add_category', $new_cat_vals);
+        $response = $this->post($admin_panel_url.'/categories/add_category', $new_cat_vals);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
@@ -832,12 +833,12 @@ class MainTest extends TestCase
 
         // get the edit page (form)
         $response = $this->get(
-            $admin_panel_url . '/categories/edit_category/' . $justCreatedRow->id
+            $admin_panel_url.'/categories/edit_category/'.$justCreatedRow->id
         );
         $response->assertStatus(200);
 
         // create some edits...
-        $newObjectAttributes['category_name'] = 'New category name ' . str_random();
+        $newObjectAttributes['category_name'] = 'New category name '.str_random();
         $newObjectAttributes['slug'] = $justCreatedRow->slug;
         $newObjectAttributes['_token'] = csrf_token();
 
@@ -865,12 +866,12 @@ class MainTest extends TestCase
         // now lets create a category
         $new_cat_vals = [
             'category_name' => str_random(),
-            'slug' => str_random(),
+            'slug'          => str_random(),
         ];
         $search_for_new_cat = $new_cat_vals;
         $new_cat_vals['_token'] = csrf_token();
         $this->assertDatabaseMissing('blog_etc_categories', $search_for_new_cat);
-        $response = $this->post($admin_panel_url . '/categories/add_category', $new_cat_vals);
+        $response = $this->post($admin_panel_url.'/categories/add_category', $new_cat_vals);
         $response->assertSessionHasNoErrors();
         $response->assertStatus(302); // redirect
         $this->assertDatabaseHas('blog_etc_categories', $search_for_new_cat);
@@ -879,7 +880,7 @@ class MainTest extends TestCase
             ->firstOrFail();
         $id = $justCreatedRow->id;
 
-        $delete_url = $admin_panel_url . "/categories/delete_category/$id";
+        $delete_url = $admin_panel_url."/categories/delete_category/$id";
 
         $response = $this->delete($delete_url, ['_token' => csrf_token()]);
         $response->assertStatus(200);

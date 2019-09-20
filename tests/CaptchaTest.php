@@ -5,10 +5,8 @@ use WebDevEtc\BlogEtc\Captcha\Basic;
 
 class CaptchaTest extends TestCase
 {
-
     public function testBasicCaptchaMethodsReturnCorrectType(): void
     {
-
         $captcha = new Basic();
         $this->assertEquals(gettype($captcha->captchaFieldName()), 'string');
         $this->assertEquals(gettype($captcha->view()), 'string');
@@ -17,11 +15,9 @@ class CaptchaTest extends TestCase
 
     public function testRuleCustomValidationFunctionReturnsCorrectly(): void
     {
-
         $captcha = new Basic();
 
         foreach ($captcha->rules() as $rule) {
-
             if (is_callable($rule)) {
                 // a quick hack to test that the rule (we are assuming only 1 callable rule is the one we are looking for) returns the $fail function which in this case is hard coded to return 'lookingforthis'.
                 // it isn't a pretty way to do this.

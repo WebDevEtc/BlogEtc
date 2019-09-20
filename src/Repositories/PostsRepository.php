@@ -10,8 +10,7 @@ use WebDevEtc\BlogEtc\Exceptions\PostNotFoundException;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class BlogEtcPostsRepository
- * @package WebDevEtc\BlogEtc\Repositories
+ * Class BlogEtcPostsRepository.
  */
 class PostsRepository
 {
@@ -22,6 +21,7 @@ class PostsRepository
 
     /**
      * BlogEtcPostsRepository constructor.
+     *
      * @param Post $model
      */
     public function __construct(Post $model)
@@ -30,10 +30,11 @@ class PostsRepository
     }
 
     /**
-     * Return blog posts ordered by posted_at, paginated
+     * Return blog posts ordered by posted_at, paginated.
      *
      * @param int $perPage
      * @param int $categoryID
+     *
      * @return LengthAwarePaginator
      */
     public function indexPaginated(int $perPage = 10, int $categoryID = null): LengthAwarePaginator
@@ -51,7 +52,8 @@ class PostsRepository
     }
 
     /**
-     * Return posts for RSS feed
+     * Return posts for RSS feed.
+     *
      * @return Builder[]|Collection
      */
     public function rssItems(): Collection
@@ -64,8 +66,10 @@ class PostsRepository
     }
 
     /**
-     * Return new instance of the Query Builder for this model
+     * Return new instance of the Query Builder for this model.
+     *
      * @param bool $eagerLoad
+     *
      * @return Builder
      */
     public function query(bool $eagerLoad = false): Builder
@@ -75,7 +79,7 @@ class PostsRepository
         if ($eagerLoad === true) {
             // eager load the categories relationship.
             // Comments probably don't need to be loaded for most queries.
-            $queryBuilder->with(['categories',]);
+            $queryBuilder->with(['categories']);
         }
 
         return $queryBuilder;
@@ -83,9 +87,10 @@ class PostsRepository
 
     /**
      * Find a blog etc post by ID
-     * If cannot find, throw exception
+     * If cannot find, throw exception.
      *
      * @param int $blogEtcPostID
+     *
      * @return Post
      */
     public function find(int $blogEtcPostID): Post
@@ -93,15 +98,16 @@ class PostsRepository
         try {
             return $this->query(true)->findOrFail($blogEtcPostID);
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with ID: ' . $blogEtcPostID);
+            throw new PostNotFoundException('Unable to find blog post with ID: '.$blogEtcPostID);
         }
     }
 
     /**
      * Find a blog etc post by ID
-     * If cannot find, throw exception
+     * If cannot find, throw exception.
      *
      * @param string $slug
+     *
      * @return Post
      */
     public function findBySlug(string $slug): Post
@@ -113,14 +119,15 @@ class PostsRepository
                 ->where('slug', $slug)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with slug: ' . $slug);
+            throw new PostNotFoundException('Unable to find blog post with slug: '.$slug);
         }
     }
 
     /**
-     * Create a new BlogEtcPost post
+     * Create a new BlogEtcPost post.
      *
      * @param array $attributes
+     *
      * @return Post
      */
     public function create(array $attributes): Post
@@ -129,10 +136,11 @@ class PostsRepository
     }
 
     /**
-     * Update image sizes (or in theory any attribute) on a blog etc post
+     * Update image sizes (or in theory any attribute) on a blog etc post.
      *
-     * @param Post $post
+     * @param Post  $post
      * @param array $uploadedImages
+     *
      * @return Post
      */
     public function updateImageSizes(Post $post, ?array $uploadedImages): Post

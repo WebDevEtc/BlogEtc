@@ -5,9 +5,7 @@ namespace WebDevEtc\BlogEtc\Exceptions;
 use InvalidArgumentException;
 
 /**
- * Class InvalidImageSizeException
- *
- * @package WebDevEtc\BlogEtc\Exceptions
+ * Class InvalidImageSizeException.
  */
 class InvalidImageSizeException extends InvalidArgumentException
 {

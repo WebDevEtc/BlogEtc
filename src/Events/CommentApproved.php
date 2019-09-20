@@ -8,8 +8,7 @@ use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class CommentApproved
- * @package WebDevEtc\BlogEtc\Events
+ * Class CommentApproved.
  */
 class CommentApproved
 {
@@ -23,6 +22,7 @@ class CommentApproved
 
     /**
      * CommentApproved constructor.
+     *
      * @param Comment $comment
      */
     public function __construct(Comment $comment)

@@ -10,13 +10,12 @@ use Illuminate\Validation\Rule;
 use WebDevEtc\BlogEtc\Models\Category;
 
 /**
- * Class PostRequest
- * @package WebDevEtc\BlogEtc\Requests
+ * Class PostRequest.
  */
 class PostRequest extends FormRequest
 {
     /**
-     * If $_GET['category'] slugs were submitted, then it should return an array of the IDs
+     * If $_GET['category'] slugs were submitted, then it should return an array of the IDs.
      *
      * @return array
      */
@@ -41,6 +40,7 @@ class PostRequest extends FormRequest
 
     /**
      * @param $size
+     *
      * @return UploadedFile|null
      */
     public function getImageSize($size): ?UploadedFile
@@ -74,7 +74,7 @@ class PostRequest extends FormRequest
         $rules = $this->sharedRules();
 
         if ($this->method() === Request::METHOD_POST) {
-            $rules['slug'] [] = Rule::unique('blog_etc_posts', 'slug');
+            $rules['slug'][] = Rule::unique('blog_etc_posts', 'slug');
         }
 
         if (in_array($this->method(), [Request::METHOD_PATCH, Request::METHOD_PUT], true)) {
@@ -86,9 +86,10 @@ class PostRequest extends FormRequest
     }
 
     /**
-     * Shared rules for blog posts
+     * Shared rules for blog posts.
      *
      * @return array
+     *
      * @todo - Refactor! This is a mess.
      */
     protected function sharedRules(): array
@@ -108,7 +109,7 @@ class PostRequest extends FormRequest
         $showErrorIfHasValue = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value...
-                return $fail($attribute . ' must be empty');
+                return $fail($attribute.' must be empty');
             }
         };
 
@@ -121,13 +122,13 @@ class PostRequest extends FormRequest
 
         // generate the main set of rules:
         $return = [
-            'posted_at' => ['nullable', $checkValidPostedAt],
-            'title' => ['required', 'string', 'min:1', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'min:1', 'max:255'],
-            'post_body' => ['required_without:use_view_file', 'max:2000000'], //medium text
-            'meta_desc' => ['nullable', 'string', 'min:1', 'max:1000'],
+            'posted_at'         => ['nullable', $checkValidPostedAt],
+            'title'             => ['required', 'string', 'min:1', 'max:255'],
+            'subtitle'          => ['nullable', 'string', 'min:1', 'max:255'],
+            'post_body'         => ['required_without:use_view_file', 'max:2000000'], //medium text
+            'meta_desc'         => ['nullable', 'string', 'min:1', 'max:1000'],
             'short_description' => ['nullable', 'string', 'max:30000'],
-            'slug' => [
+            'slug'              => [
                 'nullable',
                 'string',
                 'min:1',
@@ -139,27 +140,30 @@ class PostRequest extends FormRequest
 
         // is use_custom_view_files true?
         if (config('blogetc.use_custom_view_files')) {
-            $return['use_view_file'] = ['nullable', 'string', 'alpha_num', 'min:1', 'max:75',];
+            $return['use_view_file'] = ['nullable', 'string', 'alpha_num', 'min:1', 'max:75'];
         } else {
             // use_view_file is disabled, so give an empty if anything is submitted via this function:
             $return['use_view_file'] = ['string', $disabledUseViewFile];
         }
 
         // some additional rules for uploaded images
-        foreach ((array)config('blogetc.image_sizes') as $size => $image_detail) {
+        foreach ((array) config('blogetc.image_sizes') as $size => $image_detail) {
             if ($image_detail['enabled'] && config('blogetc.image_upload_enabled')) {
-                $return[$size] = ['nullable', 'image',];
+                $return[$size] = ['nullable', 'image'];
             } else {
                 // was not enabled (or all images are disabled), so show an error if it was submitted:
                 $return[$size] = $showErrorIfHasValue;
             }
         }
+
         return $return;
     }
 
     /**
      * @param $size
+     *
      * @return UploadedFile|null
+     *
      * @deprecated - use getImageSize() instead
      */
     public function get_image_file($size): ?UploadedFile

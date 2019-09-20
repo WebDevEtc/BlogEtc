@@ -5,12 +5,12 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class CreateBlogEtcPostsTable
+ * Class CreateBlogEtcPostsTable.
  */
 class CreateBlogEtcPostsTable extends Migration
 {
     /**
-     * Initial DB table setup for blog etc package
+     * Initial DB table setup for blog etc package.
      *
      * @return void
      */

@@ -7,8 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\Category;
 
 /**
- * Class CategoryWillBeDeleted
- * @package WebDevEtc\BlogEtc\Events
+ * Class CategoryWillBeDeleted.
  */
 class CategoryWillBeDeleted
 {
@@ -19,6 +18,7 @@ class CategoryWillBeDeleted
 
     /**
      * CategoryWillBeDeleted constructor.
+     *
      * @param Category $category
      */
     public function __construct(Category $category)

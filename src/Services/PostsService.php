@@ -14,14 +14,12 @@ use WebDevEtc\BlogEtc\Repositories\PostsRepository;
 use WebDevEtc\BlogEtc\Requests\PostRequest;
 
 /**
- * Class BlogEtcPostsService
+ * Class BlogEtcPostsService.
  *
  * Service class to handle most logic relating to BlogEtcPosts.
  *
  * Some Eloquent/DB things are in here - but query heavy method belong in the repository, accessible
  * as $this->repository, or publicly via repository()
- *
- * @package WebDevEtc\BlogEtc\Services
  */
 class PostsService
 {
@@ -33,8 +31,9 @@ class PostsService
 
     /**
      * PostsService constructor.
+     *
      * @param PostsRepository $repository
-     * @param UploadsService $uploadsService
+     * @param UploadsService  $uploadsService
      */
     public function __construct(PostsRepository $repository, UploadsService $uploadsService)
     {
@@ -56,15 +55,17 @@ class PostsService
     }
 
     /**
-     * Create a new BlogEtcPost entry, and process any uploaded image
+     * Create a new BlogEtcPost entry, and process any uploaded image.
      *
      * (I'm never keen on passing around entire Request objects - this will get
      * refactored out)
      *
      * @param PostRequest $request
-     * @param int|null $userID
-     * @return Post
+     * @param int|null    $userID
+     *
      * @throws Exception
+     *
+     * @return Post
      */
     public function create(PostRequest $request, ?int $userID): Post
     {
@@ -96,10 +97,11 @@ class PostsService
     }
 
     /**
-     * Return all results, paginated
+     * Return all results, paginated.
      *
-     * @param int $perPage
+     * @param int      $perPage
      * @param int|null $categoryID
+     *
      * @return LengthAwarePaginator
      */
     public function indexPaginated($perPage = 10, int $categoryID = null): LengthAwarePaginator
@@ -122,10 +124,12 @@ class PostsService
      *
      * N.B. I dislike sending the whole Request object around, this will get refactored.
      *
-     * @param int $blogPostID
+     * @param int         $blogPostID
      * @param PostRequest $request
-     * @return Post
+     *
      * @throws Exception
+     *
+     * @return Post
      */
     public function update(int $blogPostID, PostRequest $request): Post
     {
@@ -152,11 +156,13 @@ class PostsService
 
     /**
      * Delete a blog etc post, return the deleted post and an array of featured images which were associated
-     * to the blog post (but which were not deleted form the filesystem)
+     * to the blog post (but which were not deleted form the filesystem).
      *
      * @param int $blogPostEtcID
-     * @return array - [Post (deleted post), array (remaining featured photos)
+     *
      * @throws Exception
+     *
+     * @return array - [Post (deleted post), array (remaining featured photos)
      */
     public function delete(int $blogPostEtcID): array
     {
@@ -172,9 +178,9 @@ class PostsService
 
         $remainingPhotos = [];
 
-        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
-                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $imageSize);
+                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images').'/'.$imageSize);
 
                 if (file_exists($fullPath)) {
                     // there was record of this size in the db, so push it to array of featured photos which remain
@@ -185,14 +191,14 @@ class PostsService
                     if ($fileSize) {
                         // get file gt
                         //size in human readable (kb)
-                        $fileSize = round(filesize($fileSize) / 1000, 1) . ' kb';
+                        $fileSize = round(filesize($fileSize) / 1000, 1).' kb';
                     }
 
                     $remainingPhotos[] = [
-                        'filename' => $post->$imageSize,
+                        'filename'  => $post->$imageSize,
                         'full_path' => $fullPath,
                         'file_size' => $fileSize,
-                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize),
+                        'url'       => asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize),
                     ];
                 }
             }
@@ -202,9 +208,10 @@ class PostsService
     }
 
     /**
-     * Find and return a blog post based on slug
+     * Find and return a blog post based on slug.
      *
      * @param string $slug
+     *
      * @return Post
      */
     public function findBySlug(string $slug): Post

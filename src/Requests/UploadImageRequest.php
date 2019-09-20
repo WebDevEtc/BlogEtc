@@ -5,8 +5,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UploadImageRequest
- * @package WebDevEtc\BlogEtc\Requests
+ * Class UploadImageRequest.
  */
 class UploadImageRequest extends FormRequest
 {

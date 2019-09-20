@@ -8,8 +8,7 @@ use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 use WebDevEtc\BlogEtc\Services\CommentsService;
 
 /**
- * Class AddNewCommentRequest
- * @package WebDevEtc\BlogEtc\Requests
+ * Class AddNewCommentRequest.
  */
 class CommentRequest extends FormRequest
 {
@@ -32,10 +31,10 @@ class CommentRequest extends FormRequest
     {
         // basic rules
         $return = [
-            'comment' => ['required', 'string', 'min:3', 'max:1000'],
-            'author_name' => ['string', 'min:1', 'max:50'],
-            'author_email' => ['string', 'nullable', 'min:1', 'max:254', 'email'],
-            'author_website' => ['string', 'nullable', 'min:' . strlen('http://a.b'), 'max:175', 'active_url',],
+            'comment'        => ['required', 'string', 'min:3', 'max:1000'],
+            'author_name'    => ['string', 'min:1', 'max:50'],
+            'author_email'   => ['string', 'nullable', 'min:1', 'max:254', 'email'],
+            'author_website' => ['string', 'nullable', 'min:'.strlen('http://a.b'), 'max:175', 'active_url'],
         ];
 
         // Do we need author name?

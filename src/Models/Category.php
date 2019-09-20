@@ -37,7 +37,7 @@ class Category extends Model
     ];
 
     /**
-     * BlogEtcPost relationship
+     * BlogEtcPost relationship.
      *
      * @return BelongsToMany
      */
@@ -52,7 +52,7 @@ class Category extends Model
     }
 
     /**
-     * Returns the public facing URL of showing blog posts in this category
+     * Returns the public facing URL of showing blog posts in this category.
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class Category extends Model
     }
 
     /**
-     * Returns the URL for an admin user to edit this category
+     * Returns the URL for an admin user to edit this category.
      *
      * @return string
      */
@@ -73,6 +73,7 @@ class Category extends Model
 
     /**
      * @return string
+     *
      * @deprecated - use editUrl() instead
      */
     public function edit_url(): string

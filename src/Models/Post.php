@@ -22,6 +22,7 @@ use WebDevEtc\BlogEtc\Scopes\PostPublishedScope;
 
 /**
  * Class BlogEtcPost.
+ *
  * @property string|null title
  * @property string|null subtitle
  * @property string|null short_description
@@ -192,21 +193,22 @@ class Post extends Model
     }
 
     /**
-     * @return string
      * @throws Exception
+     *
+     * @return string
      */
     public function fullViewFilePath(): string
     {
-        return resource_path('views/custom_blog_posts/' . $this->use_view_file . '.blade.php');
+        return resource_path('views/custom_blog_posts/'.$this->use_view_file.'.blade.php');
     }
 
     /**
      * If $this->user_view_file is not empty, then it'll return the dot syntax
      * location of the blade file it should look for.
      *
-     * @return string
      * @throws Exception
      *
+     * @return string
      */
     public function bladeViewFile(): string
     {
@@ -214,15 +216,15 @@ class Post extends Model
             throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
         }
 
-        return 'custom_blog_posts.' . $this->use_view_file;
+        return 'custom_blog_posts.'.$this->use_view_file;
     }
 
     /**
      * Generate a full <img src='' alt=''> img tag.
      *
-     * @param string $size - large, medium, thumbnail
-     * @param bool $addAHref - if true then it will add <a href=''>...</a> around the <img> tag
-     * @param null|string $imgTagClass - if you want any additional CSS classes for this tag for the <IMG>
+     * @param string      $size           - large, medium, thumbnail
+     * @param bool        $addAHref       - if true then it will add <a href=''>...</a> around the <img> tag
+     * @param null|string $imgTagClass    - if you want any additional CSS classes for this tag for the <IMG>
      * @param null|string $anchorTagClass - is you want any additional CSS classes in the <a> anchor tag
      *
      * @return HtmlString
@@ -239,11 +241,11 @@ class Post extends Model
         }
         $imageUrl = e($this->imageUrl($size));
         $imageAltText = e($this->title);
-        $imgTag = '<img src="' . $imageUrl . '" alt="' . $imageAltText . '" class="' . e($imgTagClass) . '">';
+        $imgTag = '<img src="'.$imageUrl.'" alt="'.$imageAltText.'" class="'.e($imgTagClass).'">';
 
         return new HtmlString(
             $addAHref
-                ? '<a class="' . e($anchorTagClass) . '" href="' . e($this->url()) . '">' . $imgTag . '</a>'
+                ? '<a class="'.e($anchorTagClass).'" href="'.e($this->url()).'">'.$imgTag.'</a>'
                 : $imgTag
         );
     }
@@ -259,7 +261,7 @@ class Post extends Model
     {
         $this->checkValidImageSize($size);
 
-        return array_key_exists('image_' . $size, $this->getAttributes()) && $this->$size;
+        return array_key_exists('image_'.$size, $this->getAttributes()) && $this->$size;
     }
 
     /**
@@ -268,12 +270,13 @@ class Post extends Model
      *
      * @param string $size
      *
-     * @return bool
      * @throws InvalidArgumentException
+     *
+     * @return bool
      */
     protected function checkValidImageSize(string $size = 'medium'): bool
     {
-        if (array_key_exists('image_' . $size, config('blogetc.image_sizes'))) {
+        if (array_key_exists('image_'.$size, config('blogetc.image_sizes'))) {
             // correct size string - just return
             return true;
         }
@@ -292,15 +295,15 @@ class Post extends Model
                 when calling image_url()  : image_url("medium")
             */
             throw new InvalidImageSizeException(
-                'Invalid image size (' . e($size) . '). BlogEtcPost image size should not begin with' .
-                ' \'image_\'. Remove this from the start of ' . e($size) . '. It *should* be in the' .
+                'Invalid image size ('.e($size).'). BlogEtcPost image size should not begin with'.
+                ' \'image_\'. Remove this from the start of '.e($size).'. It *should* be in the'.
                 ' blogetc.image_sizes config though'
             );
         }
 
         throw new InvalidImageSizeException(
-            'BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\'' .
-            ' or another field as defined in config/blogetc.php. Provided size (' . e($size) . ') is not valid'
+            'BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.
+            ' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid'
         );
     }
 
@@ -315,9 +318,9 @@ class Post extends Model
     public function imageUrl($size = 'medium'): string
     {
         $this->checkValidImageSize($size);
-        $filename = $this->{'image_' . $size};
+        $filename = $this->{'image_'.$size};
 
-        return asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $filename);
+        return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
     }
 
     /**
@@ -331,9 +334,10 @@ class Post extends Model
     }
 
     /**
-     * Generate an introduction, max length $max_len characters
+     * Generate an introduction, max length $max_len characters.
      *
      * @param int $maxLen
+     *
      * @return string
      */
     public function generateIntroduction(int $maxLen = 500): string
@@ -349,10 +353,11 @@ class Post extends Model
     }
 
     /**
-     * Return post body HTML, ready for output
+     * Return post body HTML, ready for output.
+     *
+     * @throws Throwable
      *
      * @return HtmlString
-     * @throws Throwable
      */
     public function renderBody(): HtmlString
     {
@@ -384,6 +389,7 @@ class Post extends Model
      * Basically return $this->seo_title ?? $this->title;
      *
      * TODO - what convention do we use for gen/generate/etc for naming of this.
+     *
      * @return string
      */
     public function genSeoTitle(): ?string
@@ -397,6 +403,7 @@ class Post extends Model
 
     /**
      * @return string|null
+     *
      * @deprecated - use genSeoTitle() instead
      */
     public function gen_seo_title(): ?string
@@ -406,7 +413,9 @@ class Post extends Model
 
     /**
      * @param mixed ...$args
+     *
      * @return HtmlString
+     *
      * @deprecated - use imageTag() instead, which returns a HtmlString
      */
     public function image_tag(...$args): HtmlString
@@ -416,9 +425,10 @@ class Post extends Model
 
     /**
      * @param string $size
-     * @return bool
-     * @deprecated  - use hasImage() instead
      *
+     * @return bool
+     *
+     * @deprecated  - use hasImage() instead
      */
     public function has_image($size = 'medium'): bool
     {
@@ -427,6 +437,7 @@ class Post extends Model
 
     /**
      * @return string|null
+     *
      * @deprecated - use authorString() instead
      */
     public function author_string(): ?string
@@ -436,6 +447,7 @@ class Post extends Model
 
     /**
      * @return string
+     *
      * @deprecated - use editUrl() instead
      */
     public function edit_url(): string
@@ -445,7 +457,9 @@ class Post extends Model
 
     /**
      * @param string $size
+     *
      * @return bool
+     *
      * @deprecated - use checkValidImageSize()
      */
     protected function check_valid_image_size(string $size = 'medium'): bool
@@ -454,8 +468,9 @@ class Post extends Model
     }
 
     /**
-     * @return string
      * @throws Exception
+     *
+     * @return string
      *
      * @deprecated - use bladeViewFile() instead
      */
@@ -466,7 +481,9 @@ class Post extends Model
 
     /**
      * @param string $size
+     *
      * @return string
+     *
      * @deprecated - use imageUrl() instead
      */
     public function image_url($size = 'medium'): string
@@ -476,7 +493,9 @@ class Post extends Model
 
     /**
      * @param int $maxLen
+     *
      * @return string
+     *
      * @deprecated - use generateIntroduction() instead
      */
     public function generate_introduction(int $maxLen = 500): string
@@ -485,12 +504,13 @@ class Post extends Model
     }
 
     /**
-     * @return string
      * @throws Throwable
+     *
+     * @return string
+     *
      * @deprecated - use renderBody() instead
      *
      * (post_body_output used to return a string, renderBody() now returns HtmlString)
-     *
      */
     public function post_body_output(): string
     {

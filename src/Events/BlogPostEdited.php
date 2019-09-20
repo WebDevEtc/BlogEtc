@@ -7,18 +7,18 @@ use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class BlogPostEdited
- * @package WebDevEtc\BlogEtc\Events
+ * Class BlogPostEdited.
  */
 class BlogPostEdited
 {
     use Dispatchable, SerializesModels;
 
-    /** @var  Post */
+    /** @var Post */
     public $post;
 
     /**
      * BlogPostEdited constructor.
+     *
      * @param Post $post
      */
     public function __construct(Post $post)
