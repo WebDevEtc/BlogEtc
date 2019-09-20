@@ -18,7 +18,7 @@ use WebDevEtc\BlogEtc\Services\CaptchaService;
  * All of the main public facing methods for viewing blog content (index, single posts)
  * @package WebDevEtc\BlogEtc\Controllers
  */
-class BlogPostsController extends Controller
+class PostsController extends Controller
 {
     /** @var PostsService */
     private $postsService;

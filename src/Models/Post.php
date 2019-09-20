@@ -105,15 +105,14 @@ class Post extends Model
      *
      * @return void
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
         static::$authorNameResolver = config('blogetc.comments.user_field_for_author_name');
 
-        /* If user is logged in and \Auth::user()->canManageBlogEtcPosts() == true, show any/all posts.
-           otherwise (which will be for most users) it should only show published posts that have a posted_at
-           time <= Carbon::now(). This sets it up: */
+        // by default users without correct permission will only see published posts. Admin-like users will see
+        // any posts. Defined in a gate. See docs for details.
         static::addGlobalScope(new PostPublishedScope());
     }
 
@@ -209,14 +208,13 @@ class Post extends Model
      * @throws Exception
      *
      */
-    public function bladeViewFile() : string
+    public function bladeViewFile(): string
     {
         if (!$this->use_view_file) {
             throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
         }
 
         return 'custom_blog_posts.' . $this->use_view_file;
-
     }
 
     /**
@@ -411,7 +409,7 @@ class Post extends Model
      * @return HtmlString
      * @deprecated - use imageTag() instead, which returns a HtmlString
      */
-    public function image_tag(...$args)
+    public function image_tag(...$args): HtmlString
     {
         return $this->imageTag(...$args);
     }
@@ -447,9 +445,10 @@ class Post extends Model
 
     /**
      * @param string $size
+     * @return bool
      * @deprecated - use checkValidImageSize()
      */
-    protected function check_valid_image_size(string $size = 'medium')
+    protected function check_valid_image_size(string $size = 'medium'): bool
     {
         return $this->checkValidImageSize($size);
     }
@@ -472,7 +471,7 @@ class Post extends Model
      */
     public function image_url($size = 'medium'): string
     {
-        return $this->iamgeUrl($size);
+        return $this->imageUrl($size);
     }
 
     /**

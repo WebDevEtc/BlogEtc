@@ -20,10 +20,6 @@ class StoreBlogPostIDOnUploadedPhotos extends Migration
     {
         Schema::table('blog_etc_uploaded_photos', function (Blueprint $table) {
             $table->unsignedInteger('blog_etc_post_id')->nullable();
-
-            $table->foreign('blog_etc_post_id', 'uploaded_photo_post_id_fk')
-                ->references('id')
-                ->on('blog_etc_posts');
         });
     }
 
@@ -35,7 +31,6 @@ class StoreBlogPostIDOnUploadedPhotos extends Migration
     public function down()
     {
         Schema::table('blog_etc_uploaded_photos', function (Blueprint $table) {
-            $table->dropForeign('uploaded_photo_post_id_fk');
             $table->dropColumn('blog_etc_post_id');
         });
     }

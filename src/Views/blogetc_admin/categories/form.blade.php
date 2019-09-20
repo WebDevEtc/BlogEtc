@@ -9,7 +9,7 @@
            required
            aria-describedby="category_category_name_help"
            name="category_name"
-           value="{{ old('category_name',$category->category_name) }}"
+           value="{{ old('category_name', $category->category_name) }}"
     >
 
     <small id="category_category_name_help" class="form-text text-muted">The name of the category</small>
@@ -25,7 +25,7 @@
 
     <small id="category_slug_help" class="form-text text-muted">
         Letters, numbers, dash only. The slug i.e.
-        {{ route('blogetc.view_category','' )}}/<u><em>this_part</em></u>.
+        {{ route('blogetc.view_category', '' )}}/<u><em>this_part</em></u>.
         This must be unique (two categories can't share the same slug).
     </small>
 </div>
@@ -36,7 +36,7 @@
     </label>
     <textarea name="category_description"
               class="form-control"
-              id="category_description">{{ old('category_description',$category->category_description) }}</textarea>
+              id="category_description">{{ old('category_description', $category->category_description) }}</textarea>
 </div>
 
 @push('js')

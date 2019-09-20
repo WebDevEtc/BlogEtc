@@ -21,47 +21,12 @@ use WebDevEtc\BlogEtc\Requests\PostRequest;
  */
 class UploadsService
 {
-    private static $num_of_attempts_to_find_filename = 10;
-    private $checked_blog_image_dir_is_writable = false;
-
     /**
-     * Store new image upload meta data in database
+     * How many iterations to find an available filename, before exception.
      *
-     * @param int|null $blogPostID
-     * @param string $imageTitle
-     * @param string $source
-     * @param int|null $uploaderID
-     * @param array $uploadedImages
+     * @var int
      */
-    protected function create(
-        ?int $blogPostID,
-        string $imageTitle,
-        string $source,
-        ?int $uploaderID,
-        array $uploadedImages
-    ) {
-        // store the image upload.
-        UploadedPhoto::create([
-            'blog_etc_post_id' => $blogPostID,
-            'image_title' => $imageTitle,
-            'source' => $source,
-            'uploader_id' => $uploaderID,
-            'uploaded_images' => $uploadedImages,
-        ]);
-    }
-
-    /**
-     * Small method to increase memory limit.
-     * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
-     * This is needed though because if you upload a large image it'll not work
-     */
-    public function increaseMemoryLimit(): void
-    {
-        // increase memory - change this setting in config file
-        if (config('blogetc.memory_limit')) {
-            ini_set('memory_limit', config('blogetc.memory_limit'));
-        }
-    }
+    private static $availableFilenameAttempts = 10;
 
     /**
      * Handle an image upload via the upload image section (not blog post featured image)
@@ -70,8 +35,9 @@ class UploadsService
      * @param string $imageTitle
      * @param $sizesToUpload
      * @return array
+     * @throws Exception
      */
-    public function processUpload($uploadedImage, string $imageTitle, $sizesToUpload)
+    public function processUpload($uploadedImage, string $imageTitle, $sizesToUpload): array
     {
         // to save in db later
         $uploadedImageDetails = [];
@@ -111,60 +77,16 @@ class UploadsService
     }
 
     /**
-     * Process any uploaded images (for featured image)
-     *
-     * @param PostRequest $request
-     * @param Post $new_blog_post
-     * @return array|null
-     * @throws Exception
-     * @todo - next full release, tidy this up!
+     * Small method to increase memory limit.
+     * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
+     * This is needed though because if you upload a large image it'll not work
      */
-    public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
+    public function increaseMemoryLimit(): void
     {
-        if (!config('blogetc.image_upload_enabled')) {
-            // image upload was disabled
-            return null;
+        // increase memory - change this setting in config file
+        if (config('blogetc.memory_limit')) {
+            ini_set('memory_limit', config('blogetc.memory_limit'));
         }
-
-        $newSizes = [];
-        $this->increaseMemoryLimit();
-
-        // to save in db later
-        $uploaded_image_details = [];
-
-        foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
-            // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
-            if ($image_size_details['enabled'] && $photo = $request->getImageSize($size)) {
-                // this image size is enabled, and
-                // we have an uploaded image that we can use
-
-                // TODO - this method does not exist
-                $uploaded_image = $this->uploadAndResize(
-                    $new_blog_post,
-                    $new_blog_post->title,
-                    $image_size_details,
-                    $photo
-                );
-
-                $newSizes[$size] = $uploaded_image['filename'];
-
-                $uploaded_image_details[$size] = $uploaded_image;
-            }
-        }
-
-        // store the image upload.
-        // todo: link this to the blogetc_post row.
-        if (count(array_filter($uploaded_image_details)) > 0) {
-            $this->create(
-                $new_blog_post->id,
-                $new_blog_post->title,
-                UploadedPhoto::SOURCE_FEATURED_IMAGE,
-                \Auth::id(),
-                $uploaded_image_details
-            );
-        }
-
-        return $newSizes;
     }
 
     /**
@@ -243,7 +165,7 @@ class UploadsService
         $wh = $this->getDimensions($image_size_details);
         $ext = '.' . $photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
+        for ($i = 1; $i <= self::$availableFilenameAttempts; $i++) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-' . Str::random(5) : '';
 
@@ -266,6 +188,7 @@ class UploadsService
     protected function baseFilename(string $suggestedTitle): string
     {
         $base = substr($suggestedTitle, 0, 100);
+
         return $base ?: 'image-' . Str::random(5);
     }
 
@@ -305,6 +228,7 @@ class UploadsService
     }
 
     /**
+     *
      * @return string
      * @throws RuntimeException
      */
@@ -312,18 +236,17 @@ class UploadsService
     {
         $path = public_path('/' . config('blogetc.blog_upload_dir'));
 
-        $this->checkDestinationWritable($path);
-
-        return $path;
+        return $this->checkDestinationWritable($path);
     }
 
     /**
      * Check if the image destination directory is writable.
      * Throw an exception if it was not writable
      * @param $path
+     * @return string
      * @throws RuntimeException
      */
-    protected function checkDestinationWritable(string $path): void
+    protected function checkDestinationWritable(string $path): string
     {
         if (!$this->checked_blog_image_dir_is_writable) {
             if (!is_writable($path)) {
@@ -331,6 +254,91 @@ class UploadsService
             }
             $this->checked_blog_image_dir_is_writable = true;
         }
+
+        return $path;
     }
 
+    /**
+     * Store new image upload meta data in database
+     *
+     * @param int|null $blogPostID
+     * @param string $imageTitle
+     * @param string $source
+     * @param int|null $uploaderID
+     * @param array $uploadedImages
+     * @return UploadedPhoto
+     */
+    protected function create(
+        ?int $blogPostID,
+        string $imageTitle,
+        string $source,
+        ?int $uploaderID,
+        array $uploadedImages
+    ): UploadedPhoto {
+        // store the image upload.
+        return UploadedPhoto::create([
+            'blog_etc_post_id' => $blogPostID,
+            'image_title' => $imageTitle,
+            'source' => $source,
+            'uploader_id' => $uploaderID,
+            'uploaded_images' => $uploadedImages,
+        ]);
+    }
+
+    /**
+     * Process any uploaded images (for featured image)
+     *
+     * @param PostRequest $request
+     * @param Post $new_blog_post
+     * @return array|null
+     * @throws Exception
+     * @todo - next full release, tidy this up!
+     */
+    public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
+    {
+        if (!config('blogetc.image_upload_enabled')) {
+            // image upload was disabled
+            return null;
+        }
+
+        $newSizes = [];
+        $this->increaseMemoryLimit();
+
+        // to save in db later
+        $uploaded_image_details = [];
+
+        foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
+            // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
+            if ($image_size_details['enabled'] && $photo = $request->getImageSize($size)) {
+                // this image size is enabled, and
+                // we have an uploaded image that we can use
+
+                // TODO - this method does not exist
+                $uploaded_image = $this->uploadAndResize(
+                    $new_blog_post,
+                    $new_blog_post->title,
+                    $image_size_details,
+                    $photo
+                );
+
+                $newSizes[$size] = $uploaded_image['filename'];
+
+                $uploaded_image_details[$size] = $uploaded_image;
+            }
+        }
+
+        // store the image upload.
+        // todo: link this to the blogetc_post row.
+        if (count(array_filter($uploaded_image_details)) > 0) {
+            $this->create(
+                $new_blog_post->id,
+                $new_blog_post->title,
+                UploadedPhoto::SOURCE_FEATURED_IMAGE,
+                Auth::id(),
+                $uploaded_image_details
+            );
+        }
+
+        return $newSizes;
+    }
 }

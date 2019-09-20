@@ -16,19 +16,19 @@ class CommentAdded
     use Dispatchable, SerializesModels;
 
     /** @var Post */
-    public $blogEtcPost;
+    public $post;
 
     /** @var Comment */
     public $newComment;
 
     /**
      * CommentAdded constructor.
-     * @param Post $blogEtcPost
+     * @param Post $post
      * @param Comment $newComment
      */
-    public function __construct(Post $blogEtcPost, Comment $newComment)
+    public function __construct(Post $post, Comment $newComment)
     {
-        $this->blogEtcPost = $blogEtcPost;
+        $this->post = $post;
         $this->newComment = $newComment;
     }
 }

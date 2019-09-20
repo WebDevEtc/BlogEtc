@@ -15,14 +15,14 @@ class CategoryAdded
     use Dispatchable, SerializesModels;
 
     /** @var Category */
-    public $blogEtcCategory;
+    public $category;
 
     /**
      * CategoryAdded constructor.
-     * @param Category $blogEtcCategory
+     * @param Category $category
      */
-    public function __construct(Category $blogEtcCategory)
+    public function __construct(Category $category)
     {
-        $this->blogEtcCategory = $blogEtcCategory;
+        $this->category = $category;
     }
 }

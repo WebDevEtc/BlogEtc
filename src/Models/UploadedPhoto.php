@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * Class BlogEtcUploadedPhoto
  * @property Post blogPost
- * @property User|\App\Models\User uploader
+ * @property User uploader
  * @property int|null blog_etc_post_id
  * @property string image_title
  * @property ing|null uploader_id
@@ -20,8 +20,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class UploadedPhoto extends Model
 {
+    /**
+     * Source from a image uploaded not linked to a blog post.
+     *
+     * @var string
+     */
     public const SOURCE_IMAGE_UPLOAD = 'ImageUpload';
+
+    /**
+     * Source from an image uploaded linked to a featured blog image.
+     *
+     * @var string
+     */
     public const SOURCE_FEATURED_IMAGE = 'BlogFeaturedImage';
+
     /**
      * DB table name
      *
@@ -63,9 +75,6 @@ class UploadedPhoto extends Model
 
     /**
      * Relationship for a blog post for which this image is a featured image.
-     *
-     * (Only set when initially uploading a featured image, does not mean that this image is still used as a featured
-     * image - this is just for convenience rather than something to rely upon).
      *
      * @return BelongsTo
      */

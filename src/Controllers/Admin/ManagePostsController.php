@@ -14,8 +14,9 @@ use WebDevEtc\BlogEtc\Requests\PostRequest;
 use WebDevEtc\BlogEtc\Services\PostsService;
 
 /**
- * Class BlogEtcAdminController
- * @package WebDevEtc\BlogEtc\Controllers
+ * Class ManagePostsController
+ *
+ * @package WebDevEtc\BlogEtc\Controllers\Admin
  */
 class ManagePostsController extends Controller
 {
@@ -37,7 +38,6 @@ class ManagePostsController extends Controller
             );
         }
     }
-
 
     /**
      * View all posts (paginated)
@@ -83,7 +83,7 @@ class ManagePostsController extends Controller
      * @param $blogPostId
      * @return View
      */
-    public function edit($blogPostId): View
+    public function edit(int $blogPostId): View
     {
         $blogPost = $this->service->repository()->find($blogPostId);
 
@@ -94,11 +94,11 @@ class ManagePostsController extends Controller
      * Save changes to a post
      *
      * @param PostRequest $request
-     * @param $blogPostID
+     * @param int $blogPostID
      * @return RedirectResponse
      * @throws Exception
      */
-    public function update(PostRequest $request, $blogPostID): RedirectResponse
+    public function update(PostRequest $request, int $blogPostID): RedirectResponse
     {
         $blogPost = $this->service->update($blogPostID, $request);
 
@@ -111,11 +111,11 @@ class ManagePostsController extends Controller
      * Delete a post - removes it from the database, does not remove any featured images associated with the blog post.
      *
      * @param PostRequest $request
-     * @param $blogPostID
+     * @param int $blogPostID
      * @return View
      * @throws Exception
      */
-    public function destroy(PostRequest $request, $blogPostID): View
+    public function destroy(PostRequest $request, int $blogPostID): View
     {
         [$blogPost, $remainingPhotos] = $this->service->delete($blogPostID);
 

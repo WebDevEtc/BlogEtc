@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Blog Admin - {{ config('app.name') }}</title>
+    <title>BlogEtcPost Blog Admin - {{ config('app.name') }}</title>
 
     <!-- jQuery is only used for hide(), show() and slideDown(). All other features use vanilla JS -->
     <script
@@ -59,7 +59,7 @@
                     <!-- Authentication Links -->
 
                     <li class="nav-item px-2">
-                        <a class="nav-link" href="{{route('blogetc.index')}}">
+                        <a class="nav-link" href="{{ route('blogetc.index') }}">
                             Blog home
                         </a>
                     </li>
@@ -113,7 +113,7 @@
 <div class="text-center mt-5 pt-5 mb-3 text-muted">
     <small>
         <a href="https://webdevetc.com/">
-            Laravel Blog Package provided by Webdevetc
+            Laravel Blog Package provided by WebDevEtc
         </a>
     </small>
 </div>

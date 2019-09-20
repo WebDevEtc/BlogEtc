@@ -12,11 +12,11 @@ Route::group(
             ['prefix' => config('blogetc.blog_prefix', 'blog')],
             static function () {
                 // Public blog index:
-                Route::get('/', 'BlogPostsController@index')
+                Route::get('/', 'PostsController@index')
                     ->name('blogetc.index');
 
                 // Public search results:
-                Route::get('/search', 'BlogPostsController@search')
+                Route::get('/search', 'PostsController@search')
                     ->name('blogetc.search');
 
                 // Public RSS feed:
@@ -33,7 +33,7 @@ Route::group(
                 // Public show single blog post:
                 Route::get(
                     '/{blogPostSlug}',
-                    'BlogPostsController@show'
+                    'PostsController@show'
                 )
                     ->name('blogetc.show');
 
@@ -50,7 +50,7 @@ Route::group(
         // Admin backend routes - CRUD for posts, categories, and approving/deleting submitted comments.
         Route::group(
             [
-                'middleware' => ['can:blog-etc-admin','auth',],
+                'middleware' => ['can:blog-etc-admin', 'auth',],
                 'prefix' => config('blogetc.admin_prefix', 'blog_admin'),
                 'namespace' => 'Admin',
             ],
@@ -101,19 +101,19 @@ Route::group(
                         // show all uploaded images:
                         Route::get(
                             '/',
-                            'UploadsController@index'
+                            'ManageUploadsController@index'
                         )->name('blogetc.admin.images.all');
 
                         // upload new image (form):
                         Route::get(
                             '/upload',
-                            'UploadsController@create'
+                            'ManageUploadsController@create'
                         )->name('blogetc.admin.images.upload');
 
                         // store a new uploaded image:
                         Route::post(
                             '/upload',
-                            'UploadsController@store'
+                            'ManageUploadsController@store'
                         )->name('blogetc.admin.images.store');
                     }
                 );

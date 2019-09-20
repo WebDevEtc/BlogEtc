@@ -4,7 +4,7 @@ namespace WebDevEtc\BlogEtc\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use WebDevEtc\BlogEtc\Exceptions\BlogEtcCommentNotFoundException;
+use WebDevEtc\BlogEtc\Exceptions\CommentNotFoundException;
 use WebDevEtc\BlogEtc\Models\Comment;
 
 class CommentsRepository
@@ -62,7 +62,7 @@ class CommentsRepository
 
             return $queryBuilder->findOrFail($blogEtcCommentID);
         } catch (ModelNotFoundException $e) {
-            throw new BlogEtcCommentNotFoundException('Unable to find blog post comment with ID: ' . $blogEtcCommentID);
+            throw new CommentNotFoundException('Unable to find blog post comment with ID: ' . $blogEtcCommentID);
         }
     }
 }

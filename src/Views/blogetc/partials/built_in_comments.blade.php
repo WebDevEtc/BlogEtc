@@ -23,7 +23,8 @@
 @endforelse
 
 @if(count($comments) >= config('blogetc.comments.max_num_of_comments_to_show', 500))
-    <p><em>Only the first {{ config('blogetc.comments.max_num_of_comments_to_show', 500) }} comments are
+    <p>
+        <em>Only the first {{ config('blogetc.comments.max_num_of_comments_to_show', 500) }} comments are
             shown.</em>
     </p>
 @endif

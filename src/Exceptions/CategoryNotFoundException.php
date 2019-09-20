@@ -5,9 +5,9 @@ namespace WebDevEtc\BlogEtc\Exceptions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
- * Class BlogEtcPostNotFoundException
+ * Class CategoryNotFoundException
  * @package WebDevEtc\BlogEtc\Exceptions
  */
-class BlogEtcPostNotFoundException extends ModelNotFoundException
+class CategoryNotFoundException extends ModelNotFoundException
 {
 }

@@ -19,7 +19,7 @@ class CommentApproved
     public $comment;
 
     /** @var Post */
-    public $blogEtcPost;
+    public $post;
 
     /**
      * CommentApproved constructor.
@@ -28,6 +28,6 @@ class CommentApproved
     public function __construct(Comment $comment)
     {
         $this->comment = $comment;
-        $this->blogEtcPost = $comment->post;
+        $this->post = $comment->post;
     }
 }

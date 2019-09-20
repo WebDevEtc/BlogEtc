@@ -31,6 +31,11 @@ class PostsService
     /** @var UploadsService */
     private $uploadsService;
 
+    /**
+     * PostsService constructor.
+     * @param PostsRepository $repository
+     * @param UploadsService $uploadsService
+     */
     public function __construct(PostsRepository $repository, UploadsService $uploadsService)
     {
         $this->repository = $repository;
@@ -59,6 +64,7 @@ class PostsService
      * @param PostRequest $request
      * @param int|null $userID
      * @return Post
+     * @throws Exception
      */
     public function create(PostRequest $request, ?int $userID): Post
     {
@@ -69,9 +75,9 @@ class PostsService
             $attributes['posted_at'] = Carbon::now();
         }
 
-        // create new instance of BlogEtcPost, hydrate it with submitted attributes:
-        // Must save it first, then process images (so they can be linked to the blog post) then update again with
-        // the featured images. This isn't ideal, but seeing as blog posts are not created very often it isn't too bad...
+        // Create new instance of BlogEtcPost, hydrate it with submitted attributes:
+        // Must save it first, then process images (so they can be linked to the blog post) then update again with the
+        // featured images. This isn't ideal, but seeing as blog posts are not created very often it isn't too bad...
         $newBlogPost = $this->repository->create($request->validated());
 
         // process any submitted images:
@@ -145,11 +151,11 @@ class PostsService
     }
 
     /**
-     * Delete a blog etc post, return the deleted post and an array of featured images which were assoicated
+     * Delete a blog etc post, return the deleted post and an array of featured images which were associated
      * to the blog post (but which were not deleted form the filesystem)
      *
      * @param int $blogPostEtcID
-     * @return array - [BlogEtcPost (deleted post), array (remaining featured photos)
+     * @return array - [Post (deleted post), array (remaining featured photos)
      * @throws Exception
      */
     public function delete(int $blogPostEtcID): array

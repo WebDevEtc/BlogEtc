@@ -19,35 +19,29 @@ use WebDevEtc\BlogEtc\Repositories\CategoriesRepository;
  */
 class CategoriesService
 {
-
     /**
      * @var CategoriesRepository
      */
     private $repository;
 
+    /**
+     * CategoriesService constructor.
+     * @param CategoriesRepository $repository
+     */
     public function __construct(CategoriesRepository $repository)
     {
         $this->repository = $repository;
     }
 
     /**
+     * Return paginated collection of categories.
+     *
      * @param int $perPage
      * @return LengthAwarePaginator
      */
     public function indexPaginated(int $perPage = 25): LengthAwarePaginator
     {
         return $this->repository->indexPaginated($perPage);
-    }
-
-    /**
-     * Find and return a blog etc category from it's ID
-     *
-     * @param int $categoryID
-     * @return Category
-     */
-    public function find(int $categoryID): Category
-    {
-        return $this->repository->find($categoryID);
     }
 
     /**
@@ -62,7 +56,7 @@ class CategoriesService
     }
 
     /**
-     * Create a new BlogEtcCategory entry
+     * Create a new Category entry.
      *
      * @param array $attributes
      * @return Category
@@ -78,7 +72,7 @@ class CategoriesService
     }
 
     /**
-     * Update a blog etc category entry
+     * Update an existing Category entry.
      *
      * @param int $categoryID
      * @param array $attributes
@@ -86,6 +80,7 @@ class CategoriesService
      */
     public function update(int $categoryID, array $attributes): Category
     {
+        // find the entry:
         $category = $this->find($categoryID);
         $category->fill($attributes);
         $category->save();
@@ -93,6 +88,17 @@ class CategoriesService
         event(new CategoryEdited($category));
 
         return $category;
+    }
+
+    /**
+     * Find and return a blog etc category from it's ID
+     *
+     * @param int $categoryID
+     * @return Category
+     */
+    public function find(int $categoryID): Category
+    {
+        return $this->repository->find($categoryID);
     }
 
     /**

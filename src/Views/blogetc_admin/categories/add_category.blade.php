@@ -6,6 +6,6 @@
         @csrf
         @include('blogetc_admin::categories.form', ['category' => new \WebDevEtc\BlogEtc\Models\Category()])
 
-        <input type="submit" class="btn btn-primary" value="Add new category">
+        <input type="submit" class="btn btn-primary" value="Add New Category">
     </form>
 @endsection

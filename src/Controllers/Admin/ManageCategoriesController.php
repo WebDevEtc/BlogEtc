@@ -12,8 +12,8 @@ use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Services\CategoriesService;
 
 /**
- * Class BlogEtcCategoryAdminController
- * @package WebDevEtc\BlogEtc\Controllers
+ * Class ManageCategoriesController
+ * @package WebDevEtc\BlogEtc\Controllers\Admin
  */
 class ManageCategoriesController extends Controller
 {
@@ -74,10 +74,10 @@ class ManageCategoriesController extends Controller
     /**
      * Show the edit form for category
      *
-     * @param $categoryID
+     * @param int $categoryID
      * @return View
      */
-    public function edit($categoryID): View
+    public function edit(int $categoryID): View
     {
         $category = $this->service->find($categoryID);
 
@@ -93,14 +93,14 @@ class ManageCategoriesController extends Controller
      * Update a blog category attributes
      *
      * @param CategoryRequest $request
-     * @param $categoryID
+     * @param int $categoryID
      * @return RedirectResponse
      */
-    public function update(CategoryRequest $request, $categoryID): RedirectResponse
+    public function update(CategoryRequest $request, int $categoryID): RedirectResponse
     {
         $category = $this->service->update($categoryID, $request->validated());
 
-        Helpers::flashMessage('Saved category changes');
+        Helpers::flashMessage('Updated category');
 
         return redirect($category->editUrl());
     }
@@ -109,11 +109,11 @@ class ManageCategoriesController extends Controller
      * Delete the category
      *
      * @param CategoryRequest $request
-     * @param $categoryID
+     * @param int $categoryID
      * @return View
      * @throws Exception
      */
-    public function destroy(CategoryRequest $request, $categoryID): View
+    public function destroy(CategoryRequest $request, int $categoryID): View
     {
         $this->service->delete($categoryID);
 

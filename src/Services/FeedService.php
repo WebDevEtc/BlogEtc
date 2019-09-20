@@ -19,6 +19,10 @@ class FeedService
      */
     private $postsService;
 
+    /**
+     * FeedService constructor.
+     * @param PostsService $postsService
+     */
     public function __construct(PostsService $postsService)
     {
         $this->postsService = $postsService;
@@ -54,19 +58,6 @@ class FeedService
     }
 
     /**
-     * Return the first post posted_at date, or if none exist then return today.
-     *
-     * @param Collection $blogPosts
-     * @return Carbon
-     */
-    protected function pubDate(Collection $blogPosts): Carbon
-    {
-        return $blogPosts->first()
-            ? $blogPosts->first()->posted_at
-            : Carbon::now();
-    }
-
-    /**
      * Create fresh feed by passing latest blog posts
      *
      * @param $feed
@@ -77,7 +68,7 @@ class FeedService
 
         $this->setupFeed(
             $feed,
-            $this->pubDate($feed)
+            $this->pubDate($blogPosts)
         );
 
         /** @var Post $blogPost */
@@ -112,5 +103,18 @@ class FeedService
         $feed->pubdate = $pubDate;
 
         return $feed;
+    }
+
+    /**
+     * Return the first post posted_at date, or if none exist then return today.
+     *
+     * @param Collection $blogPosts
+     * @return Carbon
+     */
+    protected function pubDate(Collection $blogPosts): Carbon
+    {
+        return $blogPosts->first()
+            ? $blogPosts->first()->posted_at
+            : Carbon::now();
     }
 }

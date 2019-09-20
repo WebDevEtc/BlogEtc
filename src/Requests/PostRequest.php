@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rule;
 use WebDevEtc\BlogEtc\Models\Category;
-use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
 /**
- * Class CreateBlogEtcPostRequest
+ * Class PostRequest
  * @package WebDevEtc\BlogEtc\Requests
  */
 class PostRequest extends FormRequest
@@ -46,7 +45,6 @@ class PostRequest extends FormRequest
      */
     public function getImageSize($size): ?UploadedFile
     {
-
         if ($this->file($size)) {
             return $this->file($size);
         }
@@ -62,13 +60,29 @@ class PostRequest extends FormRequest
     }
 
     /**
-     * @param $size
-     * @return UploadedFile|null
-     * @deprecated - use getImageSize() instead
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
      */
-    public function get_image_file($size): ?UploadedFile
+    public function rules(): array
     {
-        return $this->getImageFile($size);
+        if ($this->method() === Request::METHOD_DELETE) {
+            // No rules are required for deleting.
+            return [];
+        }
+
+        $rules = $this->sharedRules();
+
+        if ($this->method() === Request::METHOD_POST) {
+            $rules['slug'] [] = Rule::unique('blog_etc_posts', 'slug');
+        }
+
+        if (in_array($this->method(), [Request::METHOD_PATCH, Request::METHOD_PUT], true)) {
+            $rules['slug'][] = Rule::unique('blog_etc_posts', 'slug')
+                ->ignore($this->route()->parameter('blogPostID'));
+        }
+
+        return $rules;
     }
 
     /**
@@ -144,28 +158,12 @@ class PostRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
+     * @param $size
+     * @return UploadedFile|null
+     * @deprecated - use getImageSize() instead
      */
-    public function rules(): array
+    public function get_image_file($size): ?UploadedFile
     {
-        if ($this->method() === Request::METHOD_DELETE) {
-            // No rules are required for deleting.
-            return [];
-        }
-
-        $rules = $this->sharedRules();
-
-        if ($this->method() === Request::METHOD_POST) {
-            $rules['slug'] [] = Rule::unique('blog_etc_posts', 'slug');
-        }
-
-        if (in_array($this->method(), [Request::METHOD_PATCH, Request::METHOD_PUT], true)) {
-            $rules['slug'][] = Rule::unique('blog_etc_posts', 'slug')
-                ->ignore($this->route()->parameter('blogPostID'));
-        }
-
-        return $rules;
+        return $this->getImageFile($size);
     }
 }

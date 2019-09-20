@@ -5,7 +5,7 @@ namespace WebDevEtc\BlogEtc\Repositories;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use WebDevEtc\BlogEtc\Exceptions\BlogEtcCategoryNotFoundException;
+use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
 use WebDevEtc\BlogEtc\Models\Category;
 
 /**
@@ -59,7 +59,7 @@ class CategoriesRepository
         try {
             return $this->query()->findOrFail($categoryID);
         } catch (ModelNotFoundException $e) {
-            throw new BlogEtcCategoryNotFoundException(
+            throw new CategoryNotFoundException(
                 'Unable to find a blog category with ID: ' . $categoryID
             );
         }
@@ -76,7 +76,7 @@ class CategoriesRepository
         try {
             return $this->query()->where('slug', $categorySlug)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new BlogEtcCategoryNotFoundException(
+            throw new CategoryNotFoundException(
                 'Unable to find a blog category with slug: ' . $categorySlug
             );
         }

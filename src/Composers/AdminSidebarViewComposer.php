@@ -16,7 +16,12 @@ use WebDevEtc\BlogEtc\Models\UploadedPhoto;
  */
 class AdminSidebarViewComposer
 {
-    public function compose(View $view)
+    /**
+     * Set up view parameters for the default admin panel.
+     *
+     * @param View $view
+     */
+    public function compose(View $view): void
     {
         $view->with('postCount', Post::count());
         $view->with('categoryCount', Category::count());

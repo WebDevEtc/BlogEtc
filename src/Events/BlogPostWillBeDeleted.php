@@ -15,14 +15,14 @@ class BlogPostWillBeDeleted
     use Dispatchable, SerializesModels;
 
     /** @var Post */
-    public $blogEtcPost;
+    public $post;
 
     /**
      * BlogPostWillBeDeleted constructor.
-     * @param Post $blogEtcPost
+     * @param Post $post
      */
-    public function __construct(Post $blogEtcPost)
+    public function __construct(Post $post)
     {
-        $this->blogEtcPost = $blogEtcPost;
+        $this->post = $post;
     }
 }

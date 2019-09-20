@@ -6,7 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use WebDevEtc\BlogEtc\Exceptions\BlogEtcPostNotFoundException;
+use WebDevEtc\BlogEtc\Exceptions\PostNotFoundException;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
@@ -93,7 +93,7 @@ class PostsRepository
         try {
             return $this->query(true)->findOrFail($blogEtcPostID);
         } catch (ModelNotFoundException $e) {
-            throw new BlogEtcPostNotFoundException('Unable to find blog post with ID: ' . $blogEtcPostID);
+            throw new PostNotFoundException('Unable to find blog post with ID: ' . $blogEtcPostID);
         }
     }
 
@@ -113,7 +113,7 @@ class PostsRepository
                 ->where('slug', $slug)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new BlogEtcPostNotFoundException('Unable to find blog post with slug: ' . $slug);
+            throw new PostNotFoundException('Unable to find blog post with slug: ' . $slug);
         }
     }
 

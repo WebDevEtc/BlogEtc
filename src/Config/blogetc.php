@@ -2,6 +2,7 @@
 
 use App\User;
 use WebDevEtc\BlogEtc\Captcha\Basic;
+use WebDevEtc\BlogEtc\Services\CommentsService;
 
 // config for webdevetc/blogetc
 // There are lots of options here, but all have comments. For further documentation please see webdevetc.com/blogetc
@@ -216,7 +217,7 @@ return [
         //      \WebDevEtc\BlogEtc\Services\BlogEtcCommentsService::COMMENT_TYPE_DISABLED
         //           (turn comments off)
         // Default: built_in
-        'type_of_comments_to_show' => \WebDevEtc\BlogEtc\Services\CommentsService::COMMENT_TYPE_BUILT_IN,
+        'type_of_comments_to_show' => CommentsService::COMMENT_TYPE_BUILT_IN,
 
         // Max num of comments to show on a single blog post.
         // Set to a lower number for smaller page sizes.

@@ -2,8 +2,13 @@
 
 namespace WebDevEtc\BlogEtc\Exceptions;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use InvalidArgumentException;
 
-class InvalidImageSizeException extends \InvalidArgumentException
+/**
+ * Class InvalidImageSizeException
+ *
+ * @package WebDevEtc\BlogEtc\Exceptions
+ */
+class InvalidImageSizeException extends InvalidArgumentException
 {
 }

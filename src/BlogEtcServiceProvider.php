@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
 use Swis\LaravelFulltext\ModelObserver;
+use View;
 use WebDevEtc\BlogEtc\Composers\AdminSidebarViewComposer;
 use WebDevEtc\BlogEtc\Models\Post;
 
@@ -18,11 +19,11 @@ use WebDevEtc\BlogEtc\Models\Post;
 class BlogEtcServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap services.
+     * Bootstrap the BlogEtcPost services.
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         // if full text is not enabled, disable it:
         $this->disableFulltextSyncing();
@@ -43,10 +44,11 @@ class BlogEtcServiceProvider extends ServiceProvider
     /**
      * Set up view composers so admin views have required view params.
      */
-    protected function setupViewComposer()
+    protected function setupViewComposer(): void
     {
-        \View::composer(
-            'blogetc_admin::layouts.admin_layout', AdminSidebarViewComposer::class
+        View::composer(
+            'blogetc_admin::layouts.admin_layout',
+            AdminSidebarViewComposer::class
         );
     }
 
@@ -57,11 +59,11 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // for the admin backend views ( view("blogetc_admin::BLADEFILE") )
+        // for the admin backend views ( view("blogetc_admin::some-blade-file") )
         $this->loadViewsFrom(__DIR__ . '/Views/blogetc_admin', 'blogetc_admin');
 
-        // for public facing views (view("blogetc::BLADEFILE")):
-        // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc anyway
+        // for public facing views (view("blogetc::some-blade-file")):
+        // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc.
         $this->loadViewsFrom(__DIR__ . '/Views/blogetc', 'blogetc');
     }
 
@@ -125,12 +127,13 @@ class BlogEtcServiceProvider extends ServiceProvider
 
         // You must add a gate with the ability name 'blog-etc-admin' to your AuthServiceProvider class.
         // This is provided only as a backup, which will restrict all access to BlogEtc admin.
-        Gate::define('blog-etc-admin', function ($user) {
-            throw new LogicException('You must implement your own gate in AuthServiceProvider for the "blog-etc-admin" gate.');
+        Gate::define('blog-etc-admin', static function ($user) {
+            throw new LogicException('You must implement your own gate in AuthServiceProvider' .
+                ' for the "blog-etc-admin" gate.');
         });
 
         // Used for the search results
-        \Gate::define('view-blog-etc-post', function (?Model $user, Post $post) {
+        Gate::define('view-blog-etc-post', static function (?Model $user, Post $post) {
             return $post->is_published && $post->posted_at->isPast();
         });
 
@@ -139,14 +142,14 @@ class BlogEtcServiceProvider extends ServiceProvider
         /**
          * For people to add comments to your blog posts.
          */
-        Gate::define('blog-etc-add-comment', function (?Model $user) {
+        Gate::define('blog-etc-add-comment', static function (?Model $user) {
             return true;
         });
 
         /**
          * For an admin-like user to approve comments.
          */
-        Gate::define('blog-etc-approve-comments', function ($user) {
+        Gate::define('blog-etc-approve-comments', static function ($user) {
             return true;
         });
     }

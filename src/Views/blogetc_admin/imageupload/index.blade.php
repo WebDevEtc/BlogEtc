@@ -1,3 +1,7 @@
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\UploadedPhoto $uploadedPhoto */
+    $uploadedPhoto = $uploadedPhoto;
+@endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('content')
     <h5>Admin - Uploaded Images</h5>
@@ -33,25 +37,25 @@
                     <div class="row" style="margin: 10px; background: #eee; overflow:auto; padding:5px;">
 
                         @php
-                        $smallest = null;
-                        $smallest_size = -1;
+                            $smallest = null;
+                            $smallest_size = -1;
                         @endphp
                         @foreach ($uploadedPhoto->uploaded_images as $file_key => $file)
                             @php
-                            $id = 'uploaded_' . ($uploadedPhoto->id) . '_' . $file_key;
+                                $id = 'uploaded_' . ($uploadedPhoto->id) . '_' . $file_key;
                             @endphp
 
                             <div class="col-md-12">
                                 <h6 class="text-center mt-3">
-                                    <strong>{{ $file_key}}</strong>
-                                    - {{ $file['w']}} x {{ $file['h']}}:
+                                    <strong>{{ $file_key }}</strong>
+                                    - {{ $file['w'] }} x {{ $file['h'] }}:
                                 </h6>
                                 <p class="text-center">
                                     <a href="{{ asset(config('blogetc.blog_upload_dir') . '/'. $file['filename']) }}"
                                        target="_blank">
                                         [link]
                                     </a> / <span class="btn btn-sm btn-primary" style="cursor: zoom-in;"
-                                                 {{--                                        TODO JS--}}
+                                                 {{--  TODO JS--}}
                                                  onclick="show_uploaded_file_row('{{ $id }}','{{ asset( config('blogetc.blog_upload_dir') . '/'. $file['filename']) }}')">show</span>
                                 </p>
 
@@ -72,16 +76,16 @@
                                         img tag
                                     </small>
                                     <input type="text" readonly="readonly" class="form-control"
-                                           value="{{'<img src="' . asset(config('blogetc.blog_upload_dir') . '/'. $file['filename']) . '" alt="' . e($uploadedPhoto->image_title) . '" >' }}">
+                                           value="{{ '<img src="' . asset(config('blogetc.blog_upload_dir') . '/'. $file['filename']) . '" alt="' . e($uploadedPhoto->image_title) . '" >' }}">
                                 </div>
                             </div>
 
                             @php
-                            $area = $file['w'] * $file['h'];
-                            if ($area < $smallest_size || $smallest_size < 0) {
-                                $smallest = $file;
-                                $smallest_size = $area;
-                            }
+                                $area = $file['w'] * $file['h'];
+                                if ($area < $smallest_size || $smallest_size < 0) {
+                                    $smallest = $file;
+                                    $smallest_size = $area;
+                                }
                             @endphp
                         @endforeach
                     </div>
@@ -107,6 +111,6 @@
     @endforeach
 
     <div class="text-center">
-        {{ $uploaded_photos->appends( [] )->links()}}
+        {{ $uploaded_photos->links() }}
     </div>
 @endsection

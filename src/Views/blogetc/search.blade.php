@@ -12,7 +12,7 @@
                 is_a($result->indexable,\WebDevEtc\BlogEtc\Models\Post::class)
                 && \Gate::allows('view-blog-etc-post', $result->indexable)
                 )
-                    <h2>Search result #{{ $loop->count}}</h2>
+                    <h2>Search result #{{ $loop->count }}</h2>
                     @include('blogetc::partials.index_loop', ['post' => $result->indexable])
                 @else
 

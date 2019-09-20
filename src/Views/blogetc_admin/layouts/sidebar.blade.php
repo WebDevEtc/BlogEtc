@@ -28,14 +28,15 @@
             <div class="list-group ">
 
                 <a href="{{ route('blogetc.admin.index') }}"
-                   class="list-group-item list-group-item-action @if(Request::routeIs('blogetc.admin.index')) active @endif  "><i
-                        class="fa fa-th fa-fw"
-                        aria-hidden="true"></i>
-                    All Posts</a>
+                   class="list-group-item list-group-item-action @if(Request::routeIs('blogetc.admin.index')) active @endif">
+                    <i class="fa fa-th fa-fw" aria-hidden="true"></i>
+                    All Posts
+                </a>
                 <a href="{{ route('blogetc.admin.create_post') }}"
-                   class="list-group-item list-group-item-action  @if(Request::routeIs('blogetc.admin.create_post')) active @endif  "><i
-                        class="fa fa-plus fa-fw" aria-hidden="true"></i>
-                    Add Post</a>
+                   class="list-group-item list-group-item-action @if(Request::routeIs('blogetc.admin.create_post')) active @endif">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                    Add Post
+                </a>
             </div>
         </div>
 
@@ -54,13 +55,21 @@
 
             <div class="list-group ">
                 <a href="{{ route('blogetc.admin.comments.index') }}"
-                   class="list-group-item list-group-item-action  @if(Request::routeIs('blogetc.admin.comments.index') && !Request::get('waiting_for_approval')) active @endif">
+                   class="list-group-item list-group-item-action
+                        @if(Request::routeIs('blogetc.admin.comments.index') && !Request::get('waiting_for_approval'))
+                            active
+                        @endif">
                     <i class="fa fa-fw fa-comments" aria-hidden="true"></i>
                     All Comments
                 </a>
 
                 <a href="{{ route('blogetc.admin.comments.index') }}?waiting_for_approval=true"
-                   class="list-group-item list-group-item-action  @if(Request::routeIs( 'blogetc.admin.comments.index') && Request::get('waiting_for_approval')) active @elseif($commentApprovalCount>0) list-group-item-warning @endif">
+                   class="list-group-item list-group-item-action
+                        @if(Request::routeIs( 'blogetc.admin.comments.index') && Request::get('waiting_for_approval'))
+                            active
+                        @elseif($commentApprovalCount>0)
+                            list-group-item-warning
+                        @endif">
                     <i class="fa  fa-fw fa-comments" aria-hidden="true"></i>
                     {{ $commentApprovalCount }}
                     Waiting for approval
@@ -81,13 +90,13 @@
 
             <div class="list-group ">
                 <a href="{{ route('blogetc.admin.categories.index') }}"
-                   class="list-group-item list-group-item-action  @if(Request::routeIs( 'blogetc.admin.categories.index')) active @endif"><i
-                        class="fa fa-object-group fa-fw" aria-hidden="true"></i>
+                   class="list-group-item list-group-item-action @if(Request::routeIs( 'blogetc.admin.categories.index')) active @endif">
+                    <i class="fa fa-object-group fa-fw" aria-hidden="true"></i>
                     All Categories
                 </a>
                 <a href="{{ route('blogetc.admin.categories.create_category') }}"
-                   class="list-group-item list-group-item-action  @if(Request::routeIs('blogetc.admin.categories.create_category')) active @endif"><i
-                        class="fa fa-plus fa-fw" aria-hidden="true"></i>
+                   class="list-group-item list-group-item-action @if(Request::routeIs('blogetc.admin.categories.create_category')) active @endif">
+                    <i class="fa fa-plus fa-fw" aria-hidden="true"></i>
                     Add Category
                 </a>
             </div>

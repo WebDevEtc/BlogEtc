@@ -57,7 +57,7 @@ class CommentsController extends Controller
      */
     public function store(CommentRequest $request, string $slug)
     {
-        if (config('blogetc.comments.type_of_comments_to_show') !== \WebDevEtc\BlogEtc\Services\CommentsService::COMMENT_TYPE_BUILT_IN) {
+        if (config('blogetc.comments.type_of_comments_to_show') !== CommentsService::COMMENT_TYPE_BUILT_IN) {
             throw new RuntimeException('Built in comments are disabled');
         }
 

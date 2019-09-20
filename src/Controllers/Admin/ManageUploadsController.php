@@ -15,7 +15,7 @@ use WebDevEtc\BlogEtc\Services\UploadsService;
  * @package WebDevEtc\BlogEtc\Controllers
  * @todo - a lot of this will be refactored. The public API won't change.
  */
-class UploadsController extends Controller
+class ManageUploadsController extends Controller
 {
     /** @var UploadsService */
     private $uploadsService;

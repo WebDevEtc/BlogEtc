@@ -14,33 +14,35 @@ use WebDevEtc\BlogEtc\Models\Post;
 class UploadedImage
 {
     use Dispatchable, SerializesModels;
+
     /** @var string */
-    private $imageFilename;
+    public $imageFilename;
     /** @var Image */
-    private $image;
+    public $image;
     /** @var Post */
-    private $blogEtcPost;
+    public $post;
     /** @var string|null */
-    private $source;
+    public $source;
 
     /**
      * UploadedImage constructor.
      *
      * $source =  the method name which was firing this event (or other string)
+     *
      * @param string $imageFilename - the new filename
-     * @param Post $blogEtcPost
+     * @param Post $post
      * @param Image $image
      * @param string|null $source
      */
     public function __construct(
         string $imageFilename,
         Image $image,
-        Post $blogEtcPost = null,
+        Post $post = null,
         ?string $source = 'other'
     ) {
         $this->imageFilename = $imageFilename;
         $this->image = $image;
-        $this->blogEtcPost = $blogEtcPost;
+        $this->post = $post;
         $this->source = $source;
     }
 }

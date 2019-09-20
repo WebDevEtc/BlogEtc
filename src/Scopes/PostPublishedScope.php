@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Scopes;
 
-use Auth;
 use Carbon\Carbon;
 use Gate;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
 /**
- * Class BlogEtcPublishedScope
+ * Class PostPublishedScope
  * @package WebDevEtc\BlogEtc\Scopes
  */
 class PostPublishedScope implements Scope

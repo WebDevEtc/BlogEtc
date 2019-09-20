@@ -11,11 +11,10 @@
                     {{ $comment->author() }} commented on:
 
                     @if($comment->post)
-                        <a href="{{ $comment->post->url()}}">{{ $comment->post->title }}</a>
+                        <a href="{{ $comment->post->url() }}">{{ $comment->post->title }}</a>
                     @else
                         Unknown blog post
                     @endif
-
                     on {{ $comment->created_at }} </h5>
 
                 <p class="m-3 p-2">{{ $comment->comment }}</p>
@@ -44,11 +43,11 @@
 
                 {{--DELETE BUTTON--}}
                 <form
-                    {{--                        TODO--}}
+                    {{--   TODO--}}
                     onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"
-                    method="post" action="{{route('blogetc.admin.comments.delete', $comment->id)}}"
+                    method="post" action="{{ route('blogetc.admin.comments.delete', $comment->id) }}"
                     class="float-right">
-                    {{--                    TODO  float-right--}}
+                    {{--  TODO  float-right--}}
                     @csrf
                     @method('DELETE')
                     <input type="submit" class="btn btn-danger btn-sm" value="Delete">
@@ -60,6 +59,6 @@
     @endforelse
 
     <div class="text-center">
-        {{ $comments->appends( [] )->links() }}
+        {{ $comments->links() }}
     </div>
 @endsection

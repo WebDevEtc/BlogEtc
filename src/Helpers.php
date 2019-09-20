@@ -53,9 +53,10 @@ class Helpers
      */
     public static function rssHtmlTag(): string
     {
-        return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="' . e(route('blogetc.feed')) . '?type=atom" />
-  <link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="' . e(route('blogetc.feed')) . '?type=rss" />
-  ';
+        return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="'
+            . e(route('blogetc.feed')) . '?type=atom" />'
+            . '<link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="'
+            . e(route('blogetc.feed')) . '?type=rss" />';
     }
 
     ### Depreciated methods:

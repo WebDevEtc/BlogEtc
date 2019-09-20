@@ -5,6 +5,10 @@ namespace WebDevEtc\BlogEtc\Services;
 use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
 use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 
+/**
+ * Class CaptchaService
+ * @package WebDevEtc\BlogEtc\Services
+ */
 class CaptchaService
 {
     /**

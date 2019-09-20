@@ -1,7 +1,6 @@
 @extends('blogetc_admin::layouts.admin_layout')
 @section('title','Blog Etc Admin - Upload Images')
 @section('content')
-
     <h5>Admin - Upload Images</h5>
 
     <p>You can use this to upload images.</p>
@@ -49,7 +48,7 @@
             @endforeach
         </div>
         <div class="form-group mb-4 p-2">
-            <label>Save</label>
+            <label>Upload</label>
             <input type="submit" class="btn btn-primary" value="Upload">
         </div>
     </form>

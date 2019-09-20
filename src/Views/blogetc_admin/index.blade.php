@@ -1,5 +1,5 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
+    /** @var \WebDevEtc\BlogEtc\Models\Post[]|\Illuminate\Support\Collection $posts */
 @endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('content')
@@ -106,6 +106,6 @@
     @endforelse
 
     <div class="text-center">
-        {{ $posts->appends( [] )->links()}}
+        {{ $posts->links()}}
     </div>
 @endsection

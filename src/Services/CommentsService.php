@@ -31,6 +31,10 @@ class CommentsService
     /** @var CommentsRepository */
     private $repository;
 
+    /**
+     * CommentsService constructor.
+     * @param CommentsRepository $repository
+     */
     public function __construct(CommentsRepository $repository)
     {
         $this->repository = $repository;
@@ -47,6 +51,13 @@ class CommentsService
         return $this->repository;
     }
 
+    /**
+     * @param Post $blogEtcPost
+     * @param array $attributes
+     * @param string|null $ip
+     * @param int|null $userID
+     * @return Comment
+     */
     public function create(
         Post $blogEtcPost,
         array $attributes,
@@ -91,18 +102,6 @@ class CommentsService
     }
 
     /**
-     * Find and return a comment by ID
-     *
-     * @param int $blogEtcCommentID
-     * @param bool $onlyApproved
-     * @return Comment
-     */
-    public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
-    {
-        return $this->repository->find($blogEtcCommentID, $onlyApproved);
-    }
-
-    /**
      * Approve a blog comment
      *
      * @param int $blogCommentID
@@ -124,6 +123,18 @@ class CommentsService
 
         // return comment
         return $comment;
+    }
+
+    /**
+     * Find and return a comment by ID
+     *
+     * @param int $blogEtcCommentID
+     * @param bool $onlyApproved
+     * @return Comment
+     */
+    public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
+    {
+        return $this->repository->find($blogEtcCommentID, $onlyApproved);
     }
 
     /**
@@ -149,5 +160,4 @@ class CommentsService
         // return deleted comment
         return $comment;
     }
-
 }
