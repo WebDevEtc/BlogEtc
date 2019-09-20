@@ -3,6 +3,7 @@
 ### 5 minutes to install! Quick and easy!
 
 [![StyleCI](https://github.styleci.io/repos/144829997/shield?branch=master)](https://github.styleci.io/repos/144829997)
+[![Build Status](https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master)](https://travis-ci.org/WebDevEtc/BlogEtc)
 
 ## Sept 2019
 Updated for Laravel 6.0. Still rewriting the core for a proper release of v4 with much cleaner code.
