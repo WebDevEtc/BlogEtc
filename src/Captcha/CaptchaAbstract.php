@@ -1,20 +1,21 @@
-<?php namespace WebDevEtc\BlogEtc\Captcha;
+<?php
+
+namespace WebDevEtc\BlogEtc\Captcha;
 
 use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Interfaces\CaptchaInterface;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class CaptchaAbstract
- * @package WebDevEtc\BlogEtc\Captcha
+ * Class CaptchaAbstract.
  */
 abstract class CaptchaAbstract implements CaptchaInterface
 {
     /**
-     * executed when viewing single post
+     * executed when viewing single post.
      *
      * @param Request $request
-     * @param Post $blogEtcPost
+     * @param Post    $blogEtcPost
      *
      * @return mixed|void
      */
@@ -34,10 +35,10 @@ abstract class CaptchaAbstract implements CaptchaInterface
     }
 
     /**
-     * executed when posting new comment
+     * executed when posting new comment.
      *
      * @param Request $request
-     * @param Post $blogEtcPost
+     * @param Post    $blogEtcPost
      *
      * @return void|mixed
      */

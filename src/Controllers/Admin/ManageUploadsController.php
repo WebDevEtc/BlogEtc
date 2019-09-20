@@ -11,8 +11,8 @@ use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
 use WebDevEtc\BlogEtc\Services\UploadsService;
 
 /**
- * Class BlogEtcAdminController
- * @package WebDevEtc\BlogEtc\Controllers
+ * Class BlogEtcAdminController.
+ *
  * @todo - a lot of this will be refactored. The public API won't change.
  */
 class ManageUploadsController extends Controller
@@ -22,6 +22,7 @@ class ManageUploadsController extends Controller
 
     /**
      * BlogEtcAdminController constructor.
+     *
      * @param UploadsService $uploadsService
      */
     public function __construct(UploadsService $uploadsService)
@@ -31,7 +32,7 @@ class ManageUploadsController extends Controller
         // ensure the config file exists
         if (!is_array(config('blogetc'))) {
             throw new RuntimeException(
-                'The config/blogetc.php does not exist. ' .
+                'The config/blogetc.php does not exist. '.
                 'Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command'
             );
         }
@@ -42,7 +43,7 @@ class ManageUploadsController extends Controller
     }
 
     /**
-     * Show the main listing of uploaded images
+     * Show the main listing of uploaded images.
      */
     public function index(): View
     {
@@ -55,19 +56,20 @@ class ManageUploadsController extends Controller
     }
 
     /**
-     * show the form for uploading a new image
+     * show the form for uploading a new image.
      */
     public function create(): View
     {
         return view('blogetc_admin::imageupload.create', [
-            'imageSizes' => (array)config('blogetc.image_sizes'),
+            'imageSizes' => (array) config('blogetc.image_sizes'),
         ]);
     }
 
     /**
-     * Save a new uploaded image
+     * Save a new uploaded image.
      *
      * @param UploadImageRequest $request
+     *
      * @return Response
      */
     public function store(UploadImageRequest $request): Response

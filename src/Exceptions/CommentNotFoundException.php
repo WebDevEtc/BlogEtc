@@ -5,9 +5,7 @@ namespace WebDevEtc\BlogEtc\Exceptions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
- * Class CommentNotFoundException
- *
- * @package WebDevEtc\BlogEtc\Exceptions
+ * Class CommentNotFoundException.
  */
 class CommentNotFoundException extends ModelNotFoundException
 {

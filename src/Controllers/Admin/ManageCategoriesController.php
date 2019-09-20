@@ -8,12 +8,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Requests\CategoryRequest;
-use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Services\CategoriesService;
 
 /**
- * Class ManageCategoriesController
- * @package WebDevEtc\BlogEtc\Controllers\Admin
+ * Class ManageCategoriesController.
  */
 class ManageCategoriesController extends Controller
 {
@@ -22,6 +20,7 @@ class ManageCategoriesController extends Controller
 
     /**
      * BlogEtcCategoryAdminController constructor.
+     *
      * @param CategoriesService $service
      */
     public function __construct(CategoriesService $service)
@@ -30,7 +29,7 @@ class ManageCategoriesController extends Controller
     }
 
     /**
-     * Show list of categories
+     * Show list of categories.
      *
      * @return mixed
      */
@@ -47,7 +46,7 @@ class ManageCategoriesController extends Controller
     }
 
     /**
-     * Show the form for creating new category
+     * Show the form for creating new category.
      *
      * @return View
      */
@@ -57,9 +56,10 @@ class ManageCategoriesController extends Controller
     }
 
     /**
-     * Store a new category
+     * Store a new category.
      *
      * @param CategoryRequest $request
+     *
      * @return RedirectResponse
      */
     public function store(CategoryRequest $request): RedirectResponse
@@ -72,9 +72,10 @@ class ManageCategoriesController extends Controller
     }
 
     /**
-     * Show the edit form for category
+     * Show the edit form for category.
      *
      * @param int $categoryID
+     *
      * @return View
      */
     public function edit(int $categoryID): View
@@ -90,10 +91,11 @@ class ManageCategoriesController extends Controller
     }
 
     /**
-     * Update a blog category attributes
+     * Update a blog category attributes.
      *
      * @param CategoryRequest $request
-     * @param int $categoryID
+     * @param int             $categoryID
+     *
      * @return RedirectResponse
      */
     public function update(CategoryRequest $request, int $categoryID): RedirectResponse
@@ -106,12 +108,14 @@ class ManageCategoriesController extends Controller
     }
 
     /**
-     * Delete the category
+     * Delete the category.
      *
      * @param CategoryRequest $request
-     * @param int $categoryID
-     * @return View
+     * @param int             $categoryID
+     *
      * @throws Exception
+     *
+     * @return View
      */
     public function destroy(CategoryRequest $request, int $categoryID): View
     {

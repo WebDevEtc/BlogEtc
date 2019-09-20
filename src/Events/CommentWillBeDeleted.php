@@ -7,8 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\Comment;
 
 /**
- * Class CommentWillBeDeleted
- * @package WebDevEtc\BlogEtc\Events
+ * Class CommentWillBeDeleted.
  */
 class CommentWillBeDeleted
 {
@@ -19,6 +18,7 @@ class CommentWillBeDeleted
 
     /**
      * CommentWillBeDeleted constructor.
+     *
      * @param Comment $comment
      */
     public function __construct(Comment $comment)

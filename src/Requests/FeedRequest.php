@@ -6,13 +6,12 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * Class FeedRequest
- * @package WebDevEtc\BlogEtc\Requests
+ * Class FeedRequest.
  */
 class FeedRequest extends FormRequest
 {
     /**
-     * Rules for requesting the feed
+     * Rules for requesting the feed.
      *
      * @return array
      */

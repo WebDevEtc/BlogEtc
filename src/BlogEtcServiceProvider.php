@@ -12,9 +12,7 @@ use WebDevEtc\BlogEtc\Composers\AdminSidebarViewComposer;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class BlogEtcServiceProvider
- *
- * @package WebDevEtc\BlogEtc
+ * Class BlogEtcServiceProvider.
  */
 class BlogEtcServiceProvider extends ServiceProvider
 {
@@ -60,15 +58,16 @@ class BlogEtcServiceProvider extends ServiceProvider
     public function register()
     {
         // for the admin backend views ( view("blogetc_admin::some-blade-file") )
-        $this->loadViewsFrom(__DIR__ . '/Views/blogetc_admin', 'blogetc_admin');
+        $this->loadViewsFrom(__DIR__.'/Views/blogetc_admin', 'blogetc_admin');
 
         // for public facing views (view("blogetc::some-blade-file")):
         // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc.
-        $this->loadViewsFrom(__DIR__ . '/Views/blogetc', 'blogetc');
+        $this->loadViewsFrom(__DIR__.'/Views/blogetc', 'blogetc');
     }
 
     /**
-     * If full text search is not enabled in config, then disable syncing for the BlogEtcPost model
+     * If full text search is not enabled in config, then disable syncing for the BlogEtcPost model.
+     *
      * @return void
      */
     protected function disableFulltextSyncing(): void
@@ -80,18 +79,20 @@ class BlogEtcServiceProvider extends ServiceProvider
     }
 
     /**
-     * If config is set to include default routes, load the routes file
+     * If config is set to include default routes, load the routes file.
+     *
      * @return void
      */
     protected function includeRoutes(): void
     {
         if (config('blogetc.include_default_routes', true)) {
-            include __DIR__ . '/routes.php';
+            include __DIR__.'/routes.php';
         }
     }
 
     /**
-     * Setup the files for vendor:publish
+     * Setup the files for vendor:publish.
+     *
      * @return void
      */
     protected function publishFiles(): void
@@ -103,19 +104,20 @@ class BlogEtcServiceProvider extends ServiceProvider
                      '2018_09_27_122627_create_blog_etc_uploaded_photos_table.php',
                  ] as $migration) {
             $this->publishes([
-                __DIR__ . '/../migrations/' . $migration => database_path('migrations/' . $migration),
+                __DIR__.'/../migrations/'.$migration => database_path('migrations/'.$migration),
             ]);
         }
 
         $this->publishes([
-            __DIR__ . '/Views/blogetc' => base_path('resources/views/vendor/blogetc'),
-            __DIR__ . '/Config/blogetc.php' => config_path('blogetc.php'),
-            __DIR__ . '/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
+            __DIR__.'/Views/blogetc'             => base_path('resources/views/vendor/blogetc'),
+            __DIR__.'/Config/blogetc.php'        => config_path('blogetc.php'),
+            __DIR__.'/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
         ]);
     }
 
     /**
      * Set up default gates.
+     *
      * @see https://laravel.com/docs/5.8/authorization#authorizing-actions-via-gates
      */
     protected function setupDefaultGates(): void
@@ -128,7 +130,7 @@ class BlogEtcServiceProvider extends ServiceProvider
         // You must add a gate with the ability name 'blog-etc-admin' to your AuthServiceProvider class.
         // This is provided only as a backup, which will restrict all access to BlogEtc admin.
         Gate::define('blog-etc-admin', static function ($user) {
-            throw new LogicException('You must implement your own gate in AuthServiceProvider' .
+            throw new LogicException('You must implement your own gate in AuthServiceProvider'.
                 ' for the "blog-etc-admin" gate.');
         });
 
@@ -139,14 +141,14 @@ class BlogEtcServiceProvider extends ServiceProvider
 
         // Some defaults which allow everything through - you can override these and add your own logic.
 
-        /**
+        /*
          * For people to add comments to your blog posts.
          */
         Gate::define('blog-etc-add-comment', static function (?Model $user) {
             return true;
         });
 
-        /**
+        /*
          * For an admin-like user to approve comments.
          */
         Gate::define('blog-etc-approve-comments', static function ($user) {

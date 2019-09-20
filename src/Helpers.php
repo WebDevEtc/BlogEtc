@@ -5,14 +5,12 @@ namespace WebDevEtc\BlogEtc;
 use Session;
 
 /**
- * Small little helper class of static methods
- *
- * @package WebDevEtc\BlogEtc
+ * Small little helper class of static methods.
  */
 class Helpers
 {
     /**
-     * What key to use for the session::flash / pull / has
+     * What key to use for the session::flash / pull / has.
      */
     public const FLASH_MESSAGE_SESSION_KEY = 'BLOGETC_FLASH';
 
@@ -39,6 +37,7 @@ class Helpers
 
     /**
      * return the flashed message. Use with ::has_flashed_message() if you need to check if it has a value...
+     *
      * @return string
      */
     public static function pullFlashedMessage(): ?string
@@ -47,24 +46,24 @@ class Helpers
     }
 
     /**
-     * Use this in your blade/template files, within <head> to auto insert the links to rss feed
+     * Use this in your blade/template files, within <head> to auto insert the links to rss feed.
      *
      * @return string
      */
     public static function rssHtmlTag(): string
     {
         return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="'
-            . e(route('blogetc.feed')) . '?type=atom" />'
-            . '<link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="'
-            . e(route('blogetc.feed')) . '?type=rss" />';
+            .e(route('blogetc.feed')).'?type=atom" />'
+            .'<link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="'
+            .e(route('blogetc.feed')).'?type=rss" />';
     }
 
-    ### Depreciated methods:
+    //## Depreciated methods:
 
     /**
      * @return string|null
-     * @deprecated use pullFlashedMessage() instead
      *
+     * @deprecated use pullFlashedMessage() instead
      */
     public static function pull_flashed_message(): ?string
     {
@@ -73,8 +72,8 @@ class Helpers
 
     /**
      * @return bool
-     * @deprecated use hasFlashedMessage() instead
      *
+     * @deprecated use hasFlashedMessage() instead
      */
     public static function has_flashed_message(): bool
     {
@@ -83,8 +82,8 @@ class Helpers
 
     /**
      * @param string $message
-     * @deprecated use flashMessage() instead
      *
+     * @deprecated use flashMessage() instead
      */
     public static function flash_message(string $message): void
     {
@@ -103,6 +102,7 @@ class Helpers
 
     /**
      * This method is depreciated. Just use the config() directly.
+     *
      * @return array
      *
      * @deprecated

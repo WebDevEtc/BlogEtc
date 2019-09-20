@@ -21,7 +21,7 @@ use WebDevEtc\BlogEtc\Scopes\BlogCommentApprovedAndDefaultOrderScope;
 class Comment extends Model
 {
     /**
-     * Attributes which have specific casts
+     * Attributes which have specific casts.
      *
      * @var array
      */
@@ -62,7 +62,7 @@ class Comment extends Model
     }
 
     /**
-     * The BlogEtcPost relationship
+     * The BlogEtcPost relationship.
      *
      * @return BelongsTo
      */
@@ -72,7 +72,7 @@ class Comment extends Model
     }
 
     /**
-     * Comment author relationship
+     * Comment author relationship.
      *
      * @return BelongsTo
      */
@@ -82,7 +82,7 @@ class Comment extends Model
     }
 
     /**
-     * Return author string (either from the User (via ->user_id), or the submitted author_name value
+     * Return author string (either from the User (via ->user_id), or the submitted author_name value.
      *
      * TODO - rename this as it looks like a relationship
      *
@@ -93,6 +93,7 @@ class Comment extends Model
         if ($this->user_id) {
             // a user is associated with this
             $field = config('blogetc.comments.user_field_for_author_name', 'name');
+
             return optional($this->user)->$field;
         }
 

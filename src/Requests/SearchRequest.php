@@ -5,8 +5,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class SearchRequest
- * @package WebDevEtc\BlogEtc\Requests
+ * Class SearchRequest.
  */
 class SearchRequest extends FormRequest
 {
@@ -33,7 +32,7 @@ class SearchRequest extends FormRequest
     }
 
     /**
-     * Return the query that user searched for
+     * Return the query that user searched for.
      *
      * @return string
      */

@@ -7,8 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class BlogPostAdded
- * @package WebDevEtc\BlogEtc\Events
+ * Class BlogPostAdded.
  */
 class BlogPostAdded
 {
@@ -19,6 +18,7 @@ class BlogPostAdded
 
     /**
      * BlogPostAdded constructor.
+     *
      * @param Post $post
      */
     public function __construct(Post $post)

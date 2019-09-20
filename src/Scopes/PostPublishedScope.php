@@ -9,8 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
 /**
- * Class PostPublishedScope
- * @package WebDevEtc\BlogEtc\Scopes
+ * Class PostPublishedScope.
  */
 class PostPublishedScope implements Scope
 {
@@ -18,7 +17,8 @@ class PostPublishedScope implements Scope
      * For normal users, add a global scope for BlogEtcPosts to never return unpublished posts.
      *
      * @param Builder $builder
-     * @param Model $model
+     * @param Model   $model
+     *
      * @return void
      */
     public function apply(Builder $builder, Model $model): void
