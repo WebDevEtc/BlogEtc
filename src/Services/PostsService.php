@@ -65,6 +65,7 @@ class PostsService
      *
      * @return Post
      * @throws Exception
+     *
      */
     public function create(PostRequest $request, ?int $userID): Post
     {
@@ -128,6 +129,7 @@ class PostsService
      *
      * @return Post
      * @throws Exception
+     *
      */
     public function update(int $blogPostID, PostRequest $request): Post
     {
@@ -160,6 +162,7 @@ class PostsService
      *
      * @return array - [Post (deleted post), array (remaining featured photos)
      * @throws Exception
+     *
      */
     public function delete(int $postID): array
     {
@@ -175,9 +178,9 @@ class PostsService
 
         $remainingPhotos = [];
 
-        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
-                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images').'/'.$imageSize);
+                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $imageSize);
 
                 if (file_exists($fullPath)) {
                     // there was record of this size in the db, so push it to array of featured photos which remain
@@ -195,7 +198,7 @@ class PostsService
                         'filename' => $post->$imageSize,
                         'full_path' => $fullPath,
                         'file_size' => $fileSize,
-                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize),
+                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize),
                     ];
                 }
             }
@@ -224,6 +227,6 @@ class PostsService
      */
     protected function getFileSize(int $fileSize): string
     {
-        return round(filesize($fileSize) / 1000, 1).' kb';
+        return round(filesize($fileSize) / 1000, 1) . ' kb';
     }
 }

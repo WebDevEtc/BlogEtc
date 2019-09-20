@@ -337,7 +337,7 @@ class MainTest extends TestCase
     public function testCreatePostWithNotPublishedThenCheckIsNotViewableToPublic()
     {
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
-        [$newObjectAttributes, $search_for_obj] = $this->prepare_post_creation();
+        list($newObjectAttributes, $search_for_obj) = $this->prepare_post_creation();
 
         $newObjectAttributes['is_published'] = false;
 
@@ -394,7 +394,7 @@ class MainTest extends TestCase
     public function testCreatePostWithFuturePostedAtThenCheckIsNotViewableToPublic()
     {
         $admin_panel_url = config('blogetc.admin_prefix', 'blog_admin');
-        [$newObjectAttributes, $search_for_obj] = $this->prepare_post_creation();
+        list($newObjectAttributes, $search_for_obj) = $this->prepare_post_creation();
 
         $newObjectAttributes['posted_at'] = Carbon::now()->addMonths(12);
 
