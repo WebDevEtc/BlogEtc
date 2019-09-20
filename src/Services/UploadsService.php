@@ -57,7 +57,7 @@ class UploadsService
         }
 
         foreach ((array) config('blogetc.image_sizes') as $size => $imageSizeDetails) {
-            if (!isset($sizesToUpload[$size]) || !$sizesToUpload[$size] || !$imageSizeDetails['enabled']) {
+            if (! isset($sizesToUpload[$size]) || ! $sizesToUpload[$size] || ! $imageSizeDetails['enabled']) {
                 continue;
             }
 
@@ -176,7 +176,7 @@ class UploadsService
 
             $attempt = Str::slug($base.$suffix.$wh).$ext;
 
-            if (!File::exists($this->imageDestinationPath().'/'.$attempt)) {
+            if (! File::exists($this->imageDestinationPath().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -259,8 +259,8 @@ class UploadsService
      */
     protected function checkDestinationWritable(string $path): string
     {
-        if (!$this->checked_blog_image_dir_is_writable) {
-            if (!is_writable($path)) {
+        if (! $this->checked_blog_image_dir_is_writable) {
+            if (! is_writable($path)) {
                 throw new RuntimeException("Image destination path is not writable ($path)");
             }
             $this->checked_blog_image_dir_is_writable = true;
@@ -311,7 +311,7 @@ class UploadsService
      */
     public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
     {
-        if (!config('blogetc.image_upload_enabled')) {
+        if (! config('blogetc.image_upload_enabled')) {
             // image upload was disabled
             return null;
         }
