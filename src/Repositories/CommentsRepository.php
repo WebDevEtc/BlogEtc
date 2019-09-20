@@ -58,7 +58,7 @@ class CommentsRepository
         try {
             $queryBuilder = $this->query(true);
 
-            if (! $onlyApproved) {
+            if (!$onlyApproved) {
                 $queryBuilder->withoutGlobalScopes();
             }
 
