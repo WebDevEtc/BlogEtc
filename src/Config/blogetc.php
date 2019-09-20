@@ -271,6 +271,6 @@ return [
     'search' => [
         // Is search enabled? By default this is disabled, but you can easily turn it on.
         // Default: false
-        'search_enabled' => true,
+        'search_enabled' => false,
     ],
 ];

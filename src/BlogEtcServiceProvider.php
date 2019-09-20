@@ -6,7 +6,7 @@ use Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
-use Swis\LaravelFulltext\ModelObserver;
+//use Swis\LaravelFulltext\ModelObserver;
 use View;
 use WebDevEtc\BlogEtc\Composers\AdminSidebarViewComposer;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -72,10 +72,10 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     protected function disableFulltextSyncing(): void
     {
-        if (!config('blogetc.search.search_enabled')) {
-            // if search is disabled, don't allow it to sync full text.
-            ModelObserver::disableSyncingFor(Post::class);
-        }
+//        if (!config('blogetc.search.search_enabled')) {
+//            // if search is disabled, don't allow it to sync full text.
+//            ModelObserver::disableSyncingFor(Post::class);
+//        }
     }
 
     /**
