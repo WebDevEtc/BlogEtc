@@ -1,3 +1,5 @@
+# Styleci for WebDevEtc.
+
 preset: laravel
 
 enabled:
@@ -5,14 +7,15 @@ enabled:
 
 disabled:
   - length_ordered_imports
+  - not_operator_with_successor_space
 
-finder:
-  exclude:
-    - "tests"
-    - "node_modules"
-    - "storage"
-    - "vendor"
-  not-name:
-    - "AcceptanceTester.php"
-    - "FunctionalTester.php"
-    - "UnitTester.php"
+#finder:
+#  exclude:
+#    - "tests"
+#    - "node_modules"
+#    - "storage"
+#    - "vendor"
+#  not-name:
+#    - "AcceptanceTester.php"
+#    - "FunctionalTester.php"
+#    - "UnitTester.php"
