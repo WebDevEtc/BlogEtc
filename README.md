@@ -2,6 +2,8 @@
 ## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app
 ### 5 minutes to install! Quick and easy!
 
+[![StyleCI](https://github.styleci.io/repos/144829997/shield?branch=master)](https://github.styleci.io/repos/144829997)
+
 ## Sept 2019
 Updated for Laravel 6.0. Still rewriting the core for a proper release of v4 with much cleaner code.
 
