@@ -72,7 +72,7 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     protected function disableFulltextSyncing(): void
     {
-        if (!config('blogetc.search.search_enabled')) {
+        if (! config('blogetc.search.search_enabled')) {
             // if search is disabled, don't allow it to sync full text.
             ModelObserver::disableSyncingFor(Post::class);
         }

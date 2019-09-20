@@ -51,7 +51,7 @@ class FeedService
             'blogetc-'.$feedType.$userOrGuest
         );
 
-        if (!$feed->isCached()) {
+        if (! $feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 
