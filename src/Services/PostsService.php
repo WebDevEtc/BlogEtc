@@ -33,7 +33,7 @@ class PostsService
      * PostsService constructor.
      *
      * @param PostsRepository $repository
-     * @param UploadsService  $uploadsService
+     * @param UploadsService $uploadsService
      */
     public function __construct(PostsRepository $repository, UploadsService $uploadsService)
     {
@@ -61,11 +61,11 @@ class PostsService
      * refactored out)
      *
      * @param PostRequest $request
-     * @param int|null    $userID
-     *
-     * @throws Exception
+     * @param int|null $userID
      *
      * @return Post
+     * @throws Exception
+     *
      */
     public function create(PostRequest $request, ?int $userID): Post
     {
@@ -99,7 +99,7 @@ class PostsService
     /**
      * Return all results, paginated.
      *
-     * @param int      $perPage
+     * @param int $perPage
      * @param int|null $categoryID
      *
      * @return LengthAwarePaginator
@@ -124,12 +124,12 @@ class PostsService
      *
      * N.B. I dislike sending the whole Request object around, this will get refactored.
      *
-     * @param int         $blogPostID
+     * @param int $blogPostID
      * @param PostRequest $request
      *
+     * @return Post
      * @throws Exception
      *
-     * @return Post
      */
     public function update(int $blogPostID, PostRequest $request): Post
     {
@@ -158,16 +158,16 @@ class PostsService
      * Delete a blog etc post, return the deleted post and an array of featured images which were associated
      * to the blog post (but which were not deleted form the filesystem).
      *
-     * @param int $blogPostEtcID
-     *
-     * @throws Exception
+     * @param int $postID
      *
      * @return array - [Post (deleted post), array (remaining featured photos)
+     * @throws Exception
+     *
      */
-    public function delete(int $blogPostEtcID): array
+    public function delete(int $postID): array
     {
         // delete the DB entry:
-        $post = $this->repository->find($blogPostEtcID);
+        $post = $this->repository->find($postID);
 
         event(new BlogPostWillBeDeleted($post));
 
@@ -178,9 +178,9 @@ class PostsService
 
         $remainingPhotos = [];
 
-        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
-                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images').'/'.$imageSize);
+                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $imageSize);
 
                 if (file_exists($fullPath)) {
                     // there was record of this size in the db, so push it to array of featured photos which remain
@@ -191,14 +191,14 @@ class PostsService
                     if ($fileSize) {
                         // get file gt
                         //size in human readable (kb)
-                        $fileSize = round(filesize($fileSize) / 1000, 1).' kb';
+                        $fileSize = $this->getFileSize($fileSize);
                     }
 
                     $remainingPhotos[] = [
-                        'filename'  => $post->$imageSize,
+                        'filename' => $post->$imageSize,
                         'full_path' => $fullPath,
                         'file_size' => $fileSize,
-                        'url'       => asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize),
+                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize),
                     ];
                 }
             }
@@ -217,5 +217,16 @@ class PostsService
     public function findBySlug(string $slug): Post
     {
         return $this->repository->findBySlug($slug);
+    }
+
+    /**
+     * Get human readable file size (in kb).
+     *
+     * @param int $fileSize
+     * @return string
+     */
+    protected function getFileSize(int $fileSize): string
+    {
+        return round(filesize($fileSize) / 1000, 1) . ' kb';
     }
 }
