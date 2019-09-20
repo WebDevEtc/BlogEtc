@@ -9,7 +9,7 @@ class CaptchaService
 {
     /**
      * Return either null (if captcha is not enabled), or the captcha object (which should implement
-     * CaptchaInterface interface / extend the CaptchaAbstract class)
+     * CaptchaInterface interface / extend the CaptchaAbstract class).
      *
      *
      * @return null|CaptchaAbstract

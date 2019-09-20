@@ -5,19 +5,18 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class CreateBlogEtcUploadedPhotosTable
+ * Class CreateBlogEtcUploadedPhotosTable.
  */
 class CreateBlogEtcUploadedPhotosTable extends Migration
 {
     /**
-     * Create the DB table for Blog Etc photos
+     * Create the DB table for Blog Etc photos.
      *
      * @return void
      */
     public function up(): void
     {
         Schema::create('blog_etc_uploaded_photos', static function (Blueprint $table) {
-
             $table->increments('id');
             $table->text('uploaded_images')->nullable();
             $table->string('image_title')->nullable();

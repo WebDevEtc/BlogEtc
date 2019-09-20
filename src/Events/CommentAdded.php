@@ -8,8 +8,7 @@ use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class CommentAdded
- * @package WebDevEtc\BlogEtc\Events
+ * Class CommentAdded.
  */
 class CommentAdded
 {
@@ -23,7 +22,8 @@ class CommentAdded
 
     /**
      * CommentAdded constructor.
-     * @param Post $blogEtcPost
+     *
+     * @param Post    $blogEtcPost
      * @param Comment $newComment
      */
     public function __construct(Post $blogEtcPost, Comment $newComment)

@@ -38,7 +38,7 @@ Route::group(
                     ->name('blogetc.show');
 
                 // Public save new blog comment (throttle to a max of 10 attempts in 3 minutes):
-                Route::group(['middleware' => ['throttle:10,3', 'can:blog-etc-add-comment'],], static function () {
+                Route::group(['middleware' => ['throttle:10,3', 'can:blog-etc-add-comment']], static function () {
                     Route::post(
                         'save_comment/{blogPostSlug}',
                         'CommentsController@store'
@@ -50,13 +50,13 @@ Route::group(
         // Admin backend routes - CRUD for posts, categories, and approving/deleting submitted comments.
         Route::group(
             [
-                'middleware' => ['can:blog-etc-admin','auth',],
-                'prefix' => config('blogetc.admin_prefix', 'blog_admin'),
-                'namespace' => 'Admin',
+                'middleware' => ['can:blog-etc-admin', 'auth'],
+                'prefix'     => config('blogetc.admin_prefix', 'blog_admin'),
+                'namespace'  => 'Admin',
             ],
             static function () {
                 // Manage blog posts (admin panel):
-                Route::group(['prefix' => 'posts',], static function () {
+                Route::group(['prefix' => 'posts'], static function () {
                     // Show all blog posts:
                     Route::get(
                         '/',
@@ -96,7 +96,7 @@ Route::group(
 
                 // Manage Image Uploads (Admin panel):
                 Route::group(
-                    ['prefix' => 'image_uploads',],
+                    ['prefix' => 'image_uploads'],
                     static function () {
                         // show all uploaded images:
                         Route::get(
@@ -120,7 +120,7 @@ Route::group(
 
                 // Manage comments (Admin Panel):
                 Route::group(
-                    ['prefix' => 'comments',],
+                    ['prefix' => 'comments'],
                     static function () {
                         // show all comments:
                         Route::get(

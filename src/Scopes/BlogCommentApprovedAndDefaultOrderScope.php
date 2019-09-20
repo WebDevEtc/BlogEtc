@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
 /**
- * Class BlogCommentApprovedAndDefaultOrderScope
- * @package WebDevEtc\BlogEtc\Scopes
+ * Class BlogCommentApprovedAndDefaultOrderScope.
  */
 class BlogCommentApprovedAndDefaultOrderScope implements Scope
 {
@@ -20,7 +19,8 @@ class BlogCommentApprovedAndDefaultOrderScope implements Scope
      * In the admin panel we disable this scope with ::withoutGlobalScopes() or ::withoutGlobalScope(...)
      *
      * @param Builder $builder
-     * @param Model $model
+     * @param Model   $model
+     *
      * @return void
      */
     public function apply(Builder $builder, Model $model): void

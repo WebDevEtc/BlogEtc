@@ -11,14 +11,12 @@ use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Repositories\CommentsRepository;
 
 /**
- * Class BlogEtcCategoriesService
+ * Class BlogEtcCategoriesService.
  *
  * Service class to handle most logic relating to BlogEtcCategory entries.
  *
  * Some Eloquent/DB things are in here - but query heavy method belong in the repository, accessible
  * as $this->repository
- *
- * @package WebDevEtc\BlogEtc\Services
  */
 class CommentsService
 {
@@ -83,6 +81,7 @@ class CommentsService
 
     /**
      * Are comments auto approved?
+     *
      * @return bool
      */
     protected function autoApproved(): bool
@@ -91,10 +90,11 @@ class CommentsService
     }
 
     /**
-     * Find and return a comment by ID
+     * Find and return a comment by ID.
      *
-     * @param int $blogEtcCommentID
+     * @param int  $blogEtcCommentID
      * @param bool $onlyApproved
+     *
      * @return Comment
      */
     public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
@@ -103,9 +103,10 @@ class CommentsService
     }
 
     /**
-     * Approve a blog comment
+     * Approve a blog comment.
      *
      * @param int $blogCommentID
+     *
      * @return Comment
      */
     public function approve(int $blogCommentID): Comment
@@ -127,13 +128,15 @@ class CommentsService
     }
 
     /**
-     * Delete a blog comment
+     * Delete a blog comment.
      *
      * Returns the now deleted comment object
      *
      * @param int $blogCommentID
-     * @return Comment
+     *
      * @throws Exception
+     *
+     * @return Comment
      */
     public function delete(int $blogCommentID): Comment
     {
@@ -149,5 +152,4 @@ class CommentsService
         // return deleted comment
         return $comment;
     }
-
 }

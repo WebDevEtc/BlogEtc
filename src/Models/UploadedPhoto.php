@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class BlogEtcUploadedPhoto
+ * Class BlogEtcUploadedPhoto.
+ *
  * @property Post blogPost
  * @property User|\App\Models\User uploader
  * @property int|null blog_etc_post_id
@@ -15,22 +16,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property ing|null uploader_id
  * @property string source - see const values in this model
  * @property uploaded_images
- *
- * @package WebDevEtc\BlogEtc\Models
  */
 class UploadedPhoto extends Model
 {
     public const SOURCE_IMAGE_UPLOAD = 'ImageUpload';
     public const SOURCE_FEATURED_IMAGE = 'BlogFeaturedImage';
     /**
-     * DB table name
+     * DB table name.
      *
      * @var string
      */
     public $table = 'blog_etc_uploaded_photos';
 
     /**
-     * Eloquent cast attributes
+     * Eloquent cast attributes.
      *
      * @var array
      */
@@ -39,7 +38,7 @@ class UploadedPhoto extends Model
     ];
 
     /**
-     * Fillable attributes
+     * Fillable attributes.
      *
      * @var array
      */
@@ -52,7 +51,7 @@ class UploadedPhoto extends Model
     ];
 
     /**
-     * Relationship for the user
+     * Relationship for the user.
      *
      * @return BelongsTo
      */

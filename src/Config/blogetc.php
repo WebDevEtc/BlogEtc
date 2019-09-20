@@ -105,19 +105,19 @@ return [
         ],
         // for comments please see image_large above
         'image_medium' => [
-            'w' => 600,
-            'h' => 400,
+            'w'         => 600,
+            'h'         => 400,
             'basic_key' => 'medium',
-            'name' => 'Medium',
-            'enabled' => true,
-            'crop' => true,
+            'name'      => 'Medium',
+            'enabled'   => true,
+            'crop'      => true,
         ],
         'image_thumbnail' => [
-            'w' => 150,
-            'h' => 150,
+            'w'         => 150,
+            'h'         => 150,
             'basic_key' => 'thumbnail',
-            'name' => 'Thumbnail',
-            'enabled' => true,
+            'name'      => 'Thumbnail',
+            'enabled'   => true,
         ],
 
         /*

@@ -1,14 +1,15 @@
-<?php namespace WebDevEtc\BlogEtc\Interfaces;
+<?php
+
+namespace WebDevEtc\BlogEtc\Interfaces;
 
 /**
  * Captcha interface to be used with the commenting system built into BlogEtc.
  * Write your own, set it in the config file.
- * @package WebDevEtc\BlogEtc\Interfaces
  */
 interface CaptchaInterface
 {
     /**
-     * What should the field name be (in the <input type='text' name='????'>)
+     * What should the field name be (in the <input type='text' name='????'>).
      *
      * Note: In v4, this replaced the old captcha_field_name method
      *

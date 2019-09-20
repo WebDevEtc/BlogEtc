@@ -9,8 +9,7 @@ use Laravelium\Feed\view;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class BlogEtcFeedService
- * @package WebDevEtc\BlogEtc\Services
+ * Class BlogEtcFeedService.
  */
 class FeedService
 {
@@ -27,8 +26,9 @@ class FeedService
     /**
      * Build the Feed object and populate it with blog posts.
      *
-     * @param Feed $feed
+     * @param Feed   $feed
      * @param string $feedType
+     *
      * @return view
      */
     public function getFeed(Feed $feed, string $feedType): view
@@ -43,7 +43,7 @@ class FeedService
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
-            'blogetc-' . $feedType . $userOrGuest
+            'blogetc-'.$feedType.$userOrGuest
         );
 
         if (!$feed->isCached()) {
@@ -57,6 +57,7 @@ class FeedService
      * Return the first post posted_at date, or if none exist then return today.
      *
      * @param Collection $blogPosts
+     *
      * @return Carbon
      */
     protected function pubDate(Collection $blogPosts): Carbon
@@ -67,7 +68,7 @@ class FeedService
     }
 
     /**
-     * Create fresh feed by passing latest blog posts
+     * Create fresh feed by passing latest blog posts.
      *
      * @param $feed
      */
@@ -94,10 +95,11 @@ class FeedService
     }
 
     /**
-     * Basic set up of the Feed object
+     * Basic set up of the Feed object.
      *
-     * @param Feed $feed
+     * @param Feed   $feed
      * @param Carbon $pubDate
+     *
      * @return Feed
      */
     protected function setupFeed(Feed $feed, Carbon $pubDate): Feed

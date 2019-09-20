@@ -14,8 +14,7 @@ use WebDevEtc\BlogEtc\Requests\PostRequest;
 use WebDevEtc\BlogEtc\Services\PostsService;
 
 /**
- * Class BlogEtcAdminController
- * @package WebDevEtc\BlogEtc\Controllers
+ * Class BlogEtcAdminController.
  */
 class ManagePostsController extends Controller
 {
@@ -24,6 +23,7 @@ class ManagePostsController extends Controller
 
     /**
      * BlogEtcAdminController constructor.
+     *
      * @param PostsService $blogEtcPostsService
      */
     public function __construct(PostsService $blogEtcPostsService)
@@ -32,15 +32,14 @@ class ManagePostsController extends Controller
 
         if (!is_array(config('blogetc'))) {
             throw new RuntimeException(
-                'The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc' .
+                'The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc'.
                 ' package by running the php artisan publish:vendor command'
             );
         }
     }
 
-
     /**
-     * View all posts (paginated)
+     * View all posts (paginated).
      *
      * @return View
      */
@@ -65,8 +64,10 @@ class ManagePostsController extends Controller
      * Save a new post.
      *
      * @param PostRequest $request
-     * @return RedirectResponse
+     *
      * @throws Exception
+     *
+     * @return RedirectResponse
      */
     public function store(PostRequest $request): RedirectResponse
     {
@@ -78,9 +79,10 @@ class ManagePostsController extends Controller
     }
 
     /**
-     * Show form to edit post
+     * Show form to edit post.
      *
      * @param $blogPostId
+     *
      * @return View
      */
     public function edit($blogPostId): View
@@ -91,12 +93,14 @@ class ManagePostsController extends Controller
     }
 
     /**
-     * Save changes to a post
+     * Save changes to a post.
      *
      * @param PostRequest $request
      * @param $blogPostID
-     * @return RedirectResponse
+     *
      * @throws Exception
+     *
+     * @return RedirectResponse
      */
     public function update(PostRequest $request, $blogPostID): RedirectResponse
     {
@@ -112,8 +116,10 @@ class ManagePostsController extends Controller
      *
      * @param PostRequest $request
      * @param $blogPostID
-     * @return View
+     *
      * @throws Exception
+     *
+     * @return View
      */
     public function destroy(PostRequest $request, $blogPostID): View
     {

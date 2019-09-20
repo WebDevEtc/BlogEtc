@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Scopes;
 
-use Auth;
 use Carbon\Carbon;
 use Gate;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,8 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
 /**
- * Class BlogEtcPublishedScope
- * @package WebDevEtc\BlogEtc\Scopes
+ * Class BlogEtcPublishedScope.
  */
 class PostPublishedScope implements Scope
 {
@@ -19,7 +17,8 @@ class PostPublishedScope implements Scope
      * For normal users, add a global scope for BlogEtcPosts to never return unpublished posts.
      *
      * @param Builder $builder
-     * @param Model $model
+     * @param Model   $model
+     *
      * @return void
      */
     public function apply(Builder $builder, Model $model): void

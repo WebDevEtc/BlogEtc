@@ -16,8 +16,7 @@ use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\PostRequest;
 
 /**
- * Class UploadsService
- * @package WebDevEtc\BlogEtc\Services
+ * Class UploadsService.
  */
 class UploadsService
 {
@@ -25,13 +24,13 @@ class UploadsService
     private $checked_blog_image_dir_is_writable = false;
 
     /**
-     * Store new image upload meta data in database
+     * Store new image upload meta data in database.
      *
      * @param int|null $blogPostID
-     * @param string $imageTitle
-     * @param string $source
+     * @param string   $imageTitle
+     * @param string   $source
      * @param int|null $uploaderID
-     * @param array $uploadedImages
+     * @param array    $uploadedImages
      */
     protected function create(
         ?int $blogPostID,
@@ -43,17 +42,17 @@ class UploadsService
         // store the image upload.
         UploadedPhoto::create([
             'blog_etc_post_id' => $blogPostID,
-            'image_title' => $imageTitle,
-            'source' => $source,
-            'uploader_id' => $uploaderID,
-            'uploaded_images' => $uploadedImages,
+            'image_title'      => $imageTitle,
+            'source'           => $source,
+            'uploader_id'      => $uploaderID,
+            'uploaded_images'  => $uploadedImages,
         ]);
     }
 
     /**
      * Small method to increase memory limit.
      * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
-     * This is needed though because if you upload a large image it'll not work
+     * This is needed though because if you upload a large image it'll not work.
      */
     public function increaseMemoryLimit(): void
     {
@@ -64,11 +63,12 @@ class UploadsService
     }
 
     /**
-     * Handle an image upload via the upload image section (not blog post featured image)
+     * Handle an image upload via the upload image section (not blog post featured image).
      *
      * @param $uploadedImage
      * @param string $imageTitle
      * @param $sizesToUpload
+     *
      * @return array
      */
     public function processUpload($uploadedImage, string $imageTitle, $sizesToUpload)
@@ -89,7 +89,7 @@ class UploadsService
             );
         }
 
-        foreach ((array)config('blogetc.image_sizes') as $size => $imageSizeDetails) {
+        foreach ((array) config('blogetc.image_sizes') as $size => $imageSizeDetails) {
             if (!isset($sizesToUpload[$size]) || !$sizesToUpload[$size] || !$imageSizeDetails['enabled']) {
                 continue;
             }
@@ -111,12 +111,15 @@ class UploadsService
     }
 
     /**
-     * Process any uploaded images (for featured image)
+     * Process any uploaded images (for featured image).
      *
      * @param PostRequest $request
-     * @param Post $new_blog_post
-     * @return array|null
+     * @param Post        $new_blog_post
+     *
      * @throws Exception
+     *
+     * @return array|null
+     *
      * @todo - next full release, tidy this up!
      */
     public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
@@ -132,7 +135,7 @@ class UploadsService
         // to save in db later
         $uploaded_image_details = [];
 
-        foreach ((array)config('blogetc.image_sizes') as $size => $image_size_details) {
+        foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
             // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
             if ($image_size_details['enabled'] && $photo = $request->getImageSize($size)) {
                 // this image size is enabled, and
@@ -173,8 +176,10 @@ class UploadsService
      * @param $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
      * no size reduction, but will use this string to generate the filename)
      * @param $photo
-     * @return array
+     *
      * @throws Exception
+     *
+     * @return array
      */
     protected function uploadAndResize(
         ?Post $new_blog_post,
@@ -207,11 +212,11 @@ class UploadsService
             $w = $resizedImage->width();
             $h = $resizedImage->height();
         } else {
-            throw new RuntimeException('Invalid image_size_details value of ' . $imageSizeDetails);
+            throw new RuntimeException('Invalid image_size_details value of '.$imageSizeDetails);
         }
 
         // save image
-        $resizedImage->save($destinationPath . '/' . $image_filename, config('blogetc.image_quality', 80));
+        $resizedImage->save($destinationPath.'/'.$image_filename, config('blogetc.image_quality', 80));
 
         // fire event
         event(new UploadedImage($image_filename, $resizedImage, $new_blog_post, __METHOD__));
@@ -219,8 +224,8 @@ class UploadsService
         // return the filename and w/h details
         return [
             'filename' => $image_filename,
-            'w' => $w,
-            'h' => $h,
+            'w'        => $w,
+            'h'        => $h,
         ];
     }
 
@@ -232,8 +237,10 @@ class UploadsService
      * @param string $suggested_title
      * @param $image_size_details - either an array (with w/h attributes) or a string
      * @param UploadedFile $photo
-     * @return string
+     *
      * @throws RuntimeException
+     *
+     * @return string
      */
     protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo): string
     {
@@ -241,15 +248,15 @@ class UploadsService
 
         // $wh will be something like "-1200x300"
         $wh = $this->getDimensions($image_size_details);
-        $ext = '.' . $photo->getClientOriginalExtension();
+        $ext = '.'.$photo->getClientOriginalExtension();
 
         for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
             // add suffix if $i>1
-            $suffix = $i > 1 ? '-' . Str::random(5) : '';
+            $suffix = $i > 1 ? '-'.Str::random(5) : '';
 
-            $attempt = Str::slug($base . $suffix . $wh) . $ext;
+            $attempt = Str::slug($base.$suffix.$wh).$ext;
 
-            if (!File::exists($this->imageDestinationPath() . '/' . $attempt)) {
+            if (!File::exists($this->imageDestinationPath().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -261,12 +268,14 @@ class UploadsService
 
     /**
      * @param string $suggestedTitle
+     *
      * @return string
      */
     protected function baseFilename(string $suggestedTitle): string
     {
         $base = substr($suggestedTitle, 0, 100);
-        return $base ?: 'image-' . Str::random(5);
+
+        return $base ?: 'image-'.Str::random(5);
     }
 
     /**
@@ -287,17 +296,19 @@ class UploadsService
      * getWhForFilename("some string") it will return -some-string". (max len: 30)
      *
      * @param array|string $imageSize
-     * @return string
+     *
      * @throws RuntimeException
+     *
+     * @return string
      */
     protected function getDimensions($imageSize): string
     {
         if (is_array($imageSize)) {
-            return '-' . $imageSize['w'] . 'x' . $imageSize['h'];
+            return '-'.$imageSize['w'].'x'.$imageSize['h'];
         }
 
         if (is_string($imageSize)) {
-            return '-' . Str::slug(substr($imageSize, 0, 30));
+            return '-'.Str::slug(substr($imageSize, 0, 30));
         }
 
         // was not a string or array, so error
@@ -305,12 +316,13 @@ class UploadsService
     }
 
     /**
-     * @return string
      * @throws RuntimeException
+     *
+     * @return string
      */
     protected function imageDestinationPath(): string
     {
-        $path = public_path('/' . config('blogetc.blog_upload_dir'));
+        $path = public_path('/'.config('blogetc.blog_upload_dir'));
 
         $this->checkDestinationWritable($path);
 
@@ -319,8 +331,10 @@ class UploadsService
 
     /**
      * Check if the image destination directory is writable.
-     * Throw an exception if it was not writable
+     * Throw an exception if it was not writable.
+     *
      * @param $path
+     *
      * @throws RuntimeException
      */
     protected function checkDestinationWritable(string $path): void
@@ -332,5 +346,4 @@ class UploadsService
             $this->checked_blog_image_dir_is_writable = true;
         }
     }
-
 }

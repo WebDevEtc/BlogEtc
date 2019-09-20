@@ -12,7 +12,6 @@ use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 
 /**
  * View composer to provide some param used in admin's sidebar.
- * @package WebDevEtc\BlogEtc\Composers
  */
 class AdminSidebarViewComposer
 {

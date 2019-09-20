@@ -1,15 +1,15 @@
-<?php /** @noinspection PhpInconsistentReturnPointsInspection */
+<?php
+
+/** @noinspection PhpInconsistentReturnPointsInspection */
 
 namespace WebDevEtc\BlogEtc\Captcha;
 
 use DomainException;
 
 /**
- * Class Basic
+ * Class Basic.
  *
  * Basic anti spam captcha
- *
- * @package WebDevEtc\BlogEtc\Captcha
  */
 class Basic extends CaptchaAbstract
 {
@@ -21,7 +21,7 @@ class Basic extends CaptchaAbstract
     }
 
     /**
-     * What should the field name be (in the <input type='text' name='????'>)
+     * What should the field name be (in the <input type='text' name='????'>).
      *
      * @return string
      */
@@ -73,6 +73,7 @@ class Basic extends CaptchaAbstract
 
     /**
      * @return string
+     *
      * @deprecated - please use captchaFieldName() instead
      */
     public function captcha_field_name(): string

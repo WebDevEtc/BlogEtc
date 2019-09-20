@@ -11,15 +11,12 @@ use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Repositories\CategoriesRepository;
 
 /**
- * Class BlogEtcCategoriesService
+ * Class BlogEtcCategoriesService.
  *
  * Service class to handle most logic relating to BlogEtcCategory entries.
- *
- * @package WebDevEtc\BlogEtc\Services
  */
 class CategoriesService
 {
-
     /**
      * @var CategoriesRepository
      */
@@ -32,6 +29,7 @@ class CategoriesService
 
     /**
      * @param int $perPage
+     *
      * @return LengthAwarePaginator
      */
     public function indexPaginated(int $perPage = 25): LengthAwarePaginator
@@ -40,9 +38,10 @@ class CategoriesService
     }
 
     /**
-     * Find and return a blog etc category from it's ID
+     * Find and return a blog etc category from it's ID.
      *
      * @param int $categoryID
+     *
      * @return Category
      */
     public function find(int $categoryID): Category
@@ -51,9 +50,10 @@ class CategoriesService
     }
 
     /**
-     * Find and return a blog etc category, based on its slug
+     * Find and return a blog etc category, based on its slug.
      *
      * @param string $categorySlug
+     *
      * @return Category
      */
     public function findBySlug(string $categorySlug): Category
@@ -62,9 +62,10 @@ class CategoriesService
     }
 
     /**
-     * Create a new BlogEtcCategory entry
+     * Create a new BlogEtcCategory entry.
      *
      * @param array $attributes
+     *
      * @return Category
      */
     public function create(array $attributes): Category
@@ -78,10 +79,11 @@ class CategoriesService
     }
 
     /**
-     * Update a blog etc category entry
+     * Update a blog etc category entry.
      *
-     * @param int $categoryID
+     * @param int   $categoryID
      * @param array $attributes
+     *
      * @return Category
      */
     public function update(int $categoryID, array $attributes): Category
@@ -96,9 +98,10 @@ class CategoriesService
     }
 
     /**
-     * Delete a BlogEtcCategory
+     * Delete a BlogEtcCategory.
      *
      * @param int $categoryID
+     *
      * @throws Exception
      */
     public function delete(int $categoryID): void

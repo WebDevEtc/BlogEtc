@@ -8,8 +8,7 @@ use Intervention\Image\Image;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
- * Class UploadedImage
- * @package WebDevEtc\BlogEtc\Events
+ * Class UploadedImage.
  */
 class UploadedImage
 {
@@ -27,9 +26,10 @@ class UploadedImage
      * UploadedImage constructor.
      *
      * $source =  the method name which was firing this event (or other string)
-     * @param string $imageFilename - the new filename
-     * @param Post $blogEtcPost
-     * @param Image $image
+     *
+     * @param string      $imageFilename - the new filename
+     * @param Post        $blogEtcPost
+     * @param Image       $image
      * @param string|null $source
      */
     public function __construct(

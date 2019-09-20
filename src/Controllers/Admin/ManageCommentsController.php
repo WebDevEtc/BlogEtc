@@ -11,8 +11,7 @@ use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Services\CommentsService;
 
 /**
- * Class BlogEtcCommentsAdminController
- * @package WebDevEtc\BlogEtc\Controllers
+ * Class BlogEtcCommentsAdminController.
  */
 class ManageCommentsController extends Controller
 {
@@ -21,6 +20,7 @@ class ManageCommentsController extends Controller
 
     /**
      * BlogEtcCommentsAdminController constructor.
+     *
      * @param CommentsService $service
      */
     public function __construct(CommentsService $service)
@@ -29,9 +29,10 @@ class ManageCommentsController extends Controller
     }
 
     /**
-     * Show all comments (and show buttons with approve/delete)
+     * Show all comments (and show buttons with approve/delete).
      *
      * @param Request $request
+     *
      * @return mixed
      */
     public function index(Request $request)
@@ -51,9 +52,10 @@ class ManageCommentsController extends Controller
     }
 
     /**
-     * Approve a comment
+     * Approve a comment.
      *
      * @param $blogCommentID
+     *
      * @return RedirectResponse
      */
     public function approve(int $blogCommentID): RedirectResponse
@@ -66,11 +68,13 @@ class ManageCommentsController extends Controller
     }
 
     /**
-     * Delete a submitted comment
+     * Delete a submitted comment.
      *
      * @param $blogCommentID
-     * @return RedirectResponse
+     *
      * @throws Exception
+     *
+     * @return RedirectResponse
      */
     public function destroy(int $blogCommentID): RedirectResponse
     {
