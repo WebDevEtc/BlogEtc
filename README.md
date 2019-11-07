@@ -1,4 +1,4 @@
-(Package is in a rewrite. Proper tests coming, unfortunately work has taken up a lot of my time since I first added this package, and I don't have time to get back to it and maintain it propperly. The rewrite (which is just on the master branch...) has much better coding standards, proper unit/integration tests are intended to be added soon).
+Package is in a rewrite. Proper tests coming, unfortunately work has taken up a lot of my time since I first added this package, and I don't have time to get back to it and maintain it propperly. The rewrite (which is just on the master branch...) has much better coding standards, proper unit/integration tests are intended to be added soon. The current versions on Packagist are on a different branch. I thought the rewrite would be a bit quicker! 
 
 # WebDevEtc BlogEtc
 ## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app
