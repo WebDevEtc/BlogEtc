@@ -8,9 +8,7 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
 
 /**
- * Class TestCase
- *
- * @package WebDevEtc\BlogEtc\Tests
+ * Class TestCase.
  */
 abstract class TestCase extends BaseTestCase
 {
@@ -40,7 +38,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function loadMigrations(): void
     {
-        $paths = __DIR__ . '/../migrations';
+        $paths = __DIR__.'/../migrations';
         $options = ['--path' => $paths];
         $options['--realpath'] = true;
 
@@ -70,7 +68,7 @@ abstract class TestCase extends BaseTestCase
         $app['config']->set('app.key', base64_decode('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
 
         // Ensure has correct 'sluggable' config set up:
-        $app['config'] ->set('sluggable', [
+        $app['config']->set('sluggable', [
             'source' => null,
             'maxLength' => null,
             'maxLengthKeepWords' => true,
