@@ -96,7 +96,6 @@ class PostsController extends Controller
         // if using captcha, there might be some code to run now or to echo in the view:
         $usingCaptcha = $this->captchaService->getCaptchaObject();
 
-
         if ($usingCaptcha !== null) {
             $usingCaptcha->runCaptchaBeforeShowingPosts($request, $blogPost);
         }
