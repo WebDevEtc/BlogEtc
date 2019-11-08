@@ -19,13 +19,11 @@ use WebDevEtc\BlogEtc\Services\UploadsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 /**
- * Class PostsServiceTest
+ * Class PostsServiceTest.
  *
  * Unit test for PostsService.
  *
  * Should be quick to run, mock any DB calls.
- *
- * @package WebDevEtc\BlogEtc\Tests\Unit
  */
 class PostsServiceTest extends TestCase
 {
@@ -89,6 +87,7 @@ class PostsServiceTest extends TestCase
 
         $service->indexPaginated();
     }
+
     /**
      * Test that findBySlug calls the correct repository method.
      */
