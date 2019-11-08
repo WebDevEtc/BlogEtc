@@ -1,7 +1,7 @@
 <?php
 
 // These are old, rubbish tests which do far too much. They were quick to write, they are not the style of tests that I
-// want to be using for this package. They are copied here for reference only. A full set of proper tests (split into 
+// want to be using for this package. They are copied here for reference only. A full set of proper tests (split into
 // unit/integration) will be added to the main branch soon.
 
 use App\User;
@@ -14,7 +14,6 @@ use WebDevEtc\BlogEtc\Models\Post;
 
 class MainTest extends TestCase
 {
-
     /*
      *
      *
