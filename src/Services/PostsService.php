@@ -65,6 +65,7 @@ class PostsService
      *
      * @return Post
      * @throws Exception
+     *
      */
     public function create(PostRequest $request, ?int $userID): Post
     {
@@ -88,7 +89,9 @@ class PostsService
         }
 
         // sync submitted categories:
-        $newBlogPost->categories()->sync($request->categories());
+        if (count($request->categories())) {
+            $newBlogPost->categories()->sync($request->categories());
+        }
 
         event(new BlogPostAdded($newBlogPost));
 
@@ -123,11 +126,14 @@ class PostsService
      *
      * N.B. I dislike sending the whole Request object around, this will get refactored.
      *
+     * Does not currently use repo calls - works direct on Eloquent. This will change.
+     *
      * @param int $blogPostID
      * @param PostRequest $request
      *
      * @return Post
      * @throws Exception
+     *
      */
     public function update(int $blogPostID, PostRequest $request): Post
     {
@@ -156,6 +162,8 @@ class PostsService
      * Delete a blog etc post, return the deleted post and an array of featured images which were associated
      * to the blog post (but which were not deleted form the filesystem).
      *
+     * @todo - rewrite delete() to use a repo call.
+     *
      * @param int $postID
      *
      * @return array - [Post (deleted post), array (remaining featured photos)
@@ -175,9 +183,9 @@ class PostsService
 
         $remainingPhotos = [];
 
-        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
-                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images').'/'.$imageSize);
+                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $imageSize);
 
                 if (file_exists($fullPath)) {
                     // there was record of this size in the db, so push it to array of featured photos which remain
@@ -195,7 +203,7 @@ class PostsService
                         'filename' => $post->$imageSize,
                         'full_path' => $fullPath,
                         'file_size' => $fileSize,
-                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize),
+                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize),
                     ];
                 }
             }
@@ -224,6 +232,6 @@ class PostsService
      */
     protected function getFileSize(int $fileSize): string
     {
-        return round(filesize($fileSize) / 1000, 1).' kb';
+        return round(filesize($fileSize) / 1000, 1) . ' kb';
     }
 }

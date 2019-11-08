@@ -41,7 +41,8 @@ use WebDevEtc\BlogEtc\Scopes\PostPublishedScope;
 class Post extends Model
 {
     use Sluggable;
-    use Indexable;
+    // todo: add indexable again.
+    // use Indexable;
 
     /**
      * The callback or user property to be used when resolving author name.
