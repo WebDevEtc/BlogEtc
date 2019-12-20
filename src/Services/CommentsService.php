@@ -13,10 +13,7 @@ use WebDevEtc\BlogEtc\Repositories\CommentsRepository;
 /**
  * Class BlogEtcCategoriesService.
  *
- * Service class to handle most logic relating to BlogEtcCategory entries.
- *
- * Some Eloquent/DB things are in here - but query heavy method belong in the repository, accessible
- * as $this->repository
+ * Service class to handle most logic relating to Comment entries.
  */
 class CommentsService
 {
@@ -51,10 +48,12 @@ class CommentsService
     }
 
     /**
-     * @param Post        $blogEtcPost
-     * @param array       $attributes
+     * Create a new comment.
+     *
+     * @param Post $blogEtcPost
+     * @param array $attributes
      * @param string|null $ip
-     * @param int|null    $userID
+     * @param int|null $userID
      *
      * @return Comment
      */
@@ -64,31 +63,44 @@ class CommentsService
         string $ip = null,
         int $userID = null
     ): Comment {
-        // TODO - inject the model object, put into repo, generate $attributes
-        // fill it with fillable attributes
-        $newComment = new Comment($attributes);
+        // Store in db. Most things are fillable, but some must be explicitly set (such as storing IP etc).
 
-        // then some additional attributes
-        if (config('blogetc.comments.save_ip_address')) {
-            $newComment->ip = $ip;
-        }
-        if (config('blogetc.comments.ask_for_author_website')) {
-            $newComment->author_website = $attributes['author_website'] ?? '';
-        }
-        if (config('blogetc.comments.ask_for_author_website')) {
-            $newComment->author_email = $attributes['author_email'] ?? '';
-        }
-        if (config('blogetc.comments.save_user_id_if_logged_in')) {
-            $newComment->user_id = $userID;
-        }
+        // Should IP be stored?
+        $ip = config('blogetc.comments.save_ip_address')
+            ? $ip : null;
 
-        // are comments auto approved?
-        $newComment->approved = $this->autoApproved();
+        // Should website be stored?
+        $authorWebsite = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_website'])
+            ? $attributes['author_website']
+            : null;
 
-        $blogEtcPost->comments()->save($newComment);
+        // Should email be stored?
+        $authorEmail = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_email'])
+            ? $attributes['author_email']
+            : null;
 
+        // Should user ID be stored?
+        $userID = config('blogetc.comments.save_user_id_if_logged_in')
+            ? $userID
+            : null;
+
+        // Are new comments auto approved?
+        $approved = $this->autoApproved();
+
+        $newComment = $this->repository->create(
+            $blogEtcPost,
+            $attributes,
+            $ip,
+            $authorWebsite,
+            $authorEmail,
+            $userID,
+            $approved,
+        );
+
+        // Fire event:
         event(new CommentAdded($blogEtcPost, $newComment));
 
+        // return comment:
         return $newComment;
     }
 
@@ -111,14 +123,7 @@ class CommentsService
      */
     public function approve(int $blogCommentID): Comment
     {
-        // get comment
-        $comment = $this->find($blogCommentID, false);
-
-        // mark as approved
-        $comment->approved = true;
-
-        // save changes
-        $comment->save();
+        $comment = $this->repository->approve($blogCommentID);
 
         // fire event
         event(new CommentApproved($comment));
@@ -130,7 +135,7 @@ class CommentsService
     /**
      * Find and return a comment by ID.
      *
-     * @param int  $blogEtcCommentID
+     * @param int $blogEtcCommentID
      * @param bool $onlyApproved
      *
      * @return Comment
@@ -147,9 +152,9 @@ class CommentsService
      *
      * @param int $blogCommentID
      *
+     * @return Comment
      * @throws Exception
      *
-     * @return Comment
      */
     public function delete(int $blogCommentID): Comment
     {
