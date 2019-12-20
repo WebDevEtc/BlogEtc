@@ -129,30 +129,38 @@ class BlogEtcServiceProvider extends ServiceProvider
 
         // You must add a gate with the ability name 'blog-etc-admin' to your AuthServiceProvider class.
         // This is provided only as a backup, which will restrict all access to BlogEtc admin.
-        Gate::define('blog-etc-admin', static function ($user) {
-            throw new LogicException('You must implement your own gate in AuthServiceProvider'.
-                ' for the "blog-etc-admin" gate.');
-        });
+        if (!Gate::has('blog-etc-admin')) {
+            Gate::define('blog-etc-admin', static function ($user) {
+                throw new LogicException('You must implement your own gate in AuthServiceProvider' .
+                    ' for the "blog-etc-admin" gate.');
+            });
+        }
 
-        // Used for the search results
-        Gate::define('view-blog-etc-post', static function (?Model $user, Post $post) {
-            return $post->is_published && $post->posted_at->isPast();
-        });
+        if (!Gate::has('view-blog-etc-post')) {
+            // Used for the search results
+            Gate::define('view-blog-etc-post', static function (?Model $user, Post $post) {
+                return $post->is_published && $post->posted_at->isPast();
+            });
+        }
 
         // Some defaults which allow everything through - you can override these and add your own logic.
 
         /*
          * For people to add comments to your blog posts.
          */
-        Gate::define('blog-etc-add-comment', static function (?Model $user) {
-            return true;
-        });
+        if (!Gate::has('blog-etc-add-comment')) {
+            Gate::define('blog-etc-add-comment', static function (?Model $user) {
+                return true;
+            });
+        }
 
         /*
          * For an admin-like user to approve comments.
          */
-        Gate::define('blog-etc-approve-comments', static function ($user) {
-            return true;
-        });
+        if (!Gate::has('blog-etc-approve-comments')) {
+            Gate::define('blog-etc-approve-comments', static function ($user) {
+                return true;
+            });
+        }
     }
 }
