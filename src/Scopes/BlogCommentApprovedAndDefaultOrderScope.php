@@ -25,10 +25,13 @@ class BlogCommentApprovedAndDefaultOrderScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
+        // Comments are not paginated. Set a high number of max comments to show.
+        $maxNumComments = config('blogetc.comments.max_num_of_comments_to_show', 500);
+
         // order in ascending order:
         $builder->orderBy('id')
-            // set a sane limit on num of comments. No pagination. Maybe a feature in the future.
-            ->limit(config('blogetc.comments.max_num_of_comments_to_show', 500))
+            // set a sane limit on num of comments.
+            ->limit($maxNumComments)
             // only show approved comments:
             ->where('approved', true);
     }

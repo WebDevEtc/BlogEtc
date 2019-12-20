@@ -46,7 +46,7 @@
             var categoryNameInput = document.getElementById('category_category_name');
             var slugInput = document.getElementById('category_slug');
 
-            // Initially, only enable generating slug if slug originally had no value...
+            // Initially, only enable generating slug if slug originally had no value.
             var shouldGenerateSlug = slugInput.value.length === 0;
 
             /**
@@ -57,9 +57,9 @@
              */
             var slug = function (value) {
                 return value.toLowerCase()
-                            .replace(/[^\w-_ ]+/g, '') // replace invalid characters with nothing ('')
-                            .replace(/[_ ]+/g, '-') // replace _ and spaces with -
-                            .substring(0, 99); // limit str length to 99 chars
+                            .replace(/[^\w-_ ]+/g, '') // remove invalid characters
+                            .replace(/[_ ]+/g, '-') // replace underscores and spaces with '-'
+                            .substring(0, 100); // limit length to 100 characters
             };
 
             /**

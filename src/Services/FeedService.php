@@ -31,7 +31,7 @@ class FeedService
     /**
      * Build the Feed object and populate it with blog posts.
      *
-     * @param Feed   $feed
+     * @param Feed $feed
      * @param string $feedType
      *
      * @return view
@@ -42,13 +42,11 @@ class FeedService
         // use a different cache for different users.
 
         // This should not be a problem unless your site has many logged in users.
-        $userOrGuest = Auth::check()
-            ? Auth::id()
-            : 'guest';
+        $userOrGuest = Auth::id() ?: 'guest';
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
-            'blogetc-'.$feedType.$userOrGuest
+            'blogetc-' . $feedType . $userOrGuest
         );
 
         if (!$feed->isCached()) {
@@ -88,7 +86,7 @@ class FeedService
     /**
      * Basic set up of the Feed object.
      *
-     * @param Feed   $feed
+     * @param Feed $feed
      * @param Carbon $pubDate
      *
      * @return Feed
