@@ -46,7 +46,7 @@ class FeedService
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
-            'blogetc-' . $feedType . $userOrGuest
+            'blogetc-'.$feedType.$userOrGuest
         );
 
         if (!$feed->isCached()) {
