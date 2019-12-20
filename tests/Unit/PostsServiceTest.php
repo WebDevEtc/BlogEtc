@@ -1,7 +1,5 @@
 <?php
 
-// @todo - Add a full set of tests, inc. integration tests & for all services/repos.
-
 namespace WebDevEtc\BlogEtc\Tests\Unit;
 
 use Carbon\Carbon;
@@ -10,7 +8,6 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
-use Str;
 use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -60,16 +57,8 @@ class PostsServiceTest extends TestCase
         // Instanciate service, the mocked repo will be injected:
         $service = resolve(PostsService::class);
 
-        // Submitted params:
-        $params = $this->createParams();
-
         // Not testing the request, just mock it and what it returns.
-        $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
-            $mock->shouldReceive('validated')->andReturn($params);
-        });
-
-        $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
-        $request->setValidator($mockedValidator);
+        $request = $this->createRequest($this->createParams());
 
         // Call the service method (assets are done above).
         $service->create($request, null);
@@ -150,16 +139,7 @@ class PostsServiceTest extends TestCase
         // Instanciate service, the mocked repo will be injected:
         $service = resolve(PostsService::class);
 
-        // Submitted params:
-        $params = $this->createParams();
-
-        // Not testing the request, just mock it and what it returns.
-        $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
-            $mock->shouldReceive('validated')->andReturn($params);
-        });
-
-        $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
-        $request->setValidator($mockedValidator);
+        $request = $this->createRequest($this->createParams());
 
         $this->expectsEvents(BlogPostEdited::class);
 
@@ -171,19 +151,19 @@ class PostsServiceTest extends TestCase
      * Test the delete() service call.
      *
      * @throws Exception
-     * @todo - rewrite delete() to use a repo call.
      */
     public function testDelete(): void
     {
         $this->mock(PostsRepository::class, static function ($mock) {
-            $mock->shouldReceive('find')->andReturn(new Post());
+            $mock->shouldReceive('find')->with(123)->andReturn(new Post());
+            $mock->shouldReceive('delete')->with(123)->andReturn(true);
         });
 
         $service = resolve(PostsService::class);
 
         $this->expectsEvents(BlogPostWillBeDeleted::class);
 
-        $response = $service->delete(1);
+        $response = $service->delete(123);
 
         $this->assertIsArray($response);
     }
@@ -202,8 +182,23 @@ class PostsServiceTest extends TestCase
             'post_body' => $this->faker->paragraph,
             'meta_desc' => $this->faker->paragraph,
             'short_description' => $this->faker->paragraph,
-            'slug' => Str::random(),
+            'slug' => $this->faker->asciify('*********'),
             'categories' => null,
         ];
+    }
+
+    /**
+     * @param array $params
+     * @return PostRequest
+     */
+    public function createRequest(array $params): PostRequest
+    {
+        // Not testing the request, just mock it and what it returns.
+        $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
+            $mock->shouldReceive('validated')->andReturn($params);
+        });
+
+        $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
+        return tap($request)->setValidator($mockedValidator);
     }
 }

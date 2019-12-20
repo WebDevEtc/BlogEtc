@@ -38,12 +38,16 @@ abstract class TestCase extends BaseTestCase
      */
     protected function loadMigrations(): void
     {
+        dump("loading migr");
         $paths = __DIR__.'/../migrations';
         $options = ['--path' => $paths];
         $options['--realpath'] = true;
+        dump(config('database'));
 
         $migrator = new MigrateProcessor($this, $options);
         $migrator->up();
+
+        dump("up");
 
         $this->resetApplicationArtisanCommands($this->app);
     }

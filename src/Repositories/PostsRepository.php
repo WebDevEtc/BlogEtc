@@ -2,11 +2,11 @@
 
 namespace WebDevEtc\BlogEtc\Repositories;
 
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use WebDevEtc\BlogEtc\Events\CommentApproved;
 use WebDevEtc\BlogEtc\Exceptions\PostNotFoundException;
 use WebDevEtc\BlogEtc\Models\Post;
 
@@ -99,10 +99,9 @@ class PostsRepository
         try {
             return $this->query(true)->findOrFail($blogEtcPostID);
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with ID: '.$blogEtcPostID);
+            throw new PostNotFoundException('Unable to find blog post with ID: ' . $blogEtcPostID);
         }
     }
-
 
     /**
      * Find a blog etc post by ID
@@ -121,7 +120,7 @@ class PostsRepository
                 ->where('slug', $slug)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with slug: '.$slug);
+            throw new PostNotFoundException('Unable to find blog post with slug: ' . $slug);
         }
     }
 
@@ -138,9 +137,23 @@ class PostsRepository
     }
 
     /**
+     * Delete a post.
+     *
+     * @param int $postID
+     * @return bool
+     * @throws Exception
+     */
+    public function delete(int $postID):bool
+    {
+        $post = $this->find($postID);
+
+        return $post->delete();
+    }
+
+    /**
      * Update image sizes (or in theory any attribute) on a blog etc post.
      *
-     * @param Post  $post
+     * @param Post $post
      * @param array $uploadedImages
      *
      * @return Post
