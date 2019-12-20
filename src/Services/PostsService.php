@@ -139,6 +139,7 @@ class PostsService
         $post = $this->repository->find($blogPostID);
 
         // update it:
+        // TODO - split this into a repo call.
         $post->fill($request->validated());
 
         // save any uploaded image:
@@ -160,8 +161,6 @@ class PostsService
      * Delete a blog etc post, return the deleted post and an array of featured images which were associated
      * to the blog post (but which were not deleted form the filesystem).
      *
-     * @todo - rewrite delete() to use a repo call.
-     *
      * @param int $postID
      *
      * @return array - [Post (deleted post), array (remaining featured photos)
@@ -169,21 +168,23 @@ class PostsService
      */
     public function delete(int $postID): array
     {
-        // delete the DB entry:
+        // Get the post to delete.
         $post = $this->repository->find($postID);
 
+        // Fire 'will be deleted' event:
         event(new BlogPostWillBeDeleted($post));
 
-        $post->delete();
+        // Delete:
+        $this->repository->delete($postID);
 
         // now return an array of image files that are not deleted (so we can tell the user that these featured photos
         // still exist on the filesystem
 
         $remainingPhotos = [];
 
-        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
-                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images').'/'.$imageSize);
+                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $imageSize);
 
                 if (file_exists($fullPath)) {
                     // there was record of this size in the db, so push it to array of featured photos which remain
@@ -194,14 +195,14 @@ class PostsService
                     if ($fileSize) {
                         // get file gt
                         //size in human readable (kb)
-                        $fileSize = $this->getFileSize($fileSize);
+                        $fileSize = $this->humanReadableFileSize($fileSize);
                     }
 
                     $remainingPhotos[] = [
                         'filename' => $post->$imageSize,
                         'full_path' => $fullPath,
                         'file_size' => $fileSize,
-                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize),
+                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize),
                     ];
                 }
             }
@@ -228,8 +229,8 @@ class PostsService
      * @param int $fileSize
      * @return string
      */
-    protected function getFileSize(int $fileSize): string
+    protected function humanReadableFileSize(int $fileSize): string
     {
-        return round(filesize($fileSize) / 1000, 1).' kb';
+        return round(filesize($fileSize) / 1000, 1) . ' kb';
     }
 }
