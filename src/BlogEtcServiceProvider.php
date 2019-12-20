@@ -131,7 +131,7 @@ class BlogEtcServiceProvider extends ServiceProvider
         // This is provided only as a backup, which will restrict all access to BlogEtc admin.
         if (!Gate::has('blog-etc-admin')) {
             Gate::define('blog-etc-admin', static function ($user) {
-                throw new LogicException('You must implement your own gate in AuthServiceProvider' .
+                throw new LogicException('You must implement your own gate in AuthServiceProvider'.
                     ' for the "blog-etc-admin" gate.');
             });
         }
