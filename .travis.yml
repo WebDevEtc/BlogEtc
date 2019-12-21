@@ -10,6 +10,8 @@ env:
   - LARAVEL_VERSION=6.1.*
   - LARAVEL_VERSION=6.2.*
   - LARAVEL_VERSION=6.3.*
+  - LARAVEL_VERSION=6.4.*
+  - LARAVEL_VERSION=6.5.*
 
 matrix:
   fast_finish: true
