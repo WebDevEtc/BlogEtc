@@ -199,6 +199,7 @@ class PostsServiceTest extends TestCase
         });
 
         $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
+
         return tap($request)->setValidator($mockedValidator);
     }
 }

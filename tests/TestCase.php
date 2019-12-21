@@ -38,7 +38,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function loadMigrations(): void
     {
-        dump("loading migr");
+        dump('loading migr');
         $paths = __DIR__.'/../migrations';
         $options = ['--path' => $paths];
         $options['--realpath'] = true;
@@ -47,7 +47,7 @@ abstract class TestCase extends BaseTestCase
         $migrator = new MigrateProcessor($this, $options);
         $migrator->up();
 
-        dump("up");
+        dump('up');
 
         $this->resetApplicationArtisanCommands($this->app);
     }
