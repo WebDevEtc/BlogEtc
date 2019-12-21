@@ -2,7 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/* @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -15,4 +15,3 @@ $factory->define(Category::class, static function (Faker $faker) {
         'category_description' => $faker->paragraph,
     ];
 });
-

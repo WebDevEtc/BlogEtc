@@ -149,5 +149,4 @@ class FeedControllerTest extends TestCase
         $guestResponse->assertOk()
             ->assertDontSee($post->title);
     }
-
 }

@@ -8,15 +8,13 @@ use WebDevEtc\BlogEtc\Services\CommentsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 /**
- * Class PostsControllerTest
+ * Class PostsControllerTest.
  *
  * Test the comments controller.
  *
  * @todo: Add more tests (different comment providers, captcha, logged in/logged out users, config options).
- *
- * @package WebDevEtc\BlogEtc\Tests\Unit
  */
-class PostsControllerTest extends TestCase
+class CommentsControllerTest extends TestCase
 {
     use WithFaker;
 
@@ -50,7 +48,7 @@ class PostsControllerTest extends TestCase
             'comment' => $this->faker->sentence,
             'author_name' => $this->faker->name,
             'author_email' => $this->faker->safeEmail,
-            'author_website' => 'http://' . $this->faker->safeEmailDomain,
+            'author_website' => 'http://'.$this->faker->safeEmailDomain,
         ];
 
         $response = $this->postJson($url, $params);
@@ -79,7 +77,7 @@ class PostsControllerTest extends TestCase
             'comment' => $this->faker->sentence,
             'author_name' => $this->faker->name,
             'author_email' => $this->faker->safeEmail,
-            'author_website' => 'http://' . $this->faker->safeEmailDomain,
+            'author_website' => 'http://'.$this->faker->safeEmailDomain,
         ];
 
         $response = $this->postJson($url, $params);
