@@ -50,7 +50,9 @@ class PostsControllerTest extends TestCase
 
         $response = $this->get(route('blogetc.show', $post->slug));
 
-        $response->assertOk();
+        $response->assertOk()
+            ->assertSee($post->title)
+            ->assertSee($post->description);
     }
 
     /**
@@ -108,11 +110,32 @@ class PostsControllerTest extends TestCase
         $this->withoutExceptionHandling();
         $post = factory(Post::class)->create();
         $category = factory(Category::class)->create();
-        $post->categories()->save($post);
+        $post->categories()->save($category);
 
         $response = $this->get(route('blogetc.view_category', $category->slug));
 
+        $response->assertOk()
+            ->assertViewHas('category', $category)
+            ->assertSee($post->title);
+    }
+
+    /**
+     * Test the category route.
+     */
+    public function testCategoryExcludesOtherCategories(): void
+    {
+        $this->withoutExceptionHandling();
+        $post = factory(Post::class)->create();
+        $category = factory(Category::class)->create();
+        $post->categories()->save($category);
+
+        $anotherCategory = factory(Category::class)->create();
+
+        $response = $this->get(route('blogetc.view_category', $anotherCategory->slug));
+
         $response->assertOk();
-        $response->assertViewHas('category', $category);
+        $response->assertViewHas('category', $anotherCategory);
+
+        $response->assertDontSee($post->title);
     }
 }
