@@ -6,13 +6,12 @@ use App\User;
 use Gate;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Schema;
 use Laravelium\Feed\FeedServiceProvider;
 use Orchestra\Testbench\Database\MigrateProcessor;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use View;
 use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
-use Illuminate\Support\Facades\Schema;
-
 
 /**
  * Class TestCase.
@@ -27,7 +26,6 @@ abstract class TestCase extends BaseTestCase
      * @param string $expectedView
      * @param array $viewArgumentTypes
      * @deprecated - not in use. todo: remove
-     *
      */
     protected function mockView(string $expectedView, array $viewArgumentTypes): void
     {
@@ -71,11 +69,12 @@ abstract class TestCase extends BaseTestCase
     protected function featureSetUp(): void
     {
         $this->loadMigrations();
-        $this->withFactories(__DIR__ . '/../src/Factories');
+        $this->withFactories(__DIR__.'/../src/Factories');
 
-        if (!\Route::has('login') ) {
+        if (!\Route::has('login')) {
             // Need to define a login route for feature tests.
-            \Route::get('login', function () {})->name('login');
+            \Route::get('login', function () {
+            })->name('login');
         }
     }
 
@@ -87,7 +86,7 @@ abstract class TestCase extends BaseTestCase
     protected function loadMigrations(): void
     {
         $paths = [
-            __DIR__ . '/../migrations',
+            __DIR__.'/../migrations',
         ];
 
         foreach ($paths as $path) {
@@ -131,13 +130,13 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         // Add the custom dir for layouts.app view:
-        $app['view']->addLocation(__DIR__ . '/views');
+        $app['view']->addLocation(__DIR__.'/views');
 
         // ensure app.key is set.
         $app['config']->set('app.key', base64_decode('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
 
         // Use the default config for this package:
-        $app['config']->set('blogetc', include(__DIR__ . '/../src/Config/blogetc.php'));
+        $app['config']->set('blogetc', include(__DIR__.'/../src/Config/blogetc.php'));
 
         // Ensure has correct 'sluggable' config set up:
         $app['config']->set('sluggable', [
@@ -163,6 +162,7 @@ abstract class TestCase extends BaseTestCase
             return true;
         });
     }
+
     /**
      * Define the blog-etc-admin gate to deny access to any user.
      */
@@ -185,6 +185,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->allowAdminGate();
     }
+
     /**
      * Be an admin user, give gate permissions to user.
      */
