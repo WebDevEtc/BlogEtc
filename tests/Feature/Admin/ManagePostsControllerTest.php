@@ -38,7 +38,7 @@ class ManagePostsControllerTest extends TestCase
 
     /**
      * Assert that the index admin page is not accessible for guests.
-     * (Via gate)
+     * (Via gate).
      */
     public function testForbiddenToNonAdminUsers(): void
     {
@@ -51,7 +51,7 @@ class ManagePostsControllerTest extends TestCase
 
     /**
      * Assert that the index admin page is not accessible for guests.
-     * (Via auth middleware)
+     * (Via auth middleware).
      */
     public function testForbiddenToGuests(): void
     {
@@ -59,5 +59,4 @@ class ManagePostsControllerTest extends TestCase
 
         $response->assertRedirect(route('login'));
     }
-
 }
