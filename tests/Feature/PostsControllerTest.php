@@ -129,12 +129,14 @@ class PostsControllerTest extends TestCase
         $category = factory(Category::class)->create();
         $post->categories()->save($category);
 
-        $anotherCategory = factory(Category::class)->create();
+        // Another category, unassociated to $post:
+        $unrelatedCategory = factory(Category::class)->create();
 
-        $response = $this->get(route('blogetc.view_category', $anotherCategory->slug));
+        // Get category page for the unrelated category:
+        $response = $this->get(route('blogetc.view_category', $unrelatedCategory->slug));
 
         $response->assertOk();
-        $response->assertViewHas('category', $anotherCategory);
+        $response->assertViewHas('category', $unrelatedCategory);
 
         $response->assertDontSee($post->title);
     }

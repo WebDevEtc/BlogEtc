@@ -2,8 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Services;
 
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Response;
 use Laravelium\Feed\Feed;
 use Laravelium\Feed\view;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -36,17 +38,23 @@ class FeedService
      *
      * @return view
      */
-    public function getFeed(Feed $feed, string $feedType): view
+    public function getFeed(Feed $feed, string $feedType): Response
     {
         // RSS feed is cached. Admin/writer users might see different content, so
         // use a different cache for different users.
 
         // This should not be a problem unless your site has many logged in users.
-        $userOrGuest = Auth::id() ?: 'guest';
+        // (Use check(), as it is possible for user to be logged in without having an ID (depending on how the guard
+        // is set up...)
+        $userOrGuest = Auth::check()
+            ? 'logged-in-' . Auth::id()
+            : 'guest';
+
+        $key = 'blogetc-' . $feedType . $userOrGuest;
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
-            'blogetc-' . $feedType . $userOrGuest
+            $key
         );
 
         if (!$feed->isCached()) {
