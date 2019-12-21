@@ -2,6 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Unit;
 
+use App\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -35,7 +36,8 @@ class PostsControllerTest extends TestCase
     {
         $response = $this->get(route('blogetc.index'));
 
-        $response->assertOk();
+        $response->assertOk()
+            ->assertViewHas('posts');
     }
 
     /**
@@ -51,6 +53,7 @@ class PostsControllerTest extends TestCase
         $response = $this->get(route('blogetc.show', $post->slug));
 
         $response->assertOk()
+            ->assertViewHas('post', $post)
             ->assertSee($post->title)
             ->assertSee($post->description);
     }
@@ -78,6 +81,23 @@ class PostsControllerTest extends TestCase
     }
 
     /**
+     * A post with is_published = false should be visible if logged in with user which passes the gate check.
+     */
+    public function testShowAdminCanSeeNotPublished(): void
+    {
+        $user = new User();
+        $user->id = 1;
+        $this->actingAs($user);
+        $this->allowAdminGate();
+
+        $post = factory(Post::class)->state('not_published')->create();
+
+        $response = $this->get(route('blogetc.show', $post->slug));
+
+        $response->assertOk()->assertViewHas('post', $post);
+    }
+
+    /**
      * A post with posted_at in the future should not be shown.
      */
     public function testShow404IfFuturePost(): void
@@ -86,7 +106,24 @@ class PostsControllerTest extends TestCase
 
         $response = $this->get(route('blogetc.show', $post->slug));
 
-        $response->assertNotFound();
+        $response->assertNotFound()->assertViewMissing('post');
+    }
+
+    /**
+     * A post with posted_at in the future should not be shown.
+     */
+    public function testAdminsCanSeeFuturePosts(): void
+    {
+        $user = new User();
+        $user->id = 1;
+        $this->actingAs($user);
+        $this->allowAdminGate();
+
+        $post = factory(Post::class)->state('in_future')->create();
+
+        $response = $this->get(route('blogetc.show', $post->slug));
+
+        $response->assertOk()->assertViewHas('post', $post);
     }
 
     /**
@@ -99,7 +136,7 @@ class PostsControllerTest extends TestCase
 
         $response = $this->get(route('blogetc.show', $post->slug));
 
-        $response->assertNotFound();
+        $response->assertNotFound()->assertViewMissing('post');
     }
 
     /**
