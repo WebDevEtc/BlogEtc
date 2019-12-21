@@ -36,7 +36,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "*",
-        "orchestra/testbench": "4.0.*"
+        "orchestra/testbench": "4.0.*",
+        "satooshi/php-coveralls": "dev-master@dev"
     },
     "autoload": {
         "psr-4": {
