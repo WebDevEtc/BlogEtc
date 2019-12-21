@@ -13,6 +13,32 @@ use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
 abstract class TestCase extends BaseTestCase
 {
     /**
+     * As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
+     * only on the package code in the controller. Would be interested if anyone has a suggestion on better way
+     * to test this.
+     * @param string $expectedView
+     * @param array $viewArgumentTypes
+     */
+    protected function mockView(string $expectedView, array $viewArgumentTypes): void
+    {
+        // Mocked view to return:
+        $mockedReturnedView = $this->mock(\Illuminate\View\View::class);
+        $mockedReturnedView->shouldReceive('render');
+
+        // Mock the main view() calls in controller.
+        $mockedView = View::shouldReceive('share')
+            ->once()
+            ->shouldReceive('make')
+            ->once();
+
+        $mockedView = call_user_func_array([$mockedView, 'with'], array_merge([$expectedView] , $viewArgumentTypes));
+
+        $mockedView->andReturn($mockedReturnedView)
+            ->shouldReceive('exists')
+            ->shouldReceive('replaceNamespace');
+    }
+
+    /**
      * Used for Orchestra\Testbench package.
      *
      * @param \Illuminate\Foundation\Application $app
@@ -38,16 +64,12 @@ abstract class TestCase extends BaseTestCase
      */
     protected function loadMigrations(): void
     {
-        dump("loading migr");
         $paths = __DIR__.'/../migrations';
         $options = ['--path' => $paths];
         $options['--realpath'] = true;
-        dump(config('database'));
 
         $migrator = new MigrateProcessor($this, $options);
         $migrator->up();
-
-        dump("up");
 
         $this->resetApplicationArtisanCommands($this->app);
     }

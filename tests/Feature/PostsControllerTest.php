@@ -2,11 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Unit;
 
+use Carbon\Carbon;
+use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;
-use Str;
-use View;
 use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Services\PostsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 /**
@@ -16,6 +15,8 @@ use WebDevEtc\BlogEtc\Tests\TestCase;
  */
 class PostsControllerTest extends TestCase
 {
+    use WithFaker;
+
     /**
      * Setup the feature test.
      */
@@ -37,15 +38,7 @@ class PostsControllerTest extends TestCase
 
         $this->withoutExceptionHandling();
 
-        // As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
-        // only on the package code in the controller. Would be interested if anyone has a suggestion on better way
-        // to test this.
-        View::shouldReceive('share')
-            ->once()
-            ->shouldReceive('make')
-            ->once()
-            ->with('blogetc::index', Mockery::type('array'), Mockery::type('array'));
-
+        $this->mockView('blogetc::index', [Mockery::type('array'), Mockery::type('array')]);
         // also see assertions made in the mocked view.
         $response = $this->get($url);
 
@@ -60,29 +53,17 @@ class PostsControllerTest extends TestCase
      */
     public function testShow(): void
     {
-        $slug = Str::random();
-        $post = new Post(['slug' => $slug]);
-        $post->save();
-        $url = route('blogetc.show', $post->slug);
-
-        $this->mock(PostsService::class, static function ($mock) use ($post) {
-            $mock->shouldReceive('findBySlug')->once()->andReturn($post);
-        });
         $this->withoutExceptionHandling();
+        $slug = $this->faker->lexify('?????????');
+        $post = new Post(['title' => $slug, 'is_published' => true, 'posted_at' => Carbon::now()]);
+        $post->save();
+
+        $url = route('blogetc.show', $post->slug);
 
         // As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
         // only on the package code in the controller. Would be interested if anyone has a suggestion on better way
         // to test this.
-        $viewMock = $this->mock(\Illuminate\View\View::class);
-        $viewMock->shouldReceive('render');
-        View::shouldReceive('share')
-            ->once()
-            ->shouldReceive('make')
-            ->once()
-            ->with('blogetc::single_post', Mockery::type('array'), Mockery::type('array'))
-            ->andReturn($viewMock)
-            ->shouldReceive('exists')
-            ->shouldReceive('replaceNamespace');
+        $this->mockView('blogetc::single_post', [Mockery::type('array'), Mockery::type('array')]);
 
         // also see assertions made in the mocked view.
         $response = $this->get($url);
