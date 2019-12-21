@@ -47,10 +47,10 @@ class FeedService
         // (Use check(), as it is possible for user to be logged in without having an ID (depending on how the guard
         // is set up...)
         $userOrGuest = Auth::check()
-            ? 'logged-in-' . Auth::id()
+            ? 'logged-in-'.Auth::id()
             : 'guest';
 
-        $key = 'blogetc-' . $feedType . $userOrGuest;
+        $key = 'blogetc-'.$feedType.$userOrGuest;
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
