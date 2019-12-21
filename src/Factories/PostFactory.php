@@ -2,7 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Factories;
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/* @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use Faker\Generator as Faker;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -33,4 +33,3 @@ $factory->state(Post::class, 'in_future', function (Faker $faker) {
         'posted_at' => $faker->dateTimeBetween('now', '+2 years'),
     ];
 });
-

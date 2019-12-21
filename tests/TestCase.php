@@ -21,7 +21,6 @@ abstract class TestCase extends BaseTestCase
      * @param string $expectedView
      * @param array $viewArgumentTypes
      * @deprecated - not in use. todo: remove
-     *
      */
     protected function mockView(string $expectedView, array $viewArgumentTypes): void
     {
@@ -59,7 +58,7 @@ abstract class TestCase extends BaseTestCase
     protected function featureSetUp(): void
     {
         $this->loadMigrations();
-        $this->withFactories(__DIR__ . '/../src/Factories');
+        $this->withFactories(__DIR__.'/../src/Factories');
     }
 
     /**
@@ -69,7 +68,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function loadMigrations(): void
     {
-        $paths = __DIR__ . '/../migrations';
+        $paths = __DIR__.'/../migrations';
         $options = ['--path' => $paths];
         $options['--realpath'] = true;
 
@@ -96,13 +95,13 @@ abstract class TestCase extends BaseTestCase
         ]);
 
         // Add the custom dir for layouts.app view:
-        $app['view']->addLocation(__DIR__ . '/views');
+        $app['view']->addLocation(__DIR__.'/views');
 
         // ensure app.key is set.
         $app['config']->set('app.key', base64_decode('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
 
         // Use the default config for this package:
-        $app['config']->set('blogetc', include(__DIR__ . '/../src/Config/blogetc.php'));
+        $app['config']->set('blogetc', include(__DIR__.'/../src/Config/blogetc.php'));
 
         // Ensure has correct 'sluggable' config set up:
         $app['config']->set('sluggable', [
