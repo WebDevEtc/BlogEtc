@@ -59,11 +59,11 @@ class BlogEtcServiceProvider extends ServiceProvider
     public function register()
     {
         // for the admin backend views ( view("blogetc_admin::some-blade-file") )
-        $this->loadViewsFrom(__DIR__ . '/Views/blogetc_admin', 'blogetc_admin');
+        $this->loadViewsFrom(__DIR__.'/Views/blogetc_admin', 'blogetc_admin');
 
         // for public facing views (view("blogetc::some-blade-file")):
         // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc.
-        $this->loadViewsFrom(__DIR__ . '/Views/blogetc', 'blogetc');
+        $this->loadViewsFrom(__DIR__.'/Views/blogetc', 'blogetc');
     }
 
     /**
@@ -87,7 +87,7 @@ class BlogEtcServiceProvider extends ServiceProvider
     protected function includeRoutes(): void
     {
         if (config('blogetc.include_default_routes', true)) {
-            include __DIR__ . '/routes.php';
+            include __DIR__.'/routes.php';
         }
     }
 
@@ -105,15 +105,15 @@ class BlogEtcServiceProvider extends ServiceProvider
                      '2018_09_27_122627_create_blog_etc_uploaded_photos_table.php',
                  ] as $migration) {
             $this->publishes([
-                __DIR__ . '/../migrations/' . $migration => database_path('migrations/' . $migration),
+                __DIR__.'/../migrations/'.$migration => database_path('migrations/'.$migration),
             ]);
         }
 
         $this->publishes([
-            __DIR__ . '/Views/blogetc' => base_path('resources/views/vendor/blogetc'),
-            __DIR__ . '/Views/blogetc_admin' => base_path('resources/views/vendor/blogetc_admin'),
-            __DIR__ . '/Config/blogetc.php' => config_path('blogetc.php'),
-            __DIR__ . '/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
+            __DIR__.'/Views/blogetc' => base_path('resources/views/vendor/blogetc'),
+            __DIR__.'/Views/blogetc_admin' => base_path('resources/views/vendor/blogetc_admin'),
+            __DIR__.'/Config/blogetc.php' => config_path('blogetc.php'),
+            __DIR__.'/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
         ]);
     }
 
@@ -133,7 +133,7 @@ class BlogEtcServiceProvider extends ServiceProvider
         // This is provided only as a backup, which will restrict all access to BlogEtc admin.
         if (!Gate::has('blog-etc-admin')) {
             Gate::define('blog-etc-admin', static function ($user) {
-                throw new LogicException('You must implement your own gate in AuthServiceProvider' .
+                throw new LogicException('You must implement your own gate in AuthServiceProvider'.
                     ' for the "blog-etc-admin" gate.');
             });
         }
