@@ -2,11 +2,16 @@
 
 namespace WebDevEtc\BlogEtc\Tests;
 
+use Gate;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
+use Laravelium\Feed\FeedServiceProvider;
 use Orchestra\Testbench\Database\MigrateProcessor;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use View;
 use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
+use Illuminate\Support\Facades\Schema;
+
 
 /**
  * Class TestCase.
@@ -50,7 +55,13 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getPackageProviders($app)
     {
-        return [BlogEtcServiceProvider::class];
+        return [
+            // Main BlogEtc service provider:
+            BlogEtcServiceProvider::class,
+
+            // Feed service provider (for RSS feed)
+            FeedServiceProvider::class,
+        ];
     }
 
     /**
@@ -69,12 +80,30 @@ abstract class TestCase extends BaseTestCase
      */
     protected function loadMigrations(): void
     {
-        $paths = __DIR__ . '/../migrations';
-        $options = ['--path' => $paths];
-        $options['--realpath'] = true;
+        $paths = [
+            __DIR__ . '/../migrations',
+        ];
 
-        $migrator = new MigrateProcessor($this, $options);
-        $migrator->up();
+        foreach ($paths as $path) {
+            $options = ['--path' => $path];
+            $options['--realpath'] = true;
+
+            $migrator = new MigrateProcessor($this, $options);
+            $migrator->up();
+        }
+
+        // Also manually create users table so relations will work.
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', static function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->rememberToken();
+                $table->timestamps();
+            });
+        }
 
         $this->resetApplicationArtisanCommands($this->app);
     }
@@ -117,5 +146,15 @@ abstract class TestCase extends BaseTestCase
             'reserved' => null,
             'onUpdate' => false,
         ]);
+    }
+
+    /**
+     * Define the blog-etc-admin gate to allow anyone through.
+     */
+    protected function allowAdminGate(): void
+    {
+        Gate::define('blog-etc-admin', static function ($user) {
+            return true;
+        });
     }
 }
