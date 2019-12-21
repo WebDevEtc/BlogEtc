@@ -1,26 +1,20 @@
-Package is in a rewrite. Proper tests coming, unfortunately work has taken up a lot of my time since I first added this package, and I don't have time to get back to it and maintain it propperly. The rewrite (which is just on the master branch...) has much better coding standards, proper unit/integration tests are intended to be added soon. The current versions on Packagist are on a different branch. I thought the rewrite would be a bit quicker! 
+Package is in a rewrite (should be done by xmas 2019). Proper tests coming, unfortunately work has taken up a lot of my time since I first added this package, and I don't have time to get back to it and maintain it properly. The rewrite (which is just on the master branch...) has much better coding standards, proper unit/integration tests are intended to be added soon. The current versions on Packagist are on a different branch. I thought the rewrite would be a bit quicker! 
+
+Some older features will be stripped out. The next version will be a breaking change, but the code will be more maintainable. This package was originally (back in version 1) not really expecting to get any public use. The new version will handle more use cases easier.
 
 # WebDevEtc BlogEtc
-## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app
-### 5 minutes to install! Quick and easy!
+<p align="center">## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app</p>
+
+#### 5 minutes to install! Quick and easy!
 
 [![StyleCI](https://github.styleci.io/repos/144829997/shield?branch=master)](https://github.styleci.io/repos/144829997)
 [![Build Status](https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master)](https://travis-ci.org/WebDevEtc/BlogEtc)
-
-## Sept 2019
-Updated for Laravel 6.0. Still rewriting the core for a proper release of v4 with much cleaner code.
-
-## Aug 2019 
-Updated for Laravel 5.8. Currently working on a slight rewrite for a v4 release of this package. Will be released soon.
 
 ## Introduction
 
 This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything you need to quickly and easily add a blog to your laravel app.
 
-
-## FOR 5 MINUTE INSTALLATION GUIDE (with video guide), PLEASE VISIT [THE INSTALL GUIDE HERE](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
-
-[Install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) • [Packagist](https://packagist.org/packages/webdevetc/blogetc) << MAKE SURE YOU FOLLOW THE INSTRUCTIONS. They're simple, but must be followed.
+#### For the full installation guide please visit [the Laravel Blog Etc install guide here](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
 
 ## Features
 
@@ -85,8 +79,6 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
 
 2) if `use_custom_view_files` is enabled in the config (which it is by default), it means that any post with a custom view file set (details in the docs) can include any file within `/resources/views/custom_blog_posts`, which blade will execute. This package gives no method to edit any file within that directory though.
 
-
-
 ## How to install BlogEtc to your laravel app
 
 Please see our [BlogEtc Laravel Blog Package Documentation/install guide](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide) for install instructions. (It is very simple - done via composer/artisan commands, plus adding one method to your \App\User model (`canManageBlogEtcPosts()` which should return `true` if this user can manage the blog).
@@ -120,27 +112,6 @@ There is a built in captcha (anti spam comment) system built in, which will be e
 
   Please see [our Captcha docs](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#captcha) for  more details.
 
-## TODO
-
-This is a list of features or things that I want to eventually get round to adding
-
-- Better UI for uploading images/viewing uploaded images
-- Link uploaded images to blog post. At the moment they are not related.
-- Allow users to remove a featured image from a blog post.
-- Option to use HTMLPurifier to sanatise output.
-- Better options for assigning post authors (currently it just assigns the currently logged in user). However, if site has 10,000+ users do we really want an UI interface for this? The alternative is to add something like a a is_admin field to the `users` table and only show admin users.
-- Possibly add tags (we already have categories) but I am not sure how useful they really are, given that we already have categories.
-- Pagination for comments on view single post? At the moment we limit it to a high number (default in config is 5000).
-- RSS feed: shows from full (stripped tags) ->html of blog post (although has a setTextLimit() on it) - need to trim this, and if it uses custom view files then it should render that (without html).
-- Email notification to admin when new comment is added
-- RSS to use generate_introduction() for its contents.
-
-
-## Recent changes:
-
-1) Added full text search and search views. You have to enable it in the config file (see latest config file)
-2) Need more than the 3 default image sizes? Add more in the config/blogetc.php file, add the database column for it and it'll work!
-
 ## Having problems, something is not working?
 
 *Image upload errors?*
@@ -153,21 +124,16 @@ Try adding this to config/app.php:
 - Ensure that /public/blog_images (or whatever directory you set it to in the config) is writable by the server
 - You might need to set a higher memory limit, or upload smaller image files. This will depend on your server. I've used it to upload huge (10mb+) jpg images without problem, once the server was set up correctly to handle larger file uploads.
 
-
-
-
 ## Version History
 
-
--4.x - Currently work in progress. Will be released start of July 2019. For Laravel 5.8.
-
+- 4.x - Currently work in progress. Will be released end of 2019. For Laravel 6 onwards.
 - 3.1                   - minor fixes
 - 3.0.3                 - fixed RSS feed cache issue
 - 3.0.2                 - fixed default medium image size (changed to 600x400)
 - 3.0.1                 - replaced all short tags (<?) with full opening ones (<?php)
 - 3.0                   - Added separate functionality for uploading images (and save some meta data in db)
 - 2.1                   - added 'short_description' to db + form, and BlogEtcPost::generate_introduction() method will try and use this to generate intro text.
-- 2.0                   - added full text search (enable it via the config file - it is disabled by default).
+- 2.0                   - added full text search (enable it via the config file - it is disabled by default). (removed in future version, will be added again via a different package)
 - 1.2                   - added WYSIWYG, few smaller changes
 - 1.1.1                 - added basic captcha
 - 1.0.5                 - composer.json changes.
