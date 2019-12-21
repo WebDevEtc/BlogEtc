@@ -139,6 +139,7 @@ class ManagePostsControllerTest extends TestCase
         $this->assertCount(1, $postCategories);
         $this->assertTrue($postCategories->first()->is($category));
     }
+
     /**
      * Test that new posts can be created, and associated to a category.
      */
@@ -159,5 +160,4 @@ class ManagePostsControllerTest extends TestCase
 
         $response->assertSessionHasErrors('category');
     }
-
 }
