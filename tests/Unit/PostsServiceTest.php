@@ -29,6 +29,17 @@ class PostsServiceTest extends TestCase
     use WithFaker;
 
     /**
+     * Set up for all tests.
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // Disable image uploads for these tests.
+        config(['blogetc' => ['image_upload_enabled' => false]]);
+    }
+
+    /**
      * Test that the repository() method will return an instance of PostsRepository.
      */
     public function testRepository(): void
