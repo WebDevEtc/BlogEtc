@@ -106,7 +106,7 @@ class PostsControllerTest extends TestCase
 
         $response = $this->get(route('blogetc.show', $post->slug));
 
-        $response->assertNotFound()->assertViewMissing('post');
+        $response->assertNotFound();
     }
 
     /**
@@ -136,7 +136,7 @@ class PostsControllerTest extends TestCase
 
         $response = $this->get(route('blogetc.show', $post->slug));
 
-        $response->assertNotFound()->assertViewMissing('post');
+        $response->assertNotFound();
     }
 
     /**

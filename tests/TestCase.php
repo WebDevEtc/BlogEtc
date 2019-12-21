@@ -176,7 +176,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Be an admin user, give gate permissions to user.
      */
-    protected function beAdminUser(): void
+    protected function beAdminUser(): self
     {
         $user = new User();
         $user->id = 1;
@@ -184,6 +184,8 @@ abstract class TestCase extends BaseTestCase
         $this->be($user);
 
         $this->allowAdminGate();
+
+        return $this;
     }
 
     /**

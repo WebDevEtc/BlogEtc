@@ -109,7 +109,7 @@ class PostRequest extends FormRequest
         $showErrorIfHasValue = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value...
-                return $fail($attribute.' must be empty');
+                return $fail($attribute . ' must be empty');
             }
         };
 
@@ -122,20 +122,30 @@ class PostRequest extends FormRequest
 
         // generate the main set of rules:
         $return = [
-            'posted_at'         => ['nullable', $checkValidPostedAt],
-            'title'             => ['required', 'string', 'min:1', 'max:255'],
-            'subtitle'          => ['nullable', 'string', 'min:1', 'max:255'],
-            'post_body'         => ['required_without:use_view_file', 'max:2000000'], //medium text
-            'meta_desc'         => ['nullable', 'string', 'min:1', 'max:1000'],
+            'posted_at' => ['nullable', $checkValidPostedAt],
+            'title' => ['required', 'string', 'min:1', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'min:1', 'max:255'],
+            'post_body' => ['required_without:use_view_file', 'max:2000000'], //medium text
+            'meta_desc' => ['nullable', 'string', 'min:1', 'max:1000'],
             'short_description' => ['nullable', 'string', 'max:30000'],
-            'slug'              => [
+            'slug' => [
                 'nullable',
                 'string',
                 'min:1',
                 'max:150',
                 'alpha_dash', // this field should have some additional rules, which is done in the subclasses.
             ],
-            'categories' => ['nullable', 'array'],
+            'category' => [
+                'nullable',
+                'array',
+                static function ($attribute, $value, $fail) {
+                    foreach (array_keys((array)$value) as $categoryID) {
+                        if (Category::where('id', $categoryID)->exists() === false) {
+                            $fail($attribute . ' is not a valid category id');
+                        }
+                    }
+                },
+            ],
         ];
 
         // is use_custom_view_files true?
@@ -147,7 +157,7 @@ class PostRequest extends FormRequest
         }
 
         // some additional rules for uploaded images
-        foreach ((array) config('blogetc.image_sizes') as $size => $image_detail) {
+        foreach ((array)config('blogetc.image_sizes') as $size => $image_detail) {
             if ($image_detail['enabled'] && config('blogetc.image_upload_enabled')) {
                 $return[$size] = ['nullable', 'image'];
             } else {
