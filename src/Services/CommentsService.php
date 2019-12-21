@@ -94,7 +94,7 @@ class CommentsService
             $authorWebsite,
             $authorEmail,
             $userID,
-            $approved,
+            $approved
         );
 
         // Fire event:
