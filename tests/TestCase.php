@@ -2,6 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Tests;
 
+use App\User;
 use Gate;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Application;
@@ -71,6 +72,11 @@ abstract class TestCase extends BaseTestCase
     {
         $this->loadMigrations();
         $this->withFactories(__DIR__ . '/../src/Factories');
+
+        if (!\Route::has('login') ) {
+            // Need to define a login route for feature tests.
+            \Route::get('login', function () {})->name('login');
+        }
     }
 
     /**
@@ -156,5 +162,39 @@ abstract class TestCase extends BaseTestCase
         Gate::define('blog-etc-admin', static function ($user) {
             return true;
         });
+    }
+    /**
+     * Define the blog-etc-admin gate to deny access to any user.
+     */
+    protected function denyAdminGate(): void
+    {
+        Gate::define('blog-etc-admin', static function ($user) {
+            return false;
+        });
+    }
+
+    /**
+     * Be an admin user, give gate permissions to user.
+     */
+    protected function beAdminUser(): void
+    {
+        $user = new User();
+        $user->id = 1;
+
+        $this->be($user);
+
+        $this->allowAdminGate();
+    }
+    /**
+     * Be an admin user, give gate permissions to user.
+     */
+    protected function beNonAdminUser(): void
+    {
+        $user = new User();
+        $user->id = 1;
+
+        $this->be($user);
+
+        $this->denyAdminGate();
     }
 }

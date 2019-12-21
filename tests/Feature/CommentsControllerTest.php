@@ -1,6 +1,6 @@
 <?php
 
-namespace WebDevEtc\BlogEtc\Tests\Unit;
+namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use WebDevEtc\BlogEtc\Models\Post;
