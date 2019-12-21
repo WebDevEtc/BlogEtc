@@ -65,7 +65,7 @@ class CommentsRepository
 
             return $queryBuilder->findOrFail($blogEtcCommentID);
         } catch (ModelNotFoundException $e) {
-            throw new CommentNotFoundException('Unable to find blog post comment with ID: ' . $blogEtcCommentID);
+            throw new CommentNotFoundException('Unable to find blog post comment with ID: '.$blogEtcCommentID);
         }
     }
 
@@ -128,5 +128,4 @@ class CommentsRepository
 
         return $newComment;
     }
-
 }
