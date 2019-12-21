@@ -42,7 +42,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Used for Orchestra\Testbench package.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      * @return array
      */
     protected function getPackageProviders($app)

@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Unit;
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Mockery;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -53,10 +52,7 @@ class PostsControllerTest extends TestCase
      */
     public function testShow(): void
     {
-        $this->withoutExceptionHandling();
-        $slug = $this->faker->lexify('?????????');
-        $post = new Post(['title' => $slug, 'is_published' => true, 'posted_at' => Carbon::now()]);
-        $post->save();
+        $post = factory(Post::class)->create();
 
         $url = route('blogetc.show', $post->slug);
 
@@ -69,5 +65,45 @@ class PostsControllerTest extends TestCase
         $response = $this->get($url);
 
         $response->assertOk();
+    }
+
+    /**
+     * Test that an invalid slug returns a 404 response.
+     */
+    public function testShow404(): void
+    {
+        $url = route('blogetc.show', 'invalid-id');
+
+        $response = $this->get($url);
+
+        $response->assertNotFound();
+    }
+
+    /**
+     * A post with is_published = false should not be shown.
+     */
+    public function testShow404IfNotPublished(): void
+    {
+        $post = factory(Post::class)->state('not_published')->create();
+
+        $url = route('blogetc.show', $post->slug);
+
+        $response = $this->get($url);
+
+        $response->assertNotFound();
+    }
+
+    /**
+     * A post with posted_at in the future should not be shown.
+     */
+    public function testShow404IfFuturePost(): void
+    {
+        $post = factory(Post::class)->state('in_future')->create();
+
+        $url = route('blogetc.show', $post->slug);
+
+        $response = $this->get($url);
+
+        $response->assertNotFound();
     }
 }
