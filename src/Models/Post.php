@@ -277,7 +277,7 @@ class Post extends Model
      */
     protected function checkValidImageSize(string $size = 'medium'): bool
     {
-        if (array_key_exists('image_'.$size, config('blogetc.image_sizes'))) {
+        if (array_key_exists('image_'.$size, config('blogetc.image_sizes', []))) {
             // correct size string - just return
             return true;
         }

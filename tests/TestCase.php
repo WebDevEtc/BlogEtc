@@ -17,8 +17,11 @@ abstract class TestCase extends BaseTestCase
      * As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
      * only on the package code in the controller. Would be interested if anyone has a suggestion on better way
      * to test this.
+     *
      * @param string $expectedView
      * @param array $viewArgumentTypes
+     * @deprecated - not in use. todo: remove
+     *
      */
     protected function mockView(string $expectedView, array $viewArgumentTypes): void
     {
@@ -32,7 +35,7 @@ abstract class TestCase extends BaseTestCase
             ->shouldReceive('make')
             ->once();
 
-        $mockedView = call_user_func_array([$mockedView, 'with'], array_merge([$expectedView] , $viewArgumentTypes));
+        $mockedView = call_user_func_array([$mockedView, 'with'], array_merge([$expectedView], $viewArgumentTypes));
 
         $mockedView->andReturn($mockedReturnedView)
             ->shouldReceive('exists')
@@ -66,7 +69,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function loadMigrations(): void
     {
-        $paths = __DIR__.'/../migrations';
+        $paths = __DIR__ . '/../migrations';
         $options = ['--path' => $paths];
         $options['--realpath'] = true;
 
@@ -92,8 +95,14 @@ abstract class TestCase extends BaseTestCase
             'prefix' => '',
         ]);
 
+        // Add the custom dir for layouts.app view:
+        $app['view']->addLocation(__DIR__ . '/views');
+
         // ensure app.key is set.
         $app['config']->set('app.key', base64_decode('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
+
+        // Use the default config for this package:
+        $app['config']->set('blogetc', include(__DIR__ . '/../src/Config/blogetc.php'));
 
         // Ensure has correct 'sluggable' config set up:
         $app['config']->set('sluggable', [

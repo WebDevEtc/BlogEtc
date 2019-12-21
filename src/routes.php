@@ -26,7 +26,7 @@ Route::group(
                 // Public show category:
                 Route::get(
                     '/category/{categorySlug}',
-                    'BlogPostsController@showCategory'
+                    'PostsController@showCategory'
                 )
                     ->name('blogetc.view_category');
 

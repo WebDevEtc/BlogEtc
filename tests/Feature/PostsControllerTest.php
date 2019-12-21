@@ -3,7 +3,7 @@
 namespace WebDevEtc\BlogEtc\Tests\Unit;
 
 use Illuminate\Foundation\Testing\WithFaker;
-use Mockery;
+use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
@@ -33,13 +33,7 @@ class PostsControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $url = route('blogetc.index');
-
-        $this->withoutExceptionHandling();
-
-        $this->mockView('blogetc::index', [Mockery::type('array'), Mockery::type('array')]);
-        // also see assertions made in the mocked view.
-        $response = $this->get($url);
+        $response = $this->get(route('blogetc.index'));
 
         $response->assertOk();
     }
@@ -54,15 +48,7 @@ class PostsControllerTest extends TestCase
     {
         $post = factory(Post::class)->create();
 
-        $url = route('blogetc.show', $post->slug);
-
-        // As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
-        // only on the package code in the controller. Would be interested if anyone has a suggestion on better way
-        // to test this.
-        $this->mockView('blogetc::single_post', [Mockery::type('array'), Mockery::type('array')]);
-
-        // also see assertions made in the mocked view.
-        $response = $this->get($url);
+        $response = $this->get(route('blogetc.show', $post->slug));
 
         $response->assertOk();
     }
@@ -72,9 +58,7 @@ class PostsControllerTest extends TestCase
      */
     public function testShow404(): void
     {
-        $url = route('blogetc.show', 'invalid-id');
-
-        $response = $this->get($url);
+        $response = $this->get(route('blogetc.show', 'invalid-id'));
 
         $response->assertNotFound();
     }
@@ -86,9 +70,7 @@ class PostsControllerTest extends TestCase
     {
         $post = factory(Post::class)->state('not_published')->create();
 
-        $url = route('blogetc.show', $post->slug);
-
-        $response = $this->get($url);
+        $response = $this->get(route('blogetc.show', $post->slug));
 
         $response->assertNotFound();
     }
@@ -100,9 +82,7 @@ class PostsControllerTest extends TestCase
     {
         $post = factory(Post::class)->state('in_future')->create();
 
-        $url = route('blogetc.show', $post->slug);
-
-        $response = $this->get($url);
+        $response = $this->get(route('blogetc.show', $post->slug));
 
         $response->assertNotFound();
     }
@@ -112,13 +92,27 @@ class PostsControllerTest extends TestCase
      */
     public function testShow404IfDeletedPost(): void
     {
-        $post = factory(Post::class)->state('in_future')->create();
+        $post = factory(Post::class)->create();
         $post->delete();
 
-        $url = route('blogetc.show', $post->slug);
-
-        $response = $this->get($url);
+        $response = $this->get(route('blogetc.show', $post->slug));
 
         $response->assertNotFound();
+    }
+
+    /**
+     * Test the category route.
+     */
+    public function testCategory(): void
+    {
+        $this->withoutExceptionHandling();
+        $post = factory(Post::class)->create();
+        $category = factory(Category::class)->create();
+        $post->categories()->save($post);
+
+        $response = $this->get(route('blogetc.view_category', $category->slug));
+
+        $response->assertOk();
+        $response->assertViewHas('category', $category);
     }
 }
