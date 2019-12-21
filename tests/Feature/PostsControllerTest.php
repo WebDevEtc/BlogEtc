@@ -106,4 +106,19 @@ class PostsControllerTest extends TestCase
 
         $response->assertNotFound();
     }
+
+    /**
+     * A post which was deleted should show a 404.
+     */
+    public function testShow404IfDeletedPost(): void
+    {
+        $post = factory(Post::class)->state('in_future')->create();
+        $post->delete();
+
+        $url = route('blogetc.show', $post->slug);
+
+        $response = $this->get($url);
+
+        $response->assertNotFound();
+    }
 }
