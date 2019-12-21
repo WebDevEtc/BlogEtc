@@ -5,6 +5,7 @@ namespace WebDevEtc\BlogEtc\Tests;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\Database\MigrateProcessor;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use View;
 use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
 
 /**
@@ -55,6 +56,7 @@ abstract class TestCase extends BaseTestCase
     protected function featureSetUp(): void
     {
         $this->loadMigrations();
+        $this->withFactories(__DIR__ . '/../src/Factories');
     }
 
     /**
