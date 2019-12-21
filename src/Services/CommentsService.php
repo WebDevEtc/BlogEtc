@@ -154,7 +154,6 @@ class CommentsService
      *
      * @return Comment
      * @throws Exception
-     *
      */
     public function delete(int $blogCommentID): Comment
     {
