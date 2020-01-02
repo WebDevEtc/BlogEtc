@@ -182,29 +182,25 @@ class PostsService
 
         $remainingPhotos = [];
 
-        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
-                $fullPath = public_path(config('blogetc.blog_upload_dir', 'blog_images').'/'.$imageSize);
+                $fullPath = config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize;
 
-                if (file_exists($fullPath)) {
-                    // there was record of this size in the db, so push it to array of featured photos which remain
-                    // (Note: there is no check here to see if they actually exist on the filesystem).
-                    $fileSize = filesize($fullPath);
+                // there was record of this size in the db, so push it to array of featured photos which remain
+                // (Note: there is no check here to see if they actually exist on the filesystem).
+                $fileSize = UploadsService::disk()->getSize($fullPath);
 
-                    // TODO - refactor to use Laravel filesystem/disks
-                    if ($fileSize) {
-                        // get file gt
-                        //size in human readable (kb)
-                        $fileSize = $this->humanReadableFileSize($fileSize);
-                    }
-
-                    $remainingPhotos[] = [
-                        'filename' => $post->$imageSize,
-                        'full_path' => $fullPath,
-                        'file_size' => $fileSize,
-                        'url' => asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize),
-                    ];
+                if ($fileSize !== false) {
+                    // Get the file size, in human readable (kb) format.
+                    $fileSize = $this->humanReadableFileSize($fileSize);
                 }
+
+                $remainingPhotos[] = [
+                    'filename' => $post->$imageSize,
+                    'full_path' => $fullPath,
+                    'file_size' => $fileSize,
+                    'url' => UploadsService::disk()->url($fullPath),
+                ];
             }
         }
 
@@ -231,6 +227,21 @@ class PostsService
      */
     protected function humanReadableFileSize(int $fileSize): string
     {
-        return round(filesize($fileSize) / 1000, 1).' kb';
+        return round($fileSize / 1000, 1) . ' kb';
     }
+
+    /**
+     * Search for posts.
+     *
+     * This is a rough implementation - proper full text search has been removed in current version.
+     *
+     * @param string $query
+     * @param int $max
+     * @return Collection
+     */
+    public function search(string $query, $max = 25): Collection
+    {
+        return $this->repository->search($query, $max);
+    }
+
 }

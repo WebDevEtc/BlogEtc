@@ -1,18 +1,18 @@
 <div class="form-group">
-    <label for="category_category_name">
+    <label for="category_name">
         Category Name
     </label>
 
     <input type="text"
            class="form-control"
-           id="category_category_name"
+           id="category_name"
            required
-           aria-describedby="category_category_name_help"
+           aria-describedby="category_name_help"
            name="category_name"
            value="{{ old('category_name', $category->category_name) }}"
     >
 
-    <small id="category_category_name_help" class="form-text text-muted">The name of the category</small>
+    <small id="category_name_help" class="form-text text-muted">The name of the category</small>
 </div>
 
 <div class="form-group">
@@ -41,9 +41,15 @@
 
 @push('js')
     <script>
+        /**
+         * Generate the category slug, based on the category name.
+         *
+         * This is only run if the slug did not exist on page load,
+         * and has not been edited by a user since page load.
+         */
         (function autoSlugCategory () {
             // Get the two inputs:
-            var categoryNameInput = document.getElementById('category_category_name');
+            var categoryNameInput = document.getElementById('category_name');
             var slugInput = document.getElementById('category_slug');
 
             // Initially, only enable generating slug if slug originally had no value.

@@ -44,6 +44,13 @@ return [
     // Default: blog_images
     'blog_upload_dir' => 'blog_images',
 
+    // What disk (in config/filesystems.php) to use?
+    // Default is 'public'.
+    'image_upload_disk' => 'public',
+
+    // Store full size image when uploading a single photo (not part of featured image)?
+    'image_store_full_size' => true,
+
     // The user model - this is often moved to \App\Models namespace
     'user_model' => User::class,
 

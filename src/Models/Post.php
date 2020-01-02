@@ -19,6 +19,7 @@ use Swis\LaravelFulltext\Indexable;
 use Throwable;
 use WebDevEtc\BlogEtc\Exceptions\InvalidImageSizeException;
 use WebDevEtc\BlogEtc\Scopes\PostPublishedScope;
+use WebDevEtc\BlogEtc\Services\UploadsService;
 
 /**
  * Class BlogEtcPost.
@@ -252,7 +253,8 @@ class Post extends Model
     }
 
     /**
-     * Does this object have an uploaded image of that size...?
+     * Returns true if the database record indicates that this blog post
+     * has a featured image of size $size.
      *
      * @param string $size
      *
@@ -262,7 +264,7 @@ class Post extends Model
     {
         $this->checkValidImageSize($size);
 
-        return array_key_exists('image_'.$size, $this->getAttributes()) && $this->$size;
+        return array_key_exists('image_'.$size, $this->getAttributes()) && $this->{'image_' . $size};
     }
 
     /**
@@ -321,7 +323,7 @@ class Post extends Model
         $this->checkValidImageSize($size);
         $filename = $this->{'image_'.$size};
 
-        return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
+        return UploadsService::publicUrl($filename);
     }
 
     /**

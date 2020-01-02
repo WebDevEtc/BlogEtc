@@ -123,6 +123,7 @@ Try adding this to config/app.php:
 - Also make sure that /tmp is writable. If you have open_basedir enabled, be sure to add :/tmp to its value.
 - Ensure that /public/blog_images (or whatever directory you set it to in the config) is writable by the server
 - You might need to set a higher memory limit, or upload smaller image files. This will depend on your server. I've used it to upload huge (10mb+) jpg images without problem, once the server was set up correctly to handle larger file uploads.
+- New version of BlogEtc uses the Laravel filesystem to store images. You will probably need to run `php artisan storage:link` to use the images locally. If you are using something such as S3 then you will probably need to change the urls in blade.
 
 ## Version History
 
@@ -146,6 +147,13 @@ Try adding this to config/app.php:
 
 Please contact me on the contact from on [WebDev Etc](https://webdevetc.com/) or on [twitter](https://twitter.com/web_dev_etc/) and I'll get back to you asap.
 
+## Upgrading to v6
 
+A lot of the code base was changed for the next version of BlogEtc. I highly recommend you test locally.
 
+Here is what you need to know:
+
+1) Image uploads are now handled by the Laravel filesystem disks. You can use this to upload to services such as S3. By default it will use the 'public' disk, which will require you to run `php artisan storage:link` to create a symblink. Existing images will need to be moved to /storage/app/public/blog_images, and urls will need to be updated (to http://yoursite.com/storage/blog_images/*.jpg). You could also create a symblink to just link /storage/app/public/blog_images to http://yoursite/blog_images.
+2) Many of the internal files have been changed. Most files follow a proper coding style. This should not affect you.
+3) The search feature has been removed (it will get added again in the future).
 

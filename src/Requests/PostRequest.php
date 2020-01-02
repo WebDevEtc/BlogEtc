@@ -39,6 +39,10 @@ class PostRequest extends FormRequest
     }
 
     /**
+     * Get the image size $size.
+     *
+     * If it does not exist, try and find an alternative uploaded image in a different size.
+     *
      * @param $size
      *
      * @return UploadedFile|null
