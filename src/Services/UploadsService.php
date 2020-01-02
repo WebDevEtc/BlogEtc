@@ -42,7 +42,6 @@ class UploadsService
      * Disk for filesystem storage.
      *
      * Set the relevant config file to use things such as S3.
-     *
      */
     public static function disk(): Filesystem
     {
@@ -54,7 +53,7 @@ class UploadsService
      */
     public static function publicUrl(string $filename): string
     {
-        return self::disk()->url(config('blogetc.blog_upload_dir') . '/' . $filename);
+        return self::disk()->url(config('blogetc.blog_upload_dir').'/'.$filename);
     }
 
     /**
@@ -81,7 +80,7 @@ class UploadsService
             );
         }
 
-        foreach ((array)config('blogetc.image_sizes') as $size => $imageSizeDetails) {
+        foreach ((array) config('blogetc.image_sizes') as $size => $imageSizeDetails) {
             $uploadedImageDetails[$size] = $this->uploadAndResize(
                 null,
                 $imageTitle,
@@ -126,7 +125,6 @@ class UploadsService
      *
      * @return array
      * @throws Exception
-     *
      */
     protected function uploadAndResize(
         ?Post $new_blog_post,
@@ -159,7 +157,7 @@ class UploadsService
             $w = $resizedImage->width();
             $h = $resizedImage->height();
         } else {
-            throw new RuntimeException('Invalid image_size_details value of ' . $imageSizeDetails);
+            throw new RuntimeException('Invalid image_size_details value of '.$imageSizeDetails);
         }
 
         // What image quality to use?
@@ -172,7 +170,7 @@ class UploadsService
         $resizedImageData = $resizedImage->encode($format, $imageQuality);
 
         // Store on Laravel filesystem:
-        $this::disk()->put($destinationPath . '/' . $image_filename, $resizedImageData);
+        $this::disk()->put($destinationPath.'/'.$image_filename, $resizedImageData);
 
         // fire UploadedImage event:
         event(new UploadedImage($image_filename, $resizedImage, $new_blog_post, __METHOD__));
@@ -194,7 +192,6 @@ class UploadsService
      *
      * @return string
      * @throws RuntimeException
-     *
      */
     protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo): string
     {
@@ -202,15 +199,15 @@ class UploadsService
 
         // $wh will be something like "-1200x300"
         $wh = $this->getDimensions($image_size_details);
-        $ext = '.' . $photo->getClientOriginalExtension();
+        $ext = '.'.$photo->getClientOriginalExtension();
 
         for ($i = 1; $i <= self::$availableFilenameAttempts; $i++) {
             // add suffix if $i>1
-            $suffix = $i > 1 ? '-' . Str::random(5) : '';
+            $suffix = $i > 1 ? '-'.Str::random(5) : '';
 
-            $attempt = Str::slug($base . $suffix . $wh) . $ext;
+            $attempt = Str::slug($base.$suffix.$wh).$ext;
 
-            if (!$this::disk()->exists($this->imageDestinationPath() . '/' . $attempt)) {
+            if (!$this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -229,7 +226,7 @@ class UploadsService
     {
         $base = substr($suggestedTitle, 0, 100);
 
-        return $base ?: 'image-' . Str::random(5);
+        return $base ?: 'image-'.Str::random(5);
     }
 
     /**
@@ -253,16 +250,15 @@ class UploadsService
      *
      * @return string
      * @throws RuntimeException
-     *
      */
     protected function getDimensions($imageSize): string
     {
         if (is_array($imageSize)) {
-            return '-' . $imageSize['w'] . 'x' . $imageSize['h'];
+            return '-'.$imageSize['w'].'x'.$imageSize['h'];
         }
 
         if (is_string($imageSize)) {
-            return '-' . Str::slug(substr($imageSize, 0, 30));
+            return '-'.Str::slug(substr($imageSize, 0, 30));
         }
 
         // was not a string or array, so error
@@ -272,7 +268,6 @@ class UploadsService
     /**
      * @return string
      * @throws RuntimeException
-     *
      */
     protected function imageDestinationPath(): string
     {
@@ -332,7 +327,7 @@ class UploadsService
         // to save in db later
         $uploaded_image_details = [];
 
-        $enabledImageSizes = collect((array)config('blogetc.image_sizes'))
+        $enabledImageSizes = collect((array) config('blogetc.image_sizes'))
             ->filter(function ($size) {
                 return !empty($size['enabled']);
             });

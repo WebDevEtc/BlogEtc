@@ -151,7 +151,7 @@ class ManageCategoriesControllerTest extends TestCase
     }
 
     /**
-     * Test 404 response when deleting invalid category ID
+     * Test 404 response when deleting invalid category ID.
      */
     public function testDestroyInvalidCategoryID(): void
     {

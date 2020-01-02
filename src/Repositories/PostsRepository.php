@@ -99,7 +99,7 @@ class PostsRepository
         try {
             return $this->query(true)->findOrFail($blogEtcPostID);
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with ID: ' . $blogEtcPostID);
+            throw new PostNotFoundException('Unable to find blog post with ID: '.$blogEtcPostID);
         }
     }
 
@@ -120,7 +120,7 @@ class PostsRepository
                 ->where('slug', $slug)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with slug: ' . $slug);
+            throw new PostNotFoundException('Unable to find blog post with slug: '.$slug);
         }
     }
 
@@ -184,7 +184,7 @@ class PostsRepository
     public function search(string $query, int $max = 25): Collection
     {
         return $this->query(true)
-            ->where('title', 'like', '%' . $query)
+            ->where('title', 'like', '%'.$query)
             ->limit($max)
             ->get();
     }

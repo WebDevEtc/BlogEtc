@@ -206,7 +206,7 @@ class ManagePostsControllerTest extends TestCase
     }
 
     /**
-     * Test 404 response when deleting invalid post ID
+     * Test 404 response when deleting invalid post ID.
      */
     public function testDestroyInvalidPostID(): void
     {

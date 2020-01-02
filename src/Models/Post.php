@@ -264,7 +264,7 @@ class Post extends Model
     {
         $this->checkValidImageSize($size);
 
-        return array_key_exists('image_'.$size, $this->getAttributes()) && $this->{'image_' . $size};
+        return array_key_exists('image_'.$size, $this->getAttributes()) && $this->{'image_'.$size};
     }
 
     /**
