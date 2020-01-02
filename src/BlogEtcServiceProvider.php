@@ -98,18 +98,8 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     protected function publishFiles(): void
     {
-        foreach ([
-                     '2018_05_28_224023_create_blog_etc_posts_table.php',
-                     '2018_09_16_224023_add_author_and_url_blog_etc_posts_table.php',
-                     '2018_09_26_085711_add_short_desc_textrea_to_blog_etc.php',
-                     '2018_09_27_122627_create_blog_etc_uploaded_photos_table.php',
-                 ] as $migration) {
-            $this->publishes([
-                __DIR__.'/../migrations/'.$migration => database_path('migrations/'.$migration),
-            ]);
-        }
-
         $this->publishes([
+            __DIR__.'/../migrations' => database_path('migrations'),
             __DIR__.'/Views/blogetc' => base_path('resources/views/vendor/blogetc'),
             __DIR__.'/Views/blogetc_admin' => base_path('resources/views/vendor/blogetc_admin'),
             __DIR__.'/Config/blogetc.php' => config_path('blogetc.php'),
