@@ -21,6 +21,14 @@ use WebDevEtc\BlogEtc\Requests\PostRequest;
 class UploadsService
 {
     /**
+     * Has the blog directory been checked if it is writeable?
+     *
+     * @todo rename
+     * @var bool
+     */
+    protected $checked_blog_image_dir_is_writable=false;
+
+    /**
      * How many iterations to find an available filename, before exception.
      *
      * @var int
