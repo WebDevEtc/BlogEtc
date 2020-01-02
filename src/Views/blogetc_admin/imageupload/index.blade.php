@@ -1,6 +1,6 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\UploadedPhoto $uploadedPhoto */
-    $uploadedPhoto = $uploadedPhoto;
+    /** @var \WebDevEtc\BlogEtc\Models\UploadedPhoto[] $uploaded_photos */
+    $uploadedPhoto = $uploaded_photos;
 @endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('content')
@@ -12,6 +12,11 @@
 
     <script>
         // TODO
+        /**
+         * Show the uploaded images.
+         * @param id
+         * @param img
+         */
         function show_uploaded_file_row (id, img) {
             // show the div, and populate it with the image.
             [].forEach.call(document.querySelectorAll('.' + id), function (el) {

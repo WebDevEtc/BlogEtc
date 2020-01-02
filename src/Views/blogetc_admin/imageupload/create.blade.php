@@ -30,24 +30,6 @@
         </div>
 
         <div class="form-group mb-4 p-2">
-            <label>Sizes to convert to</label>
-            <div>
-                <input type="checkbox" name="sizes_to_upload[blogetc_full_size]"
-                       value="true" id="size_blogetc_full_size" checked>
-                <label for="size_blogetc_full_size">Full size (no resizing)</label>
-            </div>
-
-            @foreach($imageSizes as $size => $imageSizeDetails)
-                <div>
-                    <input type="checkbox" name="sizes_to_upload[{{ $size }}]"
-                           value="true" checked id="size_{{ $size }}">
-                    <label for="size_{{ $size }}">
-                        {{ $imageSizeDetails['name'] }} -
-                        {{ $imageSizeDetails['w'] . ' × ' .$imageSizeDetails['h'] . 'px' }}</label>
-                </div>
-            @endforeach
-        </div>
-        <div class="form-group mb-4 p-2">
             <label>Upload</label>
             <input type="submit" class="btn btn-primary" value="Upload">
         </div>

@@ -4,15 +4,17 @@ namespace WebDevEtc\BlogEtc\Services;
 
 use Auth;
 use Exception;
-use File;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Image;
 use Intervention\Image\Constraint;
 use RuntimeException;
+use Storage;
 use WebDevEtc\BlogEtc\Events\UploadedImage;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
+use WebDevEtc\BlogEtc\Repositories\UploadedPhotosRepository;
 use WebDevEtc\BlogEtc\Requests\PostRequest;
 
 /**
@@ -21,41 +23,56 @@ use WebDevEtc\BlogEtc\Requests\PostRequest;
 class UploadsService
 {
     /**
-     * Has the blog directory been checked if it is writeable?
-     *
-     * @todo rename
-     * @var bool
-     */
-    protected $checked_blog_image_dir_is_writable=false;
-
-    /**
      * How many iterations to find an available filename, before exception.
      *
      * @var int
      */
     private static $availableFilenameAttempts = 10;
+    /**
+     * @var UploadedPhotosRepository
+     */
+    private $repository;
+
+    public function __construct(UploadedPhotosRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Disk for filesystem storage.
+     *
+     * Set the relevant config file to use things such as S3.
+     *
+     */
+    public static function disk(): Filesystem
+    {
+        return Storage::disk(config('blogetc.image_upload_disk', 'public'));
+    }
+
+    /**
+     * Given a filename, return a public url for that asset on the filesystem as defined in the config.
+     */
+    public static function publicUrl(string $filename): string
+    {
+        return self::disk()->url(config('blogetc.blog_upload_dir') . '/' . $filename);
+    }
 
     /**
      * Handle an image upload via the upload image section (not blog post featured image).
      *
      * @param $uploadedImage
      * @param string $imageTitle
-     * @param $sizesToUpload
-     *
-     * @throws Exception
-     *
      * @return array
+     * @throws Exception
      */
-    public function processUpload($uploadedImage, string $imageTitle, $sizesToUpload): array
+    public function processUpload($uploadedImage, string $imageTitle): array
     {
         // to save in db later
         $uploadedImageDetails = [];
         $this->increaseMemoryLimit();
 
-        // now upload a full size - this is a special case, not in the config file. We only store full size images in
-        // this class, not as part of the featured blog image uploads.
-        // TODO - replace with empty()
-        if (isset($sizesToUpload['blogetc_full_size']) && $sizesToUpload['blogetc_full_size'] === 'true') {
+        if (config('blogetc.image_store_full_size')) {
+            // Store as full size
             $uploadedImageDetails['blogetc_full_size'] = $this->uploadAndResize(
                 null,
                 $imageTitle,
@@ -64,13 +81,7 @@ class UploadsService
             );
         }
 
-        foreach ((array) config('blogetc.image_sizes') as $size => $imageSizeDetails) {
-            if (!isset($sizesToUpload[$size]) || !$sizesToUpload[$size] || !$imageSizeDetails['enabled']) {
-                continue;
-            }
-
-            // this image size is enabled, and
-            // we have an uploaded image that we can use
+        foreach ((array)config('blogetc.image_sizes') as $size => $imageSizeDetails) {
             $uploadedImageDetails[$size] = $this->uploadAndResize(
                 null,
                 $imageTitle,
@@ -79,8 +90,14 @@ class UploadsService
             );
         }
 
-        // store the image data in db:
-        $this->create(null, $imageTitle, UploadedPhoto::SOURCE_IMAGE_UPLOAD, Auth::id(), $uploadedImageDetails);
+        // Store the image data in db:
+        $this->storeInDatabase(
+            null,
+            $imageTitle,
+            UploadedPhoto::SOURCE_IMAGE_UPLOAD,
+            Auth::id(),
+            $uploadedImageDetails
+        );
 
         return $uploadedImageDetails;
     }
@@ -99,15 +116,17 @@ class UploadsService
     }
 
     /**
+     * Resize and store an image.
+     *
      * @param Post $new_blog_post
      * @param $suggested_title - used to help generate the filename
-     * @param $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
+     * @param array|string $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
      * no size reduction, but will use this string to generate the filename)
      * @param $photo
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     protected function uploadAndResize(
         ?Post $new_blog_post,
@@ -140,35 +159,42 @@ class UploadsService
             $w = $resizedImage->width();
             $h = $resizedImage->height();
         } else {
-            throw new RuntimeException('Invalid image_size_details value of '.$imageSizeDetails);
+            throw new RuntimeException('Invalid image_size_details value of ' . $imageSizeDetails);
         }
 
-        // save image
-        $resizedImage->save($destinationPath.'/'.$image_filename, config('blogetc.image_quality', 80));
+        // What image quality to use?
+        $imageQuality = config('blogetc.image_quality', 80);
 
-        // fire event
+        // What format (e.g. .jpg):
+        $format = pathinfo($image_filename, PATHINFO_EXTENSION);
+
+        // Get the image data to store:
+        $resizedImageData = $resizedImage->encode($format, $imageQuality);
+
+        // Store on Laravel filesystem:
+        $this::disk()->put($destinationPath . '/' . $image_filename, $resizedImageData);
+
+        // fire UploadedImage event:
         event(new UploadedImage($image_filename, $resizedImage, $new_blog_post, __METHOD__));
 
         // return the filename and w/h details
         return [
             'filename' => $image_filename,
-            'w'        => $w,
-            'h'        => $h,
+            'w' => $w,
+            'h' => $h,
         ];
     }
 
     /**
      * Get a filename (that doesn't exist) on the filesystem.
      *
-     * Todo: support multiple filesystem locations.
-     *
      * @param string $suggested_title
      * @param $image_size_details - either an array (with w/h attributes) or a string
      * @param UploadedFile $photo
      *
+     * @return string
      * @throws RuntimeException
      *
-     * @return string
      */
     protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo): string
     {
@@ -176,15 +202,15 @@ class UploadsService
 
         // $wh will be something like "-1200x300"
         $wh = $this->getDimensions($image_size_details);
-        $ext = '.'.$photo->getClientOriginalExtension();
+        $ext = '.' . $photo->getClientOriginalExtension();
 
         for ($i = 1; $i <= self::$availableFilenameAttempts; $i++) {
             // add suffix if $i>1
-            $suffix = $i > 1 ? '-'.Str::random(5) : '';
+            $suffix = $i > 1 ? '-' . Str::random(5) : '';
 
-            $attempt = Str::slug($base.$suffix.$wh).$ext;
+            $attempt = Str::slug($base . $suffix . $wh) . $ext;
 
-            if (!File::exists($this->imageDestinationPath().'/'.$attempt)) {
+            if (!$this::disk()->exists($this->imageDestinationPath() . '/' . $attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -203,7 +229,7 @@ class UploadsService
     {
         $base = substr($suggestedTitle, 0, 100);
 
-        return $base ?: 'image-'.Str::random(5);
+        return $base ?: 'image-' . Str::random(5);
     }
 
     /**
@@ -225,18 +251,18 @@ class UploadsService
      *
      * @param array|string $imageSize
      *
+     * @return string
      * @throws RuntimeException
      *
-     * @return string
      */
     protected function getDimensions($imageSize): string
     {
         if (is_array($imageSize)) {
-            return '-'.$imageSize['w'].'x'.$imageSize['h'];
+            return '-' . $imageSize['w'] . 'x' . $imageSize['h'];
         }
 
         if (is_string($imageSize)) {
-            return '-'.Str::slug(substr($imageSize, 0, 30));
+            return '-' . Str::slug(substr($imageSize, 0, 30));
         }
 
         // was not a string or array, so error
@@ -244,51 +270,27 @@ class UploadsService
     }
 
     /**
+     * @return string
      * @throws RuntimeException
      *
-     * @return string
      */
     protected function imageDestinationPath(): string
     {
-        $path = public_path('/'.config('blogetc.blog_upload_dir'));
-
-        return $this->checkDestinationWritable($path);
-    }
-
-    /**
-     * Check if the image destination directory is writable.
-     * Throw an exception if it was not writable.
-     *
-     * @param $path
-     *
-     * @throws RuntimeException
-     *
-     * @return string
-     */
-    protected function checkDestinationWritable(string $path): string
-    {
-        if (!$this->checked_blog_image_dir_is_writable) {
-            if (!is_writable($path)) {
-                throw new RuntimeException("Image destination path is not writable ($path)");
-            }
-            $this->checked_blog_image_dir_is_writable = true;
-        }
-
-        return $path;
+        return config('blogetc.blog_upload_dir');
     }
 
     /**
      * Store new image upload meta data in database.
      *
      * @param int|null $blogPostID
-     * @param string   $imageTitle
-     * @param string   $source
+     * @param string $imageTitle
+     * @param string $source
      * @param int|null $uploaderID
-     * @param array    $uploadedImages
+     * @param array $uploadedImages
      *
      * @return UploadedPhoto
      */
-    protected function create(
+    protected function storeInDatabase(
         ?int $blogPostID,
         string $imageTitle,
         string $source,
@@ -296,12 +298,12 @@ class UploadsService
         array $uploadedImages
     ): UploadedPhoto {
         // store the image upload.
-        return UploadedPhoto::create([
+        return $this->repository->create([
             'blog_etc_post_id' => $blogPostID,
-            'image_title'      => $imageTitle,
-            'source'           => $source,
-            'uploader_id'      => $uploaderID,
-            'uploaded_images'  => $uploadedImages,
+            'image_title' => $imageTitle,
+            'source' => $source,
+            'uploader_id' => $uploaderID,
+            'uploaded_images' => $uploadedImages,
         ]);
     }
 
@@ -309,11 +311,11 @@ class UploadsService
      * Process any uploaded images (for featured image).
      *
      * @param PostRequest $request
-     * @param Post        $new_blog_post
-     *
-     * @throws Exception
+     * @param Post $new_blog_post
      *
      * @return array|null
+     *
+     * @throws Exception
      *
      * @todo - next full release, tidy this up!
      */
@@ -330,37 +332,44 @@ class UploadsService
         // to save in db later
         $uploaded_image_details = [];
 
-        foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
-            // TODO - add interface, or add to base request b/c get_image_file() isn't technically always be there
-            if ($image_size_details['enabled'] && $photo = $request->getImageSize($size)) {
-                // this image size is enabled, and
-                // we have an uploaded image that we can use
+        $enabledImageSizes = collect((array)config('blogetc.image_sizes'))
+            ->filter(function ($size) {
+                return !empty($size['enabled']);
+            });
 
-                // TODO - this method does not exist
-                $uploaded_image = $this->uploadAndResize(
-                    $new_blog_post,
-                    $new_blog_post->title,
-                    $image_size_details,
-                    $photo
-                );
+        foreach ($enabledImageSizes as $size => $image_size_details) {
+            $photo = $request->getImageSize($size);
 
-                $newSizes[$size] = $uploaded_image['filename'];
-
-                $uploaded_image_details[$size] = $uploaded_image;
+            if (!$photo) {
+                continue;
             }
+
+            $uploaded_image = $this->uploadAndResize(
+                $new_blog_post,
+                $new_blog_post->title,
+                $image_size_details,
+                $photo
+            );
+
+            $newSizes[$size] = $uploaded_image['filename'];
+
+            $uploaded_image_details[$size] = $uploaded_image;
         }
 
         // store the image upload.
-        // todo: link this to the blogetc_post row.
-        if (count(array_filter($uploaded_image_details)) > 0) {
-            $this->create(
-                $new_blog_post->id,
-                $new_blog_post->title,
-                UploadedPhoto::SOURCE_FEATURED_IMAGE,
-                Auth::id(),
-                $uploaded_image_details
-            );
+        if (empty($newSizes)) {
+            // Nothing to do if there were no sizes in config.
+            return null;
         }
+
+        // todo: link this to the blogetc_post row.
+        $this->storeInDatabase(
+            $new_blog_post->id,
+            $new_blog_post->title,
+            UploadedPhoto::SOURCE_FEATURED_IMAGE,
+            Auth::id(),
+            $uploaded_image_details
+        );
 
         return $newSizes;
     }

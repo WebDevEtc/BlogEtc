@@ -16,15 +16,7 @@ class UploadImageRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
-            'sizes_to_upload' => [
-                'required',
-                'array',
-            ],
-            'sizes_to_upload.*' => [
-                'string',
-                'max:100',
-            ],
+        return [
             'upload' => [
                 'required',
                 'image',
@@ -36,7 +28,5 @@ class UploadImageRequest extends FormRequest
                 'max:150',
             ],
         ];
-
-        return $rules;
     }
 }

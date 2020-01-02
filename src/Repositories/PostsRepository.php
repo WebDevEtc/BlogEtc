@@ -99,7 +99,7 @@ class PostsRepository
         try {
             return $this->query(true)->findOrFail($blogEtcPostID);
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with ID: '.$blogEtcPostID);
+            throw new PostNotFoundException('Unable to find blog post with ID: ' . $blogEtcPostID);
         }
     }
 
@@ -120,7 +120,7 @@ class PostsRepository
                 ->where('slug', $slug)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with slug: '.$slug);
+            throw new PostNotFoundException('Unable to find blog post with slug: ' . $slug);
         }
     }
 
@@ -143,7 +143,7 @@ class PostsRepository
      * @return bool
      * @throws Exception
      */
-    public function delete(int $postID):bool
+    public function delete(int $postID): bool
     {
         $post = $this->find($postID);
 
@@ -170,5 +170,22 @@ class PostsRepository
         }
 
         return $post;
+    }
+
+    /**
+     * Search for posts.
+     *
+     * This is a rough implementation - proper full text search has been removed in current version.
+     *
+     * @param string $query
+     * @param int $max
+     * @return Collection
+     */
+    public function search(string $query, int $max = 25): Collection
+    {
+        return $this->query(true)
+            ->where('title', 'like', '%' . $query)
+            ->limit($max)
+            ->get();
     }
 }

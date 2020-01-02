@@ -71,15 +71,13 @@ class ManageUploadsController extends Controller
      * @param UploadImageRequest $request
      *
      * @return Response
+     * @throws \Exception
      */
     public function store(UploadImageRequest $request): Response
     {
-        $sizeToUpload = $request->get('sizes_to_upload');
-
         $processed_images = $this->uploadsService->processUpload(
             $request->file('upload'),
-            $request->get('image_title'),
-            $sizeToUpload
+            $request->get('image_title')
         );
 
         return response()
