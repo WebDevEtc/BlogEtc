@@ -3,9 +3,7 @@
 namespace WebDevEtc\BlogEtc\Repositories;
 
 use Exception;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\PostNotFoundException;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -39,7 +37,7 @@ class UploadedPhotosRepository
     }
 
     /**
-     * Find a blog etc uploaded photo by ID
+     * Find a blog etc uploaded photo by ID.
      *
      * If cannot find, throw exception.
      *
@@ -53,7 +51,7 @@ class UploadedPhotosRepository
             return $this->query()
                 ->findOrFail($uploadedPhotoID);
         } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find Uploaded Photo with ID: ' . $uploadedPhotoID);
+            throw new PostNotFoundException('Unable to find Uploaded Photo with ID: '.$uploadedPhotoID);
         }
     }
 

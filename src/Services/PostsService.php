@@ -182,9 +182,9 @@ class PostsService
 
         $remainingPhotos = [];
 
-        foreach ((array)config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
-                $fullPath = config('blogetc.blog_upload_dir', 'blog_images') . '/' . $post->$imageSize;
+                $fullPath = config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize;
 
                 // there was record of this size in the db, so push it to array of featured photos which remain
                 // (Note: there is no check here to see if they actually exist on the filesystem).
@@ -227,7 +227,7 @@ class PostsService
      */
     protected function humanReadableFileSize(int $fileSize): string
     {
-        return round($fileSize / 1000, 1) . ' kb';
+        return round($fileSize / 1000, 1).' kb';
     }
 
     /**
@@ -243,5 +243,4 @@ class PostsService
     {
         return $this->repository->search($query, $max);
     }
-
 }

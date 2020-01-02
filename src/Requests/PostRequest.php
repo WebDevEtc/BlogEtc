@@ -113,7 +113,7 @@ class PostRequest extends FormRequest
         $showErrorIfHasValue = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value...
-                return $fail($attribute . ' must be empty');
+                return $fail($attribute.' must be empty');
             }
         };
 
@@ -143,9 +143,9 @@ class PostRequest extends FormRequest
                 'nullable',
                 'array',
                 static function ($attribute, $value, $fail) {
-                    foreach (array_keys((array)$value) as $categoryID) {
+                    foreach (array_keys((array) $value) as $categoryID) {
                         if (Category::where('id', $categoryID)->exists() === false) {
-                            $fail($attribute . ' is not a valid category id');
+                            $fail($attribute.' is not a valid category id');
                         }
                     }
                 },
@@ -161,7 +161,7 @@ class PostRequest extends FormRequest
         }
 
         // some additional rules for uploaded images
-        foreach ((array)config('blogetc.image_sizes') as $size => $image_detail) {
+        foreach ((array) config('blogetc.image_sizes') as $size => $image_detail) {
             if ($image_detail['enabled'] && config('blogetc.image_upload_enabled')) {
                 $return[$size] = ['nullable', 'image'];
             } else {
