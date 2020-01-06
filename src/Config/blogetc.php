@@ -173,5 +173,7 @@ return [
         'search_enabled' => false, // is search enabled? By default this is disabled, but you can easily turn it on.
     ],
 
+    'user_model'=>\App\User::class,
+
 
 ];
