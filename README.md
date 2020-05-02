@@ -1,6 +1,8 @@
-Package is in a rewrite (should be done by xmas 2019). Proper tests coming, unfortunately work has taken up a lot of my time since I first added this package, and I don't have time to get back to it and maintain it properly. The rewrite (which is just on the master branch...) has much better coding standards, proper unit/integration tests are intended to be added soon. The current versions on Packagist are on a different branch. I thought the rewrite would be a bit quicker! 
+Package is in a rewrite (should be done by summer 2020). Proper tests coming, unfortunately work has taken up a lot of my time since I first added this package, and I don't have time to get back to it and maintain it properly. The rewrite (which is just on the master branch...) has much better coding standards, proper unit/integration tests are intended to be added soon. The current versions on Packagist are on a different branch. I thought the rewrite would be a bit quicker! 
 
 Some older features will be stripped out. The next version will be a breaking change, but the code will be more maintainable. This package was originally (back in version 1) not really expecting to get any public use. The new version will handle more use cases easier.
+
+(The versions on packagist can be found on the `blogetc-legacy` branch.)
 
 # WebDevEtc BlogEtc
 <p align="center">## Easy to install Laravel Package for adding a full blog (with admin backend) to your Laravel app</p>
