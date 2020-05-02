@@ -63,7 +63,7 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
 
 ## What/who this package is for:
 
- - For websites running Laravel (5.6)
+ - For websites running Laravel (7 and higher)
  - Who want to have a site blog, and have an easy to use interface to write blog posts/assign categories/manage existing posts
  - Where only admin users can edit/manage the blog (this is not suitable for every user on your site to be able to manage posts)
  - Where you understand that posts can (potentially) contain JS or any other code, so you should only allow trusted admin users to add/edit/delete/manage the blog posts
@@ -153,6 +153,12 @@ Try adding this to config/app.php:
 
 
 
+- 7.1.4                 - updates fulltext search package which solves the search issue
+- 7.1.2                 - shows categories on blog home page - minor fix (if you upgrade try to re-publish view files)
+- 7.1.1                 - minor fix and some admin panel text changes
+- 7.1.0                 - Adds support for custom user model (if you upgrade, try to publish new config)
+- 7.0.2                 - Bug fix for listing posts and search page
+- 7.0.1                 - made compatible with Laravel 6.x & 7.x (via vhessam/laravel-blogger)
 - 3.1                   - minor fixes
 - 3.0.3                 - fixed RSS feed cache issue
 - 3.0.2                 - fixed default medium image size (changed to 600x400)
