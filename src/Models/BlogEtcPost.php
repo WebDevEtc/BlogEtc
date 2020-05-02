@@ -5,7 +5,7 @@ namespace WebDevEtc\BlogEtc\Models;
 use App\User;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
-use Swis\LaravelFulltext\Indexable;
+use Swis\Laravel\Fulltext\Indexable;
 use WebDevEtc\BlogEtc\Interfaces\SearchResultInterface;
 use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
 

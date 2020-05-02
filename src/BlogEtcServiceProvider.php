@@ -3,7 +3,7 @@
 namespace WebDevEtc\BlogEtc;
 
 use Illuminate\Support\ServiceProvider;
-use Swis\LaravelFulltext\ModelObserver;
+use Swis\Laravel\Fulltext\ModelObserver;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
 class BlogEtcServiceProvider extends ServiceProvider

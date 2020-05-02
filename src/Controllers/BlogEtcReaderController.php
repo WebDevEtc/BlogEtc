@@ -4,10 +4,11 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Swis\LaravelFulltext\Search;
+use Swis\Laravel\Fulltext\Search;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use Carbon\Carbon;
 
 /**
  * Class BlogEtcReaderController
@@ -43,7 +44,10 @@ class BlogEtcReaderController extends Controller
         }
 
         $posts = $posts->orderBy("posted_at", "desc")
-            ->paginate(config("blogetc.per_page", 10));
+            ->where('is_published', '=', 1)
+            ->where('posted_at', '<', Carbon::now())
+            ->orderBy('posted_at', 'desc')
+            ->paginate(config('blogetc.per_page', 10));
 
         return view("blogetc::index", [
             'posts' => $posts,
