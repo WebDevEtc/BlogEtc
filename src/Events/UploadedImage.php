@@ -2,20 +2,19 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
 /**
- * Class UploadedImage
- * @package WebDevEtc\BlogEtc\Events
+ * Class UploadedImage.
  */
 class UploadedImage
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var  BlogEtcPost|null */
+    /** @var BlogEtcPost|null */
     public $blogEtcPost;
     /**
      * @var
@@ -33,12 +32,11 @@ class UploadedImage
      * @param $image
      * @param $source string|null  the __METHOD__  firing this event (or other string)
      */
-    public function __construct(string $image_filename, $image,BlogEtcPost $blogEtcPost=null,string $source='other')
+    public function __construct(string $image_filename, $image, BlogEtcPost $blogEtcPost = null, string $source = 'other')
     {
         $this->image_filename = $image_filename;
-        $this->blogEtcPost=$blogEtcPost;
-        $this->image=$image;
-        $this->source=$source;
+        $this->blogEtcPost = $blogEtcPost;
+        $this->image = $image;
+        $this->source = $source;
     }
-
 }

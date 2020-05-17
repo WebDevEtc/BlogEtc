@@ -1,10 +1,11 @@
-<?php namespace WebDevEtc\BlogEtc\Interfaces;
+<?php
+
+namespace WebDevEtc\BlogEtc\Interfaces;
 
 interface CaptchaInterface
 {
-
     /**
-     * What should the field name be (in the <input type='text' name='????'>)
+     * What should the field name be (in the <input type='text' name='????'>).
      *
      * @return string
      */
@@ -24,7 +25,6 @@ interface CaptchaInterface
      */
     public function rules();
 
-
 //    // optional methods, which are run if method_exists($captcha,'...'):
 //    //  do a search in the project to see how they are used.
 
@@ -39,5 +39,4 @@ interface CaptchaInterface
 //     * @return void
 //     */
 //    public function runCaptchaBeforeAddingComment();
-
 }

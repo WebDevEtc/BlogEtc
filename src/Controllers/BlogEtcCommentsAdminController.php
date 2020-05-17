@@ -11,8 +11,7 @@ use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 
 /**
- * Class BlogEtcCommentsAdminController
- * @package WebDevEtc\BlogEtc\Controllers
+ * Class BlogEtcCommentsAdminController.
  */
 class BlogEtcCommentsAdminController extends Controller
 {
@@ -25,29 +24,29 @@ class BlogEtcCommentsAdminController extends Controller
     }
 
     /**
-     * Show all comments (and show buttons with approve/delete)
+     * Show all comments (and show buttons with approve/delete).
      *
      * @param Request $request
      * @return mixed
      */
     public function index(Request $request)
     {
-        $comments = BlogEtcComment::withoutGlobalScopes()->orderBy("created_at", "desc")
-            ->with("post");
+        $comments = BlogEtcComment::withoutGlobalScopes()->orderBy('created_at', 'desc')
+            ->with('post');
 
-        if ($request->get("waiting_for_approval")) {
-            $comments->where("approved", false);
+        if ($request->get('waiting_for_approval')) {
+            $comments->where('approved', false);
         }
 
         $comments = $comments->paginate(100);
-        return view("blogetc_admin::comments.index")
+
+        return view('blogetc_admin::comments.index')
             ->withComments($comments
             );
     }
 
-
     /**
-     * Approve a comment
+     * Approve a comment.
      *
      * @param $blogCommentId
      * @return \Illuminate\Http\RedirectResponse
@@ -58,15 +57,14 @@ class BlogEtcCommentsAdminController extends Controller
         $comment->approved = true;
         $comment->save();
 
-        Helpers::flash_message("Approved!");
+        Helpers::flash_message('Approved!');
         event(new CommentApproved($comment));
 
         return back();
-
     }
 
     /**
-     * Delete a submitted comment
+     * Delete a submitted comment.
      *
      * @param $blogCommentId
      * @return \Illuminate\Http\RedirectResponse
@@ -78,9 +76,8 @@ class BlogEtcCommentsAdminController extends Controller
 
         $comment->delete();
 
-        Helpers::flash_message("Deleted!");
+        Helpers::flash_message('Deleted!');
+
         return back();
     }
-
-
 }
