@@ -12,7 +12,6 @@ class DeleteBlogEtcPostRequest extends BaseRequest
     public function rules()
     {
         return [
-            //
         ];
     }
 }

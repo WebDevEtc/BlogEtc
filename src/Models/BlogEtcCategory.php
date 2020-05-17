@@ -22,6 +22,7 @@ class BlogEtcCategory extends Model
 
     /**
      * Returns the public facing URL of showing blog posts in this category.
+     *
      * @return string
      */
     public function url()
@@ -31,6 +32,7 @@ class BlogEtcCategory extends Model
 
     /**
      * Returns the URL for an admin user to edit this category.
+     *
      * @return string
      */
     public function edit_url()

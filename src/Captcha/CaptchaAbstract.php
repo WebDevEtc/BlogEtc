@@ -11,9 +11,6 @@ abstract class CaptchaAbstract implements CaptchaInterface
     /**
      * executed when viewing single post.
      *
-     * @param Request $request
-     * @param BlogEtcPost $blogEtcPost
-     *
      * @return void
      */
     public function runCaptchaBeforeShowingPosts(Request $request, BlogEtcPost $blogEtcPost)
@@ -35,9 +32,6 @@ abstract class CaptchaAbstract implements CaptchaInterface
 
     /**
      * executed when posting new comment.
-     *
-     * @param Request $request
-     * @param BlogEtcPost $blogEtcPost
      *
      * @return void
      */

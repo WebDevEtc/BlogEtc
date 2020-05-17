@@ -9,7 +9,7 @@
              <span class="text-muted">(<?php
                  $categoryCount = \WebDevEtc\BlogEtc\Models\BlogEtcPost::count();
 
-                 echo $categoryCount . " " . str_plural("Post", $categoryCount);
+                 echo $categoryCount.' '.str_plural('Post', $categoryCount);
 
                  ?>)</span>
             </h6>
@@ -39,7 +39,7 @@
                             <span class="text-muted">(<?php
                                 $commentCount = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->count();
 
-                                echo $commentCount . " " . str_plural("Comment", $commentCount);
+                                echo $commentCount.' '.str_plural('Comment', $commentCount);
 
                                 ?>)</span>
             </h6>
@@ -52,7 +52,7 @@
                     All Comments</a>
 
 
-                <?php $comment_approval_count = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->where("approved", false)->count(); ?>
+                <?php $comment_approval_count = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->where('approved', false)->count(); ?>
 
                 <a href='{{ route('blogetc.admin.comments.index') }}?waiting_for_approval=true'
                    class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.comments.index' && \Request::get("waiting_for_approval")) active @elseif($comment_approval_count>0) list-group-item-warning @endif  '><i
@@ -70,7 +70,7 @@
             <h6 class="my-0"><a href="{{ route('blogetc.admin.categories.index') }}">Categories</a>
                     <span class="text-muted">(<?php
                         $postCount = \WebDevEtc\BlogEtc\Models\BlogEtcCategory::count();
-                        echo $postCount . " " . str_plural("Category", $postCount);
+                        echo $postCount.' '.str_plural('Category', $postCount);
                         ?>)</span>
             </h6>
 

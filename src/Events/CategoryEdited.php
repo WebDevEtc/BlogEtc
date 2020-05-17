@@ -12,14 +12,15 @@ use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
  */
 class CategoryEdited
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var BlogEtcCategory */
     public $blogEtcCategory;
 
     /**
      * CategoryEdited constructor.
-     * @param BlogEtcCategory $blogEtcCategory
      */
     public function __construct(BlogEtcCategory $blogEtcCategory)
     {

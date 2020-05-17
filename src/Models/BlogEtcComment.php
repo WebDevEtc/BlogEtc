@@ -13,7 +13,6 @@ class BlogEtcComment extends Model
     ];
 
     public $fillable = [
-
         'comment',
         'author_name',
     ];
@@ -35,6 +34,7 @@ class BlogEtcComment extends Model
 
     /**
      * The associated BlogEtcPost.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function post()
@@ -44,6 +44,7 @@ class BlogEtcComment extends Model
 
     /**
      * Comment author user (if set).
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()

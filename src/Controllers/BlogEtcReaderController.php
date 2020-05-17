@@ -23,6 +23,7 @@ class BlogEtcReaderController extends Controller
      * If category_slug is set, then only show from that category.
      *
      * @param null $category_slug
+     *
      * @return mixed
      */
     public function index($category_slug = null)
@@ -57,13 +58,13 @@ class BlogEtcReaderController extends Controller
     /**
      * Show the search results for $_GET['s'].
      *
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function search(Request $request)
     {
-        if (!config('blogetc.search.search_enabled')) {
+        if (! config('blogetc.search.search_enabled')) {
             throw new \Exception('Search is disabled');
         }
         $query = $request->get('s');
@@ -80,6 +81,7 @@ class BlogEtcReaderController extends Controller
      *
      * @param Request $request
      * @param $category_slug
+     *
      * @return mixed
      */
     public function view_category($category_slug)
@@ -90,8 +92,8 @@ class BlogEtcReaderController extends Controller
     /**
      * View a single post and (if enabled) it's comments.
      *
-     * @param Request $request
      * @param $blogPostSlug
+     *
      * @return mixed
      */
     public function viewSinglePost(Request $request, $blogPostSlug)

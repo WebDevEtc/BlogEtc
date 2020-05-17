@@ -23,17 +23,18 @@ class BlogEtcImageUploadController extends Controller
     {
         $this->middleware(UserCanManageBlogPosts::class);
 
-        if (!is_array(config('blogetc'))) {
+        if (! is_array(config('blogetc'))) {
             throw new \RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
 
-        if (!config('blogetc.image_upload_enabled')) {
+        if (! config('blogetc.image_upload_enabled')) {
             throw new \RuntimeException('The blogetc.php config option has not enabled image uploading');
         }
     }
 
     /**
      * Show the main listing of uploaded images.
+     *
      * @return mixed
      */
     public function index()
@@ -54,9 +55,9 @@ class BlogEtcImageUploadController extends Controller
     /**
      * Save a new uploaded image.
      *
-     * @param UploadImageRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(UploadImageRequest $request)
     {
@@ -68,10 +69,10 @@ class BlogEtcImageUploadController extends Controller
     /**
      * Process any uploaded images (for featured image).
      *
-     * @param UploadImageRequest $request
-     *
-     * @return array returns an array of details about each file resized.
      * @throws \Exception
+     *
+     * @return array returns an array of details about each file resized
+     *
      * @todo - This class was added after the other main features, so this duplicates some code from the main blog post admin controller (BlogEtcAdminController). For next full release this should be tided up.
      */
     protected function processUploadedImages(UploadImageRequest $request)
@@ -85,12 +86,12 @@ class BlogEtcImageUploadController extends Controller
         $sizes_to_upload = $request->get('sizes_to_upload');
 
         // now upload a full size - this is a special case, not in the config file. We only store full size images in this class, not as part of the featured blog image uploads.
-        if (isset($sizes_to_upload['blogetc_full_size']) && $sizes_to_upload['blogetc_full_size'] === 'true') {
+        if (isset($sizes_to_upload['blogetc_full_size']) && 'true' === $sizes_to_upload['blogetc_full_size']) {
             $uploaded_image_details['blogetc_full_size'] = $this->UploadAndResize(null, $request->get('image_title'), 'fullsize', $photo);
         }
 
         foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
-            if (!isset($sizes_to_upload[$size]) || !$sizes_to_upload[$size] || !$image_size_details['enabled']) {
+            if (! isset($sizes_to_upload[$size]) || ! $sizes_to_upload[$size] || ! $image_size_details['enabled']) {
                 continue;
             }
 
@@ -101,9 +102,9 @@ class BlogEtcImageUploadController extends Controller
 
         // store the image upload.
         BlogEtcUploadedPhoto::create([
-            'image_title' => $request->get('image_title'),
-            'source' => 'ImageUpload',
-            'uploader_id' => optional(\Auth::user())->id,
+            'image_title'     => $request->get('image_title'),
+            'source'          => 'ImageUpload',
+            'uploader_id'     => optional(\Auth::user())->id,
             'uploaded_images' => $uploaded_image_details,
         ]);
 

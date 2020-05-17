@@ -10,6 +10,7 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
      * Shared rules for blog posts.
      *
      * @return array
+     *
      * @todo tidy this up! It is a bit of a mess!
      */
     protected function baseBlogPostRules()
@@ -41,13 +42,13 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
 
         // generate the main set of rules:
         $return = [
-            'posted_at' => ['nullable', $check_valid_posted_at],
-            'title' => ['required', 'string', 'min:1', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'min:1', 'max:255'],
-            'post_body' => ['required_without:use_view_file', 'max:2000000'], //medium text
-            'meta_desc' => ['nullable', 'string', 'min:1', 'max:1000'],
+            'posted_at'         => ['nullable', $check_valid_posted_at],
+            'title'             => ['required', 'string', 'min:1', 'max:255'],
+            'subtitle'          => ['nullable', 'string', 'min:1', 'max:255'],
+            'post_body'         => ['required_without:use_view_file', 'max:2000000'], //medium text
+            'meta_desc'         => ['nullable', 'string', 'min:1', 'max:1000'],
             'short_description' => ['nullable', 'string', 'max:30000'],
-            'slug' => [
+            'slug'              => [
                 'nullable', 'string', 'min:1', 'max:150', 'alpha_dash', // this field should have some additional rules, which is done in the subclasses.
             ],
             'categories' => ['nullable', 'array'],

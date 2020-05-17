@@ -12,14 +12,15 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class BlogPostWillBeDeleted
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var BlogEtcPost */
     public $blogEtcPost;
 
     /**
      * BlogPostWillBeDeleted constructor.
-     * @param BlogEtcPost $blogEtcPost
      */
     public function __construct(BlogEtcPost $blogEtcPost)
     {

@@ -31,7 +31,7 @@ class BlogEtcAdminController extends Controller
     {
         $this->middleware(UserCanManageBlogPosts::class);
 
-        if (!is_array(config('blogetc'))) {
+        if (! is_array(config('blogetc'))) {
             throw new \RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
     }
@@ -51,6 +51,7 @@ class BlogEtcAdminController extends Controller
 
     /**
      * Show form for creating new post.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create_post()
@@ -61,9 +62,9 @@ class BlogEtcAdminController extends Controller
     /**
      * Save a new post.
      *
-     * @param CreateBlogEtcPostRequest $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store_post(CreateBlogEtcPostRequest $request)
     {
@@ -71,7 +72,7 @@ class BlogEtcAdminController extends Controller
 
         $this->processUploadedImages($request, $new_blog_post);
 
-        if (!$new_blog_post->posted_at) {
+        if (! $new_blog_post->posted_at) {
             $new_blog_post->posted_at = Carbon::now();
         }
 
@@ -90,6 +91,7 @@ class BlogEtcAdminController extends Controller
      * Show form to edit post.
      *
      * @param $blogPostId
+     *
      * @return mixed
      */
     public function edit_post($blogPostId)
@@ -102,10 +104,11 @@ class BlogEtcAdminController extends Controller
     /**
      * Save changes to a post.
      *
-     * @param UpdateBlogEtcPostRequest $request
      * @param $blogPostId
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     *
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update_post(UpdateBlogEtcPostRequest $request, $blogPostId)
     {
@@ -127,8 +130,8 @@ class BlogEtcAdminController extends Controller
     /**
      * Delete a post.
      *
-     * @param DeleteBlogEtcPostRequest $request
      * @param $blogPostId
+     *
      * @return mixed
      */
     public function destroy_post(DeleteBlogEtcPostRequest $request, $blogPostId)
@@ -148,14 +151,15 @@ class BlogEtcAdminController extends Controller
     /**
      * Process any uploaded images (for featured image).
      *
-     * @param BaseRequestInterface $request
      * @param $new_blog_post
+     *
      * @throws \Exception
+     *
      * @todo - next full release, tidy this up!
      */
     protected function processUploadedImages(BaseRequestInterface $request, BlogEtcPost $new_blog_post)
     {
-        if (!config('blogetc.image_upload_enabled')) {
+        if (! config('blogetc.image_upload_enabled')) {
             // image upload was disabled
             return;
         }
@@ -181,7 +185,7 @@ class BlogEtcAdminController extends Controller
         // todo: link this to the blogetc_post row.
         if (count(array_filter($uploaded_image_details)) > 0) {
             BlogEtcUploadedPhoto::create([
-                'source' => 'BlogFeaturedImage',
+                'source'          => 'BlogFeaturedImage',
                 'uploaded_images' => $uploaded_image_details,
             ]);
         }

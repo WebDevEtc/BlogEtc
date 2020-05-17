@@ -12,14 +12,15 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class BlogPostAdded
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var BlogEtcPost */
     public $blogEtcPost;
 
     /**
      * BlogPostAdded constructor.
-     * @param BlogEtcPost $blogEtcPost
      */
     public function __construct(BlogEtcPost $blogEtcPost)
     {

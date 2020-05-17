@@ -99,8 +99,8 @@ class ManageCategoriesControllerTest extends TestCase
         $this->beAdminUser();
 
         $params = [
-            'category_name' => $this->faker->sentence,
-            'slug' => $this->faker->lexify('???????'),
+            'category_name'        => $this->faker->sentence,
+            'slug'                 => $this->faker->lexify('???????'),
             'category_description' => $this->faker->sentence,
         ];
 

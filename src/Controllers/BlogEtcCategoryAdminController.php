@@ -40,6 +40,7 @@ class BlogEtcCategoryAdminController extends Controller
 
     /**
      * Show the form for creating new category.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create_category()
@@ -50,7 +51,6 @@ class BlogEtcCategoryAdminController extends Controller
     /**
      * Store a new category.
      *
-     * @param StoreBlogEtcCategoryRequest $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store_category(StoreBlogEtcCategoryRequest $request)
@@ -67,7 +67,9 @@ class BlogEtcCategoryAdminController extends Controller
 
     /**
      * Show the edit form for category.
+     *
      * @param $categoryId
+     *
      * @return mixed
      */
     public function edit_category($categoryId)
@@ -80,8 +82,8 @@ class BlogEtcCategoryAdminController extends Controller
     /**
      * Save submitted changes.
      *
-     * @param UpdateBlogEtcCategoryRequest $request
      * @param $categoryId
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId)
@@ -100,13 +102,12 @@ class BlogEtcCategoryAdminController extends Controller
     /**
      * Delete the category.
      *
-     * @param DeleteBlogEtcCategoryRequest $request
      * @param $categoryId
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId)
     {
-
         /* Please keep this in, so code inspections don't say $request was unused. Of course it might now get marked as left/right parts are equal */
         $request = $request;
 

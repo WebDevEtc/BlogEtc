@@ -15,8 +15,8 @@ use WebDevEtc\BlogEtc\Requests\FeedRequest;
 class BlogEtcRssFeedController extends Controller
 {
     /**
-     * @param Feed $feed
      * @param $posts
+     *
      * @return mixed
      */
     protected function setupFeed(Feed $feed, $posts)
@@ -60,13 +60,10 @@ class BlogEtcRssFeedController extends Controller
      * This is a long (but quite simple) method to show an RSS feed
      * It makes use of Laravelium\Feed\Feed.
      *
-     * @param FeedRequest $request
-     * @param Feed $feed
      * @return mixed
      */
     public function feed(FeedRequest $request, Feed $feed)
     {
-
         // if a logged in user views the RSS feed it will get cached, and if they are an admin user then it'll show all posts (even if it is not set as published)
         $user_or_guest = \Auth::check() ? \Auth::user()->id : 'guest';
 
@@ -75,7 +72,7 @@ class BlogEtcRssFeedController extends Controller
             'blogetc-'.$request->getFeedType().$user_or_guest
         );
 
-        if (!$feed->isCached()) {
+        if (! $feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 

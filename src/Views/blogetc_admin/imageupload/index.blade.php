@@ -38,8 +38,7 @@
                         $smallest = null;
                         $smallest_size = -1;
                         foreach ($uploadedPhoto->uploaded_images as $file_key => $file) {
-                        $id = "uploaded_" . ($uploadedPhoto->id) . "_" . $file_key;
-                        ?>
+                            $id = 'uploaded_'.($uploadedPhoto->id).'_'.$file_key; ?>
 
 
                         <div class='col-md-12 '>
@@ -74,11 +73,10 @@
                         <?php
 
                         $area = $file['w'] * $file['h'];
-                        if ($area < $smallest_size || $smallest_size < 0) {
-                            $smallest = $file;
-                            $smallest_size = $area;
-                        }
-
+                            if ($area < $smallest_size || $smallest_size < 0) {
+                                $smallest = $file;
+                                $smallest_size = $area;
+                            }
                         }
 
                         ?>

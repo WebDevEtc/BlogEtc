@@ -15,7 +15,7 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (config('blogetc.search.search_enabled') == false) {
+        if (false == config('blogetc.search.search_enabled')) {
             // if search is disabled, don't allow it to sync.
             ModelObserver::disableSyncingFor(BlogEtcPost::class);
         }
@@ -36,8 +36,8 @@ class BlogEtcServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/Views/blogetc' => base_path('resources/views/vendor/blogetc'),
-            __DIR__.'/Config/blogetc.php' => config_path('blogetc.php'),
+            __DIR__.'/Views/blogetc'             => base_path('resources/views/vendor/blogetc'),
+            __DIR__.'/Config/blogetc.php'        => config_path('blogetc.php'),
             __DIR__.'/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
         ]);
     }
@@ -49,7 +49,6 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         // for the admin backend views ( view("blogetc_admin::BLADEFILE") )
         $this->loadViewsFrom(__DIR__.'/Views/blogetc_admin', 'blogetc_admin');
 
