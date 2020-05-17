@@ -28,7 +28,7 @@ class ManagePostsController extends Controller
     {
         $this->service = $blogEtcPostsService;
 
-        if (! is_array(config('blogetc'))) {
+        if (!is_array(config('blogetc'))) {
             throw new RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc'.' package by running the php artisan publish:vendor command');
         }
     }
