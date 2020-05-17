@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master)](https://travis-ci.org/WebDevEtc/BlogEtc)
 
 # Webdevetc BlogEtc
 
@@ -5,7 +6,9 @@
  - Works with latest version of Laravel.
  
 # Next version - coming soon
- - A rewrite of a lot of the code will be released soon. The work for this is now on the `blogetc-next-version` branch. Code there is liable to change.
+
+ - A rewrite of a lot of the code will be released soon. The work for this is now on the `blogetc-next-version` branch. Code there is liable to change. 
+ - May 2020: I am importing some of the changes from next version (including tests). I am slowly introducing these new features. Tests currently have a few skipped tests just to make migration of test code later a bit easier.
                                                                                            
 This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything you need to quickly and easily add a blog to your laravel app.
 
