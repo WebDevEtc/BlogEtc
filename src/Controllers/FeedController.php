@@ -17,8 +17,6 @@ class FeedController extends Controller
 
     /**
      * BlogEtcRssFeedController constructor.
-     *
-     * @param FeedService $feedService
      */
     public function __construct(FeedService $feedService)
     {
@@ -27,9 +25,6 @@ class FeedController extends Controller
 
     /**
      * RSS Feed controller.
-     *
-     * @param FeedRequest $request
-     * @param Feed        $feed
      *
      * @return mixed
      */

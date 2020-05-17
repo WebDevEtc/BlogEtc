@@ -20,8 +20,6 @@ class ManageCommentsController extends Controller
 
     /**
      * BlogEtcCommentsAdminController constructor.
-     *
-     * @param CommentsService $service
      */
     public function __construct(CommentsService $service)
     {
@@ -30,8 +28,6 @@ class ManageCommentsController extends Controller
 
     /**
      * Show all comments (and show buttons with approve/delete).
-     *
-     * @param Request $request
      *
      * @return mixed
      */
@@ -55,8 +51,6 @@ class ManageCommentsController extends Controller
      * Approve a comment.
      *
      * @param $blogCommentID
-     *
-     * @return RedirectResponse
      */
     public function approve(int $blogCommentID): RedirectResponse
     {
@@ -73,8 +67,6 @@ class ManageCommentsController extends Controller
      * @param $blogCommentID
      *
      * @throws Exception
-     *
-     * @return RedirectResponse
      */
     public function destroy(int $blogCommentID): RedirectResponse
     {

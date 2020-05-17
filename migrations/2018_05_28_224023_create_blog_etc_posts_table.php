@@ -11,8 +11,6 @@ class CreateBlogEtcPostsTable extends Migration
 {
     /**
      * Initial DB table setup for blog etc package.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -84,8 +82,6 @@ class CreateBlogEtcPostsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

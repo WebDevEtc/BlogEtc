@@ -12,7 +12,8 @@ use WebDevEtc\BlogEtc\Models\Post;
  */
 class UploadedImage
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /** @var string */
     public $imageFilename;
@@ -28,10 +29,8 @@ class UploadedImage
      *
      * $source =  the method name which was firing this event (or other string)
      *
-     * @param string      $imageFilename - the new filename
-     * @param Post        $post
-     * @param Image       $image
-     * @param string|null $source
+     * @param string $imageFilename - the new filename
+     * @param Post   $post
      */
     public function __construct(
         string $imageFilename,

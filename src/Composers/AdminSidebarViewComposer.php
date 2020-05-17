@@ -17,8 +17,6 @@ class AdminSidebarViewComposer
 {
     /**
      * Set up view parameters for the default admin panel.
-     *
-     * @param View $view
      */
     public function compose(View $view): void
     {

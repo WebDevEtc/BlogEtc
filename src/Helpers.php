@@ -17,8 +17,6 @@ class Helpers
     /**
      * Set a new flash message - used in the BlogEtc Admin panel to flash messages to user
      * such as 'post created'.
-     *
-     * @param string $message
      */
     public static function flashMessage(string $message): void
     {
@@ -27,8 +25,6 @@ class Helpers
 
     /**
      * Is there a flashed message?
-     *
-     * @return bool
      */
     public static function hasFlashedMessage(): bool
     {
@@ -47,8 +43,6 @@ class Helpers
 
     /**
      * Use this in your blade/template files, within <head> to auto insert the links to rss feed.
-     *
-     * @return string
      */
     public static function rssHtmlTag(): string
     {
@@ -61,8 +55,6 @@ class Helpers
     //## Depreciated methods:
 
     /**
-     * @return string|null
-     *
      * @deprecated use pullFlashedMessage() instead
      */
     public static function pull_flashed_message(): ?string
@@ -71,8 +63,6 @@ class Helpers
     }
 
     /**
-     * @return bool
-     *
      * @deprecated use hasFlashedMessage() instead
      */
     public static function has_flashed_message(): bool
@@ -81,8 +71,6 @@ class Helpers
     }
 
     /**
-     * @param string $message
-     *
      * @deprecated use flashMessage() instead
      */
     public static function flash_message(string $message): void
@@ -91,8 +79,6 @@ class Helpers
     }
 
     /**
-     * @return string
-     *
      * @deprecated use rssHtmlTag() instead
      */
     public static function rss_html_tag(): string
@@ -102,8 +88,6 @@ class Helpers
 
     /**
      * This method is depreciated. Just use the config() directly.
-     *
-     * @return array
      *
      * @deprecated
      */

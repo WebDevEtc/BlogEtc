@@ -11,8 +11,6 @@ class UploadImageRequest extends FormRequest
 {
     /**
      * Rules for uploads.
-     *
-     * @return array
      */
     public function rules(): array
     {

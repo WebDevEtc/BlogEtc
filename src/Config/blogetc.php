@@ -86,7 +86,6 @@ return [
 
     // Array of image sizes.
     'image_sizes' => [
-
         // if you set 'enabled' to false, it will clear any data for that field the next time any row is updated.
         // However it will NOT delete the .jpg file on your file server.
         // I recommend that you only change the enabled field before any images have been uploaded!

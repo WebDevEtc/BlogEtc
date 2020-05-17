@@ -22,8 +22,6 @@ class FeedService
 
     /**
      * FeedService constructor.
-     *
-     * @param PostsService $postsService
      */
     public function __construct(PostsService $postsService)
     {
@@ -32,9 +30,6 @@ class FeedService
 
     /**
      * Build the Feed object and populate it with blog posts.
-     *
-     * @param Feed $feed
-     * @param string $feedType
      *
      * @return view
      */
@@ -57,7 +52,7 @@ class FeedService
             $key
         );
 
-        if (!$feed->isCached()) {
+        if (! $feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 
@@ -93,11 +88,6 @@ class FeedService
 
     /**
      * Basic set up of the Feed object.
-     *
-     * @param Feed $feed
-     * @param Carbon $pubDate
-     *
-     * @return Feed
      */
     protected function setupFeed(Feed $feed, Carbon $pubDate): Feed
     {
@@ -115,10 +105,6 @@ class FeedService
 
     /**
      * Return the first post posted_at date, or if none exist then return today.
-     *
-     * @param Collection $blogPosts
-     *
-     * @return Carbon
      */
     protected function pubDate(Collection $blogPosts): Carbon
     {

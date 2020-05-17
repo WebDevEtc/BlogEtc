@@ -11,8 +11,6 @@ class CreateBlogEtcUploadedPhotosTable extends Migration
 {
     /**
      * Create the DB table for Blog Etc photos.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -32,8 +30,6 @@ class CreateBlogEtcUploadedPhotosTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

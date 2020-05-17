@@ -30,10 +30,6 @@ class CommentsController extends Controller
 
     /**
      * BlogEtcCommentWriterController constructor.
-     *
-     * @param PostsService    $postsService
-     * @param CommentsService $commentsService
-     * @param CaptchaService  $captchaService
      */
     public function __construct(
         PostsService $postsService,
@@ -48,7 +44,6 @@ class CommentsController extends Controller
     /**
      * Let a guest (or logged in user) submit a new comment for a blog post.
      *
-     * @param CommentRequest $request
      * @param $slug
      *
      * @throws Exception
@@ -57,7 +52,7 @@ class CommentsController extends Controller
      */
     public function store(CommentRequest $request, string $slug)
     {
-        if (config('blogetc.comments.type_of_comments_to_show') !== CommentsService::COMMENT_TYPE_BUILT_IN) {
+        if (CommentsService::COMMENT_TYPE_BUILT_IN !== config('blogetc.comments.type_of_comments_to_show')) {
             throw new RuntimeException('Built in comments are disabled');
         }
 

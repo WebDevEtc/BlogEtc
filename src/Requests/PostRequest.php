@@ -16,13 +16,11 @@ class PostRequest extends FormRequest
 {
     /**
      * If $_GET['category'] slugs were submitted, then it should return an array of the IDs.
-     *
-     * @return array
      */
     public function categories(): array
     {
         // check if categories were submitted, it not return an empty array
-        if (!$this->get('category') || !is_array($this->get('category'))) {
+        if (! $this->get('category') || ! is_array($this->get('category'))) {
             return [];
         }
 
@@ -44,8 +42,6 @@ class PostRequest extends FormRequest
      * If it does not exist, try and find an alternative uploaded image in a different size.
      *
      * @param $size
-     *
-     * @return UploadedFile|null
      */
     public function getImageSize($size): ?UploadedFile
     {
@@ -65,19 +61,17 @@ class PostRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
-        if ($this->method() === Request::METHOD_DELETE) {
+        if (Request::METHOD_DELETE === $this->method()) {
             // No rules are required for deleting.
             return [];
         }
 
         $rules = $this->sharedRules();
 
-        if ($this->method() === Request::METHOD_POST) {
+        if (Request::METHOD_POST === $this->method()) {
             $rules['slug'][] = Rule::unique('blog_etc_posts', 'slug');
         }
 
@@ -91,8 +85,6 @@ class PostRequest extends FormRequest
 
     /**
      * Shared rules for blog posts.
-     *
-     * @return array
      *
      * @todo - Refactor! This is a mess.
      */
@@ -126,13 +118,13 @@ class PostRequest extends FormRequest
 
         // generate the main set of rules:
         $return = [
-            'posted_at' => ['nullable', $checkValidPostedAt],
-            'title' => ['required', 'string', 'min:1', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'min:1', 'max:255'],
-            'post_body' => ['required_without:use_view_file', 'max:2000000'], //medium text
-            'meta_desc' => ['nullable', 'string', 'min:1', 'max:1000'],
+            'posted_at'         => ['nullable', $checkValidPostedAt],
+            'title'             => ['required', 'string', 'min:1', 'max:255'],
+            'subtitle'          => ['nullable', 'string', 'min:1', 'max:255'],
+            'post_body'         => ['required_without:use_view_file', 'max:2000000'], //medium text
+            'meta_desc'         => ['nullable', 'string', 'min:1', 'max:1000'],
             'short_description' => ['nullable', 'string', 'max:30000'],
-            'slug' => [
+            'slug'              => [
                 'nullable',
                 'string',
                 'min:1',
@@ -144,7 +136,7 @@ class PostRequest extends FormRequest
                 'array',
                 static function ($attribute, $value, $fail) {
                     foreach (array_keys((array) $value) as $categoryID) {
-                        if (Category::where('id', $categoryID)->exists() === false) {
+                        if (false === Category::where('id', $categoryID)->exists()) {
                             $fail($attribute.' is not a valid category id');
                         }
                     }
@@ -175,8 +167,6 @@ class PostRequest extends FormRequest
 
     /**
      * @param $size
-     *
-     * @return UploadedFile|null
      *
      * @deprecated - use getImageSize() instead
      */

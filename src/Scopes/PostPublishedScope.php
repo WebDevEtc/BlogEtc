@@ -15,11 +15,6 @@ class PostPublishedScope implements Scope
 {
     /**
      * For normal users, add a global scope for BlogEtcPosts to never return unpublished posts.
-     *
-     * @param Builder $builder
-     * @param Model   $model
-     *
-     * @return void
      */
     public function apply(Builder $builder, Model $model): void
     {

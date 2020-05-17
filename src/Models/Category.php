@@ -38,8 +38,6 @@ class Category extends Model
 
     /**
      * BlogEtcPost relationship.
-     *
-     * @return BelongsToMany
      */
     public function posts(): BelongsToMany
     {
@@ -53,8 +51,6 @@ class Category extends Model
 
     /**
      * Returns the public facing URL of showing blog posts in this category.
-     *
-     * @return string
      */
     public function url(): string
     {
@@ -63,8 +59,6 @@ class Category extends Model
 
     /**
      * Returns the URL for an admin user to edit this category.
-     *
-     * @return string
      */
     public function editUrl(): string
     {
@@ -72,8 +66,6 @@ class Category extends Model
     }
 
     /**
-     * @return string
-     *
      * @deprecated - use editUrl() instead
      */
     public function edit_url(): string

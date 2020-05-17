@@ -11,15 +11,14 @@ use WebDevEtc\BlogEtc\Models\Comment;
  */
 class CommentWillBeDeleted
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /** @var Comment */
     public $comment;
 
     /**
      * CommentWillBeDeleted constructor.
-     *
-     * @param Comment $comment
      */
     public function __construct(Comment $comment)
     {

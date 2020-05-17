@@ -20,8 +20,6 @@ class ManageCategoriesController extends Controller
 
     /**
      * BlogEtcCategoryAdminController constructor.
-     *
-     * @param CategoriesService $service
      */
     public function __construct(CategoriesService $service)
     {
@@ -47,8 +45,6 @@ class ManageCategoriesController extends Controller
 
     /**
      * Show the form for creating new category.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -57,10 +53,6 @@ class ManageCategoriesController extends Controller
 
     /**
      * Store a new category.
-     *
-     * @param CategoryRequest $request
-     *
-     * @return RedirectResponse
      */
     public function store(CategoryRequest $request): RedirectResponse
     {
@@ -73,10 +65,6 @@ class ManageCategoriesController extends Controller
 
     /**
      * Show the edit form for category.
-     *
-     * @param int $categoryID
-     *
-     * @return View
      */
     public function edit(int $categoryID): View
     {
@@ -92,11 +80,6 @@ class ManageCategoriesController extends Controller
 
     /**
      * Update a blog category attributes.
-     *
-     * @param CategoryRequest $request
-     * @param int             $categoryID
-     *
-     * @return RedirectResponse
      */
     public function update(CategoryRequest $request, int $categoryID): RedirectResponse
     {
@@ -110,12 +93,7 @@ class ManageCategoriesController extends Controller
     /**
      * Delete the category.
      *
-     * @param CategoryRequest $request
-     * @param int             $categoryID
-     *
      * @throws Exception
-     *
-     * @return View
      */
     public function destroy(CategoryRequest $request, int $categoryID): View
     {

@@ -14,18 +14,14 @@ class CommentRequest extends FormRequest
 {
     /**
      * Can user add new comments?
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
-        return config('blogetc.comments.type_of_comments_to_show') === CommentsService::COMMENT_TYPE_BUILT_IN;
+        return CommentsService::COMMENT_TYPE_BUILT_IN === config('blogetc.comments.type_of_comments_to_show');
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {

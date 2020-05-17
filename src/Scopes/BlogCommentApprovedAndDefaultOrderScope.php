@@ -17,11 +17,6 @@ class BlogCommentApprovedAndDefaultOrderScope implements Scope
      * We do not support comment threads/replies.
      *
      * In the admin panel we disable this scope with ::withoutGlobalScopes() or ::withoutGlobalScope(...)
-     *
-     * @param Builder $builder
-     * @param Model   $model
-     *
-     * @return void
      */
     public function apply(Builder $builder, Model $model): void
     {

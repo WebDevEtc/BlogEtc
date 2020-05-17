@@ -11,8 +11,6 @@ class AddAuthorAndUrlBlogEtcPostsTable extends Migration
 {
     /**
      * Add author_email and author_website columns to Blog Etc comments table.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -24,8 +22,6 @@ class AddAuthorAndUrlBlogEtcPostsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

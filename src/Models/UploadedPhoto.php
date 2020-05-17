@@ -64,8 +64,6 @@ class UploadedPhoto extends Model
 
     /**
      * Relationship for the user.
-     *
-     * @return BelongsTo
      */
     public function uploader(): BelongsTo
     {
@@ -74,8 +72,6 @@ class UploadedPhoto extends Model
 
     /**
      * Relationship for a blog post for which this image is a featured image.
-     *
-     * @return BelongsTo
      */
     public function blogPost(): BelongsTo
     {

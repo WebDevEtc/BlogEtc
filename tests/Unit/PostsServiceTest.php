@@ -181,27 +181,21 @@ class PostsServiceTest extends TestCase
 
     /**
      * Helper method to set up the params for editing/creating.
-     *
-     * @return array
      */
     private function createParams(): array
     {
         return [
-            'posted_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'title' => $this->faker->sentence,
-            'subtitle' => $this->faker->sentence,
-            'post_body' => $this->faker->paragraph,
-            'meta_desc' => $this->faker->paragraph,
+            'posted_at'         => Carbon::now()->format('Y-m-d H:i:s'),
+            'title'             => $this->faker->sentence,
+            'subtitle'          => $this->faker->sentence,
+            'post_body'         => $this->faker->paragraph,
+            'meta_desc'         => $this->faker->paragraph,
             'short_description' => $this->faker->paragraph,
-            'slug' => $this->faker->asciify('*********'),
-            'categories' => null,
+            'slug'              => $this->faker->asciify('*********'),
+            'categories'        => null,
         ];
     }
 
-    /**
-     * @param array $params
-     * @return PostRequest
-     */
     public function createRequest(array $params): PostRequest
     {
         // Not testing the request, just mock it and what it returns.

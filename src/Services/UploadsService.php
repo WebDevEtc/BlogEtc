@@ -60,8 +60,7 @@ class UploadsService
      * Handle an image upload via the upload image section (not blog post featured image).
      *
      * @param $uploadedImage
-     * @param string $imageTitle
-     * @return array
+     *
      * @throws Exception
      */
     public function processUpload($uploadedImage, string $imageTitle): array
@@ -120,10 +119,9 @@ class UploadsService
      * @param Post $new_blog_post
      * @param $suggested_title - used to help generate the filename
      * @param array|string $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
-     * no size reduction, but will use this string to generate the filename)
+     *                                       no size reduction, but will use this string to generate the filename)
      * @param $photo
      *
-     * @return array
      * @throws Exception
      */
     protected function uploadAndResize(
@@ -151,7 +149,7 @@ class UploadsService
                     $constraint->aspectRatio();
                 });
             }
-        } elseif ($imageSizeDetails === 'fullsize') {
+        } elseif ('fullsize' === $imageSizeDetails) {
             // nothing to do here - no resizing needed.
             // We just need to set $w/$h with the original w/h values
             $w = $resizedImage->width();
@@ -178,19 +176,16 @@ class UploadsService
         // return the filename and w/h details
         return [
             'filename' => $image_filename,
-            'w' => $w,
-            'h' => $h,
+            'w'        => $w,
+            'h'        => $h,
         ];
     }
 
     /**
      * Get a filename (that doesn't exist) on the filesystem.
      *
-     * @param string $suggested_title
      * @param $image_size_details - either an array (with w/h attributes) or a string
-     * @param UploadedFile $photo
      *
-     * @return string
      * @throws RuntimeException
      */
     protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo): string
@@ -201,13 +196,13 @@ class UploadsService
         $wh = $this->getDimensions($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$availableFilenameAttempts; $i++) {
+        for ($i = 1; $i <= self::$availableFilenameAttempts; ++$i) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.Str::random(5) : '';
 
             $attempt = Str::slug($base.$suffix.$wh).$ext;
 
-            if (!$this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
+            if (! $this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -217,11 +212,6 @@ class UploadsService
         throw new RuntimeException("Unable to find a free filename after $i attempts - aborting now.");
     }
 
-    /**
-     * @param string $suggestedTitle
-     *
-     * @return string
-     */
     protected function baseFilename(string $suggestedTitle): string
     {
         $base = substr($suggestedTitle, 0, 100);
@@ -248,7 +238,6 @@ class UploadsService
      *
      * @param array|string $imageSize
      *
-     * @return string
      * @throws RuntimeException
      */
     protected function getDimensions($imageSize): string
@@ -266,7 +255,6 @@ class UploadsService
     }
 
     /**
-     * @return string
      * @throws RuntimeException
      */
     protected function imageDestinationPath(): string
@@ -276,14 +264,6 @@ class UploadsService
 
     /**
      * Store new image upload meta data in database.
-     *
-     * @param int|null $blogPostID
-     * @param string $imageTitle
-     * @param string $source
-     * @param int|null $uploaderID
-     * @param array $uploadedImages
-     *
-     * @return UploadedPhoto
      */
     protected function storeInDatabase(
         ?int $blogPostID,
@@ -295,20 +275,15 @@ class UploadsService
         // store the image upload.
         return $this->repository->create([
             'blog_etc_post_id' => $blogPostID,
-            'image_title' => $imageTitle,
-            'source' => $source,
-            'uploader_id' => $uploaderID,
-            'uploaded_images' => $uploadedImages,
+            'image_title'      => $imageTitle,
+            'source'           => $source,
+            'uploader_id'      => $uploaderID,
+            'uploaded_images'  => $uploadedImages,
         ]);
     }
 
     /**
      * Process any uploaded images (for featured image).
-     *
-     * @param PostRequest $request
-     * @param Post $new_blog_post
-     *
-     * @return array|null
      *
      * @throws Exception
      *
@@ -316,7 +291,7 @@ class UploadsService
      */
     public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
     {
-        if (!config('blogetc.image_upload_enabled')) {
+        if (! config('blogetc.image_upload_enabled')) {
             // image upload was disabled
             return null;
         }
@@ -329,13 +304,13 @@ class UploadsService
 
         $enabledImageSizes = collect((array) config('blogetc.image_sizes'))
             ->filter(function ($size) {
-                return !empty($size['enabled']);
+                return ! empty($size['enabled']);
             });
 
         foreach ($enabledImageSizes as $size => $image_size_details) {
             $photo = $request->getImageSize($size);
 
-            if (!$photo) {
+            if (! $photo) {
                 continue;
             }
 

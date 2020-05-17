@@ -22,8 +22,6 @@ class PostsRepository
 
     /**
      * BlogEtcPostsRepository constructor.
-     *
-     * @param Post $model
      */
     public function __construct(Post $model)
     {
@@ -33,10 +31,7 @@ class PostsRepository
     /**
      * Return blog posts ordered by posted_at, paginated.
      *
-     * @param int $perPage
      * @param int $categoryID
-     *
-     * @return LengthAwarePaginator
      */
     public function indexPaginated(int $perPage = 10, int $categoryID = null): LengthAwarePaginator
     {
@@ -68,16 +63,12 @@ class PostsRepository
 
     /**
      * Return new instance of the Query Builder for this model.
-     *
-     * @param bool $eagerLoad
-     *
-     * @return Builder
      */
     public function query(bool $eagerLoad = false): Builder
     {
         $queryBuilder = $this->model->newQuery();
 
-        if ($eagerLoad === true) {
+        if (true === $eagerLoad) {
             // eager load the categories relationship.
             // Comments probably don't need to be loaded for most queries.
             $queryBuilder->with(['categories']);
@@ -89,10 +80,6 @@ class PostsRepository
     /**
      * Find a blog etc post by ID
      * If cannot find, throw exception.
-     *
-     * @param int $blogEtcPostID
-     *
-     * @return Post
      */
     public function find(int $blogEtcPostID): Post
     {
@@ -106,10 +93,6 @@ class PostsRepository
     /**
      * Find a blog etc post by ID
      * If cannot find, throw exception.
-     *
-     * @param string $slug
-     *
-     * @return Post
      */
     public function findBySlug(string $slug): Post
     {
@@ -126,10 +109,6 @@ class PostsRepository
 
     /**
      * Create a new BlogEtcPost post.
-     *
-     * @param array $attributes
-     *
-     * @return Post
      */
     public function create(array $attributes): Post
     {
@@ -139,8 +118,6 @@ class PostsRepository
     /**
      * Delete a post.
      *
-     * @param int $postID
-     * @return bool
      * @throws Exception
      */
     public function delete(int $postID): bool
@@ -153,10 +130,7 @@ class PostsRepository
     /**
      * Update image sizes (or in theory any attribute) on a blog etc post.
      *
-     * @param Post $post
      * @param array $uploadedImages
-     *
-     * @return Post
      */
     public function updateImageSizes(Post $post, ?array $uploadedImages): Post
     {
@@ -176,10 +150,6 @@ class PostsRepository
      * Search for posts.
      *
      * This is a rough implementation - proper full text search has been removed in current version.
-     *
-     * @param string $query
-     * @param int $max
-     * @return Collection
      */
     public function search(string $query, int $max = 25): Collection
     {

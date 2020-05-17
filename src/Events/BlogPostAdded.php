@@ -11,15 +11,14 @@ use WebDevEtc\BlogEtc\Models\Post;
  */
 class BlogPostAdded
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /** @var Post */
     public $post;
 
     /**
      * BlogPostAdded constructor.
-     *
-     * @param Post $post
      */
     public function __construct(Post $post)
     {

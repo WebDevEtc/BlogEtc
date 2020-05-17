@@ -12,7 +12,8 @@ use WebDevEtc\BlogEtc\Models\Post;
  */
 class CommentAdded
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /** @var Post */
     public $post;
@@ -22,9 +23,6 @@ class CommentAdded
 
     /**
      * CommentAdded constructor.
-     *
-     * @param Post    $post
-     * @param Comment $newComment
      */
     public function __construct(Post $post, Comment $newComment)
     {

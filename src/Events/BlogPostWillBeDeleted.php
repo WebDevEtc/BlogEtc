@@ -11,15 +11,14 @@ use WebDevEtc\BlogEtc\Models\Post;
  */
 class BlogPostWillBeDeleted
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /** @var Post */
     public $post;
 
     /**
      * BlogPostWillBeDeleted constructor.
-     *
-     * @param Post $post
      */
     public function __construct(Post $post)
     {

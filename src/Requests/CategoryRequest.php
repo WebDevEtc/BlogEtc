@@ -13,12 +13,10 @@ class CategoryRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
     public function rules(): array
     {
-        if ($this->method() === Request::METHOD_DELETE) {
+        if (Request::METHOD_DELETE === $this->method()) {
             // No rules are required for deleting.
             return [];
         }
@@ -28,7 +26,7 @@ class CategoryRequest extends FormRequest
             'category_description' => ['nullable', 'string', 'min:1', 'max:5000'],
         ];
 
-        if ($this->method() === Request::METHOD_POST) {
+        if (Request::METHOD_POST === $this->method()) {
             $rules['slug'][] = Rule::unique('blog_etc_categories', 'slug');
         }
 

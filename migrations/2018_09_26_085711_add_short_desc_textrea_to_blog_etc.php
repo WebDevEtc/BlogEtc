@@ -13,8 +13,6 @@ class AddShortDescTextreaToBlogEtc extends Migration
 {
     /**
      * Create the DB table changes to add TEXT short_description column.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -25,8 +23,6 @@ class AddShortDescTextreaToBlogEtc extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {

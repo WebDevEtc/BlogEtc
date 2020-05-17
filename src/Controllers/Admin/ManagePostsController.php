@@ -23,25 +23,18 @@ class ManagePostsController extends Controller
 
     /**
      * BlogEtcAdminController constructor.
-     *
-     * @param PostsService $blogEtcPostsService
      */
     public function __construct(PostsService $blogEtcPostsService)
     {
         $this->service = $blogEtcPostsService;
 
-        if (!is_array(config('blogetc'))) {
-            throw new RuntimeException(
-                'The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc'.
-                ' package by running the php artisan publish:vendor command'
-            );
+        if (! is_array(config('blogetc'))) {
+            throw new RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc'.' package by running the php artisan publish:vendor command');
         }
     }
 
     /**
      * View all posts (paginated).
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -52,8 +45,6 @@ class ManagePostsController extends Controller
 
     /**
      * Show form for creating new post.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -63,11 +54,7 @@ class ManagePostsController extends Controller
     /**
      * Save a new post.
      *
-     * @param PostRequest $request
-     *
      * @throws Exception
-     *
-     * @return RedirectResponse
      */
     public function store(PostRequest $request): RedirectResponse
     {
@@ -82,8 +69,6 @@ class ManagePostsController extends Controller
      * Show form to edit post.
      *
      * @param $blogPostId
-     *
-     * @return View
      */
     public function edit(int $blogPostId): View
     {
@@ -95,12 +80,7 @@ class ManagePostsController extends Controller
     /**
      * Save changes to a post.
      *
-     * @param PostRequest $request
-     * @param int         $blogPostID
-     *
      * @throws Exception
-     *
-     * @return RedirectResponse
      */
     public function update(PostRequest $request, int $blogPostID): RedirectResponse
     {
@@ -114,12 +94,7 @@ class ManagePostsController extends Controller
     /**
      * Delete a post - removes it from the database, does not remove any featured images associated with the blog post.
      *
-     * @param PostRequest $request
-     * @param int         $blogPostID
-     *
      * @throws Exception
-     *
-     * @return View
      */
     public function destroy(PostRequest $request, int $blogPostID): View
     {

@@ -11,15 +11,14 @@ use WebDevEtc\BlogEtc\Models\Category;
  */
 class CategoryEdited
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /** @var Category */
     public $category;
 
     /**
      * CategoryEdited constructor.
-     *
-     * @param Category $category
      */
     public function __construct(Category $category)
     {

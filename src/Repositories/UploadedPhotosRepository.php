@@ -18,8 +18,6 @@ class UploadedPhotosRepository
 
     /**
      * Constructor.
-     *
-     * @param UploadedPhoto $model
      */
     public function __construct(UploadedPhoto $model)
     {
@@ -28,8 +26,6 @@ class UploadedPhotosRepository
 
     /**
      * Return new instance of the Query Builder for this model.
-     *
-     * @return Builder
      */
     public function query(): Builder
     {
@@ -40,10 +36,6 @@ class UploadedPhotosRepository
      * Find a blog etc uploaded photo by ID.
      *
      * If cannot find, throw exception.
-     *
-     * @param int $uploadedPhotoID
-     *
-     * @return UploadedPhoto
      */
     public function find(int $uploadedPhotoID): UploadedPhoto
     {
@@ -57,10 +49,6 @@ class UploadedPhotosRepository
 
     /**
      * Create a new Uploaded Photo row in the database.
-     *
-     * @param array $attributes
-     *
-     * @return UploadedPhoto
      */
     public function create(array $attributes): UploadedPhoto
     {
@@ -70,8 +58,6 @@ class UploadedPhotosRepository
     /**
      * Delete a uploaded photo from the database.
      *
-     * @param int $uploadedPhotoID
-     * @return bool
      * @throws Exception
      */
     public function delete(int $uploadedPhotoID): bool

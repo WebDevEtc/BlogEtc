@@ -22,22 +22,17 @@ class ManageUploadsController extends Controller
 
     /**
      * BlogEtcAdminController constructor.
-     *
-     * @param UploadsService $uploadsService
      */
     public function __construct(UploadsService $uploadsService)
     {
         $this->uploadsService = $uploadsService;
 
         // ensure the config file exists
-        if (!is_array(config('blogetc'))) {
-            throw new RuntimeException(
-                'The config/blogetc.php does not exist. '.
-                'Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command'
-            );
+        if (! is_array(config('blogetc'))) {
+            throw new RuntimeException('The config/blogetc.php does not exist. '.'Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
 
-        if (!config('blogetc.image_upload_enabled') && !app()->runningInConsole()) {
+        if (! config('blogetc.image_upload_enabled') && ! app()->runningInConsole()) {
             throw new RuntimeException('Image uploads in BlogEtc are disabled in the configuration');
         }
     }
@@ -68,9 +63,6 @@ class ManageUploadsController extends Controller
     /**
      * Save a new uploaded image.
      *
-     * @param UploadImageRequest $request
-     *
-     * @return Response
      * @throws \Exception
      */
     public function store(UploadImageRequest $request): Response

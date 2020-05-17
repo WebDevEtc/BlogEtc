@@ -48,8 +48,6 @@ class Comment extends Model
 
     /**
      * The "booting" method of the model.
-     *
-     * @return void
      */
     protected static function boot(): void
     {
@@ -63,8 +61,6 @@ class Comment extends Model
 
     /**
      * The BlogEtcPost relationship.
-     *
-     * @return BelongsTo
      */
     public function post(): BelongsTo
     {
@@ -73,8 +69,6 @@ class Comment extends Model
 
     /**
      * Comment author relationship.
-     *
-     * @return BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -85,8 +79,6 @@ class Comment extends Model
      * Return author string (either from the User (via ->user_id), or the submitted author_name value.
      *
      * TODO - rename this as it looks like a relationship
-     *
-     * @return string|null
      */
     public function author(): ?string
     {

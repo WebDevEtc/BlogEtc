@@ -105,8 +105,6 @@ class Post extends Model
 
     /**
      * The "booting" method of the model.
-     *
-     * @return void
      */
     protected static function boot(): void
     {
@@ -121,8 +119,6 @@ class Post extends Model
 
     /**
      * Return the sluggable configuration array for this model.
-     *
-     * @return array
      */
     public function sluggable(): array
     {
@@ -135,8 +131,6 @@ class Post extends Model
 
     /**
      * The associated author (if user_id) is set.
-     *
-     * @return BelongsTo
      */
     public function author(): BelongsTo
     {
@@ -161,8 +155,6 @@ class Post extends Model
 
     /**
      * The associated categories relationship for this blog post.
-     *
-     * @return BelongsToMany
      */
     public function categories(): BelongsToMany
     {
@@ -176,8 +168,6 @@ class Post extends Model
 
     /**
      * Comments relationship for this post.
-     *
-     * @return HasMany
      */
     public function comments(): HasMany
     {
@@ -186,8 +176,6 @@ class Post extends Model
 
     /**
      * Return the URL for editing the post (used for admin users).
-     *
-     * @return string
      */
     public function editUrl(): string
     {
@@ -196,8 +184,6 @@ class Post extends Model
 
     /**
      * @throws Exception
-     *
-     * @return string
      */
     public function fullViewFilePath(): string
     {
@@ -209,12 +195,10 @@ class Post extends Model
      * location of the blade file it should look for.
      *
      * @throws Exception
-     *
-     * @return string
      */
     public function bladeViewFile(): string
     {
-        if (!$this->use_view_file) {
+        if (! $this->use_view_file) {
             throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
         }
 
@@ -226,10 +210,8 @@ class Post extends Model
      *
      * @param string      $size           - large, medium, thumbnail
      * @param bool        $addAHref       - if true then it will add <a href=''>...</a> around the <img> tag
-     * @param null|string $imgTagClass    - if you want any additional CSS classes for this tag for the <IMG>
-     * @param null|string $anchorTagClass - is you want any additional CSS classes in the <a> anchor tag
-     *
-     * @return HtmlString
+     * @param string|null $imgTagClass    - if you want any additional CSS classes for this tag for the <IMG>
+     * @param string|null $anchorTagClass - is you want any additional CSS classes in the <a> anchor tag
      */
     public function imageTag(
         $size = 'medium',
@@ -237,7 +219,7 @@ class Post extends Model
         $imgTagClass = null,
         $anchorTagClass = null
     ): HtmlString {
-        if (!$this->hasImage($size)) {
+        if (! $this->hasImage($size)) {
             // return an empty string if this image does not exist.
             return new HtmlString('');
         }
@@ -257,8 +239,6 @@ class Post extends Model
      * has a featured image of size $size.
      *
      * @param string $size
-     *
-     * @return bool
      */
     public function hasImage($size = 'medium'): bool
     {
@@ -271,11 +251,7 @@ class Post extends Model
      * Throws an exception if $size is not valid
      * It should be either 'large','medium','thumbnail'.
      *
-     * @param string $size
-     *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
     protected function checkValidImageSize(string $size = 'medium'): bool
     {
@@ -297,17 +273,10 @@ class Post extends Model
                 in the database table:    : blogetc_posts.image_medium
                 when calling image_url()  : image_url("medium")
             */
-            throw new InvalidImageSizeException(
-                'Invalid image size ('.e($size).'). BlogEtcPost image size should not begin with'.
-                ' \'image_\'. Remove this from the start of '.e($size).'. It *should* be in the'.
-                ' blogetc.image_sizes config though'
-            );
+            throw new InvalidImageSizeException('Invalid image size ('.e($size).'). BlogEtcPost image size should not begin with'.' \'image_\'. Remove this from the start of '.e($size).'. It *should* be in the'.' blogetc.image_sizes config though');
         }
 
-        throw new InvalidImageSizeException(
-            'BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.
-            ' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid'
-        );
+        throw new InvalidImageSizeException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
     }
 
     /**
@@ -315,8 +284,6 @@ class Post extends Model
      * You should use ::has_image($size) to check if the size is valid.
      *
      * @param string $size - should be 'medium' , 'large' or 'thumbnail'
-     *
-     * @return string
      */
     public function imageUrl($size = 'medium'): string
     {
@@ -328,8 +295,6 @@ class Post extends Model
 
     /**
      * Returns the public facing URL to view this blog post.
-     *
-     * @return string
      */
     public function url(): string
     {
@@ -338,16 +303,12 @@ class Post extends Model
 
     /**
      * Generate an introduction, max length $max_len characters.
-     *
-     * @param int $maxLen
-     *
-     * @return string
      */
     public function generateIntroduction(int $maxLen = 500): string
     {
         $base_text_to_use = $this->short_description;
 
-        if (!trim($base_text_to_use)) {
+        if (! trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
         $base_text_to_use = strip_tags($base_text_to_use);
@@ -359,8 +320,6 @@ class Post extends Model
      * Return post body HTML, ready for output.
      *
      * @throws Throwable
-     *
-     * @return HtmlString
      */
     public function renderBody(): HtmlString
     {
@@ -368,7 +327,7 @@ class Post extends Model
             ? view('blogetc::partials.use_view_file', ['post' => $this])->render()
             : $this->post_body;
 
-        if (!config('blogetc.echo_html')) {
+        if (! config('blogetc.echo_html')) {
             // if this is not true, then we should escape the output
             if (config('blogetc.strip_html')) {
                 // not perfect, but it will get wrapped in htmlspecialchars in e() anyway
@@ -405,8 +364,6 @@ class Post extends Model
     }
 
     /**
-     * @return string|null
-     *
      * @deprecated - use genSeoTitle() instead
      */
     public function gen_seo_title(): ?string
@@ -416,8 +373,6 @@ class Post extends Model
 
     /**
      * @param mixed ...$args
-     *
-     * @return HtmlString
      *
      * @deprecated - use imageTag() instead, which returns a HtmlString
      */
@@ -429,8 +384,6 @@ class Post extends Model
     /**
      * @param string $size
      *
-     * @return bool
-     *
      * @deprecated  - use hasImage() instead
      */
     public function has_image($size = 'medium'): bool
@@ -439,8 +392,6 @@ class Post extends Model
     }
 
     /**
-     * @return string|null
-     *
      * @deprecated - use authorString() instead
      */
     public function author_string(): ?string
@@ -449,8 +400,6 @@ class Post extends Model
     }
 
     /**
-     * @return string
-     *
      * @deprecated - use editUrl() instead
      */
     public function edit_url(): string
@@ -459,10 +408,6 @@ class Post extends Model
     }
 
     /**
-     * @param string $size
-     *
-     * @return bool
-     *
      * @deprecated - use checkValidImageSize()
      */
     protected function check_valid_image_size(string $size = 'medium'): bool
@@ -472,8 +417,6 @@ class Post extends Model
 
     /**
      * @throws Exception
-     *
-     * @return string
      *
      * @deprecated - use bladeViewFile() instead
      */
@@ -485,8 +428,6 @@ class Post extends Model
     /**
      * @param string $size
      *
-     * @return string
-     *
      * @deprecated - use imageUrl() instead
      */
     public function image_url($size = 'medium'): string
@@ -495,10 +436,6 @@ class Post extends Model
     }
 
     /**
-     * @param int $maxLen
-     *
-     * @return string
-     *
      * @deprecated - use generateIntroduction() instead
      */
     public function generate_introduction(int $maxLen = 500): string
@@ -508,8 +445,6 @@ class Post extends Model
 
     /**
      * @throws Throwable
-     *
-     * @return string
      *
      * @deprecated - use renderBody() instead
      *

@@ -5,7 +5,6 @@
 Route::group(
     ['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Controllers'],
     static function () {
-
         // The main public facing blog routes - show all posts, view a category, rss feed, view a single post, also the
         // add comment route.
         Route::group(

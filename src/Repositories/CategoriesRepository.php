@@ -18,8 +18,6 @@ class CategoriesRepository
 
     /**
      * BlogEtcCategoriesRepository constructor.
-     *
-     * @param Category $model
      */
     public function __construct(Category $model)
     {
@@ -28,8 +26,6 @@ class CategoriesRepository
 
     /**
      * Return new instance of the Query Builder for this model.
-     *
-     * @return Builder
      */
     public function query(): Builder
     {
@@ -38,10 +34,6 @@ class CategoriesRepository
 
     /**
      * Return all blog etc categories, ordered by category_name, paginated.
-     *
-     * @param int $perPage
-     *
-     * @return LengthAwarePaginator
      */
     public function indexPaginated(int $perPage = 25): LengthAwarePaginator
     {
@@ -52,37 +44,25 @@ class CategoriesRepository
 
     /**
      * Find and return a blog etc category.
-     *
-     * @param int $categoryID
-     *
-     * @return Category
      */
     public function find(int $categoryID): Category
     {
         try {
             return $this->query()->findOrFail($categoryID);
         } catch (ModelNotFoundException $e) {
-            throw new CategoryNotFoundException(
-                'Unable to find a blog category with ID: '.$categoryID
-            );
+            throw new CategoryNotFoundException('Unable to find a blog category with ID: '.$categoryID);
         }
     }
 
     /**
      * Find and return a blog etc category, based on its slug.
-     *
-     * @param string $categorySlug
-     *
-     * @return Category
      */
     public function findBySlug(string $categorySlug): Category
     {
         try {
             return $this->query()->where('slug', $categorySlug)->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            throw new CategoryNotFoundException(
-                'Unable to find a blog category with slug: '.$categorySlug
-            );
+            throw new CategoryNotFoundException('Unable to find a blog category with slug: '.$categorySlug);
         }
     }
 }

@@ -29,10 +29,6 @@ class PostsController extends Controller
 
     /**
      * BlogEtcReaderController constructor.
-     *
-     * @param PostsService      $postsService
-     * @param CategoriesService $categoriesService
-     * @param CaptchaService    $captchaService
      */
     public function __construct(
         PostsService $postsService,
@@ -84,10 +80,7 @@ class PostsController extends Controller
     /**
      * View a single post and (if enabled) comments.
      *
-     * @param Request $request
      * @param $postSlug
-     *
-     * @return View
      */
     public function show(Request $request, $postSlug): View
     {
@@ -96,7 +89,7 @@ class PostsController extends Controller
         // if using captcha, there might be some code to run now or to echo in the view:
         $usingCaptcha = $this->captchaService->getCaptchaObject();
 
-        if ($usingCaptcha !== null) {
+        if (null !== $usingCaptcha) {
             $usingCaptcha->runCaptchaBeforeShowingPosts($request, $blogPost);
         }
 
@@ -113,14 +106,10 @@ class PostsController extends Controller
 
     /**
      * Show the search results.
-     *
-     * @param SearchRequest $request
-     *
-     * @return \Illuminate\Contracts\View\View
      */
     public function search(SearchRequest $request): \Illuminate\Contracts\View\View
     {
-        if (!config('blogetc.search.search_enabled')) {
+        if (! config('blogetc.search.search_enabled')) {
             throw new LogicException('Search is disabled');
         }
 

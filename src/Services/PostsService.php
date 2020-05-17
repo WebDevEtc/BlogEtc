@@ -31,9 +31,6 @@ class PostsService
 
     /**
      * PostsService constructor.
-     *
-     * @param PostsRepository $repository
-     * @param UploadsService $uploadsService
      */
     public function __construct(PostsRepository $repository, UploadsService $uploadsService)
     {
@@ -46,8 +43,6 @@ class PostsService
      *
      * I don't stick 100% to all queries belonging in the repo - some Eloquent
      * things are fine to have in the service where it makes sense.
-     *
-     * @return PostsRepository
      */
     public function repository(): PostsRepository
     {
@@ -60,10 +55,6 @@ class PostsService
      * (I'm never keen on passing around entire Request objects - this will get
      * refactored out)
      *
-     * @param PostRequest $request
-     * @param int|null $userID
-     *
-     * @return Post
      * @throws Exception
      */
     public function create(PostRequest $request, ?int $userID): Post
@@ -101,9 +92,6 @@ class PostsService
      * Return all results, paginated.
      *
      * @param int $perPage
-     * @param int|null $categoryID
-     *
-     * @return LengthAwarePaginator
      */
     public function indexPaginated($perPage = 10, int $categoryID = null): LengthAwarePaginator
     {
@@ -127,10 +115,6 @@ class PostsService
      *
      * Does not currently use repo calls - works direct on Eloquent. This will change.
      *
-     * @param int $blogPostID
-     * @param PostRequest $request
-     *
-     * @return Post
      * @throws Exception
      */
     public function update(int $blogPostID, PostRequest $request): Post
@@ -161,10 +145,9 @@ class PostsService
      * Delete a blog etc post, return the deleted post and an array of featured images which were associated
      * to the blog post (but which were not deleted form the filesystem).
      *
-     * @param int $postID
+     * @throws Exception
      *
      * @return array - [Post (deleted post), array (remaining featured photos)
-     * @throws Exception
      */
     public function delete(int $postID): array
     {
@@ -190,16 +173,16 @@ class PostsService
                 // (Note: there is no check here to see if they actually exist on the filesystem).
                 $fileSize = UploadsService::disk()->getSize($fullPath);
 
-                if ($fileSize !== false) {
+                if (false !== $fileSize) {
                     // Get the file size, in human readable (kb) format.
                     $fileSize = $this->humanReadableFileSize($fileSize);
                 }
 
                 $remainingPhotos[] = [
-                    'filename' => $post->$imageSize,
+                    'filename'  => $post->$imageSize,
                     'full_path' => $fullPath,
                     'file_size' => $fileSize,
-                    'url' => UploadsService::disk()->url($fullPath),
+                    'url'       => UploadsService::disk()->url($fullPath),
                 ];
             }
         }
@@ -209,10 +192,6 @@ class PostsService
 
     /**
      * Find and return a blog post based on slug.
-     *
-     * @param string $slug
-     *
-     * @return Post
      */
     public function findBySlug(string $slug): Post
     {
@@ -221,9 +200,6 @@ class PostsService
 
     /**
      * Get human readable file size (in kb).
-     *
-     * @param int $fileSize
-     * @return string
      */
     protected function humanReadableFileSize(int $fileSize): string
     {
@@ -235,9 +211,7 @@ class PostsService
      *
      * This is a rough implementation - proper full text search has been removed in current version.
      *
-     * @param string $query
      * @param int $max
-     * @return Collection
      */
     public function search(string $query, $max = 25): Collection
     {

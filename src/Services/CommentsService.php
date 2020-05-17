@@ -28,8 +28,6 @@ class CommentsService
 
     /**
      * CommentsService constructor.
-     *
-     * @param CommentsRepository $repository
      */
     public function __construct(CommentsRepository $repository)
     {
@@ -49,13 +47,6 @@ class CommentsService
 
     /**
      * Create a new comment.
-     *
-     * @param Post $blogEtcPost
-     * @param array $attributes
-     * @param string|null $ip
-     * @param int|null $userID
-     *
-     * @return Comment
      */
     public function create(
         Post $blogEtcPost,
@@ -70,12 +61,12 @@ class CommentsService
             ? $ip : null;
 
         // Should website be stored?
-        $authorWebsite = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_website'])
+        $authorWebsite = config('blogetc.comments.ask_for_author_website') && ! empty($attributes['author_website'])
             ? $attributes['author_website']
             : null;
 
         // Should email be stored?
-        $authorEmail = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_email'])
+        $authorEmail = config('blogetc.comments.ask_for_author_website') && ! empty($attributes['author_email'])
             ? $attributes['author_email']
             : null;
 
@@ -106,20 +97,14 @@ class CommentsService
 
     /**
      * Are comments auto approved?
-     *
-     * @return bool
      */
     protected function autoApproved(): bool
     {
-        return config('blogetc.comments.auto_approve_comments', true) === true;
+        return true === config('blogetc.comments.auto_approve_comments', true);
     }
 
     /**
      * Approve a blog comment.
-     *
-     * @param int $blogCommentID
-     *
-     * @return Comment
      */
     public function approve(int $blogCommentID): Comment
     {
@@ -134,11 +119,6 @@ class CommentsService
 
     /**
      * Find and return a comment by ID.
-     *
-     * @param int $blogEtcCommentID
-     * @param bool $onlyApproved
-     *
-     * @return Comment
      */
     public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
     {
@@ -150,9 +130,6 @@ class CommentsService
      *
      * Returns the now deleted comment object
      *
-     * @param int $blogCommentID
-     *
-     * @return Comment
      * @throws Exception
      */
     public function delete(int $blogCommentID): Comment

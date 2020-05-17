@@ -10,8 +10,8 @@ use WebDevEtc\BlogEtc\Models\Category;
 
 $factory->define(Category::class, static function (Faker $faker) {
     return [
-        'category_name' => $faker->sentence,
-        'slug' => Str::slug($faker->sentence),
+        'category_name'        => $faker->sentence,
+        'slug'                 => Str::slug($faker->sentence),
         'category_description' => $faker->paragraph,
     ];
 });
