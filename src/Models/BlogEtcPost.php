@@ -163,7 +163,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
      */
     public function full_view_file_path()
     {
-        if (! $this->use_view_file) {
+        if (!$this->use_view_file) {
             throw new \RuntimeException('use_view_file was empty, so cannot use '.__METHOD__);
         }
 
@@ -212,7 +212,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
      */
     public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null)
     {
-        if (! $this->has_image($size)) {
+        if (!$this->has_image($size)) {
             // return an empty string if this image does not exist.
             return '';
         }
@@ -226,7 +226,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
     public function generate_introduction($max_len = 500)
     {
         $base_text_to_use = $this->short_description;
-        if (! trim($base_text_to_use)) {
+        if (!trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
         $base_text_to_use = strip_tags($base_text_to_use);
@@ -246,7 +246,7 @@ class BlogEtcPost extends Model implements SearchResultInterface
             $return = $this->post_body;
         }
 
-        if (! config('blogetc.echo_html')) {
+        if (!config('blogetc.echo_html')) {
             // if this is not true, then we should escape the output
             if (config('blogetc.strip_html')) {
                 $return = strip_tags($return);
