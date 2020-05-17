@@ -21,21 +21,21 @@ class BlogEtcCategory extends Model
     }
 
     /**
-     * Returns the public facing URL of showing blog posts in this category
+     * Returns the public facing URL of showing blog posts in this category.
      * @return string
      */
     public function url()
     {
-        return route("blogetc.view_category", $this->slug);
+        return route('blogetc.view_category', $this->slug);
     }
 
     /**
-     * Returns the URL for an admin user to edit this category
+     * Returns the URL for an admin user to edit this category.
      * @return string
      */
     public function edit_url()
     {
-        return route("blogetc.admin.categories.edit_category", $this->id);
+        return route('blogetc.admin.categories.edit_category', $this->id);
     }
 
 //    public function scopeApproved($query)

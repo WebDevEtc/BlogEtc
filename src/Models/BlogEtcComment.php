@@ -18,7 +18,6 @@ class BlogEtcComment extends Model
         'author_name',
     ];
 
-
     /**
      * The "booting" method of the model.
      *
@@ -34,19 +33,17 @@ class BlogEtcComment extends Model
         static::addGlobalScope(new BlogCommentApprovedAndDefaultOrderScope());
     }
 
-
-
     /**
-     * The associated BlogEtcPost
+     * The associated BlogEtcPost.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function post()
     {
-        return $this->belongsTo(BlogEtcPost::class,"blog_etc_post_id");
+        return $this->belongsTo(BlogEtcPost::class, 'blog_etc_post_id');
     }
 
     /**
-     * Comment author user (if set)
+     * Comment author user (if set).
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
@@ -55,14 +52,15 @@ class BlogEtcComment extends Model
     }
 
     /**
-     * Return author string (either from the User (via ->user_id), or the submitted author_name value
+     * Return author string (either from the User (via ->user_id), or the submitted author_name value.
      *
      * @return string
      */
     public function author()
     {
         if ($this->user_id) {
-            $field = config("blogetc.comments.user_field_for_author_name","name");
+            $field = config('blogetc.comments.user_field_for_author_name', 'name');
+
             return optional($this->user)->$field;
         }
 
