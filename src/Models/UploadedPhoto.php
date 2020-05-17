@@ -1,5 +1,6 @@
 <?php
 
+
 namespace WebDevEtc\BlogEtc\Models;
 
 use App\User;

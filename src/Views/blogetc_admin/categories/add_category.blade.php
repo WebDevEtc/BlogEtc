@@ -10,3 +10,4 @@
         <input type="submit" class="btn btn-primary" value="Add New Category">
     </form>
 @endsection
+

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace WebDevEtc\BlogEtc\Models;
 
 use Illuminate\Database\Eloquent\Collection;

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace WebDevEtc\BlogEtc\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;

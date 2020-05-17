@@ -1,5 +1,6 @@
 <?php
 
+
 namespace WebDevEtc\BlogEtc\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

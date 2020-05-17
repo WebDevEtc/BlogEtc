@@ -1,5 +1,6 @@
 <?php
 
+
 /** @noinspection PhpInconsistentReturnPointsInspection */
 
 namespace WebDevEtc\BlogEtc\Captcha;

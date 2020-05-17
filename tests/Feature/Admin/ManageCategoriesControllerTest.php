@@ -199,3 +199,4 @@ class ManageCategoriesControllerTest extends TestCase
         $response->assertNotFound();
     }
 }
+

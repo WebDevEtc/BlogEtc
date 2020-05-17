@@ -1,5 +1,6 @@
 <?php
 
+
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;

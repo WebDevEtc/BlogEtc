@@ -29,3 +29,4 @@ Posted <strong>{{ $post->posted_at->diffForHumans() }}</strong>
 
 @includeWhen($post->author, 'blogetc::partials.author', ['post'=>$post])
 @includeWhen($post->categories, 'blogetc::partials.categories', ['post'=>$post])
+

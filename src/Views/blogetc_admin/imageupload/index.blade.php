@@ -119,3 +119,4 @@
         {{ $uploaded_photos->links() }}
     </div>
 @endsection
+

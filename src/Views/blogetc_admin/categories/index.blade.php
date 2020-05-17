@@ -30,3 +30,4 @@
         {{ $categories->links() }}
     </div>
 @endsection
+

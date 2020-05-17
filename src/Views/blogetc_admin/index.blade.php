@@ -109,3 +109,4 @@
         {{ $posts->links()}}
     </div>
 @endsection
+

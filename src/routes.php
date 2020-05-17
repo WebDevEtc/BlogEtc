@@ -129,6 +129,7 @@ Route::group(
                         )->name('blogetc.admin.comments.index');
 
                         // approve a comment:
+
                         Route::patch(
                             '/{commentId}',
                             'ManageCommentsController@approve'

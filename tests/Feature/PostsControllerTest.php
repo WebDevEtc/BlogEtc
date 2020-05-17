@@ -178,3 +178,4 @@ class PostsControllerTest extends TestCase
         $response->assertDontSee($post->title);
     }
 }
+

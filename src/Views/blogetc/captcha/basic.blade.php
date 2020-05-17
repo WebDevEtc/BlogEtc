@@ -5,3 +5,4 @@
     <input type="text" required class="form-control" name="captcha"
            id="captcha" placeholder="" value="{{ old('captcha') }}">
 </div>
+

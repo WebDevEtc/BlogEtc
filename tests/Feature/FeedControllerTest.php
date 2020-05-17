@@ -150,3 +150,4 @@ class FeedControllerTest extends TestCase
             ->assertDontSee($post->title);
     }
 }
+

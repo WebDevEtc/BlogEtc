@@ -214,3 +214,4 @@ class PostsServiceTest extends TestCase
         return tap($request)->setValidator($mockedValidator);
     }
 }
+

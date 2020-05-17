@@ -8,3 +8,4 @@
         <input type="submit" class="btn btn-primary" value="Add new post">
     </form>
 @endsection
+

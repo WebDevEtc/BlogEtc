@@ -254,3 +254,4 @@ class ManagePostsControllerTest extends TestCase
         $response->assertNotFound();
     }
 }
+

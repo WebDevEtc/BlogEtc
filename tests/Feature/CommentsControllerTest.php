@@ -88,3 +88,4 @@ class CommentsControllerTest extends TestCase
         $this->assertDatabaseMissing('blog_etc_comments', ['comment' => $params['comment']]);
     }
 }
+

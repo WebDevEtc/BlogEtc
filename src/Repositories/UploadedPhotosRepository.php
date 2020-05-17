@@ -10,6 +10,7 @@ use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 
 class UploadedPhotosRepository
+
 {
     /**
      * @var Post
