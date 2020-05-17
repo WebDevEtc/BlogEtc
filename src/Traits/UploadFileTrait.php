@@ -2,18 +2,19 @@
 
 namespace WebDevEtc\BlogEtc\Traits;
 
+use File;
 use Illuminate\Http\UploadedFile;
 use WebDevEtc\BlogEtc\Events\UploadedImage;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use File;
 
 trait UploadFileTrait
 {
     /** How many tries before we throw an Exception error */
-    static $num_of_attempts_to_find_filename = 100;
+    public static $num_of_attempts_to_find_filename = 100;
 
     /**
-     * If false, we check if the blog_images/ dir is writable, when uploading images
+     * If false, we check if the blog_images/ dir is writable, when uploading images.
+     *
      * @var bool
      */
     protected $checked_blog_image_dir_is_writable = false;
@@ -21,13 +22,13 @@ trait UploadFileTrait
     /**
      * Small method to increase memory limit.
      * This can be defined in the config file. If blogetc.memory_limit is false/null then it won't do anything.
-     * This is needed though because if you upload a large image it'll not work
+     * This is needed though because if you upload a large image it'll not work.
      */
     protected function increaseMemoryLimit()
     {
         // increase memory - change this setting in config file
-        if (config("blogetc.memory_limit")) {
-            @ini_set('memory_limit', config("blogetc.memory_limit"));
+        if (config('blogetc.memory_limit')) {
+            @ini_set('memory_limit', config('blogetc.memory_limit'));
         }
     }
 
@@ -39,8 +40,10 @@ trait UploadFileTrait
      * @param string $suggested_title
      * @param $image_size_details - either an array (with w/h attributes) or a string
      * @param UploadedFile $photo
-     * @return string
+     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo)
     {
@@ -48,47 +51,47 @@ trait UploadFileTrait
 
         // $wh will be something like "-1200x300"
         $wh = $this->getWhForFilename($image_size_details);
-        $ext = '.' . $photo->getClientOriginalExtension();
+        $ext = '.'.$photo->getClientOriginalExtension();
 
         for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
 
             // add suffix if $i>1
-            $suffix = $i > 1 ? '-' . str_random(5) : '';
+            $suffix = $i > 1 ? '-'.str_random(5) : '';
 
-            $attempt = str_slug($base . $suffix . $wh) . $ext;
+            $attempt = str_slug($base.$suffix.$wh).$ext;
 
-            if (!File::exists($this->image_destination_path() . "/" . $attempt)) {
+            if (!File::exists($this->image_destination_path().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
-
         }
 
         // too many attempts...
         throw new \RuntimeException("Unable to find a free filename after $i attempts - aborting now.");
-
     }
 
-
     /**
-     * @return string
      * @throws \RuntimeException
+     *
+     * @return string
      */
     protected function image_destination_path()
     {
-        $path = public_path('/' . config("blogetc.blog_upload_dir"));
+        $path = public_path('/'.config('blogetc.blog_upload_dir'));
         $this->check_image_destination_path_is_writable($path);
+
         return $path;
     }
-
 
     /**
      * @param BlogEtcPost $new_blog_post
      * @param $suggested_title - used to help generate the filename
      * @param $image_size_details - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
      * @param $photo
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     protected function UploadAndResize(BlogEtcPost $new_blog_post = null, $suggested_title, $image_size_details, $photo)
     {
@@ -98,7 +101,6 @@ trait UploadFileTrait
 
         // make image
         $resizedImage = \Image::make($photo->getRealPath());
-
 
         if (is_array($image_size_details)) {
             // resize to these dimensions:
@@ -118,11 +120,11 @@ trait UploadFileTrait
             $w = $resizedImage->width();
             $h = $resizedImage->height();
         } else {
-            throw new \Exception("Invalid image_size_details value");
+            throw new \Exception('Invalid image_size_details value');
         }
 
         // save image
-        $resizedImage->save($destinationPath . '/' . $image_filename, config("blogetc.image_quality", 80));
+        $resizedImage->save($destinationPath.'/'.$image_filename, config('blogetc.image_quality', 80));
 
         // fireevent
         event(new UploadedImage($image_filename, $resizedImage, $new_blog_post, __METHOD__));
@@ -130,10 +132,9 @@ trait UploadFileTrait
         // return the filename and w/h details
         return [
             'filename' => $image_filename,
-            'w' => $w,
-            'h' => $h,
+            'w'        => $w,
+            'h'        => $h,
         ];
-
     }
 
     /**
@@ -154,26 +155,30 @@ trait UploadFileTrait
      * getWhForFilename("some string") it will return -some-string". (max len: 30)
      *
      * @param array|string $image_size_details
-     * @return string
+     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     protected function getWhForFilename($image_size_details)
     {
         if (is_array($image_size_details)) {
-            return '-' . $image_size_details['w'] . 'x' . $image_size_details['h'];
+            return '-'.$image_size_details['w'].'x'.$image_size_details['h'];
         } elseif (is_string($image_size_details)) {
-            return "-" . str_slug(substr($image_size_details, 0, 30));
+            return '-'.str_slug(substr($image_size_details, 0, 30));
         }
 
         // was not a string or array, so error
-        throw new \RuntimeException("Invalid image_size_details: must be an array with w and h, or a string");
+        throw new \RuntimeException('Invalid image_size_details: must be an array with w and h, or a string');
     }
 
     /**
      * Check if the image destination directory is writable.
-     * Throw an exception if it was not writable
-     * @throws \RuntimeException
+     * Throw an exception if it was not writable.
+     *
      * @param $path
+     *
+     * @throws \RuntimeException
      */
     protected function check_image_destination_path_is_writable($path)
     {
@@ -187,6 +192,7 @@ trait UploadFileTrait
 
     /**
      * @param string $suggested_title
+     *
      * @return string
      */
     protected function generate_base_filename(string $suggested_title)
@@ -194,10 +200,11 @@ trait UploadFileTrait
         $base = substr($suggested_title, 0, 100);
         if (!$base) {
             // if we have an empty string then we should use a random one:
-            $base = 'image-' . str_random(5);
+            $base = 'image-'.str_random(5);
+
             return $base;
         }
+
         return $base;
     }
-
 }
