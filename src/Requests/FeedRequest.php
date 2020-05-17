@@ -29,10 +29,11 @@ class FeedRequest extends FormRequest
 
     /**
      * Is this request for an RSS feed or Atom feed? defaults to atom.
+     *
      * @return string
      */
     public function getFeedType()
     {
-        return $this->get('type') === 'rss' ? 'rss' : 'atom';
+        return 'rss' === $this->get('type') ? 'rss' : 'atom';
     }
 }

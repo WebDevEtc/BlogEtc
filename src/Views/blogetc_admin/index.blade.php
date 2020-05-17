@@ -11,7 +11,7 @@
                 <h5 class='card-subtitle mb-2 text-muted'>{{$post->subtitle}}</h5>
                 <p class="card-text">{{$post->html}}</p>
 
-                <?=$post->image_tag("thumbnail", false, "float-right");?>
+                <?=$post->image_tag('thumbnail', false, 'float-right'); ?>
 
                 <dl class="">
                     <dt class="">Author</dt>
@@ -52,8 +52,7 @@
 
                         <?php
 
-                        $viewfile = resource_path("views/custom_blog_posts/" . $post->use_view_file . ".blade.php");
-
+                        $viewfile = resource_path('views/custom_blog_posts/'.$post->use_view_file.'.blade.php');
 
                         ?>
                         <br>

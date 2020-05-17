@@ -6,6 +6,7 @@ trait HasImageUploadTrait
 {
     /**
      * @param $size
+     *
      * @return \Illuminate\Http\UploadedFile|null
      */
     public function get_image_file($size)

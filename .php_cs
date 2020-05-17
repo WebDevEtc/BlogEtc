@@ -3,7 +3,8 @@
 $excluded_folders = [
     'node_modules',
     'storage',
-    'vendor'
+    'vendor',
+    'build'
 ];
 
 $finder = PhpCsFixer\Finder::create()

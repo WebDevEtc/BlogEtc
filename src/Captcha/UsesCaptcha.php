@@ -11,11 +11,12 @@ trait UsesCaptcha
 {
     /**
      * Return either null (if captcha is not enabled), or the captcha object (which should implement CaptchaInterface interface / extend the CaptchaAbstract class).
-     * @return null|CaptchaAbstract
+     *
+     * @return CaptchaAbstract|null
      */
     private function getCaptchaObject()
     {
-        if (!config('blogetc.captcha.captcha_enabled')) {
+        if (! config('blogetc.captcha.captcha_enabled')) {
             return;
         }
 
@@ -23,6 +24,6 @@ trait UsesCaptcha
         /** @var string $captcha_class */
         $captcha_class = config('blogetc.captcha.captcha_type');
 
-        return new $captcha_class;
+        return new $captcha_class();
     }
 }

@@ -19,7 +19,7 @@ class CreateBlogEtcPostRequest extends BaseBlogEtcPostRequest
     public function rules()
     {
         $return = $this->baseBlogPostRules();
-        $return['slug'] [] = Rule::unique('blog_etc_posts', 'slug');
+        $return['slug'][] = Rule::unique('blog_etc_posts', 'slug');
 
         return $return;
     }

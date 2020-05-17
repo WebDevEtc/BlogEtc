@@ -5,7 +5,7 @@
 <div class="" style='max-width:600px; margin: 50px auto; background: #fffbea;border-radius:3px;padding:0;' >
 
     <div class='text-center'>
-    <?=$post->image_tag("medium", true, ''); ?>
+    <?=$post->image_tag('medium', true, ''); ?>
         </div>
     <div style='padding:10px;'>
     <h3 class=''><a href='{{$post->url()}}'>{{$post->title}}</a></h3>

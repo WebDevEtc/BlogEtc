@@ -3,10 +3,9 @@
 //config for webdevetc/blogetc
 
 return [
-
     'include_default_routes' => true, // set to false to not include routes.php for BlogEtcReaderController and admin related routes. Default: true. If you disable this, you will have to manually copy over the data from routes.php and add it to your web.php.
 
-    'blog_prefix' => 'blog', // used in routes.php. If you want to your http://yoursite.com/latest-news (or anything else), then enter that here. Default: blog
+    'blog_prefix'  => 'blog', // used in routes.php. If you want to your http://yoursite.com/latest-news (or anything else), then enter that here. Default: blog
     'admin_prefix' => 'blog_admin', // similar to above, but used for the admin panel for the blog. Default: blog_admin
 
     'use_custom_view_files' => false, // set to false to disable the use of being able to make blog posts include a view from resources/views/custom_blog_posts/*.blade.php. Default: false. Set to true to use this feature. Default: false
@@ -14,7 +13,7 @@ return [
     'per_page' => 10, // how many posts to show per page on the blog index page. Default: 10
 
     'image_upload_enabled' => true, // true or false, if image uploading is allowed.
-    'blog_upload_dir' => 'blog_images', // this should be in public_path() (i.e. /public/blog_images), and should be writable
+    'blog_upload_dir'      => 'blog_images', // this should be in public_path() (i.e. /public/blog_images), and should be writable
 
     'memory_limit' => '2048M', // This is used when uploading images :
     //                              @ini_set('memory_limit', config("blogetc.memory_limit"));
@@ -43,7 +42,6 @@ return [
     'image_quality' => 80, // what image quality to use when saving images. higher = better + bigger sizes. Around 80 is normal.
 
     'image_sizes' => [
-
         // if you set 'enabled' to false, it will clear any data for that field the next time any row is updated. However it will NOT delete the .jpg file on your file server.
         // I recommend that you only change the enabled field before any images have been uploaded!
 
@@ -52,27 +50,27 @@ return [
         // There must be only three sizes - image_large, image_medium, image_thumbnail.
 
         'image_large' => [ // this key must start with 'image_'. This is what the DB column must be named
-            'w' => 1000, // width in pixels
-            'h' => 700, //height
+            'w'         => 1000, // width in pixels
+            'h'         => 700, //height
             'basic_key' => 'large', // same as the main key, but WITHOUT 'image_'.
-            'name' => 'Large', // description, used in the admin panel
-            'enabled' => true, // see note above
-            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
+            'name'      => 'Large', // description, used in the admin panel
+            'enabled'   => true, // see note above
+            'crop'      => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'
         ],
         'image_medium' => [ // this key must start with 'image_'. This is what the DB column must be named
-            'w' => 600, // width in pixels
-            'h' => 400, //height
+            'w'         => 600, // width in pixels
+            'h'         => 400, //height
             'basic_key' => 'medium', // same as the main key, but WITHOUT 'image_'.
-            'name' => 'Medium', // description, used in the admin panel
-            'enabled' => true, // see note above
-            'crop' => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website template then you should probably have this to true.
+            'name'      => 'Medium', // description, used in the admin panel
+            'enabled'   => true, // see note above
+            'crop'      => true, // if true then we will crop and resize to exactly w/h. If false then it will maintain proportions, with a max width of 'w' and max height of 'h'. If you use these images as part of your website template then you should probably have this to true.
         ],
         'image_thumbnail' => [ // this key must start with 'image_'. This is what the DB column must be named
-            'w' => 150, // width in pixels
-            'h' => 150, //height
+            'w'         => 150, // width in pixels
+            'h'         => 150, //height
             'basic_key' => 'thumbnail', // same as the main key, but WITHOUT 'image_'.
-            'name' => 'Thumbnail', // description, used in the admin panel
-            'enabled' => true, // see note above
+            'name'      => 'Thumbnail', // description, used in the admin panel
+            'enabled'   => true, // see note above
         ],
 
         // you can add more fields here, but make sure that you create the relevant database columns too!
@@ -101,27 +99,25 @@ return [
 
     'captcha' => [
         'captcha_enabled' => true, // true = we should use a captcha, false = turn it off. If comments are disabled this makes no difference.
-        'captcha_type' => \WebDevEtc\BlogEtc\Captcha\Basic::class, // this should be a class that implements the \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface interface
-        'basic_question' => 'What is the opposite of white?', // a simple captcha question to always ask (if captcha_type is set to 'basic'
-        'basic_answers' => 'black,dark', // comma separated list of possible answers. Don't worry about case.
+        'captcha_type'    => \WebDevEtc\BlogEtc\Captcha\Basic::class, // this should be a class that implements the \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface interface
+        'basic_question'  => 'What is the opposite of white?', // a simple captcha question to always ask (if captcha_type is set to 'basic'
+        'basic_answers'   => 'black,dark', // comma separated list of possible answers. Don't worry about case.
     ],
 
     ////////// RSS FEED
 
     'rssfeed' => [
-
-        'should_shorten_text' => true, // boolean. Default: true. Should we shorten the text in rss feed?
-        'text_limit' => 100, // max length of description text in the rss feed
+        'should_shorten_text'       => true, // boolean. Default: true. Should we shorten the text in rss feed?
+        'text_limit'                => 100, // max length of description text in the rss feed
         'posts_to_show_in_rss_feed' => 10,  // how many posts should we show in the rss feed
-        'cache_in_minutes' => 60, // how long (in minutes) to cache the RSS blog feed for.
-        'description' => 'Our blog post RSS feed', //description for the RSS feed
-        'language' => 'en', // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
+        'cache_in_minutes'          => 60, // how long (in minutes) to cache the RSS blog feed for.
+        'description'               => 'Our blog post RSS feed', //description for the RSS feed
+        'language'                  => 'en', // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
     ],
 
     ////////// comments:
 
     'comments' => [
-
         // What type (if any) of comments/comment form to show.
         // options:
         //      'built_in' (default, uses own database for comments),
@@ -142,24 +138,21 @@ return [
 
         'user_field_for_author_name' => 'name', // what field on your User model should we use when echoing out the author name? By default this should be 'name', but maybe you have it set up to use 'username' etc.
 
-        'ask_for_author_email' => true, // show 'author email' on the form ?
-        'require_author_email' => false, // require an email (make sure ask_for_author_email is true if you want to use this)
+        'ask_for_author_email'   => true, // show 'author email' on the form ?
+        'require_author_email'   => false, // require an email (make sure ask_for_author_email is true if you want to use this)
         'ask_for_author_website' => true, // show 'author website' on the form, show the link when viewing the comment
 
         'disqus' => [
-
             // only applies if comments.type_of_comments_to_show is set to 'disqus'
             //              The following config option can be found by looking for the following line on the embed code of your disqus code:
             //                          s.src = 'https://yourusername_or_sitename.disqus.com/embed.js';
             //
             //             You must enter the whole url (but not the "s.src = '" part!)
             'src_url' => 'https://GET_THIS_FROM_YOUR_EMBED_CODE.disqus.com/embed.js', // enter the url here, from the html snippet disqus provides
-
         ],
     ],
 
     'search' => [
         'search_enabled' => false, // is search enabled? By default this is disabled, but you can easily turn it on.
     ],
-
 ];

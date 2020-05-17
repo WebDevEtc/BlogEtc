@@ -12,7 +12,9 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class UploadedImage
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var BlogEtcPost|null */
     public $blogEtcPost;

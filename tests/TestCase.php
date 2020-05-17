@@ -9,7 +9,6 @@ namespace App\Http\Controllers {
 }
 
 namespace WebDevEtc\BlogEtc\Tests {
-
 //use App\User;
     use Gate;
     use Illuminate\Database\Schema\Blueprint;
@@ -52,8 +51,6 @@ namespace WebDevEtc\BlogEtc\Tests {
          * only on the package code in the controller. Would be interested if anyone has a suggestion on better way
          * to test this.
          *
-         * @param string $expectedView
-         * @param array $viewArgumentTypes
          * @deprecated - not in use. todo: remove
          */
         protected function mockView(string $expectedView, array $viewArgumentTypes): void
@@ -79,6 +76,7 @@ namespace WebDevEtc\BlogEtc\Tests {
          * Used for Orchestra\Testbench package.
          *
          * @param Application $app
+         *
          * @return array
          */
         protected function getPackageProviders($app)
@@ -100,7 +98,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->loadMigrations();
             $this->withFactories(__DIR__.'/../src/Factories');
 
-            if (!\Route::has('login')) {
+            if (! \Route::has('login')) {
                 // Need to define a login route for feature tests.
                 \Route::get('login', function () {
                 })->name('login');
@@ -109,8 +107,6 @@ namespace WebDevEtc\BlogEtc\Tests {
 
         /**
          * Load migrations - to be used for feature tests.
-         *
-         * @return void
          */
         protected function loadMigrations(): void
         {
@@ -127,7 +123,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             }
 
             // Also manually create users table so relations will work.
-            if (!Schema::hasTable('users')) {
+            if (! Schema::hasTable('users')) {
                 Schema::create('users', static function (Blueprint $table) {
                     $table->bigIncrements('id');
                     $table->string('name');
@@ -146,6 +142,7 @@ namespace WebDevEtc\BlogEtc\Tests {
          * Define environment setup.
          *
          * @param Application $app
+         *
          * @return void
          */
         protected function getEnvironmentSetUp($app)
@@ -153,9 +150,9 @@ namespace WebDevEtc\BlogEtc\Tests {
             // Setup default database to use sqlite :memory:
             $app['config']->set('database.default', 'testbench');
             $app['config']->set('database.connections.testbench', [
-                'driver' => 'sqlite',
+                'driver'   => 'sqlite',
                 'database' => ':memory:',
-                'prefix' => '',
+                'prefix'   => '',
             ]);
 
             // Add the custom dir for layouts.app view:
@@ -169,16 +166,16 @@ namespace WebDevEtc\BlogEtc\Tests {
 
             // Ensure has correct 'sluggable' config set up:
             $app['config']->set('sluggable', [
-                'source' => null,
-                'maxLength' => null,
+                'source'             => null,
+                'maxLength'          => null,
                 'maxLengthKeepWords' => true,
-                'method' => null,
-                'separator' => '-',
-                'unique' => true,
-                'uniqueSuffix' => null,
-                'includeTrashed' => false,
-                'reserved' => null,
-                'onUpdate' => false,
+                'method'             => null,
+                'separator'          => '-',
+                'unique'             => true,
+                'uniqueSuffix'       => null,
+                'includeTrashed'     => false,
+                'reserved'           => null,
+                'onUpdate'           => false,
             ]);
         }
 

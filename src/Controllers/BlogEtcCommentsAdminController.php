@@ -26,7 +26,6 @@ class BlogEtcCommentsAdminController extends Controller
     /**
      * Show all comments (and show buttons with approve/delete).
      *
-     * @param Request $request
      * @return mixed
      */
     public function index(Request $request)
@@ -49,6 +48,7 @@ class BlogEtcCommentsAdminController extends Controller
      * Approve a comment.
      *
      * @param $blogCommentId
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function approve($blogCommentId)
@@ -67,6 +67,7 @@ class BlogEtcCommentsAdminController extends Controller
      * Delete a submitted comment.
      *
      * @param $blogCommentId
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($blogCommentId)

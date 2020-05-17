@@ -8,7 +8,7 @@ class AddNewCommentRequest extends FormRequest
 {
     public function authorize()
     {
-        if (config('blogetc.comments.type_of_comments_to_show') === 'built_in') {
+        if ('built_in' === config('blogetc.comments.type_of_comments_to_show')) {
             // anyone is allowed to submit a comment, to return true always.
             return true;
         }
@@ -26,9 +26,9 @@ class AddNewCommentRequest extends FormRequest
     {
         // basic rules
         $return = [
-            'comment' => ['required', 'string', 'min:3', 'max:1000'],
-            'author_name' => ['string', 'min:1', 'max:50'],
-            'author_email' => ['string', 'nullable', 'min:1', 'max:254', 'email'],
+            'comment'        => ['required', 'string', 'min:3', 'max:1000'],
+            'author_name'    => ['string', 'min:1', 'max:50'],
+            'author_email'   => ['string', 'nullable', 'min:1', 'max:254', 'email'],
             'author_website' => ['string', 'nullable', 'min:'.strlen('http://a.b'), 'max:175', 'active_url'],
         ];
 
@@ -47,7 +47,7 @@ class AddNewCommentRequest extends FormRequest
             $captcha_class = config('blogetc.captcha.captcha_type');
 
             /** @var \WebDevEtc\BlogEtc\Interfaces\CaptchaInterface $captcha */
-            $captcha = new $captcha_class;
+            $captcha = new $captcha_class();
 
             $return[$captcha->captcha_field_name()] = $captcha->rules();
         }

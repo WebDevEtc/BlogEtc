@@ -15,8 +15,6 @@ class BlogCommentApprovedAndDefaultOrderScope implements Scope
      *
      * In the admin panel we disable this scope with ::withoutGlobalScopes() or ::withoutGlobalScope(...)
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $builder
-     * @param  \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
     public function apply(Builder $builder, Model $model)

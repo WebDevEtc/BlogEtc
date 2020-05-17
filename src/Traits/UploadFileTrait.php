@@ -14,6 +14,7 @@ trait UploadFileTrait
 
     /**
      * If false, we check if the blog_images/ dir is writable, when uploading images.
+     *
      * @var bool
      */
     protected $checked_blog_image_dir_is_writable = false;
@@ -36,11 +37,11 @@ trait UploadFileTrait
      *
      * Todo: support multiple filesystem locations.
      *
-     * @param string $suggested_title
      * @param $image_size_details - either an array (with w/h attributes) or a string
-     * @param UploadedFile $photo
-     * @return string
+     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo)
     {
@@ -50,14 +51,13 @@ trait UploadFileTrait
         $wh = $this->getWhForFilename($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
-
+        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; ++$i) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.str_random(5) : '';
 
             $attempt = str_slug($base.$suffix.$wh).$ext;
 
-            if (!File::exists($this->image_destination_path().'/'.$attempt)) {
+            if (! File::exists($this->image_destination_path().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -68,8 +68,9 @@ trait UploadFileTrait
     }
 
     /**
-     * @return string
      * @throws \RuntimeException
+     *
+     * @return string
      */
     protected function image_destination_path()
     {
@@ -84,8 +85,10 @@ trait UploadFileTrait
      * @param $suggested_title - used to help generate the filename
      * @param $image_size_details - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
      * @param $photo
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     protected function UploadAndResize(BlogEtcPost $new_blog_post = null, $suggested_title, $image_size_details, $photo)
     {
@@ -108,7 +111,7 @@ trait UploadFileTrait
                     $constraint->aspectRatio();
                 });
             }
-        } elseif ($image_size_details === 'fullsize') {
+        } elseif ('fullsize' === $image_size_details) {
             // nothing to do here - no resizing needed.
             // We just need to set $w/$h with the original w/h values
             $w = $resizedImage->width();
@@ -126,8 +129,8 @@ trait UploadFileTrait
         // return the filename and w/h details
         return [
             'filename' => $image_filename,
-            'w' => $w,
-            'h' => $h,
+            'w'        => $w,
+            'h'        => $h,
         ];
     }
 
@@ -149,8 +152,10 @@ trait UploadFileTrait
      * getWhForFilename("some string") it will return -some-string". (max len: 30)
      *
      * @param array|string $image_size_details
-     * @return string
+     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     protected function getWhForFilename($image_size_details)
     {
@@ -167,13 +172,15 @@ trait UploadFileTrait
     /**
      * Check if the image destination directory is writable.
      * Throw an exception if it was not writable.
-     * @throws \RuntimeException
+     *
      * @param $path
+     *
+     * @throws \RuntimeException
      */
     protected function check_image_destination_path_is_writable($path)
     {
-        if (!$this->checked_blog_image_dir_is_writable) {
-            if (!is_writable($path)) {
+        if (! $this->checked_blog_image_dir_is_writable) {
+            if (! is_writable($path)) {
                 throw new \RuntimeException("Image destination path is not writable ($path)");
             }
             $this->checked_blog_image_dir_is_writable = true;
@@ -181,13 +188,12 @@ trait UploadFileTrait
     }
 
     /**
-     * @param string $suggested_title
      * @return string
      */
     protected function generate_base_filename(string $suggested_title)
     {
         $base = substr($suggested_title, 0, 100);
-        if (!$base) {
+        if (! $base) {
             // if we have an empty string then we should use a random one:
             $base = 'image-'.str_random(5);
 

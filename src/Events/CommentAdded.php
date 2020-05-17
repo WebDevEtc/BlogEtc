@@ -13,7 +13,9 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
  */
 class CommentAdded
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /** @var BlogEtcPost */
     public $blogEtcPost;
@@ -22,8 +24,6 @@ class CommentAdded
 
     /**
      * CommentAdded constructor.
-     * @param BlogEtcPost $blogEtcPost
-     * @param BlogEtcComment $newComment
      */
     public function __construct(BlogEtcPost $blogEtcPost, BlogEtcComment $newComment)
     {

@@ -16,8 +16,6 @@ class Helpers
 
     /**
      * Set a new message.
-     *
-     * @param string $message
      */
     public static function flash_message(string $message)
     {
@@ -36,6 +34,7 @@ class Helpers
 
     /**
      * return the flashed message. Use with ::has_flashed_message() if you need to check if it has a value...
+     *
      * @return string
      */
     public static function pull_flashed_message()
@@ -46,6 +45,7 @@ class Helpers
     /**
      * Use this (Helpers::rss_html_tag()) in your blade/template files, within <head>
      * to auto insert the links to rss feed.
+     *
      * @return string
      */
     public static function rss_html_tag()
@@ -57,7 +57,9 @@ class Helpers
 
     /**
      * This method is depreciated. Just use the config() directly.
+     *
      * @return array
+     *
      * @deprecated
      */
     public static function image_sizes()

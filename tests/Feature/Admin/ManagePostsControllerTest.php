@@ -102,11 +102,11 @@ class ManagePostsControllerTest extends TestCase
         $this->beAdminUser();
 
         $params = [
-            'posted_at' => null,
-            'title' => $this->faker->sentence,
-            'subtitle' => null,
-            'post_body' => $this->faker->paragraph,
-            'meta_desc' => $this->faker->paragraph,
+            'posted_at'         => null,
+            'title'             => $this->faker->sentence,
+            'subtitle'          => null,
+            'post_body'         => $this->faker->paragraph,
+            'meta_desc'         => $this->faker->paragraph,
             'short_description' => $this->faker->paragraph,
         ];
 
@@ -129,11 +129,11 @@ class ManagePostsControllerTest extends TestCase
         $category = factory(Category::class)->create();
 
         $params = [
-            'title' => $this->faker->sentence,
-            'post_body' => $this->faker->paragraph,
-            'meta_desc' => $this->faker->paragraph,
+            'title'             => $this->faker->sentence,
+            'post_body'         => $this->faker->paragraph,
+            'meta_desc'         => $this->faker->paragraph,
             'short_description' => $this->faker->paragraph,
-            'category' => [$category->id => '1'],
+            'category'          => [$category->id => '1'],
         ];
 
         $response = $this->post(route('blogetc.admin.store_post'), $params);
@@ -159,11 +159,11 @@ class ManagePostsControllerTest extends TestCase
         $invalidCategoryID = 1000;
 
         $params = [
-            'title' => $this->faker->sentence,
-            'post_body' => $this->faker->paragraph,
-            'meta_desc' => $this->faker->paragraph,
+            'title'             => $this->faker->sentence,
+            'post_body'         => $this->faker->paragraph,
+            'meta_desc'         => $this->faker->paragraph,
             'short_description' => $this->faker->paragraph,
-            'category' => [$invalidCategoryID => '1'],
+            'category'          => [$invalidCategoryID => '1'],
         ];
 
         $response = $this->post(route('blogetc.admin.store_post'), $params);

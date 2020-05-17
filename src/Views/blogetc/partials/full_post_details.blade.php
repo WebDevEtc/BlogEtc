@@ -7,7 +7,7 @@
 <h5 class='blog_subtitle'>{{$post->subtitle}}</h5>
 
 
-<?=$post->image_tag("medium", false, 'd-block mx-auto'); ?>
+<?=$post->image_tag('medium', false, 'd-block mx-auto'); ?>
 
 <p class="blog_body_content">
     {!! $post->post_body_output() !!}

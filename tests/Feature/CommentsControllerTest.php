@@ -49,9 +49,9 @@ class CommentsControllerTest extends TestCase
         $url = route('blogetc.comments.add_new_comment', $post->slug);
 
         $params = [
-            'comment' => $this->faker->sentence,
-            'author_name' => $this->faker->name,
-            'author_email' => $this->faker->safeEmail,
+            'comment'        => $this->faker->sentence,
+            'author_name'    => $this->faker->name,
+            'author_email'   => $this->faker->safeEmail,
             'author_website' => 'http://'.$this->faker->safeEmailDomain,
         ];
 
@@ -80,9 +80,9 @@ class CommentsControllerTest extends TestCase
         $url = route('blogetc.comments.add_new_comment', $post->slug);
 
         $params = [
-            'comment' => $this->faker->sentence,
-            'author_name' => $this->faker->name,
-            'author_email' => $this->faker->safeEmail,
+            'comment'        => $this->faker->sentence,
+            'author_name'    => $this->faker->name,
+            'author_email'   => $this->faker->safeEmail,
             'author_website' => 'http://'.$this->faker->safeEmailDomain,
         ];
 

@@ -7,8 +7,8 @@
 
     <?php
     $images_to_delete = [];
-    foreach ((array) config("blogetc.image_sizes") as $image_size => $image_size_info) {
-        if (!$deletedPost->$image_size) {
+    foreach ((array) config('blogetc.image_sizes') as $image_size => $image_size_info) {
+        if (! $deletedPost->$image_size) {
             continue;
         }
         $images_to_delete[] = $image_size;
