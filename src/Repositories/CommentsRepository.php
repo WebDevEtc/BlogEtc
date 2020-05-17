@@ -9,7 +9,6 @@ use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Models\Post;
 
 class CommentsRepository
-
 {
     /**
      * @var Comment

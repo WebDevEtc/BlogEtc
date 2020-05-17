@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebDevEtc\BlogEtc\Factories;
 
 /* @var \Illuminate\Database\Eloquent\Factory $factory */

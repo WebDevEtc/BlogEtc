@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebDevEtc\BlogEtc\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebDevEtc\BlogEtc\Captcha;
 
 use Illuminate\Http\Request;
