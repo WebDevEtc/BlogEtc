@@ -98,7 +98,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->loadMigrations();
             $this->withFactories(__DIR__.'/../src/Factories');
 
-            if (! \Route::has('login')) {
+            if (!\Route::has('login')) {
                 // Need to define a login route for feature tests.
                 \Route::get('login', function () {
                 })->name('login');
@@ -123,7 +123,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             }
 
             // Also manually create users table so relations will work.
-            if (! Schema::hasTable('users')) {
+            if (!Schema::hasTable('users')) {
                 Schema::create('users', static function (Blueprint $table) {
                     $table->bigIncrements('id');
                     $table->string('name');

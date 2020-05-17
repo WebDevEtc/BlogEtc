@@ -64,7 +64,7 @@ class BlogEtcReaderController extends Controller
      */
     public function search(Request $request)
     {
-        if (! config('blogetc.search.search_enabled')) {
+        if (!config('blogetc.search.search_enabled')) {
             throw new \Exception('Search is disabled');
         }
         $query = $request->get('s');
