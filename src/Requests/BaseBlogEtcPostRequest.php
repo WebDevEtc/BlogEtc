@@ -6,9 +6,8 @@ use Carbon\Carbon;
 
 abstract class BaseBlogEtcPostRequest extends BaseRequest
 {
-
     /**
-     * Shared rules for blog posts
+     * Shared rules for blog posts.
      *
      * @return array
      * @todo tidy this up! It is a bit of a mess!
@@ -29,17 +28,16 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
         $show_error_if_has_value = function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value...
-                return $fail($attribute . ' must be empty');
+                return $fail($attribute.' must be empty');
             }
         };
 
         $disabled_use_view_file = function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value
-                return $fail("The use of custom view files is not enabled for this site, so you cannot submit a value for it");
+                return $fail('The use of custom view files is not enabled for this site, so you cannot submit a value for it');
             }
         };
-
 
         // generate the main set of rules:
         $return = [
@@ -55,26 +53,24 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
             'categories' => ['nullable', 'array'],
         ];
 
-
         // is use_custom_view_files true?
         if (config('blogetc.use_custom_view_files')) {
-            $return['use_view_file'] = ['nullable', 'string', 'alpha_num', 'min:1', 'max:75',];
+            $return['use_view_file'] = ['nullable', 'string', 'alpha_num', 'min:1', 'max:75'];
         } else {
             // use_view_file is disabled, so give an empty if anything is submitted via this function:
             $return['use_view_file'] = ['string', $disabled_use_view_file];
         }
 
         // some additional rules for uploaded images
-        foreach ((array)config('blogetc.image_sizes') as $size => $image_detail) {
-            if ($image_detail['enabled'] && config("blogetc.image_upload_enabled")) {
-                $return[$size] = ['nullable', 'image',];
+        foreach ((array) config('blogetc.image_sizes') as $size => $image_detail) {
+            if ($image_detail['enabled'] && config('blogetc.image_upload_enabled')) {
+                $return[$size] = ['nullable', 'image'];
             } else {
                 // was not enabled (or all images are disabled), so show an error if it was submitted:
                 $return[$size] = $show_error_if_has_value;
             }
         }
+
         return $return;
     }
-
-
 }
