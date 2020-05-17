@@ -44,6 +44,8 @@ class PostsServiceTest extends TestCase
      */
     public function testRepository(): void
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
+
         $mock = $this->mock(PostsRepository::class);
 
         $service = resolve(PostsService::class);
@@ -59,6 +61,7 @@ class PostsServiceTest extends TestCase
      */
     public function testCreate(): void
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         // Mock the repository:
         $this->mock(PostsRepository::class, static function ($mock) {
             // Test that it is called exactly once:
@@ -80,6 +83,7 @@ class PostsServiceTest extends TestCase
      */
     public function testIndexPaginated(): void
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $this->mock(PostsRepository::class, static function ($mock) {
             // test that is calls repo correctly:
             $mock->shouldReceive('indexPaginated')->once();
@@ -95,6 +99,7 @@ class PostsServiceTest extends TestCase
      */
     public function testFindBySlug(): void
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $this->mock(PostsRepository::class, static function ($mock) {
             // test that is calls repo correctly:
             $mock->shouldReceive('findBySlug')->once();
@@ -110,6 +115,7 @@ class PostsServiceTest extends TestCase
      */
     public function testRssItems(): void
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $this->mock(PostsRepository::class, static function ($mock) {
             // test that is calls repo correctly:
             $mock->shouldReceive('rssItems')->once();
@@ -127,6 +133,7 @@ class PostsServiceTest extends TestCase
      */
     public function testUpdate(): void
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $belongsToMany = $this->mock(BelongsToMany::class, static function ($mock) {
             $mock->shouldReceive('sync');
         });
@@ -165,6 +172,7 @@ class PostsServiceTest extends TestCase
      */
     public function testDelete(): void
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $this->mock(PostsRepository::class, static function ($mock) {
             $mock->shouldReceive('find')->with(123)->andReturn(new Post());
             $mock->shouldReceive('delete')->with(123)->andReturn(true);
@@ -186,6 +194,7 @@ class PostsServiceTest extends TestCase
      */
     private function createParams(): array
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         return [
             'posted_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'title' => $this->faker->sentence,
@@ -204,6 +213,7 @@ class PostsServiceTest extends TestCase
      */
     public function createRequest(array $params): PostRequest
     {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         // Not testing the request, just mock it and what it returns.
         $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
             $mock->shouldReceive('validated')->andReturn($params);

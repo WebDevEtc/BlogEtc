@@ -3,8 +3,9 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Services\CommentsService;
+//use WebDevEtc\BlogEtc\Models\Post;
+use WebDevEtc\BlogEtc\Models\BlogEtcPost as Post;
+//use WebDevEtc\BlogEtc\Services\CommentsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 /**
@@ -28,7 +29,8 @@ class CommentsControllerTest extends TestCase
         $this->featureSetUp();
 
         // Built in (database) comments by default):
-        config(['blogetc.comments.type_of_comments_to_show' => CommentsService::COMMENT_TYPE_BUILT_IN]);
+        config(['blogetc.comments.type_of_comments_to_show' => 'built_in']);
+//        config(['blogetc.comments.type_of_comments_to_show' => CommentsService::COMMENT_TYPE_BUILT_IN]);
         // Auto approve comments by default:
         config(['blogetc.comments.auto_approve_comments' => true]);
         // Disable captcha by default:
@@ -40,6 +42,8 @@ class CommentsControllerTest extends TestCase
      */
     public function testStore(): void
     {
+        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+
         $post = factory(Post::class)->create();
 
         $url = route('blogetc.comments.add_new_comment', $post->slug);
@@ -66,6 +70,8 @@ class CommentsControllerTest extends TestCase
      */
     public function testDisabledCommentsStore(): void
     {
+        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+
         // Disable comments:
         config(['blogetc.comments.type_of_comments_to_show' => CommentsService::COMMENT_TYPE_DISABLED]);
 

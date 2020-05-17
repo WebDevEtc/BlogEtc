@@ -11,6 +11,17 @@ env:
   - LARAVEL_VERSION=6.4.*
   - LARAVEL_VERSION=6.5.*
   - LARAVEL_VERSION=6.8.*
+  - LARAVEL_VERSION=7.0.*
+  - LARAVEL_VERSION=7.1.*
+  - LARAVEL_VERSION=7.2.*
+  - LARAVEL_VERSION=7.3.*
+  - LARAVEL_VERSION=7.4.*
+  - LARAVEL_VERSION=7.5.*
+  - LARAVEL_VERSION=7.6.*
+
+matrix:
+  fast_finish: true
+#  exclude:
 
 matrix:
   fast_finish: true

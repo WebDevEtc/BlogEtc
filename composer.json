@@ -39,7 +39,8 @@
   "require-dev": {
     "phpunit/phpunit": "*",
     "orchestra/testbench": "4.0.*",
-    "php-coveralls/php-coveralls": "*"
+    "php-coveralls/php-coveralls": "*",
+    "laravel/laravel": "7.6.*"
   },
   "autoload": {
     "psr-4": {
