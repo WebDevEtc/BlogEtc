@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebDevEtc\BlogEtc\Services;
 
 use Exception;

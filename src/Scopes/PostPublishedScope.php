@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebDevEtc\BlogEtc\Scopes;
 
 use Carbon\Carbon;

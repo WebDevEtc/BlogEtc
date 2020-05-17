@@ -1,6 +1,5 @@
 <?php
 
-
 namespace WebDevEtc\BlogEtc;
 
 use Gate;
