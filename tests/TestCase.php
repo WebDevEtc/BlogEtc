@@ -1,14 +1,17 @@
 <?php
+
 namespace App\Http\Controllers {
     use Illuminate\Routing\Controller as BaseController;
-    class  Controller extends BaseController {}
+
+    class Controller extends BaseController
+    {
+    }
 }
 
 namespace WebDevEtc\BlogEtc\Tests {
 
 //use App\User;
     use Gate;
-    use Illuminate\Database\Eloquent\Model;
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Foundation\Application;
     use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -95,7 +98,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         protected function featureSetUp(): void
         {
             $this->loadMigrations();
-            $this->withFactories(__DIR__ . '/../src/Factories');
+            $this->withFactories(__DIR__.'/../src/Factories');
 
             if (!\Route::has('login')) {
                 // Need to define a login route for feature tests.
@@ -112,7 +115,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         protected function loadMigrations(): void
         {
             $paths = [
-                __DIR__ . '/../migrations',
+                __DIR__.'/../migrations',
             ];
 
             foreach ($paths as $path) {
@@ -156,13 +159,13 @@ namespace WebDevEtc\BlogEtc\Tests {
             ]);
 
             // Add the custom dir for layouts.app view:
-            $app['view']->addLocation(__DIR__ . '/views');
+            $app['view']->addLocation(__DIR__.'/views');
 
             // ensure app.key is set.
             $app['config']->set('app.key', base64_decode('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
 
             // Use the default config for this package:
-            $app['config']->set('blogetc', include(__DIR__ . '/../src/Config/blogetc.php'));
+            $app['config']->set('blogetc', include(__DIR__.'/../src/Config/blogetc.php'));
 
             // Ensure has correct 'sluggable' config set up:
             $app['config']->set('sluggable', [
