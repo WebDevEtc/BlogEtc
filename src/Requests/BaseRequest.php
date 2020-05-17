@@ -6,8 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 
 /**
- * Class BaseRequest
- * @package WebDevEtc\BlogEtc\Requests
+ * Class BaseRequest.
  */
 abstract class BaseRequest extends FormRequest implements BaseRequestInterface
 {

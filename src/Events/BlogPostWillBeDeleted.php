@@ -2,20 +2,19 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
 /**
- * Class BlogPostWillBeDeleted
- * @package WebDevEtc\BlogEtc\Events
+ * Class BlogPostWillBeDeleted.
  */
 class BlogPostWillBeDeleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /** @var  BlogEtcPost */
+    /** @var BlogEtcPost */
     public $blogEtcPost;
 
     /**
@@ -24,7 +23,6 @@ class BlogPostWillBeDeleted
      */
     public function __construct(BlogEtcPost $blogEtcPost)
     {
-        $this->blogEtcPost=$blogEtcPost;
+        $this->blogEtcPost = $blogEtcPost;
     }
-
 }
