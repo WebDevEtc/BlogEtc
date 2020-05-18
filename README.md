@@ -1,10 +1,12 @@
-[![Build Status](https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master)](https://travis-ci.org/WebDevEtc/BlogEtc)
 
 # Webdevetc BlogEtc
 
  - Quickly add a blog with admin panel to your existing Laravel project. It has everything included (routes, views, controllers, middlware, etc)
  - Works with latest version of Laravel.
  
+[![Build Status](https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master)](https://travis-ci.org/WebDevEtc/BlogEtc)
+[![StyleCI](https://github.styleci.io/repos/144829997/shield?branch=master)](https://github.styleci.io/repos/144829997)
+
 # Next version - coming soon
 
  - A rewrite of a lot of the code will be released soon. The work for this is now on the `blogetc-next-version` branch. Code there is liable to change. 
