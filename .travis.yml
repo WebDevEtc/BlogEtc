@@ -6,19 +6,14 @@ php:
   - 7.4
 
 env:
-  - LARAVEL_VERSION=6.0.*
-  - LARAVEL_VERSION=6.2.*
-  - LARAVEL_VERSION=6.4.*
-  - LARAVEL_VERSION=6.5.*
-  - LARAVEL_VERSION=6.8.*
-  - LARAVEL_VERSION=7.0.*
-  - LARAVEL_VERSION=7.1.*
-  - LARAVEL_VERSION=7.2.*
-  - LARAVEL_VERSION=7.3.*
-  - LARAVEL_VERSION=7.4.*
-  - LARAVEL_VERSION=7.5.*
-  - LARAVEL_VERSION=7.6.*
-
+  - LARAVEL_VERSION=7.6.0
+  - LARAVEL_VERSION=7.0.0
+  - LARAVEL_VERSION=6.18.8
+  - LARAVEL_VERSION=6.8.0
+  - LARAVEL_VERSION=6.5.2
+  - LARAVEL_VERSION=5.8.35
+  - LARAVEL_VERSION=dev-master
+  - LARAVEL_VERSION=
 matrix:
   fast_finish: true
 
@@ -29,7 +24,7 @@ before_script:
   - composer update
 
 script:
-  - phpunit
+  - vendor/bin/phpunit
 
 after_script:
-  - php vendor/bin/php-coveralls -v
+#  - php vendor/bin/php-coveralls -v
