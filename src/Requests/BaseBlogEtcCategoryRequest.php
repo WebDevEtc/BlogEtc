@@ -9,7 +9,7 @@ abstract class BaseBlogEtcCategoryRequest extends BaseRequest
      *
      * @return array
      */
-    protected function baseCategoryRules():array
+    protected function baseCategoryRules(): array
     {
         $return = [
             'category_name'        => ['required', 'string', 'min:1', 'max:200'],

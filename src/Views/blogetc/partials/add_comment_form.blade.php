@@ -1,20 +1,24 @@
-<div class='add_comment_area'>
-    <h5 class='text-center'>Add a comment</h5>
-    <form method='post' action='{{route("blogetc.comments.add_new_comment", $post->slug)}}'>
+@php
+    use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
+    use WebDevEtc\BlogEtc\Models\Post;
+    /** @var Post $post */
+    /** @var CaptchaAbstract $captcha */
+@endphp
+<div class="add_comment_area">
+    <h5 class="text-center">Add a comment</h5>
+    <form method="post" action="{{ route('blogetc.comments.add_new_comment', $post->slug) }}">
         @csrf
 
+        <div class="form-group">
 
-        <div class="form-group ">
-
-            <label id="comment_label" for="comment">Your Comment </label>
-                    <textarea
-                            class="form-control"
-                            name='comment'
-                            required
-                            id="comment"
-                            placeholder="Write your comment here"
-                            rows="7">{{old("comment")}}</textarea>
-
+            <label id="comment_label" for="comment">Your Comment</label>
+            <textarea
+                class="form-control"
+                name="comment"
+                required
+                id="comment"
+                placeholder="Write your comment here"
+                rows="7">{{ old('comment') }}</textarea>
 
         </div>
 
@@ -77,17 +81,14 @@
             </div>
         </div>
 
-
         @if($captcha)
-            {{--Captcha is enabled. Load the type class, and then include the view as defined in the captcha class --}}
+            {{-- Captcha is enabled. Load the type class and then include the view as defined in the captcha class. --}}
             @include($captcha->view())
         @endif
 
-
-        <div class="form-group ">
-            <input type='submit' class="form-control input-sm btn btn-success "
-                   value='Add Comment'>
+        <div class="form-group">
+            <input type="submit" class="form-control input-sm btn btn-success" value="Add Comment">
         </div>
-
     </form>
 </div>
+

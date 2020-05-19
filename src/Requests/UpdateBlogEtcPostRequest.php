@@ -16,7 +16,7 @@ class UpdateBlogEtcPostRequest extends BaseBlogEtcPostRequest
      *
      * @return array
      */
-    public function rules():array
+    public function rules(): array
     {
         $return = $this->baseBlogPostRules();
         $return['slug'][] = Rule::unique('blog_etc_posts', 'slug')->ignore($this->route()->parameter('blogPostId'));

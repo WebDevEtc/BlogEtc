@@ -1,18 +1,14 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
-
-
+@extends('blogetc_admin::layouts.admin_layout')
+@section('content')
     <h5>Admin - Upload Images</h5>
 
     <p>Upload was successful.</p>
 
     @forelse($images as $image)
-
         <div>
-
-            <h4>{{$image['filename']}}</h4>
+            <h4>{{ $image['filename'] }}</h4>
             <h6>
-                <small>{{$image['w'] . "x" . $image['h']}}</small>
+                <small>{{ $image['w'] . 'x' . $image['h'] }}</small>
             </h6>
 
             <a href='{{asset(     config("blogetc.blog_upload_dir") . "/". $image['filename'])}}' target='_blank'>
@@ -24,11 +20,10 @@
 
 
         </div>
-
     @empty
-        <div class='alert alert-danger'>No image was processed</div>
+        <div class="alert alert-danger">
+            No image was processed
+        </div>
     @endforelse
-
-
-
 @endsection
+

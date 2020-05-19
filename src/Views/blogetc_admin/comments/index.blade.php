@@ -1,9 +1,11 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
-
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\Comment[] $comments */
+@endphp
+@extends('blogetc_admin::layouts.admin_layout')
+@section('title', 'BlogEtc Manage Comments')
+@section('content')
     @forelse ($comments as $comment)
-
-        <div class="card m-4" >
+        <div class="card m-4">
             <div class="card-body">
 
                 <h5 class='card-title'>
@@ -60,15 +62,12 @@
                 </form>
             </div>
         </div>
-
-
     @empty
-        <div class='alert alert-danger'>None found</div>
+        <div class="alert alert-danger">None found</div>
     @endforelse
 
-
-    <div class='text-center'>
-        {{$comments->appends( [] )->links()}}
+    <div class="text-center">
+        {{ $comments->links() }}
     </div>
-
 @endsection
+
