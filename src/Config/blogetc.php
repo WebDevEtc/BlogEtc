@@ -10,44 +10,54 @@ return [
 
     'use_custom_view_files' => false, // set to false to disable the use of being able to make blog posts include a view from resources/views/custom_blog_posts/*.blade.php. Default: false. Set to true to use this feature. Default: false
 
-    'per_page' => 10, // how many posts to show per page on the blog index page. Default: 10
+    // how many posts to show per page on the blog index page.
+    // Default: 10
+    'per_page' => 10,
 
-    'image_upload_enabled' => true, // true or false, if image uploading is allowed.
-    'blog_upload_dir'      => 'blog_images', // this should be in public_path() (i.e. /public/blog_images), and should be writable
+    // Are image uploads enabled?
+    // Default: true
+    'image_upload_enabled' => true,
+
+    // This should be in public_path() (i.e. /public/blog_images), and should be writable
+    // (be sure this directory is writable!)
+    // Default: blog_images
+    'blog_upload_dir' => 'blog_images',
 
     'memory_limit' => '2048M', // This is used when uploading images :
     //                              @ini_set('memory_limit', config("blogetc.memory_limit"));
     //                            See PHP.net for detailso
     //                            Set to false to not set any value.
 
-    //if true it will echo out  (with {!! !!}) the blog post with NO escaping! This is not safe if you don't trust your blog post writers! Understand the risks by leaving this to true
-    // (you should disable this (set to false) if you don't trust your blog writers).
-    // This will apply to all posts (past and future).
+    // Should it echo out raw HTML post body (with {!! ... !!})? This is not safe if you do not trust your writers!
     // Do not set to true if you don't trust your blog post writers. They could put in any HTML or JS code.
-    'echo_html' => true, // default true
+    // This will apply to all posts (past and future).
+    // (you should disable this (set to false) if you don't trust your blog writers).
+    // Default: true
+    'echo_html' => true,
 
-    // If strip_html is true, it'll run strip_tags() before escaping and echoing.
-    // It doesn't add any security advantage, but avoids any html tags appearing if you have disabled echoing plain html.
-    //  Only works if echo_html is false.
-    'strip_html' => false, // Default: false.
+    // If echo_html is false, before running the post body in e(), it can run strip_tags
+    // Default: false
+    'strip_html' => false,
 
-    //  Only works if echo_html if false. If auto_nl2br is true, the output will be run through nl2br after escaping.
-    'auto_nl2br' => true, // Default: true.
+    // If echo_html is false, should it wrap post body in nl2br()?
+    // Default: true
+    'auto_nl2br' => true,
 
-    // use the ckeditor WYWIWYG (rich text editor) for formatting your HTML blog posts.
+    // Use a WYSIWYG editor for posts (rich text editor)?
     // This will load scripts from https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js
     // echo_html must be set to true for this to have an effect.
-    'use_wysiwyg' => true, // Default: true
+    // Default: true
+    'use_wysiwyg' => true,
 
-    'image_quality' => 80, // what image quality to use when saving images. higher = better + bigger sizes. Around 80 is normal.
+    // what image quality to use when saving images. higher = better + bigger sizes. Around 80 is normal.
+    // Default: 80
+    'image_quality' => 80,
 
+    // Array of image sizes.
     'image_sizes' => [
-        // if you set 'enabled' to false, it will clear any data for that field the next time any row is updated. However it will NOT delete the .jpg file on your file server.
+        // if you set 'enabled' to false, it will clear any data for that field the next time any row is updated.
+        // However it will NOT delete the .jpg file on your file server.
         // I recommend that you only change the enabled field before any images have been uploaded!
-
-        // Also, if you change the w/h (which are obviously in pixels :) ), it won't change any previously uploaded images.
-
-        // There must be only three sizes - image_large, image_medium, image_thumbnail.
 
         'image_large' => [ // this key must start with 'image_'. This is what the DB column must be named
             'w'         => 1000, // width in pixels
@@ -115,8 +125,7 @@ return [
         'language'                  => 'en', // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
     ],
 
-    ////////// comments:
-
+    // Comments settings:
     'comments' => [
         // What type (if any) of comments/comment form to show.
         // options:
@@ -152,7 +161,11 @@ return [
         ],
     ],
 
+    // Search config:
     'search' => [
-        'search_enabled' => false, // is search enabled? By default this is disabled, but you can easily turn it on.
+        // Is search enabled? By default this is disabled, but you can easily turn it on.
+        // Default: false
+        // [Search is temporarily completely disabled - will return in a future version soon. Sorry!]
+        'search_enabled' => false,
     ],
 ];
