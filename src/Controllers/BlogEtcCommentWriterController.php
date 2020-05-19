@@ -24,9 +24,9 @@ class BlogEtcCommentWriterController extends Controller
      *
      * @param $blog_post_slug
      *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function addNewComment(AddNewCommentRequest $request, $blog_post_slug)
     {
@@ -45,8 +45,8 @@ class BlogEtcCommentWriterController extends Controller
         $new_comment = $this->createNewComment($request, $blog_post);
 
         return view('blogetc::saved_comment', [
-            'captcha'     => $captcha,
-            'blog_post'   => $blog_post,
+            'captcha' => $captcha,
+            'blog_post' => $blog_post,
             'new_comment' => $new_comment,
         ]);
     }
@@ -56,7 +56,7 @@ class BlogEtcCommentWriterController extends Controller
      *
      * @return BlogEtcComment
      */
-    protected function createNewComment(AddNewCommentRequest $request,Post $blog_post)
+    protected function createNewComment(AddNewCommentRequest $request, Post $blog_post)
     {
         $new_comment = new Comment($request->all());
 
