@@ -130,7 +130,7 @@ class Post extends Model implements SearchResultInterface
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'blog_etc_post_categories',  'blog_etc_category_id','blog_etc_post_id');
+        return $this->belongsToMany(Category::class, 'blog_etc_post_categories', 'blog_etc_category_id', 'blog_etc_post_id');
     }
 
     /**
