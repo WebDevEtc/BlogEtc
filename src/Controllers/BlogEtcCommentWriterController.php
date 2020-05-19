@@ -26,7 +26,6 @@ class BlogEtcCommentWriterController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
-     *
      */
     public function addNewComment(AddNewCommentRequest $request, $blog_post_slug)
     {
