@@ -56,7 +56,7 @@ class BlogEtcCommentWriterController extends Controller
      *
      * @return BlogEtcComment
      */
-    protected function createNewComment(AddNewCommentRequest $request,Post $blog_post)
+    protected function createNewComment(AddNewCommentRequest $request, Post $blog_post)
     {
         $new_comment = new Comment($request->all());
 
