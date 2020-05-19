@@ -57,7 +57,7 @@ class BlogEtcCommentsAdminController extends Controller
         $comment->approved = true;
         $comment->save();
 
-        Helpers::flash_message('Approved!');
+        Helpers::flashMessage('Approved!');
         event(new CommentApproved($comment));
 
         return back();
@@ -77,7 +77,7 @@ class BlogEtcCommentsAdminController extends Controller
 
         $comment->delete();
 
-        Helpers::flash_message('Deleted!');
+        Helpers::flashMessage('Deleted!');
 
         return back();
     }

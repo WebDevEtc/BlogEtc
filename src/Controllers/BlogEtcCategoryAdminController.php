@@ -58,7 +58,7 @@ class BlogEtcCategoryAdminController extends Controller
         $new_category = new BlogEtcCategory($request->all());
         $new_category->save();
 
-        Helpers::flash_message('Saved new category');
+        Helpers::flashMessage('Saved new category');
 
         event(new CategoryAdded($new_category));
 
@@ -93,7 +93,7 @@ class BlogEtcCategoryAdminController extends Controller
         $category->fill($request->all());
         $category->save();
 
-        Helpers::flash_message('Saved category changes');
+        Helpers::flashMessage('Saved category changes');
         event(new CategoryEdited($category));
 
         return redirect($category->edit_url());
