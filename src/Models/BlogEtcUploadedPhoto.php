@@ -2,8 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * legacy class for backwards compatibility.
  * @deprecated

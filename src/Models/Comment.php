@@ -39,7 +39,7 @@ class Comment extends Model
      *
      * @return BelongsTo
      */
-    public function post():BelongsTo
+    public function post(): BelongsTo
     {
         return $this->belongsTo(Post::class, 'blog_etc_post_id');
     }
@@ -49,7 +49,7 @@ class Comment extends Model
      *
      * @return BelongsTo
      */
-    public function user():BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

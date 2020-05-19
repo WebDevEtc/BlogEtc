@@ -16,7 +16,7 @@ trait UsesCaptcha
      */
     private function getCaptchaObject()
     {
-        if (! config('blogetc.captcha.captcha_enabled')) {
+        if (!config('blogetc.captcha.captcha_enabled')) {
             return;
         }
 
