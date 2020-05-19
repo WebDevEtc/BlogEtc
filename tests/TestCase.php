@@ -49,6 +49,7 @@ namespace WebDevEtc\BlogEtc\Tests {
     {
         /** @var User|AdminUser */
         protected $lastUser;
+
         /**
          * As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
          * only on the package code in the controller. Would be interested if anyone has a suggestion on better way
@@ -138,7 +139,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 });
             }
 
-            if(!Schema::hasTable('laravel_fulltext')) {
+            if (!Schema::hasTable('laravel_fulltext')) {
                 Schema::create('laravel_fulltext', function (Blueprint $table) {
                     $table->increments('id');
                     $table->integer('indexable_id');
@@ -151,7 +152,6 @@ namespace WebDevEtc\BlogEtc\Tests {
                     $table->timestamps();
                 });
             }
-
 
             $this->resetApplicationArtisanCommands($this->app);
         }

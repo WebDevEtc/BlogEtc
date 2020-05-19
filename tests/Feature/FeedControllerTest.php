@@ -5,7 +5,7 @@ namespace WebDevEtc\BlogEtc\Tests\Feature;
 use App\User;
 use Auth;
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Models\Post ;
+use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 class FeedControllerTest extends TestCase
@@ -141,7 +141,6 @@ class FeedControllerTest extends TestCase
 
         $adminResponse->assertOk()
             ->assertSee($post->title);
-
 
         // Request it as a guest:
         Auth::logout();

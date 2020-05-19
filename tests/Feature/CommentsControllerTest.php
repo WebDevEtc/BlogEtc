@@ -3,7 +3,7 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Models\Post ;
+use WebDevEtc\BlogEtc\Models\Post;
 //use WebDevEtc\BlogEtc\Services\CommentsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 

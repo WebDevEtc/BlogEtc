@@ -28,7 +28,6 @@ class Post extends Model implements SearchResultInterface
 
     protected $table = 'blog_etc_posts';
 
-
     /**
      * @var array
      */
