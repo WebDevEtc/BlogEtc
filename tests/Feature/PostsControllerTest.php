@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 //use WebDevEtc\BlogEtc\Models\Category;
 //use WebDevEtc\BlogEtc\Models\Post;
@@ -142,7 +143,10 @@ class PostsControllerTest extends TestCase
      */
     public function testCategory(): void
     {
-        $this->markTestSkipped('TODO: Fix test');
+//        $this->markTestSkipped('TODO: Fix test');
+
+        Post::truncate();
+        Category::truncate();
 
         $post = factory(Post::class)->create();
         $category = factory(Category::class)->create();
@@ -152,7 +156,7 @@ class PostsControllerTest extends TestCase
         $response = $this->get(route('blogetc.view_category', $category->slug));
 
         $response->assertOk()
-            ->assertViewHas('category', $category)
+            ->assertViewHas('blogetc_category', $category)
             ->assertSee($post->title);
     }
 
@@ -161,22 +165,15 @@ class PostsControllerTest extends TestCase
      */
     public function testCategoryExcludesOtherCategories(): void
     {
-        $this->markTestSkipped('TODO - fix test');
-//
-//        $this->withoutExceptionHandling();
         $post = factory(Post::class)->create();
         $category = factory(Category::class)->create();
         $post->categories()->save($category);
-
-        // Another category, unassociated to $post:
         $unrelatedCategory = factory(Category::class)->create();
 
-        // Get category page for the unrelated category:
         $response = $this->get(route('blogetc.view_category', $unrelatedCategory->slug));
 
         $response->assertOk();
-        $response->assertViewHas('category', $unrelatedCategory);
-
+        $response->assertViewHas('blogetc_category', $unrelatedCategory);
         $response->assertDontSee($post->title);
     }
 }
