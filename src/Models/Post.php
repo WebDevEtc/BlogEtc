@@ -28,7 +28,6 @@ class Post extends Model implements SearchResultInterface
 
     protected $table = 'blog_etc_posts';
 
-
     /**
      * @var array
      */
@@ -131,8 +130,7 @@ class Post extends Model implements SearchResultInterface
      */
     public function categories(): BelongsToMany
     {
-        // TODO check this.
-        return $this->belongsToMany(Category::class, 'blog_etc_post_categories', 'blog_etc_post_id', 'blog_etc_category_id');
+        return $this->belongsToMany(Category::class, 'blog_etc_post_categories',  'blog_etc_category_id','blog_etc_post_id');
     }
 
     /**
@@ -142,7 +140,7 @@ class Post extends Model implements SearchResultInterface
      */
     public function comments(): HasMany
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'blog_etc_post_id');
     }
 
     /**

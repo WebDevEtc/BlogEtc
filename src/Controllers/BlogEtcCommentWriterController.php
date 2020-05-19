@@ -8,7 +8,8 @@ use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Events\CommentAdded;
 use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\Comment;
+use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;
 
 /**
@@ -33,8 +34,7 @@ class BlogEtcCommentWriterController extends Controller
             throw new \RuntimeException('Built in comments are disabled');
         }
 
-        $blog_post = BlogEtcPost::where('slug', $blog_post_slug)
-            ->firstOrFail();
+        $blog_post = Post::where('slug', $blog_post_slug)->firstOrFail();
 
         /** @var CaptchaAbstract $captcha */
         $captcha = $this->getCaptchaObject();
@@ -56,9 +56,9 @@ class BlogEtcCommentWriterController extends Controller
      *
      * @return BlogEtcComment
      */
-    protected function createNewComment(AddNewCommentRequest $request, $blog_post)
+    protected function createNewComment(AddNewCommentRequest $request,Post $blog_post)
     {
-        $new_comment = new BlogEtcComment($request->all());
+        $new_comment = new Comment($request->all());
 
         if (config('blogetc.comments.save_ip_address')) {
             $new_comment->ip = $request->ip();

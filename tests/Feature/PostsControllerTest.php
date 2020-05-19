@@ -6,8 +6,8 @@ use App\User;
 use Illuminate\Foundation\Testing\WithFaker;
 //use WebDevEtc\BlogEtc\Models\Category;
 //use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Models\Category ;
-use WebDevEtc\BlogEtc\Models\Post ;
+use WebDevEtc\BlogEtc\Models\Category;
+use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 /**
