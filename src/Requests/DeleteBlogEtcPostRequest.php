@@ -9,7 +9,7 @@ class DeleteBlogEtcPostRequest extends BaseRequest
      *
      * @return array
      */
-    public function rules():array
+    public function rules(): array
     {
         return [
         ];
