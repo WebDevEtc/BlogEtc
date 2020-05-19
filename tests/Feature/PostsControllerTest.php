@@ -3,7 +3,6 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use App\User;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 //use WebDevEtc\BlogEtc\Models\Category;
 //use WebDevEtc\BlogEtc\Models\Post;
