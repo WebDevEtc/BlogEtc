@@ -1,7 +1,6 @@
 <h2><a href='https://webdevetc.com/'>WebDevEtc.com BlogEtc Admin Panel</a></h2>
 <p>Welcome to the admin panel for your blog posts.</p>
 
-
 <ul class="list-group mb-3">
     <li class="list-group-item justify-content-between lh-condensed">
         <div>
@@ -95,8 +94,6 @@
     <li class="list-group-item  justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.images.upload') }}">Upload images</a></h6>
-
-
             <div class="list-group ">
 
                 <a href='{{ route('blogetc.admin.images.all') }}'
@@ -104,21 +101,12 @@
                             class="fa fa-picture-o fa-fw" aria-hidden="true"></i>
                     View All</a>
 
-
-
                 <a href='{{ route('blogetc.admin.images.upload') }}'
                    class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.images.upload') active @endif  '><i
                             class="fa fa-upload fa-fw" aria-hidden="true"></i>
                     Upload</a>
-
-
             </div>
-
-
         </div>
-
     </li>
         @endif
-
-
 </ul>

@@ -1,7 +1,6 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
-
-
+@extends('blogetc_admin::layouts.admin_layout')
+@section('title','Blog Etc Admin - Upload Images')
+@section('content')
     <h5>Admin - Upload Images</h5>
 
     <p>You can use this to upload images.</p>
@@ -57,7 +56,5 @@
 
         </div>
     </form>
-
-
-
 @endsection
+

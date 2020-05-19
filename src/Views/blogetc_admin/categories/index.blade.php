@@ -1,8 +1,7 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
+@extends('blogetc_admin::layouts.admin_layout')
+@section('content')
 
     @forelse ($categories as $category)
-
         <div class="card m-4" style="max-width: 500px;">
             <div class="card-body">
                 <h5 class='card-title'><a href='{{$category->url()}}'>{{$category->category_name}}</a></h5>
@@ -16,20 +15,17 @@
 
                         method='post' action='{{route("blogetc.admin.categories.destroy_category", $category->id)}}' class='float-right'>
                     @csrf
-                    @method("DELETE")
-                    <input type='submit' class='btn btn-danger btn-sm' value='Delete'/>
+                    @method('DELETE')
+                    <input type="submit" class="btn btn-danger btn-sm" value="Delete">
                 </form>
             </div>
         </div>
-
-
     @empty
-    <div class='alert alert-danger'>None found, why don't you add one?</div>
+        <div class="alert alert-danger">None found, why don't you add one?</div>
     @endforelse
 
-
-    <div class='text-center'>
-        {{$categories->appends( [] )->links()}}
+    <div class="text-center">
+        {{ $categories->links() }}
     </div>
+@endsection
 
-    @endsection

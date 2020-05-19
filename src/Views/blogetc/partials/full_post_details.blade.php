@@ -1,3 +1,6 @@
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
+@endphp
 @if(\Auth::check() && \Auth::user()->canManageBlogEtcPosts())
     <a href="{{$post->edit_url()}}" class="btn btn-outline-secondary btn-sm pull-right float-right">Edit
         Post</a>
@@ -23,7 +26,8 @@
 
 <hr/>
 
-Posted <strong>{{$post->posted_at->diffForHumans()}}</strong>
+Posted <strong>{{ $post->posted_at->diffForHumans() }}</strong>
 
-@includeWhen($post->author,"blogetc::partials.author",['post'=>$post])
-@includeWhen($post->categories,"blogetc::partials.categories",['post'=>$post])
+@includeWhen($post->author, 'blogetc::partials.author', ['post'=>$post])
+@includeWhen($post->categories, 'blogetc::partials.categories', ['post'=>$post])
+

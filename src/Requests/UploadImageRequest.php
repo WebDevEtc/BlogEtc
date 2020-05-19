@@ -4,7 +4,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 class UploadImageRequest extends BaseRequest
 {
-    public function rules():array
+    public function rules(): array
     {
         $rules = [
             'sizes_to_upload' => [

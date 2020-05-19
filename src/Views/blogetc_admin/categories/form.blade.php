@@ -3,10 +3,7 @@
 
     /* Generate the slug field, if it was not touched by the user (or if it was an empty string) */
     function populate_slug_field() {
-
-//        alert("A");
-        var cat_slug = document.getElementById('category_slug');
-
+        const cat_slug = document.getElementById('category_slug');
         if (cat_slug.value.length < 1) {
             // if the slug field is empty, make sure it auto generates
             SHOULD_AUTO_GEN_SLUG = true;
@@ -19,9 +16,7 @@
                     .replace(/[^\w-_ ]+/g, '') // replace with nothing
                     .replace(/[_ ]+/g, '-') // replace _ and spaces with -
                     .substring(0,99); // limit str length
-
         }
-
     }
 </script>
 <div class="form-group">

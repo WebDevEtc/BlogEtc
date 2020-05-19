@@ -1,17 +1,15 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
-
-
+@extends('blogetc_admin::layouts.admin_layout')
+@section('title', 'Edit Category ' . $category->category_name)
+@section('content')
     <h5>Admin - Edit Category</h5>
 
-    <form method='post' action='{{route("blogetc.admin.categories.edit_category",$category->id)}}'  enctype="multipart/form-data" >
-
+    <form method="post" action="{{ route('blogetc.admin.categories.edit_category', $category->id) }}"
+          enctype="multipart/form-data">
         @csrf
-        @method("patch")
-        @include("blogetc_admin::categories.form", ['category' => $category])
+        @method('patch')
+        @include('blogetc_admin::categories.form', ['category' => $category])
 
-        <input type='submit' class='btn btn-primary' value='Save Changes' >
-
+        <input type="submit" class="btn btn-primary" value="Save">
     </form>
-
 @endsection
+
