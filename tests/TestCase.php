@@ -9,6 +9,7 @@ namespace App\Http\Controllers {
 }
 
 // Helper classes to enable easy testing.
+
 namespace App {
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Illuminate\Notifications\Notifiable;
@@ -31,7 +32,7 @@ namespace App {
             return false;
         }
     }
-    if(!class_exists('\App\User')) {
+    if (!class_exists('\App\User')) {
         class User extends NormalUser
         {
         }
@@ -52,8 +53,6 @@ namespace WebDevEtc\BlogEtc\Tests {
     use Orchestra\Testbench\TestCase as BaseTestCase;
     use View;
     use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
-
-
 
     /**
      * Class TestCase.
