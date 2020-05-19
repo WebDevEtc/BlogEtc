@@ -41,6 +41,7 @@ namespace App {
 namespace WebDevEtc\BlogEtc\Tests {
 
     use App\AdminUser;
+    use App\NormalUser;
     use App\User;
     use Gate;
     use Illuminate\Database\Schema\Blueprint;
