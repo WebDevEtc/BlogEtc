@@ -2,17 +2,9 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-/**
- * Class BaseRequest.
- */
 class UploadImageRequest extends BaseRequest
 {
-    /**
-     *  rules for uploads.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules():array
     {
         $rules = [
             'sizes_to_upload' => [

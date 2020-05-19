@@ -13,7 +13,7 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
      *
      * @todo tidy this up! It is a bit of a mess!
      */
-    protected function baseBlogPostRules()
+    protected function baseBlogPostRules():array
     {
         // setup some anon functions for some of the validation rules:
         $check_valid_posted_at = function ($attribute, $value, $fail) {
