@@ -10,6 +10,7 @@ namespace App\Http\Controllers {
 
 namespace WebDevEtc\BlogEtc\Tests {
 //use App\User;
+    use App\User;
     use Gate;
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Foundation\Application;
@@ -46,6 +47,8 @@ namespace WebDevEtc\BlogEtc\Tests {
      */
     abstract class TestCase extends BaseTestCase
     {
+        /** @var User|AdminUser */
+        protected $lastUser;
         /**
          * As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
          * only on the package code in the controller. Would be interested if anyone has a suggestion on better way
@@ -184,10 +187,10 @@ namespace WebDevEtc\BlogEtc\Tests {
          */
         protected function beAdminUser(): self
         {
-            $user = new AdminUser();
-            $user->id = 1;
+            $this->lastUser = new AdminUser();
+            $this->lastUser->id = 1;
 
-            $this->be($user);
+            $this->be($this->lastUser);
 
             return $this;
         }
@@ -197,10 +200,10 @@ namespace WebDevEtc\BlogEtc\Tests {
          */
         protected function beNonAdminUser(): void
         {
-            $user = new NormalUser();
-            $user->id = 1;
+            $this->lastUser = new NormalUser();
+            $this->lastUser->id = 1;
 
-            $this->be($user);
+            $this->be($this->lastUser);
         }
     }
 }

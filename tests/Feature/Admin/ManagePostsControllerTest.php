@@ -5,9 +5,9 @@ namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
 //use WebDevEtc\BlogEtc\Models\Category;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory as Category;
+use WebDevEtc\BlogEtc\Models\Category;
 //use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost as Post;
+use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 class ManagePostsControllerTest extends TestCase
@@ -72,7 +72,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testIndexIncludesRecentPost(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
         $post = factory(Post::class)->create();
 
         $this->beAdminUser();
@@ -122,8 +122,8 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testStoreWithCategory()
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $this->beAdminUser();
 
         $category = factory(Category::class)->create();
@@ -176,8 +176,8 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $this->beAdminUser();
 
         $post = factory(Post::class)->create();
@@ -206,8 +206,8 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testDestroy(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $this->beAdminUser();
 
         $post = factory(Post::class)->create();
@@ -237,8 +237,8 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $this->beAdminUser();
 
         $post = factory(Post::class)->create();
@@ -260,8 +260,8 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testUpdateInvalidPostID(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $invalidPostID = 10000;
         $this->beAdminUser();
 
