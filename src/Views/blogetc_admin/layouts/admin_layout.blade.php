@@ -96,9 +96,9 @@
 
                     {{--REPLACING THIS FILE WITH YOUR OWN LAYOUT FILE? Don't forget to include the following section!--}}
 
-                    @if(\WebDevEtc\BlogEtc\Helpers::has_flashed_message())
+                    @if(\WebDevEtc\BlogEtc\Helpers::hasFlashedMessage())
                         <div class='alert alert-info'>
-                            <h3>{{\WebDevEtc\BlogEtc\Helpers::pull_flashed_message() }}</h3>
+                            <h3>{{\WebDevEtc\BlogEtc\Helpers::pullFlashedMessage() }}</h3>
                         </div>
                     @endif
 
