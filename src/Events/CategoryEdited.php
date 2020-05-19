@@ -2,10 +2,9 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
+use WebDevEtc\BlogEtc\Models\Category;
 
 /**
  * Class CategoryEdited.
@@ -13,17 +12,16 @@ use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
 class CategoryEdited
 {
     use Dispatchable;
-    use InteractsWithSockets;
     use SerializesModels;
 
-    /** @var BlogEtcCategory */
+    /** @var Category */
     public $blogEtcCategory;
 
     /**
      * CategoryEdited constructor.
      */
-    public function __construct(BlogEtcCategory $blogEtcCategory)
+    public function __construct(Category $category)
     {
-        $this->blogEtcCategory = $blogEtcCategory;
+        $this->blogEtcCategory = $category;
     }
 }

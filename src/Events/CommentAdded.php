@@ -2,11 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\Comment;
+use WebDevEtc\BlogEtc\Models\Post;
 
 /**
  * Class CommentAdded.
@@ -14,20 +13,19 @@ use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 class CommentAdded
 {
     use Dispatchable;
-    use InteractsWithSockets;
     use SerializesModels;
 
-    /** @var BlogEtcPost */
+    /** @var Post */
     public $blogEtcPost;
-    /** @var BlogEtcComment */
+    /** @var Comment */
     public $newComment;
 
     /**
      * CommentAdded constructor.
      */
-    public function __construct(BlogEtcPost $blogEtcPost, BlogEtcComment $newComment)
+    public function __construct(Post $post, Comment $newComment)
     {
-        $this->blogEtcPost = $blogEtcPost;
+        $this->blogEtcPost = $post;
         $this->newComment = $newComment;
     }
 }
