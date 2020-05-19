@@ -15,7 +15,7 @@ $factory->define(Post::class, function (Faker $faker) {
         'subtitle'          => $faker->sentence,
         'meta_desc'         => $faker->paragraph,
         'post_body'         => $faker->paragraphs(5, true),
-        'posted_at'         => Carbon::now(),
+        'posted_at'         => Carbon::now()->subWeek(),
         'is_published'      => true,
         'short_description' => $faker->paragraph,
         'seo_title'         => $faker->sentence,

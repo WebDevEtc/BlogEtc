@@ -53,7 +53,7 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
             'slug'              => [
                 'nullable', 'string', 'min:1', 'max:150', 'alpha_dash', // this field should have some additional rules, which is done in the subclasses.
             ],
-            'categories' => ['nullable', 'array'],
+            'category' => ['nullable', 'array'],
         ];
 
         // is use_custom_view_files true?

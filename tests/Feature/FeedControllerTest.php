@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use App\User;
 use Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -39,8 +38,6 @@ class FeedControllerTest extends TestCase
      */
     public function testIncludesRecentPost(): void
     {
-        $this->markTestSkipped('Test needs fixing');
-
         $post = factory(Post::class)->create();
 
         $response = $this->get(route('blogetc.feed'));
@@ -80,12 +77,7 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedIn(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
-        $user = new User();
-        $this->actingAs($user);
-
-        $this->allowAdminGate();
+        $this->beNonAdminUser();
 
         $response = $this->get(route('blogetc.feed'));
 
@@ -98,8 +90,6 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedInCanSeeUnpublishedPosts(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
         $this->beAdminUser();
 
         $post = factory(Post::class)->state('not_published')->create();

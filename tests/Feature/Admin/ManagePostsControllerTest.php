@@ -150,10 +150,9 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testStoreWithInvalidCategory(): void
     {
-        $this->markTestSkipped('Skipping as current version does not support this (next version does - keeping existing tests to make migration easier)');
-
+        $this->markTestSkipped('Need to test category is stored');
         $this->beAdminUser();
-        $invalidCategoryID = 1000;
+        $invalidCategoryID = 99999;
 
         $params = [
             'title'             => $this->faker->sentence,
@@ -163,9 +162,9 @@ class ManagePostsControllerTest extends TestCase
             'category'          => [$invalidCategoryID => '1'],
         ];
 
-        $response = $this->post(route('blogetc.admin.store_post'), $params);
+        $this->post(route('blogetc.admin.store_post'), $params);
 
-        $response->assertSessionHasErrors('category');
+        // TODO - test post in db has correct category
     }
 
     /**
