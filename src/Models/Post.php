@@ -28,10 +28,12 @@ class Post extends Model implements SearchResultInterface
 
     protected $table = 'blog_etc_posts';
 
+
     /**
      * @var array
      */
     public $casts = [
+        'posted_at' => 'datetime',
         'is_published' => 'boolean',
     ];
 
@@ -129,7 +131,8 @@ class Post extends Model implements SearchResultInterface
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'blog_etc_post_categories');
+        // TODO check this.
+        return $this->belongsToMany(Category::class, 'blog_etc_post_categories', 'blog_etc_post_id', 'blog_etc_category_id');
     }
 
     /**

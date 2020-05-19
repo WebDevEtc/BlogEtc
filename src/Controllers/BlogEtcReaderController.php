@@ -7,8 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Swis\Laravel\Fulltext\Search;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
+use WebDevEtc\BlogEtc\Models\Category;
+use WebDevEtc\BlogEtc\Models\Post;
 
 /**
  * Class BlogEtcReaderController
@@ -32,7 +32,7 @@ class BlogEtcReaderController extends Controller
         $title = 'Viewing blog'; // default title...
 
         if ($category_slug) {
-            $category = BlogEtcCategory::where('slug', $category_slug)->firstOrFail();
+            $category = Category::where('slug', $category_slug)->firstOrFail();
             $posts = $category->posts()->where('blog_etc_post_categories.blog_etc_category_id', $category->id);
 
             // at the moment we handle this special case (viewing a category) by hard coding in the following two lines.
@@ -40,7 +40,7 @@ class BlogEtcReaderController extends Controller
             \View::share('blogetc_category', $category); // so the view can say "You are viewing $CATEGORYNAME category posts"
             $title = 'Viewing posts in '.$category->category_name.' category'; // hardcode title here...
         } else {
-            $posts = BlogEtcPost::query();
+            $posts = Post::query();
         }
 
         $posts = $posts->orderBy('posted_at', 'desc')
@@ -99,7 +99,7 @@ class BlogEtcReaderController extends Controller
     public function viewSinglePost(Request $request, $blogPostSlug)
     {
         // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manage log posts
-        $blog_post = BlogEtcPost::where('slug', $blogPostSlug)
+        $blog_post = Post::where('slug', $blogPostSlug)
             ->firstOrFail();
 
         if ($captcha = $this->getCaptchaObject()) {

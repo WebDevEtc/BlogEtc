@@ -138,6 +138,21 @@ namespace WebDevEtc\BlogEtc\Tests {
                 });
             }
 
+            if(!Schema::hasTable('laravel_fulltext')) {
+                Schema::create('laravel_fulltext', function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->integer('indexable_id');
+                    $table->string('indexable_type');
+                    $table->text('indexed_title');
+                    $table->text('indexed_content');
+
+                    $table->unique(['indexable_type', 'indexable_id']);
+
+                    $table->timestamps();
+                });
+            }
+
+
             $this->resetApplicationArtisanCommands($this->app);
         }
 

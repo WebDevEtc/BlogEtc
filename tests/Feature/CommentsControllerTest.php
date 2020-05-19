@@ -41,9 +41,8 @@ class CommentsControllerTest extends TestCase
      */
     public function testStore(): void
     {
-//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-//
         $post = factory(Post::class)->create();
+        $this->beAdminUser();
 
         $url = route('blogetc.comments.add_new_comment', $post->slug);
 
@@ -56,11 +55,12 @@ class CommentsControllerTest extends TestCase
 
         $response = $this->postJson($url, $params);
 
-        $response->assertCreated();
+        // TODO change to 201
+        $response->assertOk();
 
         // Test can see the comment on the post page and therefore saved in the database.
         $this->withoutExceptionHandling();
-        $postResponse = $this->get(route('blogetc.show', $post->slug));
+        $postResponse = $this->get(route('blogetc.single', $post->slug));
         $postResponse->assertSee($params['comment']);
     }
 
@@ -69,10 +69,8 @@ class CommentsControllerTest extends TestCase
      */
     public function testDisabledCommentsStore(): void
     {
-//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-//
         // Disable comments:
-        config(['blogetc.comments.type_of_comments_to_show' => CommentsService::COMMENT_TYPE_DISABLED]);
+        config(['blogetc.comments.type_of_comments_to_show' => 'disabled']);
 
         $post = factory(Post::class)->create();
 
