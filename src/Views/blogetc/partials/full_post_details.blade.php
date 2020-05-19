@@ -26,7 +26,9 @@
 
 <hr/>
 
-Posted <strong>{{ $post->posted_at->diffForHumans() }}</strong>
+@if($post->posted_at)
+    Posted <strong>{{ $post->posted_at->diffForHumans() }}</strong>
+@endif
 
 @includeWhen($post->author, 'blogetc::partials.author', ['post'=>$post])
 @includeWhen($post->categories, 'blogetc::partials.categories', ['post'=>$post])

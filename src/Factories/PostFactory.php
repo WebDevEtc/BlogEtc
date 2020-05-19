@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Factories;
 
 /* @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use Carbon\Carbon;
 use Faker\Generator as Faker;
 use WebDevEtc\BlogEtc\Models\Post;
 
@@ -14,7 +15,7 @@ $factory->define(Post::class, function (Faker $faker) {
         'subtitle'          => $faker->sentence,
         'meta_desc'         => $faker->paragraph,
         'post_body'         => $faker->paragraphs(5, true),
-        'posted_at'         => $faker->dateTimeBetween('-1 year', 'now'),
+        'posted_at'         => Carbon::now(),
         'is_published'      => true,
         'short_description' => $faker->paragraph,
         'seo_title'         => $faker->sentence,

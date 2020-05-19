@@ -61,7 +61,6 @@ class ManageCategoriesControllerTest extends TestCase
         $response = $this->get(route('blogetc.admin.categories.index'));
 
         $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
-//        $response->assertRedirect(route('login'));
     }
 
     /**
@@ -69,8 +68,6 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testIndexIncludesRecentCategory(): void
     {
-//        $this->markTestIncomplete();
-//
         $category = factory(Category::class)->create();
 
         $this->beAdminUser();
@@ -116,8 +113,6 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-//        $this->markTestIncomplete();
-//
         $this->beAdminUser();
 
         $category = factory(Category::class)->create();
@@ -146,8 +141,6 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testDestroy(): void
     {
-//        $this->markTestSkipped();
-//
         $this->beAdminUser();
 
         $category = factory(Category::class)->create();
@@ -177,8 +170,6 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testUpdate(): void
     {
-//        $this->markTestIncomplete();
-//
         $this->beAdminUser();
 
         $category = factory(Category::class)->create();
@@ -200,8 +191,6 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testUpdateInvalidCategoryID(): void
     {
-//        $this->markTestIncomplete();
-//
         $invalidCategoryID = 10000;
         $this->beAdminUser();
 
