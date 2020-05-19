@@ -5,19 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Blog Admin - {{ config('app.name', 'Laravel') }}</title>
+    <title>BlogEtcPost Blog Admin - {{ config('app.name') }}</title>
 
-
-    <!-- jQuery is only used for hide(), show() and slideDown(). All other features use vanilla JS -->
     <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
 
-    <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
 
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
@@ -26,7 +22,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito" crossorigin="anonymous">
 
     <!-- Styles -->
-    @if(file_exists(public_path("blogetc_admin_css.css")))
+    @if(file_exists(public_path('blogetc_admin_css.css')))
         <link href="{{ asset('blogetc_admin_css.css') }}" rel="stylesheet">
     @else
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -105,8 +101,6 @@
                             <h3>{{\WebDevEtc\BlogEtc\Helpers::pull_flashed_message() }}</h3>
                         </div>
                     @endif
-
-
 
                     @yield('content')
                 </div>

@@ -1,7 +1,9 @@
-@extends("blogetc_admin::layouts.admin_layout")
-@section("content")
-
-
+@php
+    /** @var \WebDevEtc\BlogEtc\Models\UploadedPhoto[] $uploaded_photos */
+    $uploadedPhoto = $uploaded_photos;
+@endphp
+@extends('blogetc_admin::layouts.admin_layout')
+@section('content')
     <h5>Admin - Uploaded Images</h5>
 
     <p>You can view all previously uploaded images here.</p>
@@ -84,8 +86,6 @@
                 </div>
                 <div class='col-md-4'>
                     @if($smallest)
-
-
                         <div style='text-align:center;'>
                             <a style='cursor: zoom-in;' href='{{asset(     config("blogetc.blog_upload_dir") . "/". $smallest['filename'])}}'
                                target='_blank'>
@@ -95,22 +95,17 @@
                         </div>
 
                     @else
-
-                        <div class='alert alert-danger'>No image found</div>
+                        <div class="alert alert-danger">
+                            No image found
+                        </div>
                     @endif
-
-
                 </div>
             </div>
         </div>
-
     @endforeach
 
-
-
-    <div class='text-center'>
-        {{$uploaded_photos->appends( [] )->links()}}
+    <div class="text-center">
+        {{ $uploaded_photos->links() }}
     </div>
-
-
 @endsection
+
