@@ -11,7 +11,7 @@ class StoreBlogEtcCategoryRequest extends BaseBlogEtcCategoryRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules():array
     {
         $return = $this->baseCategoryRules();
         $return['slug'][] = Rule::unique('blog_etc_categories', 'slug');

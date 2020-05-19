@@ -279,26 +279,11 @@ class Post extends Model implements SearchResultInterface
      */
     protected function check_valid_image_size(string $size = 'medium')
     {
-        if (array_key_exists('image_'.$size, config('blogetc.image_sizes'))) {
-            return true;
+        if (!array_key_exists('image_'.$size, config('blogetc.image_sizes'))) {
+            throw new InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
         }
 
-        // was an error!
-
-        if (starts_with($size, 'image_')) {
-            // $size starts with image_, which is an error
-            /* the config/blogetc.php and the DB columns SHOULD have keys that start with image_$size
-            however when using methods such as image_url() or has_image() it SHOULD NOT start with 'image_'
-
-            To put another way: :
-                in the config/blogetc.php : config("blogetc.image_sizes.image_medium")
-                in the database table:    : blogetc_posts.image_medium
-                when calling image_url()  : image_url("medium")
-            */
-            throw new InvalidArgumentException("Invalid image size ($size). BlogEtcPost image size should not begin with 'image_'. Remove this from the start of $size. It *should* be in the blogetc.image_sizes config though!");
-        }
-
-        throw new InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
+        return true;
     }
 
     /**

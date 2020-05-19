@@ -22,7 +22,7 @@ class AddNewCommentRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules():array
     {
         // basic rules
         $return = [

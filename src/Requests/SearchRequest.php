@@ -6,14 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SearchRequest extends FormRequest
 {
-    public function authorize()
+    public function authorize():bool
     {
-        if (config('blogetc.search.search_enabled')) {
-            // anyone is allowed to submit a comment, to return true always.
-            return true;
-        }
-        //comments are disabled so just return false to disallow everyone.
-        return false;
+        return config('blogetc.search.search_enabled');
     }
 
     /**
@@ -21,7 +16,7 @@ class SearchRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules():array
     {
         return [
             's' => ['nullable', 'string', 'min:3', 'max:40'],
