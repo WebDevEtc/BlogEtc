@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Events;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use WebDevEtc\BlogEtc\Models\Post;
