@@ -20,7 +20,7 @@ class PostRequest extends FormRequest
     public function categories(): array
     {
         // check if categories were submitted, it not return an empty array
-        if (! $this->get('category') || ! is_array($this->get('category'))) {
+        if (!$this->get('category') || !is_array($this->get('category'))) {
             return [];
         }
 

@@ -70,7 +70,7 @@ abstract class TestCase extends BaseTestCase
         $this->loadMigrations();
         $this->withFactories(__DIR__.'/../src/Factories');
 
-        if (! \Route::has('login')) {
+        if (!\Route::has('login')) {
             // Need to define a login route for feature tests.
             \Route::get('login', function () {
             })->name('login');
@@ -95,7 +95,7 @@ abstract class TestCase extends BaseTestCase
         }
 
         // Also manually create users table so relations will work.
-        if (! Schema::hasTable('users')) {
+        if (!Schema::hasTable('users')) {
             Schema::create('users', static function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name');
