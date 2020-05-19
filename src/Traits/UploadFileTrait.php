@@ -51,13 +51,13 @@ trait UploadFileTrait
         $wh = $this->getWhForFilename($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; ++$i) {
+        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.str_random(5) : '';
 
             $attempt = str_slug($base.$suffix.$wh).$ext;
 
-            if (! File::exists($this->image_destination_path().'/'.$attempt)) {
+            if (!File::exists($this->image_destination_path().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -179,8 +179,8 @@ trait UploadFileTrait
      */
     protected function check_image_destination_path_is_writable($path)
     {
-        if (! $this->checked_blog_image_dir_is_writable) {
-            if (! is_writable($path)) {
+        if (!$this->checked_blog_image_dir_is_writable) {
+            if (!is_writable($path)) {
                 throw new \RuntimeException("Image destination path is not writable ($path)");
             }
             $this->checked_blog_image_dir_is_writable = true;
@@ -193,7 +193,7 @@ trait UploadFileTrait
     protected function generate_base_filename(string $suggested_title)
     {
         $base = substr($suggested_title, 0, 100);
-        if (! $base) {
+        if (!$base) {
             // if we have an empty string then we should use a random one:
             $base = 'image-'.str_random(5);
 

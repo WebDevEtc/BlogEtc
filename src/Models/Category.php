@@ -13,6 +13,7 @@ class Category extends Model
     ];
 
     protected $table = 'blog_etc_categories';
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
