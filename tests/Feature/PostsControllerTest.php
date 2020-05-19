@@ -6,8 +6,8 @@ use App\User;
 use Illuminate\Foundation\Testing\WithFaker;
 //use WebDevEtc\BlogEtc\Models\Category;
 //use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory as Category;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost as Post;
+use WebDevEtc\BlogEtc\Models\Category ;
+use WebDevEtc\BlogEtc\Models\Post ;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 /**
@@ -50,8 +50,8 @@ class PostsControllerTest extends TestCase
      */
     public function testShow(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $post = factory(Post::class)->create();
 
         $response = $this->get(route('blogetc.show', $post->slug));
@@ -78,8 +78,8 @@ class PostsControllerTest extends TestCase
      */
     public function testShow404IfNotPublished(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $post = factory(Post::class)->state('not_published')->create();
 
         $response = $this->get(route('blogetc.show', $post->slug));
@@ -92,13 +92,9 @@ class PostsControllerTest extends TestCase
      */
     public function testShowAdminCanSeeNotPublished(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
 
-        $user = new User();
-        $user->id = 1;
-        $this->actingAs($user);
-        $this->allowAdminGate();
-
+        $this->beAdminUser();
         $post = factory(Post::class)->state('not_published')->create();
 
         $response = $this->get(route('blogetc.show', $post->slug));
@@ -111,8 +107,8 @@ class PostsControllerTest extends TestCase
      */
     public function testShow404IfFuturePost(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $post = factory(Post::class)->state('in_future')->create();
 
         $response = $this->get(route('blogetc.show', $post->slug));
@@ -125,12 +121,9 @@ class PostsControllerTest extends TestCase
      */
     public function testAdminsCanSeeFuturePosts(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
-        $user = new User();
-        $user->id = 1;
-        $this->actingAs($user);
-        $this->allowAdminGate();
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
+        $this->beAdminUser();
 
         $post = factory(Post::class)->state('in_future')->create();
 
@@ -144,9 +137,11 @@ class PostsControllerTest extends TestCase
      */
     public function testShow404IfDeletedPost(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $post = factory(Post::class)->create();
+        $this->beAdminUser();
+
         $post->delete();
 
         $response = $this->get(route('blogetc.show', $post->slug));
@@ -159,9 +154,9 @@ class PostsControllerTest extends TestCase
      */
     public function testCategory(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//        $this->withoutExceptionHandling();
 
-        $this->withoutExceptionHandling();
         $post = factory(Post::class)->create();
         $category = factory(Category::class)->create();
         $post->categories()->save($category);
@@ -178,9 +173,9 @@ class PostsControllerTest extends TestCase
      */
     public function testCategoryExcludesOtherCategories(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
-        $this->withoutExceptionHandling();
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
+//        $this->withoutExceptionHandling();
         $post = factory(Post::class)->create();
         $category = factory(Category::class)->create();
         $post->categories()->save($category);

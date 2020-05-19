@@ -5,8 +5,7 @@ namespace WebDevEtc\BlogEtc\Tests\Feature;
 use App\User;
 use Auth;
 use Illuminate\Foundation\Testing\WithFaker;
-//use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost as Post;
+use WebDevEtc\BlogEtc\Models\Post ;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 class FeedControllerTest extends TestCase
@@ -39,8 +38,8 @@ class FeedControllerTest extends TestCase
      */
     public function testIncludesRecentPost(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $post = factory(Post::class)->create();
 
         $response = $this->get(route('blogetc.feed'));
@@ -54,8 +53,8 @@ class FeedControllerTest extends TestCase
      */
     public function testExcludesUnpublishedPosts(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $post = factory(Post::class)->state('not_published')->create();
 
         $response = $this->get(route('blogetc.feed'));
@@ -69,8 +68,8 @@ class FeedControllerTest extends TestCase
      */
     public function testExcludesFuturePosts(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
         $post = factory(Post::class)->state('in_future')->create();
 
         $response = $this->get(route('blogetc.feed'));
@@ -102,12 +101,9 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedInCanSeeUnpublishedPosts(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
-        $user = new User();
-        $this->actingAs($user);
-
-        $this->allowAdminGate();
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
+        $this->beAdminUser();
 
         $post = factory(Post::class)->state('not_published')->create();
 
@@ -122,11 +118,9 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedInCanSeeFuturePosts(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
-        $user = new User();
-        $this->actingAs($user);
-        $this->allowAdminGate();
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
+        $this->beAdminUser();
 
         $post = factory(Post::class)->state('in_future')->create();
 
@@ -142,18 +136,14 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedInCacheDoesNotShowToNonLoggedInUsers(): void
     {
-        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
-
-        $user = new User();
-        $user->id = 1;
-        $this->actingAs($user);
-
-        $this->allowAdminGate();
+//        $this->markTestSkipped('Skipping as current version does not have factories (next version does - keeping existing tests to make migration easier)');
+//
+        $this->beAdminUser();
 
         $post = factory(Post::class)->state('not_published')->create();
 
         // Request it as user:
-        $adminResponse = $this->actingAs($user)->get(route('blogetc.feed'));
+        $adminResponse = $this->get(route('blogetc.feed'));
         $adminResponse->assertOk()
             ->assertSee($post->title);
 

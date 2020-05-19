@@ -4,7 +4,7 @@ namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory as Category;
+use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 class ManageCategoriesControllerTest extends TestCase
@@ -69,8 +69,8 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testIndexIncludesRecentCategory(): void
     {
-        $this->markTestIncomplete();
-
+//        $this->markTestIncomplete();
+//
         $category = factory(Category::class)->create();
 
         $this->beAdminUser();
@@ -116,8 +116,8 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->markTestIncomplete();
-
+//        $this->markTestIncomplete();
+//
         $this->beAdminUser();
 
         $category = factory(Category::class)->create();
@@ -146,8 +146,8 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testDestroy(): void
     {
-        $this->markTestSkipped();
-
+//        $this->markTestSkipped();
+//
         $this->beAdminUser();
 
         $category = factory(Category::class)->create();
@@ -177,8 +177,8 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $this->markTestIncomplete();
-
+//        $this->markTestIncomplete();
+//
         $this->beAdminUser();
 
         $category = factory(Category::class)->create();
@@ -200,8 +200,8 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testUpdateInvalidCategoryID(): void
     {
-        $this->markTestIncomplete();
-
+//        $this->markTestIncomplete();
+//
         $invalidCategoryID = 10000;
         $this->beAdminUser();
 
