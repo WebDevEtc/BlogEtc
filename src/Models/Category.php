@@ -18,7 +18,7 @@ class Category extends Model
     /**
      * @return BelongsToMany
      */
-    public function posts():BelongsToMany
+    public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'blog_etc_post_categories');
     }
@@ -28,7 +28,7 @@ class Category extends Model
      *
      * @return string
      */
-    public function url():string
+    public function url(): string
     {
         return route('blogetc.view_category', $this->slug);
     }
@@ -38,7 +38,7 @@ class Category extends Model
      *
      * @return string
      */
-    public function edit_url():string
+    public function edit_url(): string
     {
         return route('blogetc.admin.categories.edit_category', $this->id);
     }

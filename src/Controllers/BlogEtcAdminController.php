@@ -31,7 +31,7 @@ class BlogEtcAdminController extends Controller
     {
         $this->middleware(UserCanManageBlogPosts::class);
 
-        if (! is_array(config('blogetc'))) {
+        if (!is_array(config('blogetc'))) {
             throw new \RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
     }
@@ -72,7 +72,7 @@ class BlogEtcAdminController extends Controller
 
         $this->processUploadedImages($request, $new_blog_post);
 
-        if (! $new_blog_post->posted_at) {
+        if (!$new_blog_post->posted_at) {
             $new_blog_post->posted_at = Carbon::now();
         }
 
@@ -159,7 +159,7 @@ class BlogEtcAdminController extends Controller
      */
     protected function processUploadedImages(BaseRequestInterface $request, BlogEtcPost $new_blog_post)
     {
-        if (! config('blogetc.image_upload_enabled')) {
+        if (!config('blogetc.image_upload_enabled')) {
             // image upload was disabled
             return;
         }

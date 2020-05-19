@@ -64,7 +64,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return array
      */
-    public function sluggable():array
+    public function sluggable(): array
     {
         return [
             'slug' => [
@@ -103,7 +103,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return BelongsTo
      */
-    public function author():BelongsTo
+    public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -113,10 +113,10 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function author_string():string
+    public function author_string(): string
     {
         if ($this->author) {
-            return (string)optional($this->author)->name;
+            return (string) optional($this->author)->name;
         } else {
             return 'Unknown Author';
         }
@@ -127,7 +127,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return BelongsToMany
      */
-    public function categories():BelongsToMany
+    public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'blog_etc_post_categories');
     }
@@ -137,7 +137,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return HasMany
      */
-    public function comments():HasMany
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
@@ -147,7 +147,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function url():string
+    public function url(): string
     {
         return route('blogetc.single', $this->slug);
     }
@@ -157,7 +157,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function edit_url():string
+    public function edit_url(): string
     {
         return route('blogetc.admin.edit_post', $this->id);
     }
@@ -169,9 +169,9 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function full_view_file_path():string
+    public function full_view_file_path(): string
     {
-        if (! $this->use_view_file) {
+        if (!$this->use_view_file) {
             throw new RuntimeException('use_view_file was empty, so cannot use '.__METHOD__);
         }
 
@@ -185,7 +185,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return int
      */
-    public function has_image($size = 'medium'):int
+    public function has_image($size = 'medium'): int
     {
         $this->check_valid_image_size($size);
 
@@ -200,7 +200,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function image_url($size = 'medium'):string
+    public function image_url($size = 'medium'): string
     {
         $this->check_valid_image_size($size);
         $filename = $this->{'image_'.$size};
@@ -218,9 +218,9 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null):string
+    public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null): string
     {
-        if (! $this->has_image($size)) {
+        if (!$this->has_image($size)) {
             // return an empty string if this image does not exist.
             return '';
         }
@@ -231,10 +231,10 @@ class Post extends Model implements SearchResultInterface
         return $auto_link ? "<a class='".e($anchor_class)."' href='".e($this->url())."'>$img</a>" : $img;
     }
 
-    public function generate_introduction($max_len = 500):string
+    public function generate_introduction($max_len = 500): string
     {
         $base_text_to_use = $this->short_description;
-        if (! trim($base_text_to_use)) {
+        if (!trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
         $base_text_to_use = strip_tags($base_text_to_use);
@@ -254,7 +254,7 @@ class Post extends Model implements SearchResultInterface
             $return = $this->post_body;
         }
 
-        if (! config('blogetc.echo_html')) {
+        if (!config('blogetc.echo_html')) {
             // if this is not true, then we should escape the output
             if (config('blogetc.strip_html')) {
                 $return = strip_tags($return);
