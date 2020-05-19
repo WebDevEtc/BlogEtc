@@ -8,20 +8,10 @@ namespace App\Http\Controllers {
     }
 }
 
-namespace WebDevEtc\BlogEtc\Tests {
-//use App\User;
-    use App\User;
-    use Gate;
-    use Illuminate\Database\Schema\Blueprint;
-    use Illuminate\Foundation\Application;
+// Helper classes to enable easy testing.
+namespace App {
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Illuminate\Notifications\Notifiable;
-    use Illuminate\Support\Facades\Schema;
-    use Laravelium\Feed\FeedServiceProvider;
-    use Orchestra\Testbench\Database\MigrateProcessor;
-    use Orchestra\Testbench\TestCase as BaseTestCase;
-    use View;
-    use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
 
     class AdminUser extends Authenticatable
     {
@@ -41,6 +31,28 @@ namespace WebDevEtc\BlogEtc\Tests {
             return false;
         }
     }
+    if(!class_exists('\App\User')) {
+        class User extends NormalUser
+        {
+        }
+    }
+}
+
+namespace WebDevEtc\BlogEtc\Tests {
+
+    use App\AdminUser;
+    use App\User;
+    use Gate;
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Foundation\Application;
+    use Illuminate\Support\Facades\Schema;
+    use Laravelium\Feed\FeedServiceProvider;
+    use Orchestra\Testbench\Database\MigrateProcessor;
+    use Orchestra\Testbench\TestCase as BaseTestCase;
+    use View;
+    use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
+
+
 
     /**
      * Class TestCase.
