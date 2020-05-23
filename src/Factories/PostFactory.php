@@ -12,6 +12,7 @@ use WebDevEtc\BlogEtc\Models\Post;
 $factory->define(Post::class, function (Faker $faker) {
     return [
         'title'             => $faker->sentence,
+        'slug' => $faker->uuid,
         'subtitle'          => $faker->sentence,
         'meta_desc'         => $faker->paragraph,
         'post_body'         => $faker->paragraphs(5, true),
