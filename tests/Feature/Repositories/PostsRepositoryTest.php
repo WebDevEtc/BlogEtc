@@ -95,7 +95,6 @@ class PostsRepositoryTest extends TestCase
 
     public function testRssItems()
     {
-
         factory(Post::class, 11)->create();
 
         $response = $this->postsRepository->rssItems();
@@ -137,7 +136,8 @@ class PostsRepositoryTest extends TestCase
         $this->assertTrue($response[0]->is($published));
     }
 
-    public function testFindBySlug() : void{
+    public function testFindBySlug(): void
+    {
         $post = factory(Post::class)->create();
 
         $response = $this->postsRepository->findBySlug($post->slug);
@@ -145,15 +145,20 @@ class PostsRepositoryTest extends TestCase
         $this->assertTrue($post->is($response));
     }
 
-    public function testFindBySlugFails() : void{
+    public function testFindBySlugFails(): void
+    {
         $this->expectException(PostNotFoundException::class);
         $this->postsRepository->findBySlug('invalid');
     }
-    public function testFindBySlugFailsWhenEmpty() : void{
+
+    public function testFindBySlugFailsWhenEmpty(): void
+    {
         $this->expectException(PostNotFoundException::class);
-$this->postsRepository->findBySlug('');
+        $this->postsRepository->findBySlug('');
     }
-    public function testFind() : void{
+
+    public function testFind(): void
+    {
         $post = factory(Post::class)->create();
 
         $response = $this->postsRepository->find($post->id);
@@ -161,13 +166,14 @@ $this->postsRepository->findBySlug('');
         $this->assertTrue($post->is($response));
     }
 
-    public function testFindFails() : void{
+    public function testFindFails(): void
+    {
         $this->expectException(PostNotFoundException::class);
         $this->postsRepository->find(0);
     }
 
-    public function testCreate() : void{
-
+    public function testCreate(): void
+    {
         $postAttributes = factory(Post::class)->make()->toArray();
 
         $this->assertDatabaseMissing('blog_etc_posts', ['title' => $postAttributes['title']]);
@@ -176,9 +182,11 @@ $this->postsRepository->findBySlug('');
 
         $this->assertInstanceOf(Post::class, $response);
 
-        $this->assertDatabaseHas('blog_etc_posts',collect($postAttributes)->only(['title', 'subtitle', 'meta_desc', 'post_body', 'is_published',])->toArray());
+        $this->assertDatabaseHas('blog_etc_posts', collect($postAttributes)->only(['title', 'subtitle', 'meta_desc', 'post_body', 'is_published'])->toArray());
     }
-    public function testDelete() : void{
+
+    public function testDelete(): void
+    {
         $post = factory(Post::class)->create();
 
         $this->assertDatabaseHas('blog_etc_posts', ['id' => $post->id]);
@@ -190,8 +198,9 @@ $this->postsRepository->findBySlug('');
         $this->assertDatabaseMissing('blog_etc_posts', ['id' => $post->id]);
     }
 
-    public function testDeleteFails() : void{
+    public function testDeleteFails(): void
+    {
         $this->expectException(PostNotFoundException::class);
-         $this->postsRepository->delete(0);
+        $this->postsRepository->delete(0);
     }
 }
