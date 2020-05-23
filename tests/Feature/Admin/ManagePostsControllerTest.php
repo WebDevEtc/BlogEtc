@@ -52,7 +52,6 @@ class ManagePostsControllerTest extends TestCase
         $response = $this->get(route('blogetc.admin.index'));
 
         $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
-//        $response->assertForbidden();
     }
 
     /**
@@ -64,7 +63,6 @@ class ManagePostsControllerTest extends TestCase
         $response = $this->get(route('blogetc.admin.index'));
 
         $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
-//        $response->assertRedirect(route('login'));
     }
 
     /**
@@ -80,7 +78,7 @@ class ManagePostsControllerTest extends TestCase
 
         $response->assertSee($post->title);
         $response->assertViewHas('posts');
-        $posts = $response->viewData('posts');
+        $response->viewData('posts');
     }
 
     /**
@@ -119,7 +117,7 @@ class ManagePostsControllerTest extends TestCase
     /**
      * Test that new posts can be created, and associated to a category.
      */
-    public function testStoreWithCategory()
+    public function testStoreWithCategory():void
     {
         $this->beAdminUser();
 
@@ -137,12 +135,10 @@ class ManagePostsControllerTest extends TestCase
 
         $response->assertRedirect()->assertSessionDoesntHaveErrors();
 
-        $post = Post::where('title', $params['title'])->firstOrFail();
+        $redirectTo = $response->headers->get('location');
+        $postId = array_last(explode('/',$redirectTo));
 
-        $postCategories = $post->categories;
-
-        $this->assertCount(1, $postCategories);
-        $this->assertTrue($postCategories->first()->is($category));
+        $this->assertDatabaseHas('blog_etc_post_categories', ['blog_etc_post_id' => $postId, 'blog_etc_category_id' => $category->id]);
     }
 
     /**
@@ -150,7 +146,6 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testStoreWithInvalidCategory(): void
     {
-        $this->markTestSkipped('Need to test category is stored');
         $this->beAdminUser();
         $invalidCategoryID = 99999;
 
@@ -162,9 +157,13 @@ class ManagePostsControllerTest extends TestCase
             'category'          => [$invalidCategoryID => '1'],
         ];
 
-        $this->post(route('blogetc.admin.store_post'), $params);
+        $response = $this->post(route('blogetc.admin.store_post'), $params);
 
-        // TODO - test post in db has correct category
+        // TODO - there should be a request fobidding access if trying to store invalid category id
+
+        $post = Post::where('title',$params['title'])->where('post_body', $params['post_body'])->firstOrFail();
+
+        $this->assertDatabaseMissing('blog_etc_post_categories', ['blog_etc_post_id' => $post->id]);
     }
 
     /**
