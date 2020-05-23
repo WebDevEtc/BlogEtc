@@ -117,7 +117,7 @@ class ManagePostsControllerTest extends TestCase
     /**
      * Test that new posts can be created, and associated to a category.
      */
-    public function testStoreWithCategory():void
+    public function testStoreWithCategory(): void
     {
         $this->beAdminUser();
 
@@ -136,7 +136,7 @@ class ManagePostsControllerTest extends TestCase
         $response->assertRedirect()->assertSessionDoesntHaveErrors();
 
         $redirectTo = $response->headers->get('location');
-        $postId = array_last(explode('/',$redirectTo));
+        $postId = array_last(explode('/', $redirectTo));
 
         $this->assertDatabaseHas('blog_etc_post_categories', ['blog_etc_post_id' => $postId, 'blog_etc_category_id' => $category->id]);
     }
@@ -161,7 +161,7 @@ class ManagePostsControllerTest extends TestCase
 
         // TODO - there should be a request fobidding access if trying to store invalid category id
 
-        $post = Post::where('title',$params['title'])->where('post_body', $params['post_body'])->firstOrFail();
+        $post = Post::where('title', $params['title'])->where('post_body', $params['post_body'])->firstOrFail();
 
         $this->assertDatabaseMissing('blog_etc_post_categories', ['blog_etc_post_id' => $post->id]);
     }
