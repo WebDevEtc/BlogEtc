@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
 use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
@@ -12,18 +13,23 @@ use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\StoreBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
+use WebDevEtc\BlogEtc\Services\CategoriesService;
 
 /**
- * Class BlogEtcCategoryAdminController.
+ * Class ManageCategoriesController.
  */
 class ManageCategoriesController extends Controller
 {
+    /** @var CategoriesService */
+    private $service;
+
     /**
      * BlogEtcCategoryAdminController constructor.
      */
-    public function __construct()
+    public function __construct(CategoriesService $service)
     {
         $this->middleware(UserCanManageBlogPosts::class);
+        $this->service = $service;
     }
 
     /**
@@ -31,29 +37,30 @@ class ManageCategoriesController extends Controller
      *
      * @return mixed
      */
-    public function index()
+    public function index(): View
     {
-        $categories = Category::orderBy('category_name')->paginate(25);
+        $categories = $this->service->indexPaginated();
 
-        return view('blogetc_admin::categories.index')->withCategories($categories);
+        return view(
+            'blogetc_admin::categories.index',
+            [
+                'categories' => $categories,
+            ]
+        );
     }
 
     /**
      * Show the form for creating new category.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create_category()
+    public function create(): View
     {
         return view('blogetc_admin::categories.add_category');
     }
 
     /**
      * Store a new category.
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store_category(StoreBlogEtcCategoryRequest $request)
+    public function store(StoreBlogEtcCategoryRequest $request)
     {
         $new_category = Category::create($request->validated());
 
@@ -66,17 +73,19 @@ class ManageCategoriesController extends Controller
 
     /**
      * Show the edit form for category.
-     *
-     * @param $categoryId
-     *
-     * @return mixed
      */
-    public function edit_category($categoryId)
+    public function edit(int $categoryID): View
     {
-        $category = Category::findOrFail($categoryId);
+        $category = $this->service->find($categoryID);
 
-        return view('blogetc_admin::categories.edit_category')->withCategory($category);
+        return view(
+            'blogetc_admin::categories.edit_category',
+            [
+                'category' => $category,
+            ]
+        );
     }
+
 
     /**
      * Save submitted changes.
@@ -85,7 +94,7 @@ class ManageCategoriesController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId)
+    public function update(UpdateBlogEtcCategoryRequest $request, $categoryId)
     {
         /** @var Category $category */
         $category = Category::findOrFail($categoryId);
@@ -105,7 +114,7 @@ class ManageCategoriesController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId)
+    public function destroy(DeleteBlogEtcCategoryRequest $request, $categoryId)
     {
         /* Please keep this in, so code inspections don't say $request was unused. Of course it might now get marked as left/right parts are equal */
         $request = $request;
@@ -115,5 +124,45 @@ class ManageCategoriesController extends Controller
         $category->delete();
 
         return view('blogetc_admin::categories.deleted_category');
+    }
+
+    /**
+     * @deprecated - use store()
+     */
+    public function store_category(StoreBlogEtcCategoryRequest $request)
+    {
+        return $this->store($request);
+    }
+
+    /**
+     * @deprecated - use edit()
+     */
+    public function edit_category($categoryId)
+    {
+        return $this->edit($categoryId);
+    }
+
+    /**
+     * @deprecated - use create()
+     */
+    public function create_category()
+    {
+        return $this->create();
+    }
+
+    /**
+     * @deprecated - use update()
+     */
+    public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId)
+    {
+        return $this->update($request, $categoryId);
+    }
+
+    /**
+     * @deprecated - use destroy()
+     */
+    public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId)
+    {
+        return $this->destroy($request, $categoryId);
     }
 }
