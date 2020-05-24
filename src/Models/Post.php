@@ -218,7 +218,7 @@ class Post extends Model
         $imgTagClass = null,
         $anchorTagClass = null
     ): HtmlString {
-        if (! $this->hasImage($size)) {
+        if (!$this->hasImage($size)) {
             // return an empty string if this image does not exist.
             return new HtmlString('');
         }
@@ -368,7 +368,7 @@ class Post extends Model
      */
     public function bladeViewFile(): string
     {
-        if (! $this->use_view_file) {
+        if (!$this->use_view_file) {
             throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
         }
 
@@ -400,7 +400,7 @@ class Post extends Model
     {
         $base_text_to_use = $this->short_description;
 
-        if (! trim($base_text_to_use)) {
+        if (!trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
         $base_text_to_use = strip_tags($base_text_to_use);
@@ -431,7 +431,7 @@ class Post extends Model
             ? view('blogetc::partials.use_view_file', ['post' => $this])->render()
             : $this->post_body;
 
-        if (! config('blogetc.echo_html')) {
+        if (!config('blogetc.echo_html')) {
             // if this is not true, then we should escape the output
             if (config('blogetc.strip_html')) {
                 // not perfect, but it will get wrapped in htmlspecialchars in e() anyway
