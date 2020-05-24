@@ -31,11 +31,11 @@ class ManageUploadsController extends Controller
     {
         $this->middleware(UserCanManageBlogPosts::class);
 
-        if (! is_array(config('blogetc'))) {
+        if (!is_array(config('blogetc'))) {
             throw new RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
 
-        if (! config('blogetc.image_upload_enabled')) {
+        if (!config('blogetc.image_upload_enabled')) {
             throw new RuntimeException('The blogetc.php config option has not enabled image uploading');
         }
     }
@@ -100,7 +100,7 @@ class ManageUploadsController extends Controller
         }
 
         foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
-            if (! isset($sizes_to_upload[$size]) || ! $sizes_to_upload[$size] || ! $image_size_details['enabled']) {
+            if (!isset($sizes_to_upload[$size]) || !$sizes_to_upload[$size] || !$image_size_details['enabled']) {
                 continue;
             }
 

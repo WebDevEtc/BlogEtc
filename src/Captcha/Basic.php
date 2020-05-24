@@ -15,7 +15,7 @@ class Basic extends CaptchaAbstract
 {
     public function __construct()
     {
-        if (! config('blogetc.captcha.basic_question') || ! config('blogetc.captcha.basic_answers')) {
+        if (!config('blogetc.captcha.basic_question') || !config('blogetc.captcha.basic_answers')) {
             throw new DomainException('Invalid question or answers for captcha');
         }
     }
@@ -43,7 +43,7 @@ class Basic extends CaptchaAbstract
 
             $answers_array = array_map('trim', explode(',', $answers));
 
-            if (! $value || ! in_array($value, $answers_array, true)) {
+            if (!$value || !in_array($value, $answers_array, true)) {
                 return $fail('The captcha field is incorrect.');
             }
         };
