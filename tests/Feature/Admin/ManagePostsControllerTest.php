@@ -8,9 +8,6 @@ use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
-//use WebDevEtc\BlogEtc\Models\Category;
-//use WebDevEtc\BlogEtc\Models\Post;
-
 class ManagePostsControllerTest extends TestCase
 {
     use WithFaker;
