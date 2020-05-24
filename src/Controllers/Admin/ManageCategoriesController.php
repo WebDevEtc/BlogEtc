@@ -3,6 +3,9 @@
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
@@ -50,11 +53,11 @@ class ManageCategoriesController extends Controller
     }
 
     /**
-     * Show the form for creating new category.
+     * @deprecated - use store()
      */
-    public function create(): View
+    public function store_category(StoreBlogEtcCategoryRequest $request)
     {
-        return view('blogetc_admin::categories.add_category');
+        return $this->store($request);
     }
 
     /**
@@ -69,6 +72,14 @@ class ManageCategoriesController extends Controller
         event(new CategoryAdded($new_category));
 
         return redirect(route('blogetc.admin.categories.index'));
+    }
+
+    /**
+     * @deprecated - use edit()
+     */
+    public function edit_category($categoryId)
+    {
+        return $this->edit($categoryId);
     }
 
     /**
@@ -87,11 +98,35 @@ class ManageCategoriesController extends Controller
     }
 
     /**
+     * @deprecated - use create()
+     */
+    public function create_category()
+    {
+        return $this->create();
+    }
+
+    /**
+     * Show the form for creating new category.
+     */
+    public function create(): View
+    {
+        return view('blogetc_admin::categories.add_category');
+    }
+
+    /**
+     * @deprecated - use update()
+     */
+    public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId)
+    {
+        return $this->update($request, $categoryId);
+    }
+
+    /**
      * Save submitted changes.
      *
      * @param $categoryId
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function update(UpdateBlogEtcCategoryRequest $request, $categoryId)
     {
@@ -107,11 +142,19 @@ class ManageCategoriesController extends Controller
     }
 
     /**
+     * @deprecated - use destroy()
+     */
+    public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId)
+    {
+        return $this->destroy($request, $categoryId);
+    }
+
+    /**
      * Delete the category.
      *
      * @param $categoryId
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function destroy(DeleteBlogEtcCategoryRequest $request, $categoryId)
     {
@@ -123,45 +166,5 @@ class ManageCategoriesController extends Controller
         $category->delete();
 
         return view('blogetc_admin::categories.deleted_category');
-    }
-
-    /**
-     * @deprecated - use store()
-     */
-    public function store_category(StoreBlogEtcCategoryRequest $request)
-    {
-        return $this->store($request);
-    }
-
-    /**
-     * @deprecated - use edit()
-     */
-    public function edit_category($categoryId)
-    {
-        return $this->edit($categoryId);
-    }
-
-    /**
-     * @deprecated - use create()
-     */
-    public function create_category()
-    {
-        return $this->create();
-    }
-
-    /**
-     * @deprecated - use update()
-     */
-    public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId)
-    {
-        return $this->update($request, $categoryId);
-    }
-
-    /**
-     * @deprecated - use destroy()
-     */
-    public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId)
-    {
-        return $this->destroy($request, $categoryId);
     }
 }

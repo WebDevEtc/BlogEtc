@@ -16,6 +16,17 @@ class FeedServiceTest extends TestCase
     /** @var FeedService */
     protected $feedService;
 
+    public function testGetFeed()
+    {
+        $feed = resolve(Feed::class);
+
+        factory(Post::class)->create();
+
+        $response = $this->feedService->getFeed($feed, 'rss');
+
+        $this->assertInstanceOf(Response::class, $response);
+    }
+
     /**
      * Setup the feature test.
      */
@@ -27,17 +38,6 @@ class FeedServiceTest extends TestCase
         Post::truncate();
 
         $this->feedService = resolve(FeedService::class);
-    }
-
-    public function testGetFeed()
-    {
-        $feed = resolve(Feed::class);
-
-        factory(Post::class)->create();
-
-        $response = $this->feedService->getFeed($feed, 'rss');
-
-        $this->assertInstanceOf(Response::class, $response);
     }
 
     // Todo: test content, test logged in vs logged out, test cache, test empty posts

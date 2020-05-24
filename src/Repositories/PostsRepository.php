@@ -48,20 +48,6 @@ class PostsRepository
     }
 
     /**
-     * Return posts for RSS feed.
-     *
-     * @return Builder[]|Collection
-     */
-    public function rssItems(): Collection
-    {
-        return $this->query(false)
-            ->orderBy('posted_at', 'desc')
-            ->limit(config('blogetc.rssfeed.posts_to_show_in_rss_feed'))
-            ->with('author')
-            ->get();
-    }
-
-    /**
      * Return new instance of the Query Builder for this model.
      */
     public function query(bool $eagerLoad = false): Builder
@@ -76,16 +62,17 @@ class PostsRepository
     }
 
     /**
-     * Find a blog etc post by ID
-     * If cannot find, throw exception.
+     * Return posts for RSS feed.
+     *
+     * @return Builder[]|Collection
      */
-    public function find(int $blogEtcPostID): Post
+    public function rssItems(): Collection
     {
-        try {
-            return $this->query(true)->findOrFail($blogEtcPostID);
-        } catch (ModelNotFoundException $e) {
-            throw new PostNotFoundException('Unable to find blog post with ID: '.$blogEtcPostID);
-        }
+        return $this->query(false)
+            ->orderBy('posted_at', 'desc')
+            ->limit(config('blogetc.rssfeed.posts_to_show_in_rss_feed'))
+            ->with('author')
+            ->get();
     }
 
     /**
@@ -126,9 +113,23 @@ class PostsRepository
     }
 
     /**
+     * Find a blog etc post by ID
+     * If cannot find, throw exception.
+     */
+    public function find(int $blogEtcPostID): Post
+    {
+        try {
+            return $this->query(true)->findOrFail($blogEtcPostID);
+        } catch (ModelNotFoundException $e) {
+            throw new PostNotFoundException('Unable to find blog post with ID: '.$blogEtcPostID);
+        }
+    }
+
+    /**
      * Update image sizes (or in theory any attribute) on a blog etc post.
      *
      * TODO - currently untested.
+     *
      * @param array $uploadedImages
      */
     public function updateImageSizes(Post $post, ?array $uploadedImages): Post

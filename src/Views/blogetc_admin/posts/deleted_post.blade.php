@@ -5,8 +5,8 @@
 
     <?php
     $images_to_delete = [];
-    foreach ((array) config('blogetc.image_sizes') as $image_size => $image_size_info) {
-        if (! $deletedPost->$image_size) {
+    foreach ((array)config('blogetc.image_sizes') as $image_size => $image_size_info) {
+        if (!$deletedPost->$image_size) {
             continue;
         }
         $images_to_delete[] = $image_size;
@@ -35,10 +35,11 @@
 
                     </td>
                     <td><code>{{$deletedPost->$image_size}}</code>
-            {{--check filesize returns something, so we don't divide by 0--}}
+                        {{--check filesize returns something, so we don't divide by 0--}}
                         @if(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)))
 
-                        ({{ (round(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)) / 1000 ,1)). " kb"}})
+                            ({{ (round(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)) / 1000 ,1)). " kb"}}
+                            )
 
                         @endif
 

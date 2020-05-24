@@ -4,8 +4,9 @@ namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use WebDevEtc\BlogEtc\Models\Post;
-//use WebDevEtc\BlogEtc\Services\CommentsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
+
+//use WebDevEtc\BlogEtc\Services\CommentsService;
 
 /**
  * Class PostsControllerTest.
@@ -17,20 +18,6 @@ use WebDevEtc\BlogEtc\Tests\TestCase;
 class CommentsControllerTest extends TestCase
 {
     use WithFaker;
-
-    /**
-     * Setup the feature test.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->featureSetUp();
-
-        config(['blogetc.comments.type_of_comments_to_show' => 'built_in']);
-        config(['blogetc.comments.auto_approve_comments' => true]);
-        config(['blogetc.captcha.captcha_enabled' => false]);
-    }
 
     /**
      * Test the store method for saving a new comment.
@@ -84,5 +71,19 @@ class CommentsControllerTest extends TestCase
 
         // Assert was not written to db:
         $this->assertDatabaseMissing('blog_etc_comments', ['comment' => $params['comment']]);
+    }
+
+    /**
+     * Setup the feature test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->featureSetUp();
+
+        config(['blogetc.comments.type_of_comments_to_show' => 'built_in']);
+        config(['blogetc.comments.auto_approve_comments' => true]);
+        config(['blogetc.captcha.captcha_enabled' => false]);
     }
 }

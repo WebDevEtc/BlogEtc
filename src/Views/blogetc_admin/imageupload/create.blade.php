@@ -20,15 +20,17 @@
         </div>
 
         <div class="form-group mb-4 p-2">
-            <label >Sizes to convert to</label>
+            <label>Sizes to convert to</label>
             <div>
-                <input type='checkbox' name='sizes_to_upload[blogetc_full_size]' value='true' checked id='size_blogetc_full_size'>
+                <input type='checkbox' name='sizes_to_upload[blogetc_full_size]' value='true' checked
+                       id='size_blogetc_full_size'>
                 <label for='size_blogetc_full_size'>Full size (no resizing)</label>
             </div>
             @foreach((array)config('blogetc.image_sizes') as $size => $image_size_details)
                 <div>
                     <input type='checkbox' name='sizes_to_upload[{{$size}}]' value='true' checked id='size_{{$size}}'>
-                    <label for='size_{{$size}}'>{{$image_size_details['name']}} - {{$image_size_details['w']}} x {{$image_size_details['h']}}px</label>
+                    <label for='size_{{$size}}'>{{$image_size_details['name']}} - {{$image_size_details['w']}}
+                        x {{$image_size_details['h']}}px</label>
                 </div>
             @endforeach
         </div>

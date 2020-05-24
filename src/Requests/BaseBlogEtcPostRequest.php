@@ -2,14 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-use Carbon\Carbon;
-
 abstract class BaseBlogEtcPostRequest extends BaseRequest
 {
     /**
      * Shared rules for blog posts.
-     *
-     * @return array
      *
      * @todo tidy this up! It is a bit of a mess!
      */
@@ -51,7 +47,11 @@ abstract class BaseBlogEtcPostRequest extends BaseRequest
             'meta_desc'         => ['nullable', 'string', 'min:1', 'max:1000'],
             'short_description' => ['nullable', 'string', 'max:30000'],
             'slug'              => [
-                'nullable', 'string', 'min:1', 'max:150', 'alpha_dash', // this field should have some additional rules, which is done in the subclasses.
+                'nullable',
+                'string',
+                'min:1',
+                'max:150',
+                'alpha_dash', // this field should have some additional rules, which is done in the subclasses.
             ],
             'category' => ['nullable', 'array'],
         ];

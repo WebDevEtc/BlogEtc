@@ -14,11 +14,11 @@
                     {{$comment->author()}} commented on:
 
                     @if($comment->post)
-                    <a href='{{$comment->post->url()}}'>{{$comment->post->title}}</a>
-                        @else
+                        <a href='{{$comment->post->url()}}'>{{$comment->post->title}}</a>
+                    @else
                         Unknown blog post
 
-                        @endif
+                    @endif
 
                     on {{$comment->created_at}} </h5>
 
@@ -37,7 +37,8 @@
 
                 @if(!$comment->approved)
                     {{--APPROVE BUTTON--}}
-                    <form method='post' action='{{route("blogetc.admin.comments.approve", $comment->id)}}' class='float-right'>
+                    <form method='post' action='{{route("blogetc.admin.comments.approve", $comment->id)}}'
+                          class='float-right'>
                         @csrf
                         @method("PATCH")
                         <input type='submit' class='btn btn-success btn-sm' value='Approve'/>
@@ -47,7 +48,8 @@
                 {{--DELETE BUTTON--}}
                 <form
                         onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"
-                        method='post' action='{{route("blogetc.admin.comments.delete", $comment->id)}}' class='float-right'>
+                        method='post' action='{{route("blogetc.admin.comments.delete", $comment->id)}}'
+                        class='float-right'>
                     @csrf
                     @method("DELETE")
                     <input type='submit' class='btn btn-danger btn-sm' value='Delete'/>

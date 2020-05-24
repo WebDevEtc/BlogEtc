@@ -34,8 +34,12 @@ class UploadedImage
      * @param $image
      * @param $source string|null  the __METHOD__  firing this event (or other string)
      */
-    public function __construct(string $image_filename, $image, BlogEtcPost $blogEtcPost = null, string $source = 'other')
-    {
+    public function __construct(
+        string $image_filename,
+        $image,
+        BlogEtcPost $blogEtcPost = null,
+        string $source = 'other'
+    ) {
         $this->image_filename = $image_filename;
         $this->blogEtcPost = $blogEtcPost;
         $this->image = $image;

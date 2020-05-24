@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use LogicException;
 use WebDevEtc\BlogEtc\Events\BlogPostAdded;
 use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
@@ -59,7 +60,7 @@ class PostsService
      */
     public function create(PostRequest $request, ?int $userID): Post
     {
-        throw new \LogicException('PostsService create is not yet ready for use');
+        throw new LogicException('PostsService create is not yet ready for use');
         $attributes = $request->validated() + ['user_id' => $userID];
 
         // set default posted_at, if none were submitted
@@ -119,7 +120,7 @@ class PostsService
      */
     public function update(int $blogPostID, PostRequest $request): Post
     {
-        throw new \LogicException('PostsService update is not yet ready for use');
+        throw new LogicException('PostsService update is not yet ready for use');
         $post = $this->repository->find($blogPostID);
 
         // TODO - split this into a repo call.
@@ -147,7 +148,7 @@ class PostsService
      */
     public function delete(int $postID): array
     {
-        throw new \LogicException('PostsService delete is not yet ready for use');
+        throw new LogicException('PostsService delete is not yet ready for use');
         $post = $this->repository->find($postID);
 
         event(new BlogPostWillBeDeleted($post));
@@ -184,19 +185,19 @@ class PostsService
     }
 
     /**
-     * Find and return a blog post based on slug.
-     */
-    public function findBySlug(string $slug): Post
-    {
-        return $this->repository->findBySlug($slug);
-    }
-
-    /**
      * Get human readable file size (in kb).
      */
     protected function humanReadableFileSize(int $fileSize): string
     {
         return round($fileSize / 1000, 1).' kb';
+    }
+
+    /**
+     * Find and return a blog post based on slug.
+     */
+    public function findBySlug(string $slug): Post
+    {
+        return $this->repository->findBySlug($slug);
     }
 
     /**

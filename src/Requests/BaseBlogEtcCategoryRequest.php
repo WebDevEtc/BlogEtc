@@ -6,8 +6,6 @@ abstract class BaseBlogEtcCategoryRequest extends BaseRequest
 {
     /**
      * Shared rules for categories.
-     *
-     * @return array
      */
     protected function baseCategoryRules(): array
     {

@@ -12,16 +12,6 @@ class FeedControllerTest extends TestCase
     use WithFaker;
 
     /**
-     * Setup the feature test.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->featureSetUp();
-    }
-
-    /**
      * Test the main RSS feed.
      */
     public function testIndex(): void
@@ -134,5 +124,15 @@ class FeedControllerTest extends TestCase
         $guestResponse = $this->get(route('blogetc.feed'));
         $guestResponse->assertOk()
             ->assertDontSee($post->title);
+    }
+
+    /**
+     * Setup the feature test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->featureSetUp();
     }
 }

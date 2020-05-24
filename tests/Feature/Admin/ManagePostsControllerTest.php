@@ -4,25 +4,16 @@ namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
-//use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Category;
-//use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
+
+//use WebDevEtc\BlogEtc\Models\Category;
+//use WebDevEtc\BlogEtc\Models\Post;
 
 class ManagePostsControllerTest extends TestCase
 {
     use WithFaker;
-
-    /**
-     * Setup the feature test.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->featureSetUp();
-    }
 
     /**
      * Test that users passing the admin gate can access the admin index.
@@ -138,7 +129,8 @@ class ManagePostsControllerTest extends TestCase
         $redirectTo = $response->headers->get('location');
         $postId = array_last(explode('/', $redirectTo));
 
-        $this->assertDatabaseHas('blog_etc_post_categories', ['blog_etc_post_id' => $postId, 'blog_etc_category_id' => $category->id]);
+        $this->assertDatabaseHas('blog_etc_post_categories',
+            ['blog_etc_post_id' => $postId, 'blog_etc_category_id' => $category->id]);
     }
 
     /**
@@ -256,5 +248,15 @@ class ManagePostsControllerTest extends TestCase
         $response = $this->patch(route('blogetc.admin.edit_post', $invalidPostID), $params);
 
         $response->assertNotFound();
+    }
+
+    /**
+     * Setup the feature test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->featureSetUp();
     }
 }

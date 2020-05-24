@@ -16,20 +16,27 @@ use WebDevEtc\BlogEtc\Requests\FeedRequest;
 class BlogEtcRssFeedController extends Controller
 {
     /**
-     * @param $posts
+     * RSS Feed
+     * This is a long (but quite simple) method to show an RSS feed
+     * It makes use of Laravelium\Feed\Feed.
      *
      * @return mixed
      */
-    protected function setupFeed(Feed $feed, $posts)
+    public function feed(FeedRequest $request, Feed $feed)
     {
-        $feed->title = config('app.name').' Blog';
-        $feed->description = config('blogetc.rssfeed.description', 'Our blog RSS feed');
-        $feed->link = route('blogetc.index');
-        $feed->setDateFormat('carbon');
-        $feed->pubdate = isset($posts[0]) ? $posts[0]->posted_at : Carbon::now()->subYear(10);
-        $feed->lang = config('blogetc.rssfeed.language', 'en');
-        $feed->setShortening(config('blogetc.rssfeed.should_shorten_text', true));
-        $feed->setTextLimit(config('blogetc.rssfeed.text_limit', 100));
+        // for different caching
+        $user_or_guest = Auth::check() ? Auth::user()->id : 'guest';
+
+        $feed->setCache(
+            config('blogetc.rssfeed.cache_in_minutes', 60),
+            'blogetc-'.$request->getFeedType().$user_or_guest
+        );
+
+        if (! $feed->isCached()) {
+            $this->makeFreshFeed($feed);
+        }
+
+        return $feed->render($request->getFeedType());
     }
 
     /**
@@ -57,26 +64,19 @@ class BlogEtcRssFeedController extends Controller
     }
 
     /**
-     * RSS Feed
-     * This is a long (but quite simple) method to show an RSS feed
-     * It makes use of Laravelium\Feed\Feed.
+     * @param $posts
      *
      * @return mixed
      */
-    public function feed(FeedRequest $request, Feed $feed)
+    protected function setupFeed(Feed $feed, $posts)
     {
-        // for different caching
-        $user_or_guest = Auth::check() ? Auth::user()->id : 'guest';
-
-        $feed->setCache(
-            config('blogetc.rssfeed.cache_in_minutes', 60),
-            'blogetc-'.$request->getFeedType().$user_or_guest
-        );
-
-        if (! $feed->isCached()) {
-            $this->makeFreshFeed($feed);
-        }
-
-        return $feed->render($request->getFeedType());
+        $feed->title = config('app.name').' Blog';
+        $feed->description = config('blogetc.rssfeed.description', 'Our blog RSS feed');
+        $feed->link = route('blogetc.index');
+        $feed->setDateFormat('carbon');
+        $feed->pubdate = isset($posts[0]) ? $posts[0]->posted_at : Carbon::now()->subYear(10);
+        $feed->lang = config('blogetc.rssfeed.language', 'en');
+        $feed->setShortening(config('blogetc.rssfeed.should_shorten_text', true));
+        $feed->setTextLimit(config('blogetc.rssfeed.text_limit', 100));
     }
 }
