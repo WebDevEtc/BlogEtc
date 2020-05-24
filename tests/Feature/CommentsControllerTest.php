@@ -59,7 +59,6 @@ class CommentsControllerTest extends TestCase
         $response->assertOk();
 
         // Test can see the comment on the post page and therefore saved in the database.
-        $this->withoutExceptionHandling();
         $postResponse = $this->get(route('blogetc.single', $post->slug));
         $postResponse->assertSee($params['comment']);
     }
