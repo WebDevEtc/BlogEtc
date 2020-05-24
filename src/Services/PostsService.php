@@ -60,7 +60,6 @@ class PostsService
     public function create(PostRequest $request, ?int $userID): Post
     {
         throw new \LogicException('PostsService create is not yet ready for use');
-
         $attributes = $request->validated() + ['user_id' => $userID];
 
         // set default posted_at, if none were submitted
@@ -121,7 +120,6 @@ class PostsService
     public function update(int $blogPostID, PostRequest $request): Post
     {
         throw new \LogicException('PostsService update is not yet ready for use');
-
         $post = $this->repository->find($blogPostID);
 
         // TODO - split this into a repo call.
@@ -150,7 +148,6 @@ class PostsService
     public function delete(int $postID): array
     {
         throw new \LogicException('PostsService delete is not yet ready for use');
-
         $post = $this->repository->find($postID);
 
         event(new BlogPostWillBeDeleted($post));
