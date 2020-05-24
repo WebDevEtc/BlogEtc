@@ -85,8 +85,6 @@ class Post extends Model implements SearchResultInterface
         return $this->title;
     }
 
-    /**
-     */
     protected static function boot()
     {
         parent::boot();
