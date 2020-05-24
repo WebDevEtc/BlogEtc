@@ -66,7 +66,8 @@ class Post extends Model implements SearchResultInterface
         static::addGlobalScope(new BlogEtcPublishedScope());
     }
 
-    public function isPublic():boolean {
+    public function isPublic(): boolean
+    {
         return $this->is_published && $this->posted_at->isFuture();
     }
 
@@ -176,7 +177,7 @@ class Post extends Model implements SearchResultInterface
         $imgTagClass = null,
         $anchorTagClass = null
     ) {
-        if (! $this->hasImage($size)) {
+        if (!$this->hasImage($size)) {
             return '';
         }
 
@@ -299,7 +300,7 @@ class Post extends Model implements SearchResultInterface
      */
     public function bladeViewFile(): string
     {
-        if (! $this->use_view_file) {
+        if (!$this->use_view_file) {
             throw new RuntimeException('use_view_file was empty, so cannot use bladeViewFile()');
         }
 
@@ -329,7 +330,7 @@ class Post extends Model implements SearchResultInterface
     {
         $base_text_to_use = $this->short_description;
 
-        if (! trim($base_text_to_use)) {
+        if (!trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
         $base_text_to_use = strip_tags($base_text_to_use);
@@ -360,7 +361,7 @@ class Post extends Model implements SearchResultInterface
             $return = $this->post_body;
         }
 
-        if (! config('blogetc.echo_html')) {
+        if (!config('blogetc.echo_html')) {
             if (config('blogetc.strip_html')) {
                 $return = strip_tags($return);
             }
