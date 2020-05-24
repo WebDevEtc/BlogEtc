@@ -5,6 +5,7 @@ namespace WebDevEtc\BlogEtc\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Swis\Laravel\Fulltext\Search;
 use View;
@@ -19,6 +20,40 @@ use WebDevEtc\BlogEtc\Models\Post;
 class BlogEtcReaderController extends Controller
 {
     use UsesCaptcha;
+
+    /**
+     * Show the search results for $_GET['s'].
+     *
+     * @throws Exception
+     *
+     * @return Factory|\Illuminate\View\View
+     */
+    public function search(Request $request)
+    {
+        if (! config('blogetc.search.search_enabled')) {
+            throw new Exception('Search is disabled');
+        }
+        $query = $request->get('s');
+        $search = new Search();
+        $search_results = $search->run($query);
+
+        View::share('title', 'Search results for '.e($query));
+
+        return view('blogetc::search', ['query' => $query, 'search_results' => $search_results]);
+    }
+
+    /**
+     * View all posts in $category_slug category.
+     *
+     * @param Request $request
+     * @param $category_slug
+     *
+     * @return mixed
+     */
+    public function view_category($category_slug)
+    {
+        return $this->index($category_slug);
+    }
 
     /**
      * Show blog posts
@@ -56,40 +91,6 @@ class BlogEtcReaderController extends Controller
             'posts' => $posts,
             'title' => $title,
         ]);
-    }
-
-    /**
-     * Show the search results for $_GET['s'].
-     *
-     * @throws Exception
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function search(Request $request)
-    {
-        if (! config('blogetc.search.search_enabled')) {
-            throw new Exception('Search is disabled');
-        }
-        $query = $request->get('s');
-        $search = new Search();
-        $search_results = $search->run($query);
-
-        View::share('title', 'Search results for '.e($query));
-
-        return view('blogetc::search', ['query' => $query, 'search_results' => $search_results]);
-    }
-
-    /**
-     * View all posts in $category_slug category.
-     *
-     * @param Request $request
-     * @param $category_slug
-     *
-     * @return mixed
-     */
-    public function view_category($category_slug)
-    {
-        return $this->index($category_slug);
     }
 
     /**

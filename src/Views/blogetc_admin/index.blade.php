@@ -52,7 +52,7 @@
 
                         <?php
 
-                        $viewfile = resource_path('views/custom_blog_posts/'.$post->use_view_file.'.blade.php');
+                        $viewfile = resource_path('views/custom_blog_posts/' . $post->use_view_file . '.blade.php');
 
                         ?>
                         <br>

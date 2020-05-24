@@ -60,7 +60,7 @@
 
                     <li class="nav-item ">
                         <a id="" class="nav-link " href="#" role="button"
-                           aria-haspopup="true" aria-expanded="false" >
+                           aria-haspopup="true" aria-expanded="false">
                             Logged in as {{ Auth::user()->name }}
                         </a>
 
@@ -109,14 +109,14 @@
 </div>
 
 
-@if( config("blogetc.use_wysiwyg") && config("blogetc.echo_html") && (in_array( \Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
+@if( config("blogetc.use_wysiwyg") && config("blogetc.echo_html") && (in_array( Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
     <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"
             integrity="sha384-BpuqJd0Xizmp9PSp/NTwb/RSBCHK+rVdGWTrwcepj1ADQjNYPWT2GDfnfAr6/5dn"
             crossorigin="anonymous"></script>
     <script>
-        if( typeof(CKEDITOR) !== "undefined" ) {
-            CKEDITOR.replace('post_body');
-        }
+      if (typeof (CKEDITOR) !== 'undefined') {
+        CKEDITOR.replace('post_body');
+      }
     </script>
 @endif
 </body>

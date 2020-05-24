@@ -1,7 +1,7 @@
 @php
     /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
-@if(\Auth::check() && \Auth::user()->canManageBlogEtcPosts())
+@if(Auth::check() && Auth::user()->canManageBlogEtcPosts())
     <a href="{{$post->editUrl()}}" class="btn btn-outline-secondary btn-sm pull-right float-right">
         Edit Post
     </a>

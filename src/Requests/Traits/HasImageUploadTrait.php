@@ -2,12 +2,14 @@
 
 namespace WebDevEtc\BlogEtc\Requests\Traits;
 
+use Illuminate\Http\UploadedFile;
+
 trait HasImageUploadTrait
 {
     /**
      * @param $size
      *
-     * @return \Illuminate\Http\UploadedFile|null
+     * @return UploadedFile|null
      */
     public function get_image_file($size)
     {

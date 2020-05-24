@@ -3,7 +3,14 @@
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Auth;
+use Exception;
 use File;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
+use RuntimeException;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
@@ -24,12 +31,12 @@ class ManageUploadsController extends Controller
     {
         $this->middleware(UserCanManageBlogPosts::class);
 
-        if (!is_array(config('blogetc'))) {
-            throw new \RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
+        if (! is_array(config('blogetc'))) {
+            throw new RuntimeException('The config/blogetc.php does not exist. Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
 
-        if (!config('blogetc.image_upload_enabled')) {
-            throw new \RuntimeException('The blogetc.php config option has not enabled image uploading');
+        if (! config('blogetc.image_upload_enabled')) {
+            throw new RuntimeException('The blogetc.php config option has not enabled image uploading');
         }
     }
 
@@ -40,13 +47,14 @@ class ManageUploadsController extends Controller
      */
     public function index()
     {
-        return view('blogetc_admin::imageupload.index', ['uploaded_photos' => BlogEtcUploadedPhoto::orderBy('id', 'desc')->paginate(10)]);
+        return view('blogetc_admin::imageupload.index',
+            ['uploaded_photos' => BlogEtcUploadedPhoto::orderBy('id', 'desc')->paginate(10)]);
     }
 
     /**
      * show the form for uploading a new image.
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function create()
     {
@@ -56,9 +64,9 @@ class ManageUploadsController extends Controller
     /**
      * Save a new uploaded image.
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function store(UploadImageRequest $request)
     {
@@ -70,7 +78,7 @@ class ManageUploadsController extends Controller
     /**
      * Process any uploaded images (for featured image).
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array returns an array of details about each file resized
      *
@@ -87,21 +95,23 @@ class ManageUploadsController extends Controller
 
         // now upload a full size - this is a special case, not in the config file. We only store full size images in this class, not as part of the featured blog image uploads.
         if (isset($sizes_to_upload['blogetc_full_size']) && 'true' === $sizes_to_upload['blogetc_full_size']) {
-            $uploaded_image_details['blogetc_full_size'] = $this->UploadAndResize(null, $request->get('image_title'), 'fullsize', $photo);
+            $uploaded_image_details['blogetc_full_size'] = $this->UploadAndResize(null, $request->get('image_title'),
+                'fullsize', $photo);
         }
 
         foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
-            if (!isset($sizes_to_upload[$size]) || !$sizes_to_upload[$size] || !$image_size_details['enabled']) {
+            if (! isset($sizes_to_upload[$size]) || ! $sizes_to_upload[$size] || ! $image_size_details['enabled']) {
                 continue;
             }
 
-            $uploaded_image_details[$size] = $this->UploadAndResize(null, $request->get('image_title'), $image_size_details, $photo);
+            $uploaded_image_details[$size] = $this->UploadAndResize(null, $request->get('image_title'),
+                $image_size_details, $photo);
         }
 
         UploadedPhoto::create([
             'image_title'     => $request->get('image_title'),
             'source'          => 'ImageUpload',
-            'uploader_id'     => optional(\Auth::user())->id,
+            'uploader_id'     => optional(Auth::user())->id,
             'uploaded_images' => $uploaded_image_details,
         ]);
 

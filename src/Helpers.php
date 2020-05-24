@@ -15,20 +15,11 @@ class Helpers
     const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
 
     /**
-     * Set a new flash message - used in the BlogEtc Admin panel to flash messages to user
-     * such as 'post created'.
+     * @deprecated use pullFlashedMessage() instead
      */
-    public static function flashMessage(string $message): void
+    public static function pull_flashed_message(): ?string
     {
-        Session::flash(self::FLASH_MESSAGE_SESSION_KEY, $message);
-    }
-
-    /**
-     * Is there a flashed message?
-     */
-    public static function hasFlashedMessage(): bool
-    {
-        return Session::has(self::FLASH_MESSAGE_SESSION_KEY);
+        return self::pullFlashedMessage();
     }
 
     /**
@@ -42,33 +33,22 @@ class Helpers
     }
 
     /**
-     * Use this in your blade/template files, within <head> to auto insert the links to rss feed.
-     */
-    public static function rssHtmlTag(): string
-    {
-        return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="'
-            .e(route('blogetc.feed')).'?type=atom" />'
-            .'<link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="'
-            .e(route('blogetc.feed')).'?type=rss" />';
-    }
-
-    //## Depreciated methods:
-
-    /**
-     * @deprecated use pullFlashedMessage() instead
-     */
-    public static function pull_flashed_message(): ?string
-    {
-        return self::pullFlashedMessage();
-    }
-
-    /**
      * @deprecated use hasFlashedMessage() instead
      */
     public static function has_flashed_message(): bool
     {
         return self::hasFlashedMessage();
     }
+
+    /**
+     * Is there a flashed message?
+     */
+    public static function hasFlashedMessage(): bool
+    {
+        return Session::has(self::FLASH_MESSAGE_SESSION_KEY);
+    }
+
+    //## Depreciated methods:
 
     /**
      * @deprecated use flashMessage() instead
@@ -79,11 +59,31 @@ class Helpers
     }
 
     /**
+     * Set a new flash message - used in the BlogEtc Admin panel to flash messages to user
+     * such as 'post created'.
+     */
+    public static function flashMessage(string $message): void
+    {
+        Session::flash(self::FLASH_MESSAGE_SESSION_KEY, $message);
+    }
+
+    /**
      * @deprecated use rssHtmlTag() instead
      */
     public static function rss_html_tag(): string
     {
         return self::rssHtmlTag();
+    }
+
+    /**
+     * Use this in your blade/template files, within <head> to auto insert the links to rss feed.
+     */
+    public static function rssHtmlTag(): string
+    {
+        return '<link rel="alternate" type="application/atom+xml" title="Atom RSS Feed" href="'
+            .e(route('blogetc.feed')).'?type=atom" />'
+            .'<link rel="alternate" type="application/rss+xml" title="XML RSS Feed" href="'
+            .e(route('blogetc.feed')).'?type=rss" />';
     }
 
     /**

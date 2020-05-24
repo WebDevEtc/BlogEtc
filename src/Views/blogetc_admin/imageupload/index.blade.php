@@ -1,6 +1,6 @@
 @php
-    /** @var \WebDevEtc\BlogEtc\Models\UploadedPhoto[] $uploaded_photos */
-    $uploadedPhoto = $uploaded_photos;
+    /** @var UploadedPhoto[] $uploaded_photos */
+    use WebDevEtc\BlogEtc\Models\UploadedPhoto;$uploadedPhoto = $uploaded_photos
 @endphp
 @extends('blogetc_admin::layouts.admin_layout')
 @section('content')
@@ -11,21 +11,22 @@
     <p>It includes one thumbnail per photo - the smallest image is selected.</p>
 
     <script>
-        function show_uploaded_file_row(id, img) {
-            [].forEach.call(document.querySelectorAll('.' + id), function (el) {
-                el.style.display = 'block';
-            });
-            document.getElementById(id).innerHTML = "<a href='" + img + "'><img src='" + img + "' style='max-width:100%; height:auto;'></a>";
-        }
+      function show_uploaded_file_row(id, img) {
+        [].forEach.call(document.querySelectorAll('.' + id), function(el) {
+          el.style.display = 'block';
+        });
+        document.getElementById(id).innerHTML = '<a href=\'' + img + '\'><img src=\'' + img +
+            '\' style=\'max-width:100%; height:auto;\'></a>';
+      }
     </script>
     @foreach($uploaded_photos as $uploadedPhoto)
 
         <div style='border-radius:15px; border:2px solid #efefef; background : #fefefe; margin: 15px;padding:15px'>
-                    <h3>Image ID: {{$uploadedPhoto->id}}: {{$uploadedPhoto->image_title ?? "Untitled Photo"}}</h3>
-                    <h4>
-                        <small title='{{$uploadedPhoto->created_at}}'>
-                            Uploaded {{$uploadedPhoto->created_at->diffForHumans()}}</small>
-                    </h4>
+            <h3>Image ID: {{$uploadedPhoto->id}}: {{$uploadedPhoto->image_title ?? "Untitled Photo"}}</h3>
+            <h4>
+                <small title='{{$uploadedPhoto->created_at}}'>
+                    Uploaded {{$uploadedPhoto->created_at->diffForHumans()}}</small>
+            </h4>
 
             <div class='row'>
                 <div class='col-md-8'>
@@ -35,7 +36,7 @@
                         $smallest = null;
                         $smallest_size = -1;
                         foreach ($uploadedPhoto->uploaded_images as $file_key => $file) {
-                            $id = 'uploaded_'.($uploadedPhoto->id).'_'.$file_key; ?>
+                        $id = 'uploaded_' . ($uploadedPhoto->id) . '_' . $file_key; ?>
 
 
                         <div class='col-md-12 '>
@@ -70,10 +71,10 @@
                         <?php
 
                         $area = $file['w'] * $file['h'];
-                            if ($area < $smallest_size || $smallest_size < 0) {
-                                $smallest = $file;
-                                $smallest_size = $area;
-                            }
+                        if ($area < $smallest_size || $smallest_size < 0) {
+                            $smallest = $file;
+                            $smallest_size = $area;
+                        }
                         }
 
                         ?>
@@ -82,7 +83,8 @@
                 <div class='col-md-4'>
                     @if($smallest)
                         <div style='text-align:center;'>
-                            <a style='cursor: zoom-in;' href='{{asset(     config("blogetc.blog_upload_dir") . "/". $smallest['filename'])}}'
+                            <a style='cursor: zoom-in;'
+                               href='{{asset(     config("blogetc.blog_upload_dir") . "/". $smallest['filename'])}}'
                                target='_blank'>
                                 <img src='{{asset(     config("blogetc.blog_upload_dir") . "/". $smallest['filename'])}}'
                                      style='max-width:100%; height: auto;'>
