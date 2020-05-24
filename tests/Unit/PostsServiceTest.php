@@ -4,17 +4,11 @@ namespace WebDevEtc\BlogEtc\Tests\Unit;
 
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Request;
-use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Repositories\PostsRepository;
-use WebDevEtc\BlogEtc\Requests\PostRequest;
 use WebDevEtc\BlogEtc\Services\PostsService;
-use WebDevEtc\BlogEtc\Services\UploadsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 /**
@@ -34,8 +28,8 @@ class PostsServiceTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        $this->featureSetUp();
 
-        // Disable image uploads for these tests.
         config(['blogetc' => ['image_upload_enabled' => false]]);
     }
 
@@ -44,8 +38,6 @@ class PostsServiceTest extends TestCase
      */
     public function testRepository(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
-
         $mock = $this->mock(PostsRepository::class);
 
         $service = resolve(PostsService::class);
@@ -61,21 +53,16 @@ class PostsServiceTest extends TestCase
      */
     public function testCreate(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
-        // Mock the repository:
-        $this->mock(PostsRepository::class, static function ($mock) {
-            // Test that it is called exactly once:
-            $mock->shouldReceive('create')->once();
-        });
-
-        // Instanciate service, the mocked repo will be injected:
-        $service = resolve(PostsService::class);
-
-        // Not testing the request, just mock it and what it returns.
-        $request = $this->createRequest($this->createParams());
-
-        // Call the service method (assets are done above).
-        $service->create($request, null);
+        $this->markTestSkipped('Skipping as PostsService::create() is not yet ready for prod/testing');
+//        $this->mock(PostsRepository::class, static function ($mock) {
+//            $mock->shouldReceive('create')->once();
+//        });
+//
+//        $service = resolve(PostsService::class);
+//
+//        $request = $this->createRequest($this->createParams());
+//
+//        $service->create($request, null);
     }
 
     /**
@@ -83,9 +70,7 @@ class PostsServiceTest extends TestCase
      */
     public function testIndexPaginated(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $this->mock(PostsRepository::class, static function ($mock) {
-            // test that is calls repo correctly:
             $mock->shouldReceive('indexPaginated')->once();
         });
 
@@ -99,9 +84,7 @@ class PostsServiceTest extends TestCase
      */
     public function testFindBySlug(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $this->mock(PostsRepository::class, static function ($mock) {
-            // test that is calls repo correctly:
             $mock->shouldReceive('findBySlug')->once();
         });
 
@@ -115,9 +98,7 @@ class PostsServiceTest extends TestCase
      */
     public function testRssItems(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
         $this->mock(PostsRepository::class, static function ($mock) {
-            // test that is calls repo correctly:
             $mock->shouldReceive('rssItems')->once();
         });
 
@@ -133,36 +114,32 @@ class PostsServiceTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
-        $belongsToMany = $this->mock(BelongsToMany::class, static function ($mock) {
-            $mock->shouldReceive('sync');
-        });
-
-        $mockedModel = $this->mock(Post::class, static function ($mock) use ($belongsToMany) {
-            $mock->shouldReceive('fill')->once();
-            $mock->shouldReceive('save')->once();
-            $mock->shouldReceive('categories')->andReturn($belongsToMany);
-        });
-
-        // Mock the repository:
-        $this->mock(PostsRepository::class, static function ($mock) use ($mockedModel) {
-            // Test that it is called exactly once:
-            $mock->shouldReceive('find')->once()->andReturn($mockedModel);
-        });
-
-        $this->mock(UploadsService::class, static function ($mock) {
-            $mock->shouldReceive('processFeaturedUpload')->once();
-        });
-
-        // Instanciate service, the mocked repo will be injected:
-        $service = resolve(PostsService::class);
-
-        $request = $this->createRequest($this->createParams());
-
-        $this->expectsEvents(BlogPostEdited::class);
-
-        // Call the service method (assets are done above).
-        $service->update(1, $request);
+        $this->markTestSkipped('Skipping as PostsService::update() is not yet ready for prod/testing');
+//        $belongsToMany = $this->mock(BelongsToMany::class, static function ($mock) {
+//            $mock->shouldReceive('sync');
+//        });
+//
+//        $mockedModel = $this->mock(Post::class, static function ($mock) use ($belongsToMany) {
+//            $mock->shouldReceive('fill')->once();
+//            $mock->shouldReceive('save')->once();
+//            $mock->shouldReceive('categories')->andReturn($belongsToMany);
+//        });
+//
+//        $this->mock(PostsRepository::class, static function ($mock) use ($mockedModel) {
+//            $mock->shouldReceive('find')->once()->andReturn($mockedModel);
+//        });
+//
+//        $this->mock(UploadsService::class, static function ($mock) {
+//            $mock->shouldReceive('processFeaturedUpload')->once();
+//        });
+//
+//        $service = resolve(PostsService::class);
+//
+//        $request = $this->createRequest($this->createParams());
+//
+//        $this->expectsEvents(BlogPostEdited::class);
+//
+//        $service->update(1, $request);
     }
 
     /**
@@ -172,7 +149,7 @@ class PostsServiceTest extends TestCase
      */
     public function testDelete(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
+        $this->markTestSkipped('Skipping as PostsService::delete() is not yet ready for prod/testing');
         $this->mock(PostsRepository::class, static function ($mock) {
             $mock->shouldReceive('find')->with(123)->andReturn(new Post());
             $mock->shouldReceive('delete')->with(123)->andReturn(true);
@@ -195,27 +172,81 @@ class PostsServiceTest extends TestCase
         $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
 
         return [
-            'posted_at'         => Carbon::now()->format('Y-m-d H:i:s'),
-            'title'             => $this->faker->sentence,
-            'subtitle'          => $this->faker->sentence,
-            'post_body'         => $this->faker->paragraph,
-            'meta_desc'         => $this->faker->paragraph,
+            'posted_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'title' => $this->faker->sentence,
+            'subtitle' => $this->faker->sentence,
+            'post_body' => $this->faker->paragraph,
+            'meta_desc' => $this->faker->paragraph,
             'short_description' => $this->faker->paragraph,
-            'slug'              => $this->faker->asciify('*********'),
-            'categories'        => null,
+            'slug' => $this->faker->asciify('*********'),
+            'categories' => null,
         ];
     }
 
-    public function createRequest(array $params): PostRequest
+//    private function createRequest(array $params): PostRequest
+//    {
+//        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
+//        $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
+//            $mock->shouldReceive('validated')->andReturn($params);
+//        });
+//
+//        $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
+//
+//        return tap($request)->setValidator($mockedValidator);
+//    }
+//
+    public function testSearch(): void
     {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
-        // Not testing the request, just mock it and what it returns.
-        $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
-            $mock->shouldReceive('validated')->andReturn($params);
-        });
 
-        $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
+        $post = factory(Post::class)->create();
+        $otherPost = factory(Post::class)->create();
 
-        return tap($request)->setValidator($mockedValidator);
+        /** @var PostsService $service */
+        $service = resolve(PostsService::class);
+
+        $response = $service->search($post->title);
+
+        $this->assertCount(1, $response);
+
+        $this->assertTrue($post->is($response->first()));
+        $this->assertFalse($otherPost->is($response->first()));
+    }
+
+    public function testSearchNoResults(): void
+    {
+
+        factory(Post::class)->create();
+
+        /** @var PostsService $service */
+        $service = resolve(PostsService::class);
+
+        $response = $service->search('do not find');
+
+        $this->assertEmpty($response);
+    }
+
+    public function testSearchEmpty(): void
+    {
+
+        factory(Post::class)->create();
+
+        /** @var PostsService $service */
+        $service = resolve(PostsService::class);
+
+        $response = $service->search('');
+
+        $this->assertEmpty($response);
+    }
+
+    public function testSearchLimit(): void
+    {
+        $posts = factory(Post::class, 10)->create(['title' => 'search-limit-title']);
+
+        /** @var PostsService $service */
+        $service = resolve(PostsService::class);
+
+        $response = $service->search($posts->first()->title, 10);
+
+        $this->assertCount(10, $response);
     }
 }
