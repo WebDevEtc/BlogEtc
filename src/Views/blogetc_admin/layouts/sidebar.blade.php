@@ -27,9 +27,7 @@
                     Add Post</a>
             </div>
         </div>
-
     </li>
-
 
     <li class="list-group-item justify-content-between lh-condensed">
         <div>
@@ -63,7 +61,6 @@
         </div>
     </li>
 
-
     <li class="list-group-item  justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.categories.index') }}">Categories</a>
@@ -72,10 +69,7 @@
                         echo $postCount.' '.str_plural('Category', $postCount);
                         ?>)</span>
             </h6>
-
-
             <small class="text-muted">Blog post categories</small>
-
             <div class="list-group ">
                 <a href='{{ route('blogetc.admin.categories.index') }}'
                    class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.categories.index') active @endif  '><i

@@ -11,16 +11,11 @@
     <p>It includes one thumbnail per photo - the smallest image is selected.</p>
 
     <script>
-
         function show_uploaded_file_row(id, img) {
-
-            // show the div, and populate it with the image.
             [].forEach.call(document.querySelectorAll('.' + id), function (el) {
                 el.style.display = 'block';
             });
             document.getElementById(id).innerHTML = "<a href='" + img + "'><img src='" + img + "' style='max-width:100%; height:auto;'></a>";
-
-
         }
     </script>
     @foreach($uploaded_photos as $uploadedPhoto)
@@ -108,4 +103,3 @@
         {{ $uploaded_photos->links() }}
     </div>
 @endsection
-

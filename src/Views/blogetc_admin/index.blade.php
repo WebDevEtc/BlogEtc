@@ -11,7 +11,7 @@
                 <h5 class='card-subtitle mb-2 text-muted'>{{$post->subtitle}}</h5>
                 <p class="card-text">{{$post->html}}</p>
 
-                <?=$post->image_tag('thumbnail', false, 'float-right'); ?>
+                <?=$post->imageTag('thumbnail', false, 'float-right'); ?>
 
                 <dl class="">
                     <dt class="">Author</dt>

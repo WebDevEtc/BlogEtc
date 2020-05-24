@@ -12,13 +12,8 @@
     <small id="blog_subtitle_help" class="form-text text-muted">The subtitle of the blog post (optional)</small>
 </div>
 
-
 <div class='row'>
-
-
     <div class='col-sm-12 col-md-4'>
-
-
         <div class="form-group">
             <label for="blog_slug">Blog Post Slug</label>
             <input type="text" class="form-control" id="blog_slug" aria-describedby="blog_slug_help" name='slug'
@@ -29,8 +24,6 @@
 
     </div>
     <div class='col-sm-6 col-md-4'>
-
-
         <div class="form-group">
             <label for="blog_is_published">Published?</label>
 
@@ -53,7 +46,6 @@
 
     </div>
     <div class='col-sm-6 col-md-4'>
-
         <div class="form-group">
             <label for="blog_posted_at">Posted at</label>
             <input type="text" class="form-control" id="blog_posted_at" aria-describedby="blog_posted_at_help"
@@ -65,11 +57,8 @@
                     HH:MM:SS</code> format.
             </small>
         </div>
-
-
     </div>
 </div>
-
 
 <div class="form-group">
     <label for="blog_post_body">Post Body
@@ -90,9 +79,6 @@
     </div>
 </div>
 
-
-
-
 @if(config("blogetc.use_custom_view_files",true))
     <div class="form-group">
         <label for="blog_use_view_file">Custom View File</label>
@@ -105,8 +91,6 @@
         </small>
     </div>
 @endif
-
-
 
 <div class="form-group">
     <label for="blog_seo_title">SEO: {{"<title>"}} tag (optional)</label>
@@ -149,7 +133,7 @@
                 @if($post->has_image($size_info['basic_key']))
                     <div style='max-width:55px;  ' class='float-right m-2'>
                         <a style='cursor: zoom-in;' target='_blank' href='{{$post->image_url($size_info['basic_key'])}}'>
-                            <?=$post->image_tag($size_info['basic_key'], false, 'd-block mx-auto img-fluid '); ?>
+                            <?=$post->imageTag($size_info['basic_key'], false, 'd-block mx-auto img-fluid '); ?>
                         </a>
                     </div>
                 @endif

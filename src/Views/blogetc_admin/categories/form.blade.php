@@ -12,10 +12,11 @@
         if (SHOULD_AUTO_GEN_SLUG) {
             // the slug hasn't been manually changed (or it was set above), so we should generate the slug
             // This is done in two stages - one to remove non words/spaces etc, the another to replace white space (and underscore) with a -
-            cat_slug.value =document.getElementById("category_category_name").value.toLowerCase()
-                    .replace(/[^\w-_ ]+/g, '') // replace with nothing
-                    .replace(/[_ ]+/g, '-') // replace _ and spaces with -
-                    .substring(0,99); // limit str length
+            cat_slug.value =document.getElementById("category_category_name").value
+                    .toLowerCase()
+                    .replace(/[^\w-_ ]+/g, '')
+                    .replace(/[_ ]+/g, '-')
+                    .substring(0,99);
         }
     }
 </script>
@@ -31,7 +32,6 @@
            name='category_name'
            value="{{old("category_name",$category->category_name)}}"
     >
-
     <small id="category_category_name_help" class="form-text text-muted">The name of the category</small>
 </div>
 
@@ -52,26 +52,18 @@
     >
 
     <small id="category_slug_help" class="form-text text-muted">
-        Letters, numbers, dash only. The slug
-        i.e. {{route("blogetc.view_category","")}}/<u><em>this_part</em></u>. This must be unique (two categories can't
-        share the same slug).
-
+        Letters, numbers, dash only. The slug i.e. {{route("blogetc.view_category","")}}/<u><em>this_part</em></u>.
+        This must be unique (two categories can't share the same slug).
     </small>
 </div>
-
 
 <div class="form-group">
     <label for="category_description">Category Description (optional)</label>
     <textarea name='category_description'
               class='form-control'
     id='category_description'>{{old("category_description",$category->category_description)}}</textarea>
-
 </div>
 
 <script>
-    if (document.getElementById("category_slug").value.length < 1) {
-        SHOULD_AUTO_GEN_SLUG = true;
-    } else {
-        SHOULD_AUTO_GEN_SLUG = false; // there is already a value in #category_slug, so lets pretend it was changed already.
-    }
+    SHOULD_AUTO_GEN_SLUG = document.getElementById("category_slug").value.length < 1;
 </script>
