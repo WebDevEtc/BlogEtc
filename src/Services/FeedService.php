@@ -77,11 +77,10 @@ class FeedService
         foreach ($blogPosts as $blogPost) {
             $feed->add(
                 $blogPost->title,
-                $blogPost->authorString(),
+                $blogPost->author_string(),
                 $blogPost->url(),
                 $blogPost->posted_at,
-                $blogPost->short_description,
-                $blogPost->generateIntroduction()
+                $blogPost->short_description
             );
         }
     }
