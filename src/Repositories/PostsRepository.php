@@ -152,11 +152,14 @@ class PostsRepository
      *
      * This is a rough implementation - proper full text search has been removed in current version.
      */
-    public function search(string $query, int $max = 25): Collection
+    public function search(string $search, int $max = 25): Collection
     {
-        return $this->query(true)
-            ->where('title', 'like', '%'.$query)
-            ->limit($max)
-            ->get();
+        $query = $this->query(true)->limit($max);
+
+        trim($search)
+            ? $query->where('title', 'like', '%'.$search)
+            : $query->where('title', '');
+
+        return $query->get();
     }
 }
