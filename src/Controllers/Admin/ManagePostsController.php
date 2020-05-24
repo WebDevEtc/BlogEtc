@@ -12,6 +12,7 @@ use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
+use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
@@ -178,7 +179,7 @@ class ManagePostsController extends Controller
 
         // todo: link this to the blogetc_post row.
         if (count(array_filter($uploaded_image_details)) > 0) {
-            BlogEtcUploadedPhoto::create([
+            UploadedPhoto::create([
                 'source'          => 'BlogFeaturedImage',
                 'uploaded_images' => $uploaded_image_details,
             ]);

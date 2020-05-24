@@ -81,7 +81,6 @@ class ManageUploadsController extends Controller
         $this->increaseMemoryLimit();
         $photo = $request->file('upload');
 
-        // to save in db later
         $uploaded_image_details = [];
 
         $sizes_to_upload = $request->get('sizes_to_upload');
@@ -96,12 +95,9 @@ class ManageUploadsController extends Controller
                 continue;
             }
 
-            // this image size is enabled, and
-            // we have an uploaded image that we can use
             $uploaded_image_details[$size] = $this->UploadAndResize(null, $request->get('image_title'), $image_size_details, $photo);
         }
 
-        // store the image upload.
         UploadedPhoto::create([
             'image_title'     => $request->get('image_title'),
             'source'          => 'ImageUpload',

@@ -44,10 +44,8 @@ class Basic extends CaptchaAbstract
     public function rules(): array
     {
         $checkAnswer = static function ($attribute, $value, $fail) {
-            // get correct answers
             $answers = config('blogetc.captcha.basic_answers');
 
-            // lower case submitted value and the answers
             $value = strtolower(trim($value));
             $answers = strtolower($answers);
 

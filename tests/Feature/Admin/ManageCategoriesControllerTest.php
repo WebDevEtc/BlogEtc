@@ -176,7 +176,6 @@ class ManageCategoriesControllerTest extends TestCase
 
         $params = $category->toArray();
 
-        // Update category name.
         $params['category_name'] = $this->faker->sentence;
 
         $response = $this->patch(route('blogetc.admin.categories.update_category', $category), $params);

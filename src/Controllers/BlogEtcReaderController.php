@@ -4,8 +4,10 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Swis\Laravel\Fulltext\Search;
+use View;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -28,8 +30,9 @@ class BlogEtcReaderController extends Controller
      */
     public function index($category_slug = null)
     {
-        // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manageb log posts
-        $title = 'Viewing blog'; // default title...
+        // the published_at + is_published are handled by BlogEtcPublishedScope,
+        // and don't take effect if the logged in user can manage log posts
+        $title = 'Viewing blog';
 
         if ($category_slug) {
             $category = Category::where('slug', $category_slug)->firstOrFail();
@@ -37,8 +40,8 @@ class BlogEtcReaderController extends Controller
 
             // at the moment we handle this special case (viewing a category) by hard coding in the following two lines.
             // You can easily override this in the view files.
-            \View::share('blogetc_category', $category); // so the view can say "You are viewing $CATEGORYNAME category posts"
-            $title = 'Viewing posts in '.$category->category_name.' category'; // hardcode title here...
+            View::share('blogetc_category', $category);
+            $title = 'Viewing posts in '.$category->category_name.' category';
         } else {
             $posts = Post::query();
         }
@@ -58,20 +61,20 @@ class BlogEtcReaderController extends Controller
     /**
      * Show the search results for $_GET['s'].
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function search(Request $request)
     {
-        if (!config('blogetc.search.search_enabled')) {
-            throw new \Exception('Search is disabled');
+        if (! config('blogetc.search.search_enabled')) {
+            throw new Exception('Search is disabled');
         }
         $query = $request->get('s');
         $search = new Search();
         $search_results = $search->run($query);
 
-        \View::share('title', 'Search results for '.e($query));
+        View::share('title', 'Search results for '.e($query));
 
         return view('blogetc::search', ['query' => $query, 'search_results' => $search_results]);
     }
@@ -98,7 +101,8 @@ class BlogEtcReaderController extends Controller
      */
     public function viewSinglePost(Request $request, $blogPostSlug)
     {
-        // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged in user can manage log posts
+        // the published_at + is_published are handled by BlogEtcPublishedScope,
+        // and don't take effect if the logged in user can manage log posts
         $blog_post = Post::where('slug', $blogPostSlug)
             ->firstOrFail();
 
