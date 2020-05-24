@@ -197,7 +197,6 @@ class PostsServiceTest extends TestCase
 //
     public function testSearch(): void
     {
-
         $post = factory(Post::class)->create();
         $otherPost = factory(Post::class)->create();
 
@@ -214,7 +213,6 @@ class PostsServiceTest extends TestCase
 
     public function testSearchNoResults(): void
     {
-
         factory(Post::class)->create();
 
         /** @var PostsService $service */
@@ -227,7 +225,6 @@ class PostsServiceTest extends TestCase
 
     public function testSearchEmpty(): void
     {
-
         factory(Post::class)->create();
 
         /** @var PostsService $service */
