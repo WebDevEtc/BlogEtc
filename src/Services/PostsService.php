@@ -191,19 +191,19 @@ class PostsService
     }
 
     /**
-     * Find and return a blog post based on slug.
-     */
-    public function findBySlug(string $slug): Post
-    {
-        return $this->repository->findBySlug($slug);
-    }
-
-    /**
      * Get human readable file size (in kb).
      */
     protected function humanReadableFileSize(int $fileSize): string
     {
         return round($fileSize / 1000, 1).' kb';
+    }
+
+    /**
+     * Find and return a blog post based on slug.
+     */
+    public function findBySlug(string $slug): Post
+    {
+        return $this->repository->findBySlug($slug);
     }
 
     /**

@@ -43,10 +43,10 @@
 
                 {{--DELETE BUTTON--}}
                 <form
-                    {{--   TODO--}}
-                    onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"
-                    method="post" action="{{ route('blogetc.admin.comments.delete', $comment->id) }}"
-                    class="float-right">
+                        {{--   TODO--}}
+                        onsubmit="return confirm('Are you sure you want to delete this blog post comment?\n You cannot undo this action!');"
+                        method="post" action="{{ route('blogetc.admin.comments.delete', $comment->id) }}"
+                        class="float-right">
                     {{--  TODO  float-right--}}
                     @csrf
                     @method('DELETE')

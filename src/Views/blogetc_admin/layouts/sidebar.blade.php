@@ -57,8 +57,8 @@
                 <a href="{{ route('blogetc.admin.comments.index') }}"
                    class="list-group-item list-group-item-action
                         @if(Request::routeIs('blogetc.admin.comments.index') && !Request::get('waiting_for_approval'))
-                            active
-                        @endif">
+                           active
+@endif">
                     <i class="fa fa-fw fa-comments" aria-hidden="true"></i>
                     All Comments
                 </a>
@@ -66,10 +66,10 @@
                 <a href="{{ route('blogetc.admin.comments.index') }}?waiting_for_approval=true"
                    class="list-group-item list-group-item-action
                         @if(Request::routeIs( 'blogetc.admin.comments.index') && Request::get('waiting_for_approval'))
-                            active
-                        @elseif($commentApprovalCount>0)
-                            list-group-item-warning
-                        @endif">
+                           active
+@elseif($commentApprovalCount>0)
+                           list-group-item-warning
+@endif">
                     <i class="fa  fa-fw fa-comments" aria-hidden="true"></i>
                     {{ $commentApprovalCount }}
                     Waiting for approval

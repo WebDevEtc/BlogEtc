@@ -25,11 +25,31 @@ class UploadedPhotosRepository
     }
 
     /**
+     * Create a new Uploaded Photo row in the database.
+     */
+    public function create(array $attributes): UploadedPhoto
+    {
+        return $this->query()->create($attributes);
+    }
+
+    /**
      * Return new instance of the Query Builder for this model.
      */
     public function query(): Builder
     {
         return $this->model->newQuery();
+    }
+
+    /**
+     * Delete a uploaded photo from the database.
+     *
+     * @throws Exception
+     */
+    public function delete(int $uploadedPhotoID): bool
+    {
+        $post = $this->find($uploadedPhotoID);
+
+        return $post->delete();
     }
 
     /**
@@ -45,25 +65,5 @@ class UploadedPhotosRepository
         } catch (ModelNotFoundException $e) {
             throw new PostNotFoundException('Unable to find Uploaded Photo with ID: '.$uploadedPhotoID);
         }
-    }
-
-    /**
-     * Create a new Uploaded Photo row in the database.
-     */
-    public function create(array $attributes): UploadedPhoto
-    {
-        return $this->query()->create($attributes);
-    }
-
-    /**
-     * Delete a uploaded photo from the database.
-     *
-     * @throws Exception
-     */
-    public function delete(int $uploadedPhotoID): bool
-    {
-        $post = $this->find($uploadedPhotoID);
-
-        return $post->delete();
     }
 }

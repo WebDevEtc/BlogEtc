@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 use RuntimeException;
@@ -28,11 +29,11 @@ class ManageUploadsController extends Controller
         $this->uploadsService = $uploadsService;
 
         // ensure the config file exists
-        if (!is_array(config('blogetc'))) {
+        if (! is_array(config('blogetc'))) {
             throw new RuntimeException('The config/blogetc.php does not exist. '.'Publish the vendor files for the BlogEtc package by running the php artisan publish:vendor command');
         }
 
-        if (!config('blogetc.image_upload_enabled') && !app()->runningInConsole()) {
+        if (! config('blogetc.image_upload_enabled') && ! app()->runningInConsole()) {
             throw new RuntimeException('Image uploads in BlogEtc are disabled in the configuration');
         }
     }
@@ -63,7 +64,7 @@ class ManageUploadsController extends Controller
     /**
      * Save a new uploaded image.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function store(UploadImageRequest $request): Response
     {

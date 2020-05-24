@@ -1,5 +1,5 @@
 @php
-/** @var \WebDevEtc\BlogEtc\Models\Post $post */
+    /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
 @extends('layouts.app',['title' => $post->genSeoTitle() ])
 @section('content')

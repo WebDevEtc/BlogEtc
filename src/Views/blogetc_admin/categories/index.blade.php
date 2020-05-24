@@ -12,7 +12,7 @@
                     Edit Category
                 </a>
                 <form
-{{--                        TODO--}}
+                        {{--                        TODO--}}
                         onsubmit="return confirm('Are you sure you want to delete this blog post category?\n You cannot undo this action!');"
                         method="post" action="{{ route('blogetc.admin.categories.destroy_category', $category->id) }}"
                         class="float-right">

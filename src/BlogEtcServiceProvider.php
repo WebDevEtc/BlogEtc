@@ -39,32 +39,6 @@ class BlogEtcServiceProvider extends ServiceProvider
     }
 
     /**
-     * Set up view composers so admin views have required view params.
-     */
-    protected function setupViewComposer(): void
-    {
-        View::composer(
-            'blogetc_admin::layouts.admin_layout',
-            AdminSidebarViewComposer::class
-        );
-    }
-
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        // for the admin backend views ( view("blogetc_admin::some-blade-file") )
-        $this->loadViewsFrom(__DIR__.'/Views/blogetc_admin', 'blogetc_admin');
-
-        // for public facing views (view("blogetc::some-blade-file")):
-        // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc.
-        $this->loadViewsFrom(__DIR__.'/Views/blogetc', 'blogetc');
-    }
-
-    /**
      * If full text search is not enabled in config, then disable syncing for the BlogEtcPost model.
      */
     protected function disableFulltextSyncing(): void
@@ -113,13 +87,13 @@ class BlogEtcServiceProvider extends ServiceProvider
 
         // You must add a gate with the ability name 'blog-etc-admin' to your AuthServiceProvider class.
         // This is provided only as a backup, which will restrict all access to BlogEtc admin.
-        if (!Gate::has('blog-etc-admin')) {
+        if (! Gate::has('blog-etc-admin')) {
             Gate::define('blog-etc-admin', static function ($user) {
                 throw new LogicException('You must implement your own gate in AuthServiceProvider'.' for the "blog-etc-admin" gate.');
             });
         }
 
-        if (!Gate::has('view-blog-etc-post')) {
+        if (! Gate::has('view-blog-etc-post')) {
             // Used for the search results
             Gate::define('view-blog-etc-post', static function (?Model $user, Post $post) {
                 return $post->is_published && $post->posted_at->isPast();
@@ -131,7 +105,7 @@ class BlogEtcServiceProvider extends ServiceProvider
         /*
          * For people to add comments to your blog posts.
          */
-        if (!Gate::has('blog-etc-add-comment')) {
+        if (! Gate::has('blog-etc-add-comment')) {
             Gate::define('blog-etc-add-comment', static function (?Model $user) {
                 return true;
             });
@@ -140,10 +114,36 @@ class BlogEtcServiceProvider extends ServiceProvider
         /*
          * For an admin-like user to approve comments.
          */
-        if (!Gate::has('blog-etc-approve-comments')) {
+        if (! Gate::has('blog-etc-approve-comments')) {
             Gate::define('blog-etc-approve-comments', static function ($user) {
                 return true;
             });
         }
+    }
+
+    /**
+     * Set up view composers so admin views have required view params.
+     */
+    protected function setupViewComposer(): void
+    {
+        View::composer(
+            'blogetc_admin::layouts.admin_layout',
+            AdminSidebarViewComposer::class
+        );
+    }
+
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        // for the admin backend views ( view("blogetc_admin::some-blade-file") )
+        $this->loadViewsFrom(__DIR__.'/Views/blogetc_admin', 'blogetc_admin');
+
+        // for public facing views (view("blogetc::some-blade-file")):
+        // if you do the vendor:publish, these will be copied to /resources/views/vendor/blogetc.
+        $this->loadViewsFrom(__DIR__.'/Views/blogetc', 'blogetc');
     }
 }

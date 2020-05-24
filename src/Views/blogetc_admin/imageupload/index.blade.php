@@ -11,22 +11,22 @@
     <p>It includes one thumbnail per photo - the smallest image is selected.</p>
 
     <script>
-        // TODO
-        /**
-         * Show the uploaded images.
-         * @param id
-         * @param img
-         */
-        function show_uploaded_file_row (id, img) {
-            // show the div, and populate it with the image.
-            [].forEach.call(document.querySelectorAll('.' + id), function (el) {
-                el.style.display = 'block';
-            });
-            // TODO build the html properly
-            document.getElementById(id).innerHTML = '<a href="' + img + '"><img src="' + img +
-                '" style="max-width:100%; height:auto;"></a>';
+      // TODO
+      /**
+       * Show the uploaded images.
+       * @param id
+       * @param img
+       */
+      function show_uploaded_file_row(id, img) {
+        // show the div, and populate it with the image.
+        [].forEach.call(document.querySelectorAll('.' + id), function(el) {
+          el.style.display = 'block';
+        });
+        // TODO build the html properly
+        document.getElementById(id).innerHTML = '<a href="' + img + '"><img src="' + img +
+            '" style="max-width:100%; height:auto;"></a>';
 
-        }
+      }
     </script>
     @foreach($uploaded_photos as $uploadedPhoto)
         <div style="border-radius:15px; border:2px solid #efefef; background : #fefefe; margin: 15px;padding:15px">

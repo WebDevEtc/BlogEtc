@@ -20,7 +20,7 @@
         Category Slug
     </label>
     <input maxlength="100" pattern="[a-zA-Z0-9-]+" type="text" required
-            class="form-control" id="category_slug" aria-describedby="category_slug_help"
+           class="form-control" id="category_slug" aria-describedby="category_slug_help"
            name="slug" value="{{ old('slug',$category->slug) }}">
 
     <small id="category_slug_help" class="form-text text-muted">
@@ -41,64 +41,63 @@
 
 @push('js')
     <script>
+      /**
+       * Generate the category slug, based on the category name.
+       *
+       * This is only run if the slug did not exist on page load,
+       * and has not been edited by a user since page load.
+       */
+      (function autoSlugCategory() {
+        // Get the two inputs:
+        var categoryNameInput = document.getElementById('category_name');
+        var slugInput = document.getElementById('category_slug');
+
+        // Initially, only enable generating slug if slug originally had no value.
+        var shouldGenerateSlug = slugInput.value.length === 0;
+
         /**
-         * Generate the category slug, based on the category name.
+         * Function to generate a URL friendly 'slug' from value
          *
-         * This is only run if the slug did not exist on page load,
-         * and has not been edited by a user since page load.
+         * @param value
+         * @returns {string}
          */
-        (function autoSlugCategory () {
-            // Get the two inputs:
-            var categoryNameInput = document.getElementById('category_name');
-            var slugInput = document.getElementById('category_slug');
+        var slug = function(value) {
+          return value.toLowerCase().replace(/[^\w-_ ]+/g, '') // remove invalid characters
+              .replace(/[_ ]+/g, '-') // replace underscores and spaces with '-'
+              .substring(0, 100); // limit length to 100 characters
+        };
 
-            // Initially, only enable generating slug if slug originally had no value.
-            var shouldGenerateSlug = slugInput.value.length === 0;
+        /**
+         * Function to generate the slug (if required) - called as an event listener.
+         */
+        var updateSlug = function() {
+          // check if slug value is empty, if so then force shouldGenerateSlug to true
+          shouldGenerateSlug = slugInput.value.length === 0
+              ? true // enable generating slug
+              : shouldGenerateSlug; // default to its initial value
 
-            /**
-             * Function to generate a URL friendly 'slug' from value
-             *
-             * @param value
-             * @returns {string}
-             */
-            var slug = function (value) {
-                return value.toLowerCase()
-                            .replace(/[^\w-_ ]+/g, '') // remove invalid characters
-                            .replace(/[_ ]+/g, '-') // replace underscores and spaces with '-'
-                            .substring(0, 100); // limit length to 100 characters
-            };
+          if (shouldGenerateSlug === false || categoryNameInput.value.length === 0) {
+            return;
+          }
 
-            /**
-             * Function to generate the slug (if required) - called as an event listener.
-             */
-            var updateSlug = function () {
-                // check if slug value is empty, if so then force shouldGenerateSlug to true
-                shouldGenerateSlug = slugInput.value.length === 0
-                    ? true // enable generating slug
-                    : shouldGenerateSlug; // default to its initial value
+          slugInput.value = slug(categoryNameInput.value);
+        };
 
-                if (shouldGenerateSlug === false || categoryNameInput.value.length === 0) {
-                    return;
-                }
+        /**
+         * Disable generating of slug - called when the slug input is updated
+         *
+         * Only enable it if text input was cleared
+         */
+        var disable = function() {
+          shouldGenerateSlug = slugInput.length === 0;
+        };
 
-                slugInput.value = slug(categoryNameInput.value);
-            };
+        // when category name is updated, generate slug (if enabled):
+        categoryNameInput.addEventListener('input', updateSlug);
 
-            /**
-             * Disable generating of slug - called when the slug input is updated
-             *
-             * Only enable it if text input was cleared
-             */
-            var disable = function () {
-                shouldGenerateSlug = slugInput.length === 0;
-            };
-
-            // when category name is updated, generate slug (if enabled):
-            categoryNameInput.addEventListener('input', updateSlug);
-
-            // if the slug field is changed, disable future auto update:
-            slugInput.addEventListener('input', disable);
-        })();
+        // if the slug field is changed, disable future auto update:
+        slugInput.addEventListener('input', disable);
+      })();
     </script>
 @endpush
 

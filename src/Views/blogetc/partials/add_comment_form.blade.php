@@ -13,12 +13,12 @@
 
             <label id="comment_label" for="comment">Your Comment</label>
             <textarea
-                class="form-control"
-                name="comment"
-                required
-                id="comment"
-                placeholder="Write your comment here"
-                rows="7">{{ old('comment') }}</textarea>
+                    class="form-control"
+                    name="comment"
+                    required
+                    id="comment"
+                    placeholder="Write your comment here"
+                    rows="7">{{ old('comment') }}</textarea>
 
         </div>
 

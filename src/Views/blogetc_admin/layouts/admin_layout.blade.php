@@ -123,9 +123,9 @@
             integrity="sha384-BpuqJd0Xizmp9PSp/NTwb/RSBCHK+rVdGWTrwcepj1ADQjNYPWT2GDfnfAr6/5dn"
             crossorigin="anonymous"></script>
     <script>
-        if (typeof (CKEDITOR) !== 'undefined') {
-            CKEDITOR.replace('post_body');
-        }
+      if (typeof (CKEDITOR) !== 'undefined') {
+        CKEDITOR.replace('post_body');
+      }
     </script>
 @endif
 

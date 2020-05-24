@@ -88,8 +88,8 @@
                 </a>
                 {{-- TODO--}}
                 <form
-                    onsubmit="return confirm('Are you sure you want to delete this blog post?\n You cannot undo this action!');"
-                    method="post" action="{{ route('blogetc.admin.destroy_post', $post->id) }}" class="float-right">
+                        onsubmit="return confirm('Are you sure you want to delete this blog post?\n You cannot undo this action!');"
+                        method="post" action="{{ route('blogetc.admin.destroy_post', $post->id) }}" class="float-right">
                     @csrf
                     <input name="_method" type="hidden" value="DELETE"/>
                     <button type="submit" class="btn btn-danger btn-sm">

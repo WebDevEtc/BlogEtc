@@ -61,12 +61,12 @@ class CommentsService
             ? $ip : null;
 
         // Should website be stored?
-        $authorWebsite = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_website'])
+        $authorWebsite = config('blogetc.comments.ask_for_author_website') && ! empty($attributes['author_website'])
             ? $attributes['author_website']
             : null;
 
         // Should email be stored?
-        $authorEmail = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_email'])
+        $authorEmail = config('blogetc.comments.ask_for_author_website') && ! empty($attributes['author_email'])
             ? $attributes['author_email']
             : null;
 
@@ -118,14 +118,6 @@ class CommentsService
     }
 
     /**
-     * Find and return a comment by ID.
-     */
-    public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
-    {
-        return $this->repository->find($blogEtcCommentID, $onlyApproved);
-    }
-
-    /**
      * Delete a blog comment.
      *
      * Returns the now deleted comment object
@@ -145,5 +137,13 @@ class CommentsService
 
         // return deleted comment
         return $comment;
+    }
+
+    /**
+     * Find and return a comment by ID.
+     */
+    public function find(int $blogEtcCommentID, bool $onlyApproved = true): Comment
+    {
+        return $this->repository->find($blogEtcCommentID, $onlyApproved);
     }
 }

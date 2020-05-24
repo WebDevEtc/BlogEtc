@@ -138,7 +138,8 @@
                 @endif
 
                 <label for="blog_{{ $size_key }}">Image - {{ $size_info['name'] }} (optional)</label>
-                <small id="blog_{{ $size_key }}_help" class="form-text text-muted">Upload {{ $size_info['name'] }} image -
+                <small id="blog_{{ $size_key }}_help" class="form-text text-muted">Upload {{ $size_info['name'] }} image
+                    -
                     <code>{{ $size_info['w'] }}&times;{{ $size_info['h'] }}px</code> - it will
                     get automatically resized if larger
                 </small>
@@ -188,29 +189,29 @@
 
 @push('js')
     <script>
-        // TODO
-        (function setupShowOtherSizes () {
-            var showAllSizesContainer = document.getElementById('show-all-sizes-container');
+      // TODO
+      (function setupShowOtherSizes() {
+        var showAllSizesContainer = document.getElementById('show-all-sizes-container');
 
-            if (!showAllSizesContainer) {
-                // missing element
-                return;
-            }
-            var showAllSizesBtn = document.getElementById('show-all-sizes-btn');
-            var otherSizes = document.querySelectorAll('.image_upload_other_sizes');
+        if (!showAllSizesContainer) {
+          // missing element
+          return;
+        }
+        var showAllSizesBtn = document.getElementById('show-all-sizes-btn');
+        var otherSizes = document.querySelectorAll('.image_upload_other_sizes');
 
-            var onClickListener = function (event) {
-                // hide button:
-                event.target.style.display = 'none';
+        var onClickListener = function(event) {
+          // hide button:
+          event.target.style.display = 'none';
 
-                // show all otherSizes
-                [].forEach.call(otherSizes, function (otherSize) {
-                    otherSize.style.display = 'block';
-                });
-            };
+          // show all otherSizes
+          [].forEach.call(otherSizes, function(otherSize) {
+            otherSize.style.display = 'block';
+          });
+        };
 
-            showAllSizesBtn.addEventListener('click', onClickListener);
-        })();
+        showAllSizesBtn.addEventListener('click', onClickListener);
+      })();
     </script>
 
     <style>

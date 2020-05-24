@@ -42,6 +42,7 @@ use WebDevEtc\BlogEtc\Services\UploadsService;
 class Post extends Model
 {
     use Sluggable;
+
     // todo: add indexable again.
     // use Indexable;
 
@@ -138,22 +139,6 @@ class Post extends Model
     }
 
     /**
-     * Return author string (either from the User (via ->user_id), or the submitted author_name value.
-     *
-     * @return string
-     */
-    public function authorString(): ?string
-    {
-        if ($this->author) {
-            return is_callable(self::$authorNameResolver)
-                ? call_user_func(self::$authorNameResolver, $this->author)
-                : $this->author->{self::$authorNameResolver};
-        }
-
-        return 'Unknown Author';
-    }
-
-    /**
      * The associated categories relationship for this blog post.
      */
     public function categories(): BelongsToMany
@@ -175,14 +160,6 @@ class Post extends Model
     }
 
     /**
-     * Return the URL for editing the post (used for admin users).
-     */
-    public function editUrl(): string
-    {
-        return route('blogetc.admin.edit_post', $this->id);
-    }
-
-    /**
      * @throws Exception
      */
     public function fullViewFilePath(): string
@@ -191,18 +168,40 @@ class Post extends Model
     }
 
     /**
-     * If $this->user_view_file is not empty, then it'll return the dot syntax
-     * location of the blade file it should look for.
-     *
-     * @throws Exception
+     * @deprecated - use genSeoTitle() instead
      */
-    public function bladeViewFile(): string
+    public function gen_seo_title(): ?string
     {
-        if (!$this->use_view_file) {
-            throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
+        return $this->genSeoTitle();
+    }
+
+    /**
+     * If $this->seo_title was set, return that.
+     * Otherwise just return $this->title.
+     *
+     * Basically return $this->seo_title ?? $this->title;
+     *
+     * TODO - what convention do we use for gen/generate/etc for naming of this.
+     *
+     * @return string
+     */
+    public function genSeoTitle(): ?string
+    {
+        if ($this->seo_title) {
+            return $this->seo_title;
         }
 
-        return 'custom_blog_posts.'.$this->use_view_file;
+        return $this->title;
+    }
+
+    /**
+     * @param mixed ...$args
+     *
+     * @deprecated - use imageTag() instead, which returns a HtmlString
+     */
+    public function image_tag(...$args): HtmlString
+    {
+        return $this->imageTag(...$args);
     }
 
     /**
@@ -219,7 +218,7 @@ class Post extends Model
         $imgTagClass = null,
         $anchorTagClass = null
     ): HtmlString {
-        if (!$this->hasImage($size)) {
+        if (! $this->hasImage($size)) {
             // return an empty string if this image does not exist.
             return new HtmlString('');
         }
@@ -302,86 +301,6 @@ class Post extends Model
     }
 
     /**
-     * Generate an introduction, max length $max_len characters.
-     */
-    public function generateIntroduction(int $maxLen = 500): string
-    {
-        $base_text_to_use = $this->short_description;
-
-        if (!trim($base_text_to_use)) {
-            $base_text_to_use = $this->post_body;
-        }
-        $base_text_to_use = strip_tags($base_text_to_use);
-
-        return Str::limit($base_text_to_use, $maxLen);
-    }
-
-    /**
-     * Return post body HTML, ready for output.
-     *
-     * @throws Throwable
-     */
-    public function renderBody(): HtmlString
-    {
-        $body = $this->use_view_file && config('blogetc.use_custom_view_files')
-            ? view('blogetc::partials.use_view_file', ['post' => $this])->render()
-            : $this->post_body;
-
-        if (!config('blogetc.echo_html')) {
-            // if this is not true, then we should escape the output
-            if (config('blogetc.strip_html')) {
-                // not perfect, but it will get wrapped in htmlspecialchars in e() anyway
-                $body = strip_tags($body);
-            }
-
-            $body = e($body);
-
-            if (config('blogetc.auto_nl2br')) {
-                $body = nl2br($body);
-            }
-        }
-
-        return new HtmlString($body);
-    }
-
-    /**
-     * If $this->seo_title was set, return that.
-     * Otherwise just return $this->title.
-     *
-     * Basically return $this->seo_title ?? $this->title;
-     *
-     * TODO - what convention do we use for gen/generate/etc for naming of this.
-     *
-     * @return string
-     */
-    public function genSeoTitle(): ?string
-    {
-        if ($this->seo_title) {
-            return $this->seo_title;
-        }
-
-        return $this->title;
-    }
-
-    /**
-     * @deprecated - use genSeoTitle() instead
-     */
-    public function gen_seo_title(): ?string
-    {
-        return $this->genSeoTitle();
-    }
-
-    /**
-     * @param mixed ...$args
-     *
-     * @deprecated - use imageTag() instead, which returns a HtmlString
-     */
-    public function image_tag(...$args): HtmlString
-    {
-        return $this->imageTag(...$args);
-    }
-
-    /**
      * @param string $size
      *
      * @deprecated  - use hasImage() instead
@@ -400,6 +319,22 @@ class Post extends Model
     }
 
     /**
+     * Return author string (either from the User (via ->user_id), or the submitted author_name value.
+     *
+     * @return string
+     */
+    public function authorString(): ?string
+    {
+        if ($this->author) {
+            return is_callable(self::$authorNameResolver)
+                ? call_user_func(self::$authorNameResolver, $this->author)
+                : $this->author->{self::$authorNameResolver};
+        }
+
+        return 'Unknown Author';
+    }
+
+    /**
      * @deprecated - use editUrl() instead
      */
     public function edit_url(): string
@@ -408,11 +343,11 @@ class Post extends Model
     }
 
     /**
-     * @deprecated - use checkValidImageSize()
+     * Return the URL for editing the post (used for admin users).
      */
-    protected function check_valid_image_size(string $size = 'medium'): bool
+    public function editUrl(): string
     {
-        return $this->checkValidImageSize($size);
+        return route('blogetc.admin.edit_post', $this->id);
     }
 
     /**
@@ -423,6 +358,21 @@ class Post extends Model
     public function full_view_file_path(): string
     {
         return $this->bladeViewFile();
+    }
+
+    /**
+     * If $this->user_view_file is not empty, then it'll return the dot syntax
+     * location of the blade file it should look for.
+     *
+     * @throws Exception
+     */
+    public function bladeViewFile(): string
+    {
+        if (! $this->use_view_file) {
+            throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
+        }
+
+        return 'custom_blog_posts.'.$this->use_view_file;
     }
 
     /**
@@ -444,6 +394,21 @@ class Post extends Model
     }
 
     /**
+     * Generate an introduction, max length $max_len characters.
+     */
+    public function generateIntroduction(int $maxLen = 500): string
+    {
+        $base_text_to_use = $this->short_description;
+
+        if (! trim($base_text_to_use)) {
+            $base_text_to_use = $this->post_body;
+        }
+        $base_text_to_use = strip_tags($base_text_to_use);
+
+        return Str::limit($base_text_to_use, $maxLen);
+    }
+
+    /**
      * @throws Throwable
      *
      * @deprecated - use renderBody() instead
@@ -453,5 +418,41 @@ class Post extends Model
     public function post_body_output(): string
     {
         return $this->renderBody();
+    }
+
+    /**
+     * Return post body HTML, ready for output.
+     *
+     * @throws Throwable
+     */
+    public function renderBody(): HtmlString
+    {
+        $body = $this->use_view_file && config('blogetc.use_custom_view_files')
+            ? view('blogetc::partials.use_view_file', ['post' => $this])->render()
+            : $this->post_body;
+
+        if (! config('blogetc.echo_html')) {
+            // if this is not true, then we should escape the output
+            if (config('blogetc.strip_html')) {
+                // not perfect, but it will get wrapped in htmlspecialchars in e() anyway
+                $body = strip_tags($body);
+            }
+
+            $body = e($body);
+
+            if (config('blogetc.auto_nl2br')) {
+                $body = nl2br($body);
+            }
+        }
+
+        return new HtmlString($body);
+    }
+
+    /**
+     * @deprecated - use checkValidImageSize()
+     */
+    protected function check_valid_image_size(string $size = 'medium'): bool
+    {
+        return $this->checkValidImageSize($size);
     }
 }

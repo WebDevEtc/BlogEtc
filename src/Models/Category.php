@@ -58,18 +58,18 @@ class Category extends Model
     }
 
     /**
-     * Returns the URL for an admin user to edit this category.
-     */
-    public function editUrl(): string
-    {
-        return route('blogetc.admin.categories.edit_category', $this->id);
-    }
-
-    /**
      * @deprecated - use editUrl() instead
      */
     public function edit_url(): string
     {
         return $this->editUrl();
+    }
+
+    /**
+     * Returns the URL for an admin user to edit this category.
+     */
+    public function editUrl(): string
+    {
+        return route('blogetc.admin.categories.edit_category', $this->id);
     }
 }

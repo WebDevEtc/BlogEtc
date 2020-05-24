@@ -39,6 +39,14 @@ class UploadsService
     }
 
     /**
+     * Given a filename, return a public url for that asset on the filesystem as defined in the config.
+     */
+    public static function publicUrl(string $filename): string
+    {
+        return self::disk()->url(config('blogetc.blog_upload_dir').'/'.$filename);
+    }
+
+    /**
      * Disk for filesystem storage.
      *
      * Set the relevant config file to use things such as S3.
@@ -46,14 +54,6 @@ class UploadsService
     public static function disk(): Filesystem
     {
         return Storage::disk(config('blogetc.image_upload_disk', 'public'));
-    }
-
-    /**
-     * Given a filename, return a public url for that asset on the filesystem as defined in the config.
-     */
-    public static function publicUrl(string $filename): string
-    {
-        return self::disk()->url(config('blogetc.blog_upload_dir').'/'.$filename);
     }
 
     /**
@@ -196,13 +196,13 @@ class UploadsService
         $wh = $this->getDimensions($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$availableFilenameAttempts; $i++) {
+        for ($i = 1; $i <= self::$availableFilenameAttempts; ++$i) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.Str::random(5) : '';
 
             $attempt = Str::slug($base.$suffix.$wh).$ext;
 
-            if (!$this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
+            if (! $this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -291,7 +291,7 @@ class UploadsService
      */
     public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
     {
-        if (!config('blogetc.image_upload_enabled')) {
+        if (! config('blogetc.image_upload_enabled')) {
             // image upload was disabled
             return null;
         }
@@ -304,13 +304,13 @@ class UploadsService
 
         $enabledImageSizes = collect((array) config('blogetc.image_sizes'))
             ->filter(function ($size) {
-                return !empty($size['enabled']);
+                return ! empty($size['enabled']);
             });
 
         foreach ($enabledImageSizes as $size => $image_size_details) {
             $photo = $request->getImageSize($size);
 
-            if (!$photo) {
+            if (! $photo) {
                 continue;
             }
 

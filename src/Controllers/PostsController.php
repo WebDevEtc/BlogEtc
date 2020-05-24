@@ -41,6 +41,66 @@ class PostsController extends Controller
     }
 
     /**
+     * View a single post and (if enabled) comments.
+     *
+     * @param $postSlug
+     */
+    public function show(Request $request, $postSlug): View
+    {
+        $blogPost = $this->postsService->findBySlug($postSlug);
+
+        // if using captcha, there might be some code to run now or to echo in the view:
+        $usingCaptcha = $this->captchaService->getCaptchaObject();
+
+        if (null !== $usingCaptcha) {
+            $usingCaptcha->runCaptchaBeforeShowingPosts($request, $blogPost);
+        }
+
+        return view(
+            'blogetc::single_post',
+            [
+                'post'    => $blogPost,
+                'captcha' => $usingCaptcha,
+                // the default scope only selects approved comments, ordered by id
+                'comments' => $blogPost->comments->load('user'),
+            ]
+        );
+    }
+
+    /**
+     * Show the search results.
+     */
+    public function search(SearchRequest $request): \Illuminate\Contracts\View\View
+    {
+        if (! config('blogetc.search.search_enabled')) {
+            throw new LogicException('Search is disabled');
+        }
+
+        $query = $request->searchQuery();
+
+        $search = new Search();
+        $searchResults = $search->run($query);
+
+        return view('blogetc::search', [
+            'title'         => 'Search results for '.e($query),
+            'query'         => $query,
+            'searchResults' => $searchResults,
+        ]);
+    }
+
+    /**
+     * View all posts in $category_slug category.
+     *
+     * @param $categorySlug
+     *
+     * @return View
+     */
+    public function showCategory($categorySlug): \Illuminate\Contracts\View\View
+    {
+        return $this->index($categorySlug);
+    }
+
+    /**
      * Show blog posts
      * If $categorySlug is set, then only show from that category.
      *
@@ -75,65 +135,5 @@ class PostsController extends Controller
             'title'    => $title,
             'category' => $category ?? null,
         ]);
-    }
-
-    /**
-     * View a single post and (if enabled) comments.
-     *
-     * @param $postSlug
-     */
-    public function show(Request $request, $postSlug): View
-    {
-        $blogPost = $this->postsService->findBySlug($postSlug);
-
-        // if using captcha, there might be some code to run now or to echo in the view:
-        $usingCaptcha = $this->captchaService->getCaptchaObject();
-
-        if (null !== $usingCaptcha) {
-            $usingCaptcha->runCaptchaBeforeShowingPosts($request, $blogPost);
-        }
-
-        return view(
-            'blogetc::single_post',
-            [
-                'post'    => $blogPost,
-                'captcha' => $usingCaptcha,
-                // the default scope only selects approved comments, ordered by id
-                'comments' => $blogPost->comments->load('user'),
-            ]
-        );
-    }
-
-    /**
-     * Show the search results.
-     */
-    public function search(SearchRequest $request): \Illuminate\Contracts\View\View
-    {
-        if (!config('blogetc.search.search_enabled')) {
-            throw new LogicException('Search is disabled');
-        }
-
-        $query = $request->searchQuery();
-
-        $search = new Search();
-        $searchResults = $search->run($query);
-
-        return view('blogetc::search', [
-            'title'         => 'Search results for '.e($query),
-            'query'         => $query,
-            'searchResults' => $searchResults,
-        ]);
-    }
-
-    /**
-     * View all posts in $category_slug category.
-     *
-     * @param $categorySlug
-     *
-     * @return View
-     */
-    public function showCategory($categorySlug): \Illuminate\Contracts\View\View
-    {
-        return $this->index($categorySlug);
     }
 }
