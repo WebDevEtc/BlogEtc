@@ -16,7 +16,7 @@ trait HasCategoriesTrait
      */
     public function categories()
     {
-        if (! $this->get('category') || ! is_array($this->get('category'))) {
+        if (!$this->get('category') || !is_array($this->get('category'))) {
             return [];
         }
 
