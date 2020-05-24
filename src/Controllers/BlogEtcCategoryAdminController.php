@@ -8,7 +8,7 @@ use WebDevEtc\BlogEtc\Events\CategoryEdited;
 use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Models\BlogEtcCategory;
+use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\StoreBlogEtcCategoryRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
@@ -33,7 +33,7 @@ class BlogEtcCategoryAdminController extends Controller
      */
     public function index()
     {
-        $categories = BlogEtcCategory::orderBy('category_name')->paginate(25);
+        $categories = Category::orderBy('category_name')->paginate(25);
 
         return view('blogetc_admin::categories.index')->withCategories($categories);
     }
@@ -55,10 +55,9 @@ class BlogEtcCategoryAdminController extends Controller
      */
     public function store_category(StoreBlogEtcCategoryRequest $request)
     {
-        $new_category = new BlogEtcCategory($request->all());
-        $new_category->save();
+        $new_category = Category::create($request->validated());
 
-        Helpers::flashMessage('Saved new category');
+        Helpers::flashMessage('Created new category');
 
         event(new CategoryAdded($new_category));
 
@@ -74,7 +73,7 @@ class BlogEtcCategoryAdminController extends Controller
      */
     public function edit_category($categoryId)
     {
-        $category = BlogEtcCategory::findOrFail($categoryId);
+        $category = Category::findOrFail($categoryId);
 
         return view('blogetc_admin::categories.edit_category')->withCategory($category);
     }
@@ -88,9 +87,9 @@ class BlogEtcCategoryAdminController extends Controller
      */
     public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId)
     {
-        /** @var BlogEtcCategory $category */
-        $category = BlogEtcCategory::findOrFail($categoryId);
-        $category->fill($request->all());
+        /** @var Category $category */
+        $category = Category::findOrFail($categoryId);
+        $category->fill($request->validated());
         $category->save();
 
         Helpers::flashMessage('Saved category changes');
@@ -111,7 +110,7 @@ class BlogEtcCategoryAdminController extends Controller
         /* Please keep this in, so code inspections don't say $request was unused. Of course it might now get marked as left/right parts are equal */
         $request = $request;
 
-        $category = BlogEtcCategory::findOrFail($categoryId);
+        $category = Category::findOrFail($categoryId);
         event(new CategoryWillBeDeleted($category));
         $category->delete();
 

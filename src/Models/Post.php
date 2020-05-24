@@ -86,9 +86,6 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * The "booting" method of the model.
-     *
-     * @return void
      */
     protected static function boot()
     {
@@ -174,13 +171,11 @@ class Post extends Model implements SearchResultInterface
     /**
      * If $this->user_view_file is not empty, then it'll return the dot syntax
      * location of the blade file it should look for.
-     *
-     * @throws Exception
      */
     public function bladeViewFile(): string
     {
         if (!$this->use_view_file) {
-            throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
+            throw new RuntimeException('use_view_file was empty, so cannot use bladeViewFile()');
         }
 
         return 'custom_blog_posts.'.$this->use_view_file;
@@ -314,12 +309,8 @@ class Post extends Model implements SearchResultInterface
     protected function checkValidImageSize(string $size = 'medium'): bool
     {
         if (array_key_exists('image_'.$size, config('blogetc.image_sizes', []))) {
-            // correct size string - just return
             return true;
         }
-
-        // if it got this far then the size was not valid. As this error will probably be seen by whoever set up the
-        // blog, return a useful message to help with debugging.
 
         throw new InvalidArgumentException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
 //        throw new InvalidImageSizeException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
@@ -361,7 +352,7 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * @deprecated  - use hasImage() instead
+     * @deprecated - use hasImage() instead
      */
     public function has_image($size = 'medium'): bool
     {

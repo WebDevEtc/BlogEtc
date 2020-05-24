@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use File;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
+use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
 use WebDevEtc\BlogEtc\Traits\UploadFileTrait;
 
@@ -101,7 +102,7 @@ class BlogEtcImageUploadController extends Controller
         }
 
         // store the image upload.
-        BlogEtcUploadedPhoto::create([
+        UploadedPhoto::create([
             'image_title'     => $request->get('image_title'),
             'source'          => 'ImageUpload',
             'uploader_id'     => optional(\Auth::user())->id,

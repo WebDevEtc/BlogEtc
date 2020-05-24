@@ -31,25 +31,26 @@
 
     <li class="list-group-item justify-content-between lh-condensed">
         <div>
-            <h6 class="my-0"><a href="{{ route('blogetc.admin.comments.index') }}">Comments</a>
+            <h6 class="my-0">
+                <a href="{{ route('blogetc.admin.comments.index') }}">Comments</a>
+                            <span class="text-muted">
+                                <?php
+                                    $commentCount = \WebDevEtc\BlogEtc\Models\Comment::withoutGlobalScopes()->count();
+                                ?>
 
-                            <span class="text-muted">(<?php
-                                $commentCount = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->count();
-
-                                echo $commentCount.' '.str_plural('Comment', $commentCount);
-
-                                ?>)</span>
+                                {{'('.$commentCount.' '.str_plural('Comment', $commentCount).')'}}
+                            </span>
             </h6>
             <small class="text-muted">Manage your comments</small>
 
             <div class="list-group ">
                 <a href='{{ route('blogetc.admin.comments.index') }}'
-                   class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.comments.index' && !\Request::get("waiting_for_approval")) active @endif   '><i
-                            class="fa  fa-fw fa-comments" aria-hidden="true"></i>
-                    All Comments</a>
+                   class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.comments.index' && !\Request::get("waiting_for_approval")) active @endif   '>
+                    <i class="fa  fa-fw fa-comments" aria-hidden="true"></i>
+                    All Comments
+                </a>
 
-
-                <?php $comment_approval_count = \WebDevEtc\BlogEtc\Models\BlogEtcComment::withoutGlobalScopes()->where('approved', false)->count(); ?>
+                <?php $comment_approval_count = \WebDevEtc\BlogEtc\Models\Comment::withoutGlobalScopes()->where('approved', false)->count(); ?>
 
                 <a href='{{ route('blogetc.admin.comments.index') }}?waiting_for_approval=true'
                    class='list-group-item list-group-item-action  @if(\Request::route()->getName() === 'blogetc.admin.comments.index' && \Request::get("waiting_for_approval")) active @elseif($comment_approval_count>0) list-group-item-warning @endif  '><i
@@ -64,10 +65,10 @@
     <li class="list-group-item  justify-content-between lh-condensed">
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.categories.index') }}">Categories</a>
-                    <span class="text-muted">(<?php
-                        $postCount = \WebDevEtc\BlogEtc\Models\BlogEtcCategory::count();
-                        echo $postCount.' '.str_plural('Category', $postCount);
-                        ?>)</span>
+                    <span class="text-muted">
+                        <?php $postCount = \WebDevEtc\BlogEtc\Models\Category::count(); ?>
+                        {{ '(' . $postCount.' '.str_plural('Category', $postCount) . ')' }}
+                    </span>
             </h6>
             <small class="text-muted">Blog post categories</small>
             <div class="list-group ">

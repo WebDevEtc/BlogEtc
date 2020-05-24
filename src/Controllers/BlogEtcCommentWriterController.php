@@ -7,7 +7,6 @@ use Auth;
 use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Events\CommentAdded;
-use WebDevEtc\BlogEtc\Models\BlogEtcComment;
 use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;
@@ -52,8 +51,6 @@ class BlogEtcCommentWriterController extends Controller
 
     /**
      * @param $blog_post
-     *
-     * @return BlogEtcComment
      */
     protected function createNewComment(AddNewCommentRequest $request, Post $blog_post)
     {
