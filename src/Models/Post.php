@@ -194,7 +194,7 @@ class Post extends Model implements SearchResultInterface
      */
     public function hasImage($size = 'medium'): bool
     {
-        $this->check_valid_image_size($size);
+        $this->checkValidImageSize($size);
 
         return array_key_exists('image_'.$size, $this->getAttributes()) && $this->{'image_'.$size};
     }
@@ -230,9 +230,9 @@ class Post extends Model implements SearchResultInterface
         $anchorTagClass = null
     ) {
         if (!$this->hasImage($size)) {
-            // return an empty string if this image does not exist.
             return '';
         }
+
         $imageUrl = e($this->imageUrl($size));
         $imageAltText = e($this->title);
         $imgTag = '<img src="'.$imageUrl.'" alt="'.$imageAltText.'" class="'.e($imgTagClass).'">';
@@ -266,15 +266,12 @@ class Post extends Model implements SearchResultInterface
     public function renderBody()
     {
         if (config('blogetc.use_custom_view_files') && $this->use_view_file) {
-            // using custom view files is enabled, and this post has a use_view_file set, so render it:
             $return = view('blogetc::partials.use_view_file', ['post' => $this])->render();
         } else {
-            // just use the plain ->post_body
             $return = $this->post_body;
         }
 
         if (!config('blogetc.echo_html')) {
-            // if this is not true, then we should escape the output
             if (config('blogetc.strip_html')) {
                 $return = strip_tags($return);
             }
@@ -356,8 +353,6 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * @param mixed ...$args
-     *
      * @deprecated - use imageTag() instead
      */
     public function image_tag(...$args)
@@ -366,8 +361,6 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * @param string $size
-     *
      * @deprecated  - use hasImage() instead
      */
     public function has_image($size = 'medium'): bool
@@ -400,8 +393,6 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * @throws Exception
-     *
      * @deprecated - use bladeViewFile() instead
      */
     public function full_view_file_path(): string
@@ -410,8 +401,6 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * @param string $size
-     *
      * @deprecated - use imageUrl() instead
      */
     public function image_url($size = 'medium'): string
@@ -428,11 +417,7 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * @throws Throwable
-     *
      * @deprecated - use renderBody() instead
-     *
-     * (post_body_output used to return a string, renderBody() now returns HtmlString)
      */
     public function post_body_output()
     {

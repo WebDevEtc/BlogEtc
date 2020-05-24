@@ -46,11 +46,11 @@ class BlogEtcRssFeedController extends Controller
         /** @var Post $post */
         foreach ($posts as $post) {
             $feed->add($post->title,
-                $post->author_string(),
+                $post->authorString(),
                 $post->url(),
                 $post->posted_at,
                 $post->short_description,
-                $post->generate_introduction()
+                $post->generateIntroduction()
             );
         }
     }
