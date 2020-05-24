@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use RuntimeException;
 use Swis\Laravel\Fulltext\Indexable;
@@ -114,13 +115,19 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function author_string(): string
+    public function authorString(): ?string
     {
+        // TODO
+//        if ($this->author) {
+//            return is_callable(self::$authorNameResolver)
+//                ? call_user_func(self::$authorNameResolver, $this->author)
+//                : $this->author->{self::$authorNameResolver};
+//        }
         if ($this->author) {
-            return (string) optional($this->author)->name;
-        } else {
-            return 'Unknown Author';
+            return (string)optional($this->author)->name;
         }
+
+        return 'Unknown Author';
     }
 
     /**
@@ -130,7 +137,8 @@ class Post extends Model implements SearchResultInterface
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'blog_etc_post_categories', 'blog_etc_category_id', 'blog_etc_post_id');
+        return $this->belongsToMany(Category::class, 'blog_etc_post_categories', 'blog_etc_category_id',
+            'blog_etc_post_id');
     }
 
     /**
@@ -158,39 +166,37 @@ class Post extends Model implements SearchResultInterface
      *
      * @return string
      */
-    public function edit_url(): string
+    public function editUrl(): string
     {
         return route('blogetc.admin.edit_post', $this->id);
     }
 
     /**
-     * If $this->user_view_file is not empty, then it'll return the dot syntax location of the blade file it should look for.
+     * If $this->user_view_file is not empty, then it'll return the dot syntax
+     * location of the blade file it should look for.
      *
      * @throws Exception
-     *
-     * @return string
      */
-    public function full_view_file_path(): string
+    public function bladeViewFile(): string
     {
         if (!$this->use_view_file) {
-            throw new RuntimeException('use_view_file was empty, so cannot use '.__METHOD__);
+            throw new RuntimeException('use_view_file was empty, so cannot use fullViewFilePath()');
         }
 
-        return 'custom_blog_posts.'.$this->use_view_file;
+        return 'custom_blog_posts.' . $this->use_view_file;
     }
 
     /**
-     * Does this object have an uploaded image of that size...?
+     * Returns true if the database record indicates that this blog post
+     * has a featured image of size $size.
      *
      * @param string $size
-     *
-     * @return int
      */
-    public function has_image($size = 'medium'): int
+    public function hasImage($size = 'medium'): bool
     {
         $this->check_valid_image_size($size);
 
-        return strlen($this->{'image_'.$size});
+        return array_key_exists('image_' . $size, $this->getAttributes()) && $this->{'image_' . $size};
     }
 
     /**
@@ -198,54 +204,66 @@ class Post extends Model implements SearchResultInterface
      * You should use ::has_image($size) to check if the size is valid.
      *
      * @param string $size - should be 'medium' , 'large' or 'thumbnail'
-     *
-     * @return string
      */
-    public function image_url($size = 'medium'): string
+    public function imageUrl($size = 'medium'): string
     {
-        $this->check_valid_image_size($size);
-        $filename = $this->{'image_'.$size};
+        $this->checkValidImageSize($size);
+        $filename = $this->{'image_' . $size};
 
-        return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
+        return asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $filename);
+//        return UploadsService::publicUrl($filename);
     }
 
     /**
      * Generate a full <img src='' alt=''> img tag.
      *
-     * @param string      $size         - large, medium, thumbnail
-     * @param bool        $auto_link    - if true then itll add <a href=''>...</a> around the <img> tag
-     * @param string|null $img_class    - if you want any additional CSS classes for this tag for the <IMG>
-     * @param string|null $anchor_class - is you want any additional CSS classes in the <a> anchor tag
-     *
-     * @return string
+     * TODO - return HtmlString
+     * @param string $size - large, medium, thumbnail
+     * @param bool $addAHref - if true then it will add <a href=''>...</a> around the <img> tag
+     * @param string|null $imgTagClass - if you want any additional CSS classes for this tag for the <IMG>
+     * @param string|null $anchorTagClass - is you want any additional CSS classes in the <a> anchor tag
      */
-    public function image_tag($size = 'medium', $auto_link = true, $img_class = null, $anchor_class = null): string
-    {
-        if (!$this->has_image($size)) {
+    public function imageTag(
+        $size = 'medium',
+        $addAHref = true,
+        $imgTagClass = null,
+        $anchorTagClass = null
+    ) {
+        if (!$this->hasImage($size)) {
             // return an empty string if this image does not exist.
             return '';
         }
-        $url = e($this->image_url($size));
-        $alt = e($this->title);
-        $img = "<img src='$url' alt='$alt' class='".e($img_class)."' >";
+        $imageUrl = e($this->imageUrl($size));
+        $imageAltText = e($this->title);
+        $imgTag = '<img src="' . $imageUrl . '" alt="' . $imageAltText . '" class="' . e($imgTagClass) . '">';
 
-        return $auto_link ? "<a class='".e($anchor_class)."' href='".e($this->url())."'>$img</a>" : $img;
+        return $addAHref
+            ? '<a class="' . e($anchorTagClass) . '" href="' . e($this->url()) . '">' . $imgTag . '</a>'
+            : $imgTag;
     }
 
-    public function generate_introduction($max_len = 500): string
+    /**
+     * Generate an introduction, max length $max_len characters.
+     */
+    public function generateIntroduction(int $maxLen = 500): string
     {
         $base_text_to_use = $this->short_description;
+
         if (!trim($base_text_to_use)) {
             $base_text_to_use = $this->post_body;
         }
         $base_text_to_use = strip_tags($base_text_to_use);
 
-        $intro = str_limit($base_text_to_use, (int) $max_len);
-
-        return nl2br(e($intro));
+        return Str::limit($base_text_to_use, $maxLen);
     }
 
-    public function post_body_output()
+    /**
+     * Return post body HTML, ready for output.
+     *
+     * TODO: return HtmlString
+     * @throws Throwable
+     */
+    public function renderBody()
     {
         if (config('blogetc.use_custom_view_files') && $this->use_view_file) {
             // using custom view files is enabled, and this post has a use_view_file set, so render it:
@@ -268,6 +286,26 @@ class Post extends Model implements SearchResultInterface
         }
 
         return $return;
+        // New logic todo:
+//        $body = $this->use_view_file && config('blogetc.use_custom_view_files')
+//            ? view('blogetc::partials.use_view_file', ['post' => $this])->render()
+//            : $this->post_body;
+//
+//        if (!config('blogetc.echo_html')) {
+//            // if this is not true, then we should escape the output
+//            if (config('blogetc.strip_html')) {
+//                // not perfect, but it will get wrapped in htmlspecialchars in e() anyway
+//                $body = strip_tags($body);
+//            }
+//
+//            $body = e($body);
+//
+//            if (config('blogetc.auto_nl2br')) {
+//                $body = nl2br($body);
+//            }
+//        }
+//
+//        return new HtmlString($body);
     }
 
     /**
@@ -275,16 +313,19 @@ class Post extends Model implements SearchResultInterface
      * It should be either 'large','medium','thumbnail'.
      *
      * @throws InvalidArgumentException
-     *
-     * @return bool
      */
-    protected function check_valid_image_size(string $size = 'medium')
+    protected function checkValidImageSize(string $size = 'medium'): bool
     {
-        if (!array_key_exists('image_'.$size, config('blogetc.image_sizes'))) {
-            throw new InvalidArgumentException("BlogEtcPost image size should be 'large','medium','thumbnail' or another field as defined in config/blogetc.php. Provided size ($size) is not valid");
+        if (array_key_exists('image_' . $size, config('blogetc.image_sizes', []))) {
+            // correct size string - just return
+            return true;
         }
 
-        return true;
+        // if it got this far then the size was not valid. As this error will probably be seen by whoever set up the
+        // blog, return a useful message to help with debugging.
+
+        throw new InvalidArgumentException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\'' . ' or another field as defined in config/blogetc.php. Provided size (' . e($size) . ') is not valid');
+//        throw new InvalidImageSizeException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
     }
 
     /**
@@ -293,14 +334,108 @@ class Post extends Model implements SearchResultInterface
      *
      * Basically return $this->seo_title ?? $this->title;
      *
+     * TODO - what convention do we use for gen/generate/etc for naming of this.
+     *
      * @return string
      */
-    public function gen_seo_title()
+    public function genSeoTitle(): ?string
     {
         if ($this->seo_title) {
             return $this->seo_title;
         }
 
         return $this->title;
+    }
+
+    /**
+     * @deprecated - use genSeoTitle() instead
+     */
+    public function gen_seo_title(): ?string
+    {
+        return $this->genSeoTitle();
+    }
+
+    /**
+     * @param mixed ...$args
+     *
+     * @deprecated - use imageTag() instead
+     */
+    public function image_tag(...$args)
+    {
+        return $this->imageTag(...$args);
+    }
+
+    /**
+     * @param string $size
+     *
+     * @deprecated  - use hasImage() instead
+     */
+    public function has_image($size = 'medium'): bool
+    {
+        return $this->hasImage($size);
+    }
+
+    /**
+     * @deprecated - use authorString() instead
+     */
+    public function author_string(): ?string
+    {
+        return $this->authorString();
+    }
+
+    /**
+     * @deprecated - use editUrl() instead
+     */
+    public function edit_url(): string
+    {
+        return $this->editUrl();
+    }
+
+    /**
+     * @deprecated - use checkValidImageSize()
+     */
+    protected function check_valid_image_size(string $size = 'medium'): bool
+    {
+        return $this->checkValidImageSize($size);
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @deprecated - use bladeViewFile() instead
+     */
+    public function full_view_file_path(): string
+    {
+        return $this->bladeViewFile();
+    }
+
+    /**
+     * @param string $size
+     *
+     * @deprecated - use imageUrl() instead
+     */
+    public function image_url($size = 'medium'): string
+    {
+        return $this->imageUrl($size);
+    }
+
+    /**
+     * @deprecated - use generateIntroduction() instead
+     */
+    public function generate_introduction(int $maxLen = 500): string
+    {
+        return $this->generateIntroduction($maxLen);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @deprecated - use renderBody() instead
+     *
+     * (post_body_output used to return a string, renderBody() now returns HtmlString)
+     */
+    public function post_body_output()
+    {
+        return $this->renderBody();
     }
 }
