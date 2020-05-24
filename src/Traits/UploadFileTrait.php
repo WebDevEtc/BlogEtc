@@ -2,8 +2,11 @@
 
 namespace WebDevEtc\BlogEtc\Traits;
 
+use Exception;
 use File;
 use Illuminate\Http\UploadedFile;
+use Image;
+use RuntimeException;
 use WebDevEtc\BlogEtc\Events\UploadedImage;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 
@@ -33,60 +36,12 @@ trait UploadFileTrait
     }
 
     /**
-     * Get a filename (that doesn't exist) on the filesystem.
-     *
-     * Todo: support multiple filesystem locations.
-     *
-     * @param $image_size_details - either an array (with w/h attributes) or a string
-     *
-     * @throws \RuntimeException
-     *
-     * @return string
-     */
-    protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo)
-    {
-        $base = $this->generate_base_filename($suggested_title);
-
-        // $wh will be something like "-1200x300"
-        $wh = $this->getWhForFilename($image_size_details);
-        $ext = '.'.$photo->getClientOriginalExtension();
-
-        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
-            // add suffix if $i>1
-            $suffix = $i > 1 ? '-'.str_random(5) : '';
-
-            $attempt = str_slug($base.$suffix.$wh).$ext;
-
-            if (!File::exists($this->image_destination_path().'/'.$attempt)) {
-                // filename doesn't exist, let's use it!
-                return $attempt;
-            }
-        }
-
-        // too many attempts...
-        throw new \RuntimeException("Unable to find a free filename after $i attempts - aborting now.");
-    }
-
-    /**
-     * @throws \RuntimeException
-     *
-     * @return string
-     */
-    protected function image_destination_path()
-    {
-        $path = public_path('/'.config('blogetc.blog_upload_dir'));
-        $this->check_image_destination_path_is_writable($path);
-
-        return $path;
-    }
-
-    /**
      * @param BlogEtcPost $new_blog_post
      * @param $suggested_title - used to help generate the filename
      * @param $image_size_details - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
      * @param $photo
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -95,7 +50,7 @@ trait UploadFileTrait
         $image_filename = $this->getImageFilename($suggested_title, $image_size_details, $photo);
         $destinationPath = $this->image_destination_path();
 
-        $resizedImage = \Image::make($photo->getRealPath());
+        $resizedImage = Image::make($photo->getRealPath());
 
         if (is_array($image_size_details)) {
             $w = $image_size_details['w'];
@@ -112,7 +67,7 @@ trait UploadFileTrait
             $w = $resizedImage->width();
             $h = $resizedImage->height();
         } else {
-            throw new \Exception('Invalid image_size_details value');
+            throw new Exception('Invalid image_size_details value');
         }
 
         $resizedImage->save($destinationPath.'/'.$image_filename, config('blogetc.image_quality', 80));
@@ -124,6 +79,57 @@ trait UploadFileTrait
             'w'        => $w,
             'h'        => $h,
         ];
+    }
+
+    /**
+     * Get a filename (that doesn't exist) on the filesystem.
+     *
+     * Todo: support multiple filesystem locations.
+     *
+     * @param $image_size_details - either an array (with w/h attributes) or a string
+     *
+     * @throws RuntimeException
+     *
+     * @return string
+     */
+    protected function getImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo)
+    {
+        $base = $this->generate_base_filename($suggested_title);
+
+        // $wh will be something like "-1200x300"
+        $wh = $this->getWhForFilename($image_size_details);
+        $ext = '.'.$photo->getClientOriginalExtension();
+
+        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; ++$i) {
+            // add suffix if $i>1
+            $suffix = $i > 1 ? '-'.str_random(5) : '';
+
+            $attempt = str_slug($base.$suffix.$wh).$ext;
+
+            if (! File::exists($this->image_destination_path().'/'.$attempt)) {
+                // filename doesn't exist, let's use it!
+                return $attempt;
+            }
+        }
+
+        // too many attempts...
+        throw new RuntimeException("Unable to find a free filename after $i attempts - aborting now.");
+    }
+
+    /**
+     * @return string
+     */
+    protected function generate_base_filename(string $suggested_title)
+    {
+        $base = substr($suggested_title, 0, 100);
+        if (! $base) {
+            // if we have an empty string then we should use a random one:
+            $base = 'image-'.str_random(5);
+
+            return $base;
+        }
+
+        return $base;
     }
 
     /**
@@ -145,7 +151,7 @@ trait UploadFileTrait
      *
      * @param array|string $image_size_details
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      *
      * @return string
      */
@@ -158,7 +164,20 @@ trait UploadFileTrait
         }
 
         // was not a string or array, so error
-        throw new \RuntimeException('Invalid image_size_details: must be an array with w and h, or a string');
+        throw new RuntimeException('Invalid image_size_details: must be an array with w and h, or a string');
+    }
+
+    /**
+     * @throws RuntimeException
+     *
+     * @return string
+     */
+    protected function image_destination_path()
+    {
+        $path = public_path('/'.config('blogetc.blog_upload_dir'));
+        $this->check_image_destination_path_is_writable($path);
+
+        return $path;
     }
 
     /**
@@ -167,31 +186,15 @@ trait UploadFileTrait
      *
      * @param $path
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function check_image_destination_path_is_writable($path)
     {
-        if (!$this->checked_blog_image_dir_is_writable) {
-            if (!is_writable($path)) {
-                throw new \RuntimeException("Image destination path is not writable ($path)");
+        if (! $this->checked_blog_image_dir_is_writable) {
+            if (! is_writable($path)) {
+                throw new RuntimeException("Image destination path is not writable ($path)");
             }
             $this->checked_blog_image_dir_is_writable = true;
         }
-    }
-
-    /**
-     * @return string
-     */
-    protected function generate_base_filename(string $suggested_title)
-    {
-        $base = substr($suggested_title, 0, 100);
-        if (!$base) {
-            // if we have an empty string then we should use a random one:
-            $base = 'image-'.str_random(5);
-
-            return $base;
-        }
-
-        return $base;
     }
 }

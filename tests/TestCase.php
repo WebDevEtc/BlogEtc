@@ -23,6 +23,7 @@ namespace App {
             return true;
         }
     }
+
     class NormalUser extends Authenticatable
     {
         use Notifiable;
@@ -32,7 +33,8 @@ namespace App {
             return false;
         }
     }
-    if (!class_exists('\App\User')) {
+
+    if (! class_exists('\App\User')) {
         class User extends NormalUser
         {
         }
@@ -40,7 +42,6 @@ namespace App {
 }
 
 namespace WebDevEtc\BlogEtc\Tests {
-
     use App\AdminUser;
     use App\NormalUser;
     use App\User;
@@ -51,6 +52,7 @@ namespace WebDevEtc\BlogEtc\Tests {
     use Laravelium\Feed\FeedServiceProvider;
     use Orchestra\Testbench\Database\MigrateProcessor;
     use Orchestra\Testbench\TestCase as BaseTestCase;
+    use Route;
     use View;
     use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
 
@@ -114,9 +116,9 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->loadMigrations();
             $this->withFactories(__DIR__.'/../src/Factories');
 
-            if (!\Route::has('login')) {
+            if (! Route::has('login')) {
                 // Need to define a login route for feature tests.
-                \Route::get('login', function () {
+                Route::get('login', function () {
                 })->name('login');
             }
         }
@@ -139,7 +141,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             }
 
             // Also manually create users table so relations will work.
-            if (!Schema::hasTable('users')) {
+            if (! Schema::hasTable('users')) {
                 Schema::create('users', static function (Blueprint $table) {
                     $table->bigIncrements('id');
                     $table->string('name');
@@ -151,7 +153,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 });
             }
 
-            if (!Schema::hasTable('laravel_fulltext')) {
+            if (! Schema::hasTable('laravel_fulltext')) {
                 Schema::create('laravel_fulltext', function (Blueprint $table) {
                     $table->increments('id');
                     $table->integer('indexable_id');

@@ -18,19 +18,6 @@ class PostsRepositoryTest extends TestCase
     /** @var PostsRepository */
     protected $postsRepository;
 
-    /**
-     * Setup the feature test.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->featureSetUp();
-        Post::truncate();
-
-        $this->postsRepository = resolve(PostsRepository::class);
-    }
-
     public function testIndexPaginated()
     {
         factory(Post::class, 25)->create();
@@ -182,7 +169,8 @@ class PostsRepositoryTest extends TestCase
 
         $this->assertInstanceOf(Post::class, $response);
 
-        $this->assertDatabaseHas('blog_etc_posts', collect($postAttributes)->only(['title', 'subtitle', 'meta_desc', 'post_body', 'is_published'])->toArray());
+        $this->assertDatabaseHas('blog_etc_posts',
+            collect($postAttributes)->only(['title', 'subtitle', 'meta_desc', 'post_body', 'is_published'])->toArray());
     }
 
     public function testDelete(): void
@@ -202,5 +190,18 @@ class PostsRepositoryTest extends TestCase
     {
         $this->expectException(PostNotFoundException::class);
         $this->postsRepository->delete(0);
+    }
+
+    /**
+     * Setup the feature test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->featureSetUp();
+        Post::truncate();
+
+        $this->postsRepository = resolve(PostsRepository::class);
     }
 }

@@ -2,13 +2,13 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use App\User;
 use Illuminate\Foundation\Testing\WithFaker;
-//use WebDevEtc\BlogEtc\Models\Category;
-//use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
+
+//use WebDevEtc\BlogEtc\Models\Category;
+//use WebDevEtc\BlogEtc\Models\Post;
 
 /**
  * Class PostsControllerTest.
@@ -18,16 +18,6 @@ use WebDevEtc\BlogEtc\Tests\TestCase;
 class PostsControllerTest extends TestCase
 {
     use WithFaker;
-
-    /**
-     * Setup the feature test.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->featureSetUp();
-    }
 
     /**
      * Test the index page loads.
@@ -171,5 +161,15 @@ class PostsControllerTest extends TestCase
         $response->assertOk();
         $response->assertViewHas('blogetc_category', $unrelatedCategory);
         $response->assertDontSee($post->title);
+    }
+
+    /**
+     * Setup the feature test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->featureSetUp();
     }
 }

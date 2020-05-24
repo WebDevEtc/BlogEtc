@@ -1,26 +1,26 @@
 @switch(config("blogetc.comments.type_of_comments_to_show","built_in"))
 
-@case("built_in")
+    @case("built_in")
     @include("blogetc::partials.built_in_comments")
     @include("blogetc::partials.add_comment_form")
-@break
+    @break
 
-@case("disqus")
+    @case("disqus")
     @include("blogetc::partials.disqus_comments")
-@break
+    @break
 
 
-@case("custom")
+    @case("custom")
     @include("blogetc::partials.custom_comments")
-@break
+    @break
 
-@case("disabled")
+    @case("disabled")
     <?php
     return;  // not required, as we already filter for this
     ?>
-@break
+    @break
 
-@default
+    @default
     <div class='alert alert-danger'>Invalid comment <code>type_of_comments_to_show</code> config option</div>";
 @endswitch
 

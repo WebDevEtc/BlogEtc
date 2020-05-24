@@ -10,7 +10,7 @@
             @forelse($searchResults as $result)
                 @if($result->indexable &&
                 is_a($result->indexable,\WebDevEtc\BlogEtc\Models\Post::class)
-                && \Gate::allows('view-blog-etc-post', $result->indexable)
+                && Gate::allows('view-blog-etc-post', $result->indexable)
                 )
                     <h2>Search result #{{ $loop->count }}</h2>
                     @include('blogetc::partials.index_loop', ['post' => $result->indexable])

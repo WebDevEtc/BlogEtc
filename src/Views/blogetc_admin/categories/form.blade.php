@@ -1,24 +1,25 @@
 <script>
-    SHOULD_AUTO_GEN_SLUG = false;
+  SHOULD_AUTO_GEN_SLUG = false;
 
-    /* Generate the slug field, if it was not touched by the user (or if it was an empty string) */
-    function populate_slug_field() {
-        const cat_slug = document.getElementById('category_slug');
-        if (cat_slug.value.length < 1) {
-            // if the slug field is empty, make sure it auto generates
-            SHOULD_AUTO_GEN_SLUG = true;
-        }
-
-        if (SHOULD_AUTO_GEN_SLUG) {
-            // the slug hasn't been manually changed (or it was set above), so we should generate the slug
-            // This is done in two stages - one to remove non words/spaces etc, the another to replace white space (and underscore) with a -
-            cat_slug.value =document.getElementById("category_category_name").value
-                    .toLowerCase()
-                    .replace(/[^\w-_ ]+/g, '')
-                    .replace(/[_ ]+/g, '-')
-                    .substring(0,99);
-        }
+  /* Generate the slug field, if it was not touched by the user (or if it was an empty string) */
+  function populate_slug_field() {
+    const cat_slug = document.getElementById('category_slug');
+    if (cat_slug.value.length < 1) {
+      // if the slug field is empty, make sure it auto generates
+      SHOULD_AUTO_GEN_SLUG = true;
     }
+
+    if (SHOULD_AUTO_GEN_SLUG) {
+      // the slug hasn't been manually changed (or it was set above), so we should generate the slug
+      // This is done in two stages - one to remove non words/spaces etc, the another to replace white space (and underscore) with a -
+      cat_slug.value = document.getElementById('category_category_name').
+          value.
+          toLowerCase().
+          replace(/[^\w-_ ]+/g, '').
+          replace(/[_ ]+/g, '-').
+          substring(0, 99);
+    }
+  }
 </script>
 <div class="form-group">
     <label for="category_category_name">Category Name</label>
@@ -61,9 +62,9 @@
     <label for="category_description">Category Description (optional)</label>
     <textarea name='category_description'
               class='form-control'
-    id='category_description'>{{old("category_description",$category->category_description)}}</textarea>
+              id='category_description'>{{old("category_description",$category->category_description)}}</textarea>
 </div>
 
 <script>
-    SHOULD_AUTO_GEN_SLUG = document.getElementById("category_slug").value.length < 1;
+  SHOULD_AUTO_GEN_SLUG = document.getElementById('category_slug').value.length < 1;
 </script>

@@ -1,6 +1,7 @@
 <div class="form-group">
     <label for="blog_title">Blog Post Title</label>
-    <input type="text" class="form-control" required id="blog_title" aria-describedby="blog_title_help" name='title' value="{{old("title",$post->title)}}">
+    <input type="text" class="form-control" required id="blog_title" aria-describedby="blog_title_help" name='title'
+           value="{{old("title",$post->title)}}">
     <small id="blog_title_help" class="form-text text-muted">The title of the blog post</small>
 </div>
 
@@ -93,8 +94,9 @@
 <div class="form-group">
     <label for="blog_seo_title">SEO: {{"<title>"}} tag (optional)</label>
     <input class="form-control" id="blog_seo_title" aria-describedby="blog_seo_title_help"
-           name='seo_title' tyoe='text' value='{{old("seo_title",$post->seo_title)}}' >
-    <small id="blog_seo_title_help" class="form-text text-muted">Enter a value for the {{"<title>"}} tag. If nothing is provided here we will just use the normal post title from above (optional)</small>
+           name='seo_title' tyoe='text' value='{{old("seo_title",$post->seo_title)}}'>
+    <small id="blog_seo_title_help" class="form-text text-muted">Enter a value for the {{"<title>"}} tag. If nothing is
+        provided here we will just use the normal post title from above (optional)</small>
 </div>
 
 <div class="form-group">
@@ -108,7 +110,8 @@
     <label for="blog_short_description">Short Desc (optional)</label>
     <textarea class="form-control" id="blog_short_description" aria-describedby="blog_short_description_help"
               name='short_description'>{{old("short_description",$post->short_description)}}</textarea>
-    <small id="blog_short_description_help" class="form-text text-muted">Short description (optional - only useful if you use in your template views)</small>
+    <small id="blog_short_description_help" class="form-text text-muted">Short description (optional - only useful if
+        you use in your template views)</small>
 </div>
 
 @if(config("blogetc.image_upload_enabled",true))
@@ -129,7 +132,8 @@
                     ">
                 @if($post->has_image($size_info['basic_key']))
                     <div style='max-width:55px;  ' class='float-right m-2'>
-                        <a style='cursor: zoom-in;' target='_blank' href='{{$post->image_url($size_info['basic_key'])}}'>
+                        <a style='cursor: zoom-in;' target='_blank'
+                           href='{{$post->image_url($size_info['basic_key'])}}'>
                             <?=$post->imageTag($size_info['basic_key'], false, 'd-block mx-auto img-fluid '); ?>
                         </a>
                     </div>
@@ -177,7 +181,8 @@
 
         <div class='col-md-12 my-3 text-center'>
 
-            <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'><i class="fa fa-external-link" aria-hidden="true"></i>
+            <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'><i
+                            class="fa fa-external-link" aria-hidden="true"></i>
                     Add new categories
                     here</a></em>
         </div>

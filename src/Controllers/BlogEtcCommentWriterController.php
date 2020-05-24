@@ -4,6 +4,8 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Auth;
+use Exception;
+use RuntimeException;
 use WebDevEtc\BlogEtc\Captcha\CaptchaAbstract;
 use WebDevEtc\BlogEtc\Captcha\UsesCaptcha;
 use WebDevEtc\BlogEtc\Events\CommentAdded;
@@ -23,13 +25,14 @@ class BlogEtcCommentWriterController extends Controller
      *
      * @param $blog_post_slug
      *
+     * @throws Exception
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Exception
      */
     public function addNewComment(AddNewCommentRequest $request, $blog_post_slug)
     {
         if ('built_in' !== config('blogetc.comments.type_of_comments_to_show', 'built_in')) {
-            throw new \RuntimeException('Built in comments are disabled');
+            throw new RuntimeException('Built in comments are disabled');
         }
 
         $blog_post = Post::where('slug', $blog_post_slug)->firstOrFail();
@@ -43,8 +46,8 @@ class BlogEtcCommentWriterController extends Controller
         $new_comment = $this->createNewComment($request, $blog_post);
 
         return view('blogetc::saved_comment', [
-            'captcha' => $captcha,
-            'blog_post' => $blog_post,
+            'captcha'     => $captcha,
+            'blog_post'   => $blog_post,
             'new_comment' => $new_comment,
         ]);
     }

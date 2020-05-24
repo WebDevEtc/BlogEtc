@@ -22,14 +22,6 @@ class CategoriesRepository
     }
 
     /**
-     * Return new instance of the Query Builder for this model.
-     */
-    public function query(): Builder
-    {
-        return $this->model->newQuery();
-    }
-
-    /**
      * Return all blog etc categories, ordered by category_name, paginated.
      */
     public function indexPaginated(int $perPage = 25): LengthAwarePaginator
@@ -37,6 +29,14 @@ class CategoriesRepository
         return $this->query()
             ->orderBy('category_name')
             ->paginate($perPage);
+    }
+
+    /**
+     * Return new instance of the Query Builder for this model.
+     */
+    public function query(): Builder
+    {
+        return $this->model->newQuery();
     }
 
     /**

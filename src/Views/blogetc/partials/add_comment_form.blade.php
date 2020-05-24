@@ -13,19 +13,19 @@
 
             <label id="comment_label" for="comment">Your Comment</label>
             <textarea
-                class="form-control"
-                name="comment"
-                required
-                id="comment"
-                placeholder="Write your comment here"
-                rows="7">{{ old('comment') }}</textarea>
+                    class="form-control"
+                    name="comment"
+                    required
+                    id="comment"
+                    placeholder="Write your comment here"
+                    rows="7">{{ old('comment') }}</textarea>
 
         </div>
 
         <div class='container-fluid'>
             <div class='row'>
 
-                @if(config("blogetc.comments.save_user_id_if_logged_in", true) == false || !\Auth::check())
+                @if(config("blogetc.comments.save_user_id_if_logged_in", true) == false || !Auth::check())
 
                     <div class='col'>
                         <div class="form-group ">

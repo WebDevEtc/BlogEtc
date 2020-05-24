@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use WebDevEtc\BlogEtc\Events\CommentApproved;
 use WebDevEtc\BlogEtc\Events\CommentWillBeDeleted;
@@ -49,7 +50,7 @@ class ManageCommentsController extends Controller
      *
      * @param $blogCommentId
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function approve($blogCommentId)
     {
@@ -68,7 +69,7 @@ class ManageCommentsController extends Controller
      *
      * @param $blogCommentId
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy($blogCommentId)
     {

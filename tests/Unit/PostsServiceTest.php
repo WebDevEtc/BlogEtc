@@ -164,37 +164,6 @@ class PostsServiceTest extends TestCase
         $this->assertIsArray($response);
     }
 
-    /**
-     * Helper method to set up the params for editing/creating.
-     */
-    private function createParams(): array
-    {
-        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
-
-        return [
-            'posted_at' => Carbon::now()->format('Y-m-d H:i:s'),
-            'title' => $this->faker->sentence,
-            'subtitle' => $this->faker->sentence,
-            'post_body' => $this->faker->paragraph,
-            'meta_desc' => $this->faker->paragraph,
-            'short_description' => $this->faker->paragraph,
-            'slug' => $this->faker->asciify('*********'),
-            'categories' => null,
-        ];
-    }
-
-//    private function createRequest(array $params): PostRequest
-//    {
-//        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
-//        $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
-//            $mock->shouldReceive('validated')->andReturn($params);
-//        });
-//
-//        $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
-//
-//        return tap($request)->setValidator($mockedValidator);
-//    }
-//
     public function testSearch(): void
     {
         $post = factory(Post::class)->create();
@@ -210,6 +179,19 @@ class PostsServiceTest extends TestCase
         $this->assertTrue($post->is($response->first()));
         $this->assertFalse($otherPost->is($response->first()));
     }
+
+//    private function createRequest(array $params): PostRequest
+//    {
+//        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
+//        $mockedValidator = $this->mock(Validator::class, static function ($mock) use ($params) {
+//            $mock->shouldReceive('validated')->andReturn($params);
+//        });
+//
+//        $request = PostRequest::create('/posts/add', Request::METHOD_POST, $params);
+//
+//        return tap($request)->setValidator($mockedValidator);
+//    }
+//
 
     public function testSearchNoResults(): void
     {
@@ -245,5 +227,24 @@ class PostsServiceTest extends TestCase
         $response = $service->search($posts->first()->title, 10);
 
         $this->assertCount(10, $response);
+    }
+
+    /**
+     * Helper method to set up the params for editing/creating.
+     */
+    private function createParams(): array
+    {
+        $this->markTestSkipped('Skipping as current version does not include PostService - keeping tests in to make migration easier (in theory...) later');
+
+        return [
+            'posted_at'         => Carbon::now()->format('Y-m-d H:i:s'),
+            'title'             => $this->faker->sentence,
+            'subtitle'          => $this->faker->sentence,
+            'post_body'         => $this->faker->paragraph,
+            'meta_desc'         => $this->faker->paragraph,
+            'short_description' => $this->faker->paragraph,
+            'slug'              => $this->faker->asciify('*********'),
+            'categories'        => null,
+        ];
     }
 }

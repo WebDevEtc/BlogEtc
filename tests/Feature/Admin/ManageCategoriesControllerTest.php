@@ -12,16 +12,6 @@ class ManageCategoriesControllerTest extends TestCase
     use WithFaker;
 
     /**
-     * Setup the feature test.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->featureSetUp();
-    }
-
-    /**
      * Test that users passing the admin gate can access the admin index.
      *
      * These authentication tests are only done on the single index route as they should all be caught by
@@ -197,5 +187,15 @@ class ManageCategoriesControllerTest extends TestCase
         $response = $this->patch(route('blogetc.admin.categories.update_category', $invalidCategoryID), $params);
 
         $response->assertNotFound();
+    }
+
+    /**
+     * Setup the feature test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->featureSetUp();
     }
 }
