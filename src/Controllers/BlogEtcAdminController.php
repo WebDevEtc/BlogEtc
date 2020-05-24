@@ -10,5 +10,4 @@ use WebDevEtc\BlogEtc\Controllers\Admin\ManagePostsController;
  */
 class BlogEtcAdminController extends ManagePostsController
 {
-
 }
