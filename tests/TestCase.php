@@ -73,11 +73,9 @@ namespace WebDevEtc\BlogEtc\Tests {
          */
         protected function mockView(string $expectedView, array $viewArgumentTypes): void
         {
-            // Mocked view to return:
             $mockedReturnedView = $this->mock(\Illuminate\View\View::class);
             $mockedReturnedView->shouldReceive('render');
 
-            // Mock the main view() calls in controller.
             $mockedView = View::shouldReceive('share')
                 ->once()
                 ->shouldReceive('make')
@@ -100,10 +98,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         protected function getPackageProviders($app)
         {
             return [
-                // Main BlogEtc service provider:
                 BlogEtcServiceProvider::class,
-
-                // Feed service provider (for RSS feed)
                 FeedServiceProvider::class,
             ];
         }
@@ -117,7 +112,6 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->withFactories(__DIR__.'/../src/Factories');
 
             if (! Route::has('login')) {
-                // Need to define a login route for feature tests.
                 Route::get('login', function () {
                 })->name('login');
             }
@@ -140,7 +134,6 @@ namespace WebDevEtc\BlogEtc\Tests {
                 $migrator->up();
             }
 
-            // Also manually create users table so relations will work.
             if (! Schema::hasTable('users')) {
                 Schema::create('users', static function (Blueprint $table) {
                     $table->bigIncrements('id');
@@ -179,24 +172,15 @@ namespace WebDevEtc\BlogEtc\Tests {
          */
         protected function getEnvironmentSetUp($app)
         {
-            // Setup default database to use sqlite :memory:
             $app['config']->set('database.default', 'testbench');
             $app['config']->set('database.connections.testbench', [
                 'driver'   => 'sqlite',
                 'database' => ':memory:',
                 'prefix'   => '',
             ]);
-
-            // Add the custom dir for layouts.app view:
             $app['view']->addLocation(__DIR__.'/views');
-
-            // ensure app.key is set.
             $app['config']->set('app.key', base64_decode('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'));
-
-            // Use the default config for this package:
             $app['config']->set('blogetc', include(__DIR__.'/../src/Config/blogetc.php'));
-
-            // Ensure has correct 'sluggable' config set up:
             $app['config']->set('sluggable', [
                 'source'             => null,
                 'maxLength'          => null,
@@ -212,7 +196,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         }
 
         /**
-         * Be an admin user, give gate permissions to user.
+         * Be an admin user.
          */
         protected function beAdminUser(): self
         {
@@ -225,7 +209,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         }
 
         /**
-         * Be an admin user, give gate permissions to user.
+         * Be non admin user.
          */
         protected function beNonAdminUser(): void
         {
