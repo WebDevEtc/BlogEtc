@@ -26,11 +26,11 @@ class BlogEtcServiceProvider extends ServiceProvider
         }
 
         foreach ([
-                     '2018_05_28_224023_create_blog_etc_posts_table.php',
-                     '2018_09_16_224023_add_author_and_url_blog_etc_posts_table.php',
-                     '2018_09_26_085711_add_short_desc_textrea_to_blog_etc.php',
-                     '2018_09_27_122627_create_blog_etc_uploaded_photos_table.php',
-                 ] as $file) {
+            '2018_05_28_224023_create_blog_etc_posts_table.php',
+            '2018_09_16_224023_add_author_and_url_blog_etc_posts_table.php',
+            '2018_09_26_085711_add_short_desc_textrea_to_blog_etc.php',
+            '2018_09_27_122627_create_blog_etc_uploaded_photos_table.php',
+        ] as $file) {
             $this->publishes([
                 __DIR__.'/../migrations/'.$file => database_path('migrations/'.$file),
             ]);
