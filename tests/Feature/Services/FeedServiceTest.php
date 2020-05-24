@@ -2,16 +2,15 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use Carbon\Carbon;
 use DB;
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Exceptions\PostNotFoundException;
-use WebDevEtc\BlogEtc\Models\Category;
+use Illuminate\Http\Response;
+use Laravelium\Feed\Feed;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Services\FeedService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
-class PostsRepositoryTest extends TestCase
+class FeedServiceTest extends TestCase
 {
     use WithFaker;
 
@@ -29,8 +28,19 @@ class PostsRepositoryTest extends TestCase
         Post::truncate();
 
         $this->feedService = resolve(FeedService::class);
+
     }
 
+    public function testGetFeed() {
+        $feed = resolve(Feed::class);
 
+        factory(Post::class)->create();
+
+        $response = $this->feedService->getFeed($feed, 'rss');
+
+        $this->assertInstanceOf(Response::class,$response);
+    }
+
+    // Todo: test content, test logged in vs logged out, test cache, test empty posts
 }
 
