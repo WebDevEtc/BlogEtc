@@ -34,7 +34,7 @@ namespace App {
         }
     }
 
-    if (! class_exists('\App\User')) {
+    if (!class_exists('\App\User')) {
         class User extends NormalUser
         {
         }
@@ -45,7 +45,6 @@ namespace WebDevEtc\BlogEtc\Tests {
     use App\AdminUser;
     use App\NormalUser;
     use App\User;
-    use Gate;
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Schema;
@@ -111,7 +110,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->loadMigrations();
             $this->withFactories(__DIR__.'/../src/Factories');
 
-            if (! Route::has('login')) {
+            if (!Route::has('login')) {
                 Route::get('login', function () {
                 })->name('login');
             }
@@ -134,7 +133,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 $migrator->up();
             }
 
-            if (! Schema::hasTable('users')) {
+            if (!Schema::hasTable('users')) {
                 Schema::create('users', static function (Blueprint $table) {
                     $table->bigIncrements('id');
                     $table->string('name');
@@ -146,7 +145,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 });
             }
 
-            if (! Schema::hasTable('laravel_fulltext')) {
+            if (!Schema::hasTable('laravel_fulltext')) {
                 Schema::create('laravel_fulltext', function (Blueprint $table) {
                     $table->increments('id');
                     $table->integer('indexable_id');
