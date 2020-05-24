@@ -32,7 +32,7 @@ class BlogEtcRssFeedController extends Controller
             'blogetc-'.$request->getFeedType().$user_or_guest
         );
 
-        if (! $feed->isCached()) {
+        if (!$feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 
