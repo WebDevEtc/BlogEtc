@@ -1,7 +1,6 @@
 <div class="form-group">
     <label for="blog_title">Blog Post Title</label>
-    <input type="text" class="form-control" required id="blog_title" aria-describedby="blog_title_help" name='title'
-           value="{{old("title",$post->title)}}">
+    <input type="text" class="form-control" required id="blog_title" aria-describedby="blog_title_help" name='title' value="{{old("title",$post->title)}}">
     <small id="blog_title_help" class="form-text text-muted">The title of the blog post</small>
 </div>
 
@@ -72,7 +71,6 @@
     <textarea style='min-height:600px;' class="form-control" id="blog_post_body" aria-describedby="blog_post_body_help"
               name='post_body'>{{old("post_body",$post->post_body)}}</textarea>
 
-
     <div class='alert alert-danger'>
         Please note that any HTML (including any JS code) that is entered here will be
         echoed (without escaping)
@@ -95,7 +93,7 @@
 <div class="form-group">
     <label for="blog_seo_title">SEO: {{"<title>"}} tag (optional)</label>
     <input class="form-control" id="blog_seo_title" aria-describedby="blog_seo_title_help"
-              name='seo_title' tyoe='text' value='{{old("seo_title",$post->seo_title)}}' >
+           name='seo_title' tyoe='text' value='{{old("seo_title",$post->seo_title)}}' >
     <small id="blog_seo_title_help" class="form-text text-muted">Enter a value for the {{"<title>"}} tag. If nothing is provided here we will just use the normal post title from above (optional)</small>
 </div>
 
@@ -123,7 +121,6 @@
         </style>
         <h4>Featured Images</h4>
 
-
         @foreach(config("blogetc.image_sizes") as $size_key =>$size_info)
             <div class="form-group mb-4 p-2
         @if($loop->iteration>1)
@@ -145,8 +142,6 @@
                 </small>
                 <input class="form-control" type="file" name="{{$size_key}}" id="blog_{{$size_key}}"
                        aria-describedby="blog_{{$size_key}}_help">
-
-
             </div>
         @endforeach
 
@@ -161,12 +156,11 @@
     <div class='alert alert-warning'>Image uploads were disabled in blogetc.php config</div>
 @endif
 
-
 <div class='bg-white pt-4 px-4 pb-0 my-2 mb-4 rounded border'>
     <h4>Categories:</h4>
     <div class='row'>
 
-        @forelse(\WebDevEtc\BlogEtc\Models\BlogEtcCategory::orderBy("category_name","asc")->limit(1000)->get() as $category)
+        @forelse(\WebDevEtc\BlogEtc\Models\Category::orderBy("category_name","asc")->limit(1000)->get() as $category)
             <div class="form-check col-sm-6">
                 <input class="" type="checkbox" value="1"
                        @if(old("category.".$category->id, $post->categories->contains($category->id))) checked='checked'
@@ -184,7 +178,7 @@
         <div class='col-md-12 my-3 text-center'>
 
             <em><a target='_blank' href='{{route("blogetc.admin.categories.create_category")}}'><i class="fa fa-external-link" aria-hidden="true"></i>
-                      Add new categories
+                    Add new categories
                     here</a></em>
         </div>
     </div>

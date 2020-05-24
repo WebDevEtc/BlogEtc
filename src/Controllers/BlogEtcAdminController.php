@@ -160,20 +160,15 @@ class BlogEtcAdminController extends Controller
     protected function processUploadedImages(BaseRequestInterface $request, BlogEtcPost $new_blog_post)
     {
         if (!config('blogetc.image_upload_enabled')) {
-            // image upload was disabled
             return;
         }
 
         $this->increaseMemoryLimit();
 
-        // to save in db later
         $uploaded_image_details = [];
 
         foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
             if ($image_size_details['enabled'] && $photo = $request->get_image_file($size)) {
-                // this image size is enabled, and
-                // we have an uploaded image that we can use
-
                 $uploaded_image = $this->UploadAndResize($new_blog_post, $new_blog_post->title, $image_size_details, $photo);
 
                 $new_blog_post->$size = $uploaded_image['filename'];
@@ -181,7 +176,6 @@ class BlogEtcAdminController extends Controller
             }
         }
 
-        // store the image upload.
         // todo: link this to the blogetc_post row.
         if (count(array_filter($uploaded_image_details)) > 0) {
             BlogEtcUploadedPhoto::create([
