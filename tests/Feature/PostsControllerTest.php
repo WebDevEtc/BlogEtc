@@ -142,15 +142,12 @@ class PostsControllerTest extends TestCase
      */
     public function testCategory(): void
     {
-//        $this->markTestSkipped('TODO: Fix test');
-
         Post::truncate();
         Category::truncate();
 
         $post = factory(Post::class)->create();
         $category = factory(Category::class)->create();
         $post->categories()->save($category);
-        $this->withoutExceptionHandling();
 
         $response = $this->get(route('blogetc.view_category', $category->slug));
 

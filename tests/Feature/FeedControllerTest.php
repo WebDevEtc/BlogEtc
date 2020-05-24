@@ -26,7 +26,6 @@ class FeedControllerTest extends TestCase
      */
     public function testIndex(): void
     {
-        $this->withoutExceptionHandling();
         $response = $this->get(route('blogetc.feed'));
 
         $response->assertOk()
@@ -125,14 +124,11 @@ class FeedControllerTest extends TestCase
 
         $post = factory(Post::class)->state('not_published')->create();
 
-        $this->withoutExceptionHandling();
-        // Request it as user:
         $adminResponse = $this->get(route('blogetc.feed'));
 
         $adminResponse->assertOk()
             ->assertSee($post->title);
 
-        // Request it as a guest:
         Auth::logout();
 
         $guestResponse = $this->get(route('blogetc.feed'));
