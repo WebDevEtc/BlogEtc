@@ -10,13 +10,9 @@
     </h5>
 
     <form method="post" action="{{ route('blogetc.admin.update_post', $post->id) }}" enctype="multipart/form-data">
-
         @csrf
         @method('patch')
         @include('blogetc_admin::posts.form', ['post' => $post])
-
         <input type="submit" class="btn btn-primary" value="Save Changes">
-
     </form>
 @endsection
-

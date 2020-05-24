@@ -1,7 +1,5 @@
 @extends("blogetc_admin::layouts.admin_layout")
 @section("content")
-
-
     <div class='alert alert-success'><b>Deleted that post</b>
         <br/><a href='{{ route('blogetc.admin.index') }}' class='btn btn-primary '>Back to posts overview</a></div>
 
@@ -27,10 +25,7 @@
             </thead>
             <tbody>
             @foreach($images_to_delete as $image_size)
-
                 <tr>
-
-
                     <td class='text-center'><a
                                 href='{{asset(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}'
                                 target='_blank' class='btn btn-primary m-1'>view</a>
@@ -40,7 +35,6 @@
 
                     </td>
                     <td><code>{{$deletedPost->$image_size}}</code>
-
             {{--check filesize returns something, so we don't divide by 0--}}
                         @if(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)))
 
@@ -53,13 +47,9 @@
                             <small>{{ public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}</small>
                         </code></td>
                 </tr>
-
-
-
             @endforeach
             </tbody>
         </table>
-
         <p>
             Please manually remove those files from the filesystem if desired.
         </p>

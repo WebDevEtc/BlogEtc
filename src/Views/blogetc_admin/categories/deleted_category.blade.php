@@ -5,4 +5,3 @@
         <b>Category deleted</b>
     </p>
 @endsection
-

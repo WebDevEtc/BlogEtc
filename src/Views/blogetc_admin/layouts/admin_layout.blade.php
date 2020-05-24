@@ -30,8 +30,6 @@
         {{--<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">--}}
         {{--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">--}}
     @endif
-
-
 </head>
 <body>
 <div id="app">
@@ -92,10 +90,7 @@
                             </ul>
                         </div>
                     @endif
-
-
                     {{--REPLACING THIS FILE WITH YOUR OWN LAYOUT FILE? Don't forget to include the following section!--}}
-
                     @if(\WebDevEtc\BlogEtc\Helpers::hasFlashedMessage())
                         <div class='alert alert-info'>
                             <h3>{{\WebDevEtc\BlogEtc\Helpers::pullFlashedMessage() }}</h3>
@@ -124,7 +119,5 @@
         }
     </script>
 @endif
-
-
 </body>
 </html>
