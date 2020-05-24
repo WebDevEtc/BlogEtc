@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use DB;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
 use Laravelium\Feed\Feed;
@@ -28,19 +27,18 @@ class FeedServiceTest extends TestCase
         Post::truncate();
 
         $this->feedService = resolve(FeedService::class);
-
     }
 
-    public function testGetFeed() {
+    public function testGetFeed()
+    {
         $feed = resolve(Feed::class);
 
         factory(Post::class)->create();
 
         $response = $this->feedService->getFeed($feed, 'rss');
 
-        $this->assertInstanceOf(Response::class,$response);
+        $this->assertInstanceOf(Response::class, $response);
     }
 
     // Todo: test content, test logged in vs logged out, test cache, test empty posts
 }
-
