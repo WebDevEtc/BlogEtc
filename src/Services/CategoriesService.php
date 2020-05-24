@@ -64,7 +64,6 @@ class CategoriesService
      */
     public function update(int $categoryID, array $attributes): Category
     {
-        // find the entry:
         $category = $this->find($categoryID);
         $category->fill($attributes);
         $category->save();

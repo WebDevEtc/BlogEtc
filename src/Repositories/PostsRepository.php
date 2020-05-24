@@ -69,8 +69,6 @@ class PostsRepository
         $queryBuilder = $this->model->newQuery();
 
         if (true === $eagerLoad) {
-            // eager load the categories relationship.
-            // Comments probably don't need to be loaded for most queries.
             $queryBuilder->with(['categories']);
         }
 

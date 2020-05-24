@@ -92,15 +92,12 @@ trait UploadFileTrait
      */
     protected function UploadAndResize(BlogEtcPost $new_blog_post = null, $suggested_title, $image_size_details, $photo)
     {
-        // get the filename/filepath
         $image_filename = $this->getImageFilename($suggested_title, $image_size_details, $photo);
         $destinationPath = $this->image_destination_path();
 
-        // make image
         $resizedImage = \Image::make($photo->getRealPath());
 
         if (is_array($image_size_details)) {
-            // resize to these dimensions:
             $w = $image_size_details['w'];
             $h = $image_size_details['h'];
 
@@ -112,21 +109,16 @@ trait UploadFileTrait
                 });
             }
         } elseif ('fullsize' === $image_size_details) {
-            // nothing to do here - no resizing needed.
-            // We just need to set $w/$h with the original w/h values
             $w = $resizedImage->width();
             $h = $resizedImage->height();
         } else {
             throw new \Exception('Invalid image_size_details value');
         }
 
-        // save image
         $resizedImage->save($destinationPath.'/'.$image_filename, config('blogetc.image_quality', 80));
 
-        // fireevent
         event(new UploadedImage($image_filename, $resizedImage, $new_blog_post, __METHOD__));
 
-        // return the filename and w/h details
         return [
             'filename' => $image_filename,
             'w'        => $w,

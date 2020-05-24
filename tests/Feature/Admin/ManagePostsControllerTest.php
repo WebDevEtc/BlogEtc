@@ -157,7 +157,7 @@ class ManagePostsControllerTest extends TestCase
             'category'          => [$invalidCategoryID => '1'],
         ];
 
-        $response = $this->post(route('blogetc.admin.store_post'), $params);
+        $this->post(route('blogetc.admin.store_post'), $params);
 
         // TODO - there should be a request fobidding access if trying to store invalid category id
 
@@ -234,7 +234,6 @@ class ManagePostsControllerTest extends TestCase
 
         $params = $post->toArray();
 
-        // Update title.
         $params['title'] = $this->faker->sentence;
 
         $response = $this->patch(route('blogetc.admin.edit_post', $post), $params);

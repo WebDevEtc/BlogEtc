@@ -27,12 +27,8 @@ class CommentsControllerTest extends TestCase
 
         $this->featureSetUp();
 
-        // Built in (database) comments by default):
         config(['blogetc.comments.type_of_comments_to_show' => 'built_in']);
-//        config(['blogetc.comments.type_of_comments_to_show' => CommentsService::COMMENT_TYPE_BUILT_IN]);
-        // Auto approve comments by default:
         config(['blogetc.comments.auto_approve_comments' => true]);
-        // Disable captcha by default:
         config(['blogetc.captcha.captcha_enabled' => false]);
     }
 

@@ -44,7 +44,6 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testForbiddenToNonAdminUsers(): void
     {
-        $this->expectExceptionMessage('User not authorised to manage blog posts: Your account is not authorised to edit blog posts');
         $this->beNonAdminUser();
 
         $response = $this->get(route('blogetc.admin.categories.index'));
@@ -176,7 +175,6 @@ class ManageCategoriesControllerTest extends TestCase
 
         $params = $category->toArray();
 
-        // Update category name.
         $params['category_name'] = $this->faker->sentence;
 
         $response = $this->patch(route('blogetc.admin.categories.update_category', $category), $params);
