@@ -20,7 +20,6 @@ trait UsesCaptcha
             return;
         }
 
-        // else: captcha is enabled
         /** @var string $captcha_class */
         $captcha_class = config('blogetc.captcha.captcha_type');
 

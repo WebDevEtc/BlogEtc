@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
 use WebDevEtc\BlogEtc\Models\Category;
 
-/**
- * Class BlogEtcCategoriesRepository.
- */
 class CategoriesRepository
 {
     /** @var Category */

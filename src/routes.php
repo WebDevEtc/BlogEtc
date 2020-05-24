@@ -20,7 +20,6 @@ Route::group(['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Contro
             'BlogEtcReaderController@viewSinglePost')
             ->name('blogetc.single');
 
-        // throttle to a max of 10 attempts in 3 minutes:
         Route::group(['middleware' => 'throttle:10,3'], function () {
             Route::post('save_comment/{blogPostSlug}',
                 'BlogEtcCommentWriterController@addNewComment')

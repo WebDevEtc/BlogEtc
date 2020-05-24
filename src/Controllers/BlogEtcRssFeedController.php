@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
+use Auth;
 use Carbon\Carbon;
 use Laravelium\Feed\Feed;
 use WebDevEtc\BlogEtc\Models\Post;
@@ -27,7 +28,7 @@ class BlogEtcRssFeedController extends Controller
         $feed->setDateFormat('carbon');
         $feed->pubdate = isset($posts[0]) ? $posts[0]->posted_at : Carbon::now()->subYear(10);
         $feed->lang = config('blogetc.rssfeed.language', 'en');
-        $feed->setShortening(config('blogetc.rssfeed.should_shorten_text', true)); // true or false
+        $feed->setShortening(config('blogetc.rssfeed.should_shorten_text', true));
         $feed->setTextLimit(config('blogetc.rssfeed.text_limit', 100));
     }
 
@@ -64,15 +65,15 @@ class BlogEtcRssFeedController extends Controller
      */
     public function feed(FeedRequest $request, Feed $feed)
     {
-        // if a logged in user views the RSS feed it will get cached, and if they are an admin user then it'll show all posts (even if it is not set as published)
-        $user_or_guest = \Auth::check() ? \Auth::user()->id : 'guest';
+        // for different caching
+        $user_or_guest = Auth::check() ? Auth::user()->id : 'guest';
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
             'blogetc-'.$request->getFeedType().$user_or_guest
         );
 
-        if (!$feed->isCached()) {
+        if (! $feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 
