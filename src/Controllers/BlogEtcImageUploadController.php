@@ -10,5 +10,4 @@ use WebDevEtc\BlogEtc\Controllers\Admin\ManageUploadsController;
  */
 class BlogEtcImageUploadController extends ManageUploadsController
 {
-
 }

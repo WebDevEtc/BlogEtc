@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
-
 use App\Http\Controllers\Controller;
 use WebDevEtc\BlogEtc\Events\CategoryAdded;
 use WebDevEtc\BlogEtc\Events\CategoryEdited;
