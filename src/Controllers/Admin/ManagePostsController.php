@@ -11,7 +11,6 @@ use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
-use WebDevEtc\BlogEtc\Models\BlogEtcUploadedPhoto;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
