@@ -44,7 +44,7 @@ class PostsController extends Controller
      */
     public function search(SearchRequest $request): \Illuminate\Contracts\View\View
     {
-        if (! config('blogetc.search.search_enabled')) {
+        if (!config('blogetc.search.search_enabled')) {
             throw new LogicException('Search is disabled');
         }
 
