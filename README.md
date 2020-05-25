@@ -1,7 +1,7 @@
 
-# Webdevetc BlogEtc
+# Webdevetc BlogEtc - Complete Laravel Blog Package
 
- - Quickly add a blog with admin panel to your existing Laravel project. It has everything included (routes, views, controllers, middlware, etc)
+ - Quickly add a blog with admin panel to your existing Laravel project. It has everything included (routes, views, controllers, middleware, etc)
  - Works with latest version of Laravel.
  
 [![Build Status](https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master)](https://travis-ci.org/WebDevEtc/BlogEtc)
@@ -10,7 +10,7 @@
 # Next version - coming soon
 
  - A rewrite of a lot of the code will be released soon. The work for this is now on the `blogetc-next-version` branch. Code there is liable to change. 
- - May 2020: I am importing some of the changes from next version (including tests). I am slowly introducing these new features. Tests currently have a few skipped tests just to make migration of test code later a bit easier.
+ - May 2020: I am importing some of the changes from next version (including tests). I am slowly introducing these new features. Tests currently have a few skipped tests just to make migration of test code later a bit easier. All changes will be fully backwards compatible during the next few releases.
                                                                                            
 This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything you need to quickly and easily add a blog to your laravel app.
 
@@ -54,26 +54,29 @@ This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything
 - **Includes all required view files, works straight away with no additional setup.** All view files (Blade files) use Bootstrap 4, and very clean HTML (easy to get your head around). You can easily override any view file by putting files in your `/resources/views/vendor/blogetc/` directory
 - **Built in comments (using the database)**, can auto approve or require admin approval (comment moderation).
   - Other options include using [Disqus](http://disqus.com/) comments or disabling comments.
-- Includes unit tests.
+- Includes unit/feature tests, run automatically on Travis CI.
 - Fires events for any database changes, so you can easily add Event Listeners if you need to add additional logic.
 - **< 5 minute install time** and your blog is up and working, ready for you to go to the admin panel and write a blog post - see full details below, but this is a summary of the required steps:
    - install with composer,
    - do the database migration, copy the config file over (done with `php artisan vendor:publish`)
    - chmod/chown the `public/blog_images/` directory so featured images can be uploaded for each blog post
-   - and then add 1 method to your `\App\User` file (`canManageBlogEtcPosts()`
+   - and then add 1 method to your `\App\User` file (`canManageBlogEtcPosts()`) (this will change to using gates soon but will be backwards compatible)
    - __but please see the install instructions to get everything up and working__
 
 ## How to customise the blog views/templates
 
-This is easy to do, and further detail can be found in our  [BlogEtc Laravel Blog Package Documentation](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views).
+This is easy to do, and further details can be found in our  [BlogEtc Laravel Blog Package Documentation](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#guide_to_views).
 
-After doing the correct `vendor:publish`, all of the default template files will be found in /resources/views/vendor/blogetc/ and are easy to edit to match your needs.
+After running the `vendor:publish` command, all of the default template files will be found in `/resources/views/vendor/blogetc/` and are easy to edit to match your needs.
 
-## Built in CAPTCHA / anti spam
+## Missing /auth/register?
 
-There is a built in captcha (anti spam comment) system built in, which will be easy for you to replace with your own implementation.
-
-  Please see [our Captcha docs](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#captcha) for  more details.
+If you are installing on a fresh install of Laravel (which no longer includes auth built in) then the following must be ran:
+ 
+```
+composer require laravel/ui;
+php artisan ui vue --auth;
+``` 
 
 ## Issues, support, bug reports, security issues
 
