@@ -38,8 +38,7 @@ class CommentsControllerTest extends TestCase
 
         $response = $this->postJson($url, $params);
 
-        // TODO change to 201
-        $response->assertOk();
+        $response->assertCreated();
 
         // Test can see the comment on the post page and therefore saved in the database.
         $postResponse = $this->get(route('blogetc.single', $post->slug));
