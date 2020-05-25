@@ -201,10 +201,10 @@ class Post extends Model implements SearchResultInterface
 
         $imageUrl = e($this->imageUrl($size));
         $imageAltText = e($this->title);
-        $imgTag = '<img src="' . $imageUrl . '" alt="' . $imageAltText . '" class="' . e($imgTagClass) . '">';
+        $imgTag = '<img src="'.$imageUrl.'" alt="'.$imageAltText.'" class="'.e($imgTagClass).'">';
 
         return $addAHref
-            ? '<a class="' . e($anchorTagClass) . '" href="' . e($this->url()) . '">' . $imgTag . '</a>'
+            ? '<a class="'.e($anchorTagClass).'" href="'.e($this->url()).'">'.$imgTag.'</a>'
             : $imgTag;
     }
 
@@ -218,7 +218,7 @@ class Post extends Model implements SearchResultInterface
     {
         $this->checkValidImageSize($size);
 
-        return array_key_exists('image_' . $size, $this->getAttributes()) && $this->{'image_' . $size};
+        return array_key_exists('image_'.$size, $this->getAttributes()) && $this->{'image_'.$size};
     }
 
     /**
@@ -229,11 +229,11 @@ class Post extends Model implements SearchResultInterface
      */
     protected function checkValidImageSize(string $size = 'medium'): bool
     {
-        if (array_key_exists('image_' . $size, config('blogetc.image_sizes', []))) {
+        if (array_key_exists('image_'.$size, config('blogetc.image_sizes', []))) {
             return true;
         }
 
-        throw new InvalidArgumentException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\'' . ' or another field as defined in config/blogetc.php. Provided size (' . e($size) . ') is not valid');
+        throw new InvalidArgumentException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
 //        throw new InvalidImageSizeException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
     }
 
@@ -246,9 +246,9 @@ class Post extends Model implements SearchResultInterface
     public function imageUrl($size = 'medium'): string
     {
         $this->checkValidImageSize($size);
-        $filename = $this->{'image_' . $size};
+        $filename = $this->{'image_'.$size};
 
-        return asset(config('blogetc.blog_upload_dir', 'blog_images') . '/' . $filename);
+        return asset(config('blogetc.blog_upload_dir', 'blog_images').'/'.$filename);
 //        return UploadsService::publicUrl($filename);
     }
 
@@ -282,7 +282,7 @@ class Post extends Model implements SearchResultInterface
 //                : $this->author->{self::$authorNameResolver};
 //        }
         if ($this->author) {
-            return (string)optional($this->author)->name;
+            return (string) optional($this->author)->name;
         }
 
         return 'Unknown Author';
@@ -322,7 +322,7 @@ class Post extends Model implements SearchResultInterface
             throw new RuntimeException('use_view_file was empty, so cannot use bladeViewFile()');
         }
 
-        return 'custom_blog_posts.' . $this->use_view_file;
+        return 'custom_blog_posts.'.$this->use_view_file;
     }
 
     /**
