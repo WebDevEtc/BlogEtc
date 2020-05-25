@@ -55,5 +55,4 @@ class Category extends Model
     {
         return route('blogetc.admin.categories.edit_category', $this->id);
     }
-
 }
