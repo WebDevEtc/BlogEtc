@@ -20,8 +20,14 @@ class Category extends Model
      */
     public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(Post::class, 'blog_etc_post_categories', 'blog_etc_category_id',
-            'blog_etc_post_id');
+        return $this->belongsToMany(
+            Post::class,
+            'blog_etc_post_categories',
+            'blog_etc_category_id',
+            'blog_etc_post_id'
+        );
+//        return $this->belongsToMany(Post::class, 'blog_etc_post_categories', 'blog_etc_category_id',
+//            'blog_etc_post_id');
     }
 
     /**
@@ -35,12 +41,19 @@ class Category extends Model
     }
 
     /**
-     * Returns the URL for an admin user to edit this category.
-     *
-     * @return string
+     * @deprecated - use editUrl()
      */
     public function edit_url(): string
     {
+        return $this->editUrl();
+    }
+
+    /**
+     * Returns the URL for an admin user to edit this category.
+     */
+    public function editUrl(): string
+    {
         return route('blogetc.admin.categories.edit_category', $this->id);
     }
+
 }
