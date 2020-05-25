@@ -54,11 +54,11 @@ class CommentsService
         $ip = config('blogetc.comments.save_ip_address')
             ? $ip : null;
 
-        $authorWebsite = config('blogetc.comments.ask_for_author_website') && ! empty($attributes['author_website'])
+        $authorWebsite = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_website'])
             ? $attributes['author_website']
             : null;
 
-        $authorEmail = config('blogetc.comments.ask_for_author_website') && ! empty($attributes['author_email'])
+        $authorEmail = config('blogetc.comments.ask_for_author_website') && !empty($attributes['author_email'])
             ? $attributes['author_email']
             : null;
 

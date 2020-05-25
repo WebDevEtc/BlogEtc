@@ -34,6 +34,5 @@ class CategoryRequest extends BaseRequest
         }
 
         return $rules;
-
     }
 }
