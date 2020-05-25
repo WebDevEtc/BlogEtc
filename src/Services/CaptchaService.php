@@ -18,7 +18,7 @@ class CaptchaService
      */
     public function getCaptchaObject(): ?CaptchaInterface
     {
-        if (! config('blogetc.captcha.captcha_enabled')) {
+        if (!config('blogetc.captcha.captcha_enabled')) {
             return null;
         }
 

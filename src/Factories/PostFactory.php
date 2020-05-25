@@ -30,7 +30,7 @@ $factory->state(Post::class, 'not_published', [
 ]);
 
 // Post in future.
-$factory->state(Post::class, 'in_future',static function (Faker $faker) {
+$factory->state(Post::class, 'in_future', static function (Faker $faker) {
     return [
         'posted_at' => $faker->dateTimeBetween('now', '+2 years'),
     ];
