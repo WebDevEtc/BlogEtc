@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Response;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
@@ -38,9 +39,8 @@ class CommentsControllerTest extends TestCase
 
         $response = $this->postJson($url, $params);
 
-        $response->assertCreated();
+        $this->assertSame(Response::HTTP_CREATED, $response->getStatusCode());
 
-        // Test can see the comment on the post page and therefore saved in the database.
         $postResponse = $this->get(route('blogetc.single', $post->slug));
         $postResponse->assertSee($params['comment']);
     }
@@ -50,7 +50,6 @@ class CommentsControllerTest extends TestCase
      */
     public function testDisabledCommentsStore(): void
     {
-        // Disable comments:
         config(['blogetc.comments.type_of_comments_to_show' => 'disabled']);
 
         $post = factory(Post::class)->create();
@@ -68,7 +67,6 @@ class CommentsControllerTest extends TestCase
 
         $response->assertForbidden();
 
-        // Assert was not written to db:
         $this->assertDatabaseMissing('blog_etc_comments', ['comment' => $params['comment']]);
     }
 

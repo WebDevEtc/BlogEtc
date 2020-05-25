@@ -23,9 +23,9 @@ class CaptchaService
         }
 
         // else: captcha is enabled
-        /** @var string $captcha_class */
-        $captcha_class = config('blogetc.captcha.captcha_type');
+        /** @var string $captchaClass */
+        $captchaClass = config('blogetc.captcha.captcha_type');
 
-        return new $captcha_class();
+        return new $captchaClass();
     }
 }

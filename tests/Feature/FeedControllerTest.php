@@ -85,8 +85,7 @@ class FeedControllerTest extends TestCase
 
         $response = $this->get(route('blogetc.feed'));
 
-        $response->assertOk()
-            ->assertSee($post->title);
+        $response->assertOk()->assertSee($post->title);
     }
 
     /**

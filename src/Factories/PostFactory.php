@@ -9,7 +9,7 @@ use Faker\Generator as Faker;
 use WebDevEtc\BlogEtc\Models\Post;
 
 // Basic post factory, following happy path where everything is set up so posts can be seen.
-$factory->define(Post::class, function (Faker $faker) {
+$factory->define(Post::class, static function (Faker $faker) {
     return [
         'title'             => $faker->sentence,
         'slug'              => $faker->uuid,
@@ -30,7 +30,7 @@ $factory->state(Post::class, 'not_published', [
 ]);
 
 // Post in future.
-$factory->state(Post::class, 'in_future', function (Faker $faker) {
+$factory->state(Post::class, 'in_future',static function (Faker $faker) {
     return [
         'posted_at' => $faker->dateTimeBetween('now', '+2 years'),
     ];

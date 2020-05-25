@@ -13,6 +13,8 @@ class UserCanManageBlogPosts
     /**
      * Show 401 error if \Auth::user()->canManageBlogEtcPosts() == false.
      *
+     * TODO: replace with gates
+     *
      * @param $request
      *
      * @return mixed

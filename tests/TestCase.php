@@ -146,7 +146,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             }
 
             if (!Schema::hasTable('laravel_fulltext')) {
-                Schema::create('laravel_fulltext', function (Blueprint $table) {
+                Schema::create('laravel_fulltext',static function (Blueprint $table) {
                     $table->increments('id');
                     $table->integer('indexable_id');
                     $table->string('indexable_type');

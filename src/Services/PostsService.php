@@ -68,14 +68,9 @@ class PostsService
             $attributes['posted_at'] = Carbon::now();
         }
 
-        // Create new instance of BlogEtcPost, hydrate it with submitted attributes:
-        // Must save it first, then process images (so they can be linked to the blog post) then update again with the
-        // featured images. This isn't ideal, but seeing as blog posts are not created very often it isn't too bad...
         $newBlogPost = $this->repository->create($request->validated());
 
-        // process any submitted images:
         if (config('blogetc.image_upload_enabled')) {
-            // image upload was enabled - handle uploading of any new images:
             $uploadedImages = $this->uploadsService->processFeaturedUpload($request, $newBlogPost);
             $this->repository->updateImageSizes($newBlogPost, $uploadedImages);
         }
@@ -155,20 +150,15 @@ class PostsService
 
         $this->repository->delete($postID);
 
-        // now return an array of image files that are not deleted (so we can tell the user that these featured photos
-        // still exist on the filesystem
         $remainingPhotos = [];
 
         foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
             if ($post->$imageSize) {
                 $fullPath = config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize;
 
-                // there was record of this size in the db, so push it to array of featured photos which remain
-                // (Note: there is no check here to see if they actually exist on the filesystem).
                 $fileSize = UploadsService::disk()->getSize($fullPath);
 
                 if (false !== $fileSize) {
-                    // Get the file size, in human readable (kb) format.
                     $fileSize = $this->humanReadableFileSize($fileSize);
                 }
 
