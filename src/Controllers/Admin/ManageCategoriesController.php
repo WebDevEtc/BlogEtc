@@ -3,19 +3,12 @@
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use WebDevEtc\BlogEtc\Events\CategoryAdded;
-use WebDevEtc\BlogEtc\Events\CategoryEdited;
-use WebDevEtc\BlogEtc\Events\CategoryWillBeDeleted;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Models\Category;
-use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcCategoryRequest;
-use WebDevEtc\BlogEtc\Requests\StoreBlogEtcCategoryRequest;
-use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcCategoryRequest;
+use WebDevEtc\BlogEtc\Requests\CategoryRequest;
 use WebDevEtc\BlogEtc\Services\CategoriesService;
 
 /**
@@ -55,7 +48,7 @@ class ManageCategoriesController extends Controller
     /**
      * @deprecated - use store()
      */
-    public function store_category(StoreBlogEtcCategoryRequest $request)
+    public function store_category(CategoryRequest $request)
     {
         return $this->store($request);
     }
@@ -63,13 +56,11 @@ class ManageCategoriesController extends Controller
     /**
      * Store a new category.
      */
-    public function store(StoreBlogEtcCategoryRequest $request)
+    public function store(CategoryRequest $request)
     {
-        $new_category = Category::create($request->validated());
+        $this->service->create($request->validated());
 
-        Helpers::flashMessage('Created new category');
-
-        event(new CategoryAdded($new_category));
+        Helpers::flashMessage('Saved new category');
 
         return redirect(route('blogetc.admin.categories.index'));
     }
@@ -116,7 +107,7 @@ class ManageCategoriesController extends Controller
     /**
      * @deprecated - use update()
      */
-    public function update_category(UpdateBlogEtcCategoryRequest $request, $categoryId)
+    public function update_category(CategoryRequest $request, $categoryId)
     {
         return $this->update($request, $categoryId);
     }
@@ -124,46 +115,31 @@ class ManageCategoriesController extends Controller
     /**
      * Save submitted changes.
      *
-     * @param $categoryId
-     *
      * @return RedirectResponse|Redirector
      */
-    public function update(UpdateBlogEtcCategoryRequest $request, $categoryId)
+    public function update(CategoryRequest $request, $categoryID)
     {
-        /** @var Category $category */
-        $category = Category::findOrFail($categoryId);
-        $category->fill($request->validated());
-        $category->save();
+        $category = $this->service->update($categoryID, $request->validated());
 
-        Helpers::flashMessage('Saved category changes');
-        event(new CategoryEdited($category));
+        Helpers::flashMessage('Updated category');
 
-        return redirect($category->edit_url());
+        return redirect($category->editUrl());
     }
 
     /**
      * @deprecated - use destroy()
      */
-    public function destroy_category(DeleteBlogEtcCategoryRequest $request, $categoryId)
+    public function destroy_category(CategoryRequest $request, $categoryId)
     {
         return $this->destroy($request, $categoryId);
     }
 
     /**
      * Delete the category.
-     *
-     * @param $categoryId
-     *
-     * @return Factory|View
      */
-    public function destroy(DeleteBlogEtcCategoryRequest $request, $categoryId)
+    public function destroy(CategoryRequest $request, $categoryID)
     {
-        /* Please keep this in, so code inspections don't say $request was unused. Of course it might now get marked as left/right parts are equal */
-        $request = $request;
-
-        $category = Category::findOrFail($categoryId);
-        event(new CategoryWillBeDeleted($category));
-        $category->delete();
+        $this->service->delete($categoryID);
 
         return view('blogetc_admin::categories.deleted_category');
     }
