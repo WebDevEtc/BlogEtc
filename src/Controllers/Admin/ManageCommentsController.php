@@ -3,25 +3,29 @@
 namespace WebDevEtc\BlogEtc\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use WebDevEtc\BlogEtc\Events\CommentApproved;
-use WebDevEtc\BlogEtc\Events\CommentWillBeDeleted;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\Comment;
+use WebDevEtc\BlogEtc\Services\CommentsService;
 
 /**
  * Class BlogEtcCommentsAdminController.
  */
 class ManageCommentsController extends Controller
 {
+    /** @var CommentsService */
+    private $service;
+
     /**
      * BlogEtcCommentsAdminController constructor.
      */
-    public function __construct()
+    public function __construct(CommentsService $service)
     {
         $this->middleware(UserCanManageBlogPosts::class);
+        $this->service = $service;
     }
 
     /**
@@ -31,7 +35,9 @@ class ManageCommentsController extends Controller
      */
     public function index(Request $request)
     {
-        $comments = Comment::withoutGlobalScopes()->orderBy('created_at', 'desc')
+        //TODO - use service
+        $comments = Comment::withoutGlobalScopes()
+            ->orderBy('created_at', 'desc')
             ->with('post');
 
         if ($request->get('waiting_for_approval')) {
@@ -40,26 +46,19 @@ class ManageCommentsController extends Controller
 
         $comments = $comments->paginate(100);
 
-        return view('blogetc_admin::comments.index')
-            ->withComments($comments
-            );
+        return view('blogetc_admin::comments.index', ['comments' => $comments]);
     }
 
     /**
      * Approve a comment.
      *
-     * @param $blogCommentId
-     *
-     * @return RedirectResponse
+     * @param $blogCommentID
      */
-    public function approve($blogCommentId)
+    public function approve(int $blogCommentID): RedirectResponse
     {
-        $comment = Comment::withoutGlobalScopes()->findOrFail($blogCommentId);
-        $comment->approved = true;
-        $comment->save();
+        $this->service->approve($blogCommentID);
 
-        Helpers::flashMessage('Approved!');
-        event(new CommentApproved($comment));
+        Helpers::flashMessage('Approved comment!');
 
         return back();
     }
@@ -67,18 +66,15 @@ class ManageCommentsController extends Controller
     /**
      * Delete a submitted comment.
      *
-     * @param $blogCommentId
+     * @param $blogCommentID
      *
-     * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy($blogCommentId)
+    public function destroy(int $blogCommentID): RedirectResponse
     {
-        $comment = Comment::withoutGlobalScopes()->findOrFail($blogCommentId);
-        event(new CommentWillBeDeleted($comment));
+        $this->service->delete($blogCommentID);
 
-        $comment->delete();
-
-        Helpers::flashMessage('Deleted!');
+        Helpers::flashMessage('Deleted comment!');
 
         return back();
     }
