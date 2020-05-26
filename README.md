@@ -3,9 +3,29 @@
 
  - Quickly add a blog with admin panel to your existing Laravel project. It has everything included (routes, views, controllers, middleware, etc)
  - Works with latest version of Laravel.
- 
-[![Build Status](https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master)](https://travis-ci.org/WebDevEtc/BlogEtc)
-[![StyleCI](https://github.styleci.io/repos/144829997/shield?branch=master)](https://github.styleci.io/repos/144829997)
+
+<p align="center">
+  <a href="https://travis-ci.org/WebDevEtc/BlogEtc">
+    <img src="https://travis-ci.org/WebDevEtc/BlogEtc.svg?branch=master" alt="Build Status">
+  </a>
+
+  <a href="https://github.styleci.io/repos/144829997">
+    <img src="https://github.styleci.io/repos/144829997/shield?branch=master" alt="StyleCI">
+  </a>
+
+   <a href="https://packagist.org/packages/WebDevEtc/BlogEtc">
+      <img src="https://poser.pugx.org/WebDevEtc/BlogEtc/v/stable.png" alt="Latest Stable Version">
+  </a>
+
+  <a href="https://packagist.org/packages/WebDevEtc/BlogEtc">
+      <img src="https://poser.pugx.org/WebDevEtc/BlogEtc/downloads.png" alt="Total Downloads">
+  </a>
+
+  <a href="https://packagist.org/packages/WebDevEtc/BlogEtc">
+    <img src="https://poser.pugx.org/WebDevEtc/BlogEtc/license.png" alt="License">
+  </a>
+</p>
+
 
 # Next version - coming soon
 
