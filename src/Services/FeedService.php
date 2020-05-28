@@ -49,7 +49,7 @@ class FeedService
             $key
         );
 
-        if (! $feed->isCached()) {
+        if (!$feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 
