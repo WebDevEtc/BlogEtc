@@ -3,10 +3,11 @@
 namespace WebDevEtc\BlogEtc\Requests;
 
 use Illuminate\Validation\Rule;
+use WebDevEtc\BlogEtc\Interfaces\LegacyGetImageFileInterface;
 use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
-class CreateBlogEtcPostRequest extends BaseBlogEtcPostRequest
+class CreateBlogEtcPostRequest extends BaseBlogEtcPostRequest implements LegacyGetImageFileInterface
 {
     use HasCategoriesTrait;
     use HasImageUploadTrait;
