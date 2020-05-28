@@ -62,8 +62,6 @@ class ManageUploadsController extends Controller
      * Save a new uploaded image.
      *
      * @throws Exception
-     *
-     * @return RedirectResponse|Redirector
      */
     public function store(UploadImageRequest $request)
     {

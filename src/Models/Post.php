@@ -78,7 +78,7 @@ class Post extends Model implements SearchResultInterface
         static::addGlobalScope(new BlogEtcPublishedScope());
     }
 
-    public function isPublic(): boolean
+    public function isPublic(): bool
     {
         return $this->is_published && $this->posted_at->isFuture();
     }

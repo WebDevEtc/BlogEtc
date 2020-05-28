@@ -6,9 +6,7 @@ use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
 use Image;
 use Intervention\Image\Constraint;
@@ -26,7 +24,7 @@ use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Repositories\UploadedPhotosRepository;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\PostRequest;
+//use WebDevEtc\BlogEtc\Requests\PostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
 
@@ -53,10 +51,6 @@ class UploadsService
 
     /**
      * Save a new post.
-     *
-     * @throws Exception
-     *
-     * @return RedirectResponse|Redirector
      */
     public function legacyStorePost(CreateBlogEtcPostRequest $request)
     {
@@ -81,10 +75,6 @@ class UploadsService
 
     /**
      * This uses some legacy code. This will get refactored soon into something nicer.
-     *
-     * @param $blogPostId
-     *
-     * @return string
      */
     public function legacyUpdatePost(UpdateBlogEtcPostRequest $request, $blogPostId)
     {
@@ -141,7 +131,7 @@ class UploadsService
         UploadedPhoto::create([
             'image_title'     => $request->get('image_title'),
             'source'          => 'ImageUpload',
-            'uploader_id'     => Auth::id(),
+            'uploader_id'     => (int) Auth::id(),
             'uploaded_images' => $uploaded_image_details,
         ]);
 
@@ -278,16 +268,16 @@ class UploadsService
         $base = $this->generate_base_filename($suggested_title);
 
         // $wh will be something like "-1200x300"
-        $wh = $this->getWhForFilename($image_size_details);
+        $wh = $this->getDimensions($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; ++$i) {
+        for ($i = 1; $i <= 10; ++$i) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.str_random(5) : '';
 
             $attempt = str_slug($base.$suffix.$wh).$ext;
 
-            if (! File::exists($this->image_destination_path().'/'.$attempt)) {
+            if (! \File::exists($this->image_destination_path().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -295,6 +285,22 @@ class UploadsService
 
         // too many attempts...
         throw new RuntimeException("Unable to find a free filename after $i attempts - aborting now.");
+    }
+
+    /**
+     * @return string
+     */
+    protected function generate_base_filename(string $suggested_title)
+    {
+        $base = substr($suggested_title, 0, 100);
+        if (!$base) {
+            // if we have an empty string then we should use a random one:
+            $base = 'image-'.str_random(5);
+
+            return $base;
+        }
+
+        return $base;
     }
 
     /**
@@ -352,7 +358,7 @@ class UploadsService
             null,
             $imageTitle,
             UploadedPhoto::SOURCE_IMAGE_UPLOAD,
-            Auth::id(),
+            (int) Auth::id(),
             $uploadedImageDetails
         );
 
@@ -495,13 +501,18 @@ class UploadsService
             return '-'.$imageSize['w'].'x'.$imageSize['h'];
         }
 
-        if (is_string($imageSize)) {
-            return '-'.Str::slug(substr($imageSize, 0, 30));
-        }
-
-        // was not a string or array, so error
-        throw new RuntimeException('Invalid image_size_details: must be an array with w and h, or a string');
+        return '-'.Str::slug(substr($imageSize, 0, 30));
     }
+
+
+    /**
+     * @deprecated - use getDimensions()
+     */
+    protected function getWhForFilename($image_size_details)
+    {
+       return $this->getDimensions($image_size_details);
+    }
+
 
     /**
      * @throws RuntimeException
@@ -531,67 +542,67 @@ class UploadsService
         ]);
     }
 
-    /**
-     * Process any uploaded images (for featured image).
-     *
-     * @throws Exception
-     *
-     * @todo - next full release, tidy this up!
-     */
-    public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
-    {
-        if (! config('blogetc.image_upload_enabled')) {
-            // image upload was disabled
-            return null;
-        }
-
-        $newSizes = [];
-        $this->increaseMemoryLimit();
-
-        // to save in db later
-        $uploaded_image_details = [];
-
-        $enabledImageSizes = collect((array) config('blogetc.image_sizes'))
-            ->filter(function ($size) {
-                return ! empty($size['enabled']);
-            });
-
-        foreach ($enabledImageSizes as $size => $image_size_details) {
-            $photo = $request->getImageSize($size);
-
-            if (! $photo) {
-                continue;
-            }
-
-            $uploaded_image = $this->uploadAndResize(
-                $new_blog_post,
-                $new_blog_post->title,
-                $image_size_details,
-                $photo
-            );
-
-            $newSizes[$size] = $uploaded_image['filename'];
-
-            $uploaded_image_details[$size] = $uploaded_image;
-        }
-
-        // store the image upload.
-        if (empty($newSizes)) {
-            // Nothing to do if there were no sizes in config.
-            return null;
-        }
-
-        // todo: link this to the blogetc_post row.
-        $this->storeInDatabase(
-            $new_blog_post->id,
-            $new_blog_post->title,
-            UploadedPhoto::SOURCE_FEATURED_IMAGE,
-            Auth::id(),
-            $uploaded_image_details
-        );
-
-        return $newSizes;
-    }
+//    /**
+//     * Process any uploaded images (for featured image).
+//     *
+//     * @throws Exception
+//     *
+//     * @todo - next full release, tidy this up!
+//     */
+//    public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
+//    {
+//        if (! config('blogetc.image_upload_enabled')) {
+//            // image upload was disabled
+//            return null;
+//        }
+//
+//        $newSizes = [];
+//        $this->increaseMemoryLimit();
+//
+//        // to save in db later
+//        $uploaded_image_details = [];
+//
+//        $enabledImageSizes = collect((array) config('blogetc.image_sizes'))
+//            ->filter(function ($size) {
+//                return ! empty($size['enabled']);
+//            });
+//
+//        foreach ($enabledImageSizes as $size => $image_size_details) {
+//            $photo = $request->getImageSize($size);
+//
+//            if (! $photo) {
+//                continue;
+//            }
+//
+//            $uploaded_image = $this->uploadAndResize(
+//                $new_blog_post,
+//                $new_blog_post->title,
+//                $image_size_details,
+//                $photo
+//            );
+//
+//            $newSizes[$size] = $uploaded_image['filename'];
+//
+//            $uploaded_image_details[$size] = $uploaded_image;
+//        }
+//
+//        // store the image upload.
+//        if (empty($newSizes)) {
+//            // Nothing to do if there were no sizes in config.
+//            return null;
+//        }
+//
+//        // todo: link this to the blogetc_post row.
+//        $this->storeInDatabase(
+//            $new_blog_post->id,
+//            $new_blog_post->title,
+//            UploadedPhoto::SOURCE_FEATURED_IMAGE,
+//            Auth::id(),
+//            $uploaded_image_details
+//        );
+//
+//        return $newSizes;
+//    }
 
     /**
      * Legacy function, will be refactored soon.
