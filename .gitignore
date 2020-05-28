@@ -4,13 +4,9 @@ vendor/
 node_modules/
 npm-debug.log
 composer.lock
-
-
-# Laravel 4 specific
+.php_cs.cache
 bootstrap/compiled.php
 app/storage/
-
-# Laravel 5 & Lumen specific
 public/storage
 public/hot
 storage/*.key
@@ -19,6 +15,3 @@ storage/*.key
 .env
 Homestead.yaml
 Homestead.json
-
-# Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
-.rocketeer/
