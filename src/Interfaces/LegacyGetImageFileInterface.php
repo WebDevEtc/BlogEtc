@@ -5,7 +5,7 @@ namespace WebDevEtc\BlogEtc\Interfaces;
 interface LegacyGetImageFileInterface
 {
     /**
-     * legacy
+     * legacy.
      * @param $size
      * @return mixed
      */

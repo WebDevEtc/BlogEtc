@@ -12,6 +12,7 @@ use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Repositories\PostsRepository;
+
 //use WebDevEtc\BlogEtc\Requests\PostRequest;
 
 /**
@@ -49,6 +50,7 @@ class PostsService
     {
         return $this->repository;
     }
+
 //
 //    /**
 //     * Create a new BlogEtcPost entry, and process any uploaded image.
