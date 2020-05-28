@@ -32,7 +32,7 @@ class ManageUploadsController extends Controller
         $this->middleware(UserCanManageBlogPosts::class);
         $this->uploadsService = $uploadsService;
 
-        if (! config('blogetc.image_upload_enabled')) {
+        if (!config('blogetc.image_upload_enabled')) {
             throw new RuntimeException('The blogetc.php config option is missing or has not enabled image uploading');
         }
     }

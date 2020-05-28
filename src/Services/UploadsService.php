@@ -64,7 +64,7 @@ class UploadsService
 
         $this->legacyProcessUploadedImages($request, $new_blog_post);
 
-        if (! $new_blog_post->posted_at) {
+        if (!$new_blog_post->posted_at) {
             $new_blog_post->posted_at = Carbon::now();
         }
 
@@ -130,7 +130,7 @@ class UploadsService
         }
 
         foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
-            if (! isset($sizes_to_upload[$size]) || ! $sizes_to_upload[$size] || ! $image_size_details['enabled']) {
+            if (!isset($sizes_to_upload[$size]) || !$sizes_to_upload[$size] || !$image_size_details['enabled']) {
                 continue;
             }
 
@@ -159,7 +159,7 @@ class UploadsService
      */
     public function legacyProcessUploadedImages(LegacyGetImageFileInterface $request, Post $new_blog_post)
     {
-        if (! config('blogetc.image_upload_enabled')) {
+        if (!config('blogetc.image_upload_enabled')) {
             return;
         }
 
@@ -256,7 +256,7 @@ class UploadsService
      */
     protected function check_image_destination_path_is_writable($path)
     {
-        if (! is_writable($path)) {
+        if (!is_writable($path)) {
             throw new RuntimeException("Image destination path is not writable ($path)");
         }
     }
@@ -281,13 +281,13 @@ class UploadsService
         $wh = $this->getWhForFilename($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; ++$i) {
+        for ($i = 1; $i <= self::$num_of_attempts_to_find_filename; $i++) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.str_random(5) : '';
 
             $attempt = str_slug($base.$suffix.$wh).$ext;
 
-            if (! File::exists($this->image_destination_path().'/'.$attempt)) {
+            if (!File::exists($this->image_destination_path().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -446,13 +446,13 @@ class UploadsService
         $wh = $this->getDimensions($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$availableFilenameAttempts; ++$i) {
+        for ($i = 1; $i <= self::$availableFilenameAttempts; $i++) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.Str::random(5) : '';
 
             $attempt = Str::slug($base.$suffix.$wh).$ext;
 
-            if (! $this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
+            if (!$this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
                 return $attempt;
             }
         }
@@ -540,7 +540,7 @@ class UploadsService
      */
     public function processFeaturedUpload(PostRequest $request, Post $new_blog_post): ?array
     {
-        if (! config('blogetc.image_upload_enabled')) {
+        if (!config('blogetc.image_upload_enabled')) {
             // image upload was disabled
             return null;
         }
@@ -553,13 +553,13 @@ class UploadsService
 
         $enabledImageSizes = collect((array) config('blogetc.image_sizes'))
             ->filter(function ($size) {
-                return ! empty($size['enabled']);
+                return !empty($size['enabled']);
             });
 
         foreach ($enabledImageSizes as $size => $image_size_details) {
             $photo = $request->getImageSize($size);
 
-            if (! $photo) {
+            if (!$photo) {
                 continue;
             }
 
