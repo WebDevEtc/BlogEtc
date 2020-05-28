@@ -6,13 +6,12 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\UploadedPhotoNotFoundException;
-use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 
 class UploadedPhotosRepository
 {
     /**
-     * @var Post
+     * @var UploadedPhoto
      */
     private $model;
 
@@ -42,14 +41,12 @@ class UploadedPhotosRepository
 
     /**
      * Delete a uploaded photo from the database.
-     *
-     * @throws Exception
      */
-    public function delete(int $uploadedPhotoID): bool
+    public function delete(int $uploadedPhotoID):? bool
     {
-        $post = $this->find($uploadedPhotoID);
+        $uploadedPhoto = $this->find($uploadedPhotoID);
 
-        return $post->delete();
+        return $uploadedPhoto->delete();
     }
 
     /**

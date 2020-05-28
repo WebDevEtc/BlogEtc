@@ -66,7 +66,7 @@ class CommentsController extends Controller
 
         $captcha = $this->captchaService->getCaptchaObject();
 
-        if ($captcha) {
+        if ($captcha && method_exists($captcha, 'runCaptchaBeforeAddingComment')) {
             $captcha->runCaptchaBeforeAddingComment($request, $blogPost);
         }
 

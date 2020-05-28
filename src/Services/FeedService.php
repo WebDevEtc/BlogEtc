@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use Laravelium\Feed\Feed;
-use Laravelium\Feed\view;
 use WebDevEtc\BlogEtc\Models\Post;
 
 /**
@@ -30,8 +29,6 @@ class FeedService
 
     /**
      * Build the Feed object and populate it with blog posts.
-     *
-     * @return view
      */
     public function getFeed(Feed $feed, string $feedType): Response
     {
@@ -52,7 +49,7 @@ class FeedService
             $key
         );
 
-        if (!$feed->isCached()) {
+        if (! $feed->isCached()) {
             $this->makeFreshFeed($feed);
         }
 

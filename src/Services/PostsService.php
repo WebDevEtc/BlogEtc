@@ -12,7 +12,7 @@ use WebDevEtc\BlogEtc\Events\BlogPostEdited;
 use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Repositories\PostsRepository;
-use WebDevEtc\BlogEtc\Requests\PostRequest;
+//use WebDevEtc\BlogEtc\Requests\PostRequest;
 
 /**
  * Class BlogEtcPostsService.
@@ -49,40 +49,40 @@ class PostsService
     {
         return $this->repository;
     }
-
-    /**
-     * Create a new BlogEtcPost entry, and process any uploaded image.
-     *
-     * (I'm never keen on passing around entire Request objects - this will get
-     * refactored out)
-     *
-     * @throws Exception
-     */
-    public function create(PostRequest $request, ?int $userID): Post
-    {
-        throw new LogicException('PostsService create is not yet ready for use');
-        $attributes = $request->validated() + ['user_id' => $userID];
-
-        // set default posted_at, if none were submitted
-        if (empty($attributes['posted_at'])) {
-            $attributes['posted_at'] = Carbon::now();
-        }
-
-        $newBlogPost = $this->repository->create($request->validated());
-
-        if (config('blogetc.image_upload_enabled')) {
-            $uploadedImages = $this->uploadsService->processFeaturedUpload($request, $newBlogPost);
-            $this->repository->updateImageSizes($newBlogPost, $uploadedImages);
-        }
-
-        if (count($request->categories())) {
-            $newBlogPost->categories()->sync($request->categories());
-        }
-
-        event(new BlogPostAdded($newBlogPost));
-
-        return $newBlogPost;
-    }
+//
+//    /**
+//     * Create a new BlogEtcPost entry, and process any uploaded image.
+//     *
+//     * (I'm never keen on passing around entire Request objects - this will get
+//     * refactored out)
+//     *
+//     * @throws Exception
+//     */
+//    public function create(PostRequest $request, ?int $userID): Post
+//    {
+//        throw new LogicException('PostsService create is not yet ready for use');
+//        $attributes = $request->validated() + ['user_id' => $userID];
+//
+//        // set default posted_at, if none were submitted
+//        if (empty($attributes['posted_at'])) {
+//            $attributes['posted_at'] = Carbon::now();
+//        }
+//
+//        $newBlogPost = $this->repository->create($request->validated());
+//
+//        if (config('blogetc.image_upload_enabled')) {
+//            $uploadedImages = $this->uploadsService->processFeaturedUpload($request, $newBlogPost);
+//            $this->repository->updateImageSizes($newBlogPost, $uploadedImages);
+//        }
+//
+//        if (count($request->categories())) {
+//            $newBlogPost->categories()->sync($request->categories());
+//        }
+//
+//        event(new BlogPostAdded($newBlogPost));
+//
+//        return $newBlogPost;
+//    }
 
     /**
      * Return all results, paginated.
@@ -116,21 +116,21 @@ class PostsService
     public function update(int $blogPostID, PostRequest $request): Post
     {
         throw new LogicException('PostsService update is not yet ready for use');
-        $post = $this->repository->find($blogPostID);
-
-        // TODO - split this into a repo call.
-        $post->fill($request->validated());
-
-        // TODO - copy logic from create! this is now wrong
-        $this->uploadsService->processFeaturedUpload($request, $post);
-
-        $post->save();
-
-        $post->categories()->sync($request->categories());
-
-        event(new BlogPostEdited($post));
-
-        return $post;
+//        $post = $this->repository->find($blogPostID);
+//
+//        // TODO - split this into a repo call.
+//        $post->fill($request->validated());
+//
+//        // TODO - copy logic from create! this is now wrong
+//        $this->uploadsService->processFeaturedUpload($request, $post);
+//
+//        $post->save();
+//
+//        $post->categories()->sync($request->categories());
+//
+//        event(new BlogPostEdited($post));
+//
+//        return $post;
     }
 
     /**

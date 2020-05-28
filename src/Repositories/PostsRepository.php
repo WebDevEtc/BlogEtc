@@ -38,7 +38,7 @@ class PostsRepository
         $query = $this->query(true)
             ->orderBy('posted_at', 'desc');
 
-        if ($categoryID) {
+        if ($categoryID > 0) {
             $query->whereHas('categories', static function (Builder $query) use ($categoryID) {
                 $query->where('blog_etc_post_categories.blog_etc_category_id', $categoryID);
             })->get();
@@ -109,7 +109,7 @@ class PostsRepository
     {
         $post = $this->find($postID);
 
-        return $post->delete();
+        return (bool) $post->delete();
     }
 
     /**

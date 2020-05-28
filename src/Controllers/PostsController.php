@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use LogicException;
 use Swis\Laravel\Fulltext\Search;
 use View;
 use WebDevEtc\BlogEtc\Requests\SearchRequest;
@@ -44,7 +45,7 @@ class PostsController extends Controller
      */
     public function search(SearchRequest $request): \Illuminate\Contracts\View\View
     {
-        if (!config('blogetc.search.search_enabled')) {
+        if (! config('blogetc.search.search_enabled')) {
             throw new LogicException('Search is disabled');
         }
 
@@ -133,7 +134,7 @@ class PostsController extends Controller
 
         $usingCaptcha = $this->captchaService->getCaptchaObject();
 
-        if (null !== $usingCaptcha) {
+        if (null !== $usingCaptcha && method_exists($usingCaptcha, 'runCaptchaBeforeShowingPosts')) {
             $usingCaptcha->runCaptchaBeforeShowingPosts($request, $blogPost);
         }
 
