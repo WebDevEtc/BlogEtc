@@ -321,49 +321,49 @@ class UploadsService
         return Storage::disk(config('blogetc.image_upload_disk', 'public'));
     }
 
-    /**
-     * Handle an image upload via the upload image section (not blog post featured image).
-     *
-     * @param $uploadedImage
-     *
-     * @throws Exception
-     */
-    public function processUpload($uploadedImage, string $imageTitle): array
-    {
-        // to save in db later
-        $uploadedImageDetails = [];
-        $this->increaseMemoryLimit();
-
-        if (config('blogetc.image_store_full_size')) {
-            // Store as full size
-            $uploadedImageDetails['blogetc_full_size'] = $this->uploadAndResize(
-                null,
-                $imageTitle,
-                'fullsize',
-                $uploadedImage
-            );
-        }
-
-        foreach ((array) config('blogetc.image_sizes') as $size => $imageSizeDetails) {
-            $uploadedImageDetails[$size] = $this->uploadAndResize(
-                null,
-                $imageTitle,
-                $imageSizeDetails,
-                $uploadedImage
-            );
-        }
-
-        // Store the image data in db:
-        $this->storeInDatabase(
-            null,
-            $imageTitle,
-            UploadedPhoto::SOURCE_IMAGE_UPLOAD,
-            (int) Auth::id(),
-            $uploadedImageDetails
-        );
-
-        return $uploadedImageDetails;
-    }
+//    /**
+//     * Handle an image upload via the upload image section (not blog post featured image).
+//     *
+//     * @param $uploadedImage
+//     *
+//     * @throws Exception
+//     */
+//    public function processUpload($uploadedImage, string $imageTitle): array
+//    {
+//        // to save in db later
+//        $uploadedImageDetails = [];
+//        $this->increaseMemoryLimit();
+//
+//        if (config('blogetc.image_store_full_size')) {
+//            // Store as full size
+//            $uploadedImageDetails['blogetc_full_size'] = $this->uploadAndResize(
+//                null,
+//                $imageTitle,
+//                'fullsize',
+//                $uploadedImage
+//            );
+//        }
+//
+//        foreach ((array) config('blogetc.image_sizes') as $size => $imageSizeDetails) {
+//            $uploadedImageDetails[$size] = $this->uploadAndResize(
+//                null,
+//                $imageTitle,
+//                $imageSizeDetails,
+//                $uploadedImage
+//            );
+//        }
+//
+//        // Store the image data in db:
+//        $this->storeInDatabase(
+//            null,
+//            $imageTitle,
+//            UploadedPhoto::SOURCE_IMAGE_UPLOAD,
+//            (int) Auth::id(),
+//            $uploadedImageDetails
+//        );
+//
+//        return $uploadedImageDetails;
+//    }
 
     /**
      * Small method to increase memory limit.

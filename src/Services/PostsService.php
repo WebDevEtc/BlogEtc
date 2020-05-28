@@ -2,17 +2,12 @@
 
 namespace WebDevEtc\BlogEtc\Services;
 
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use LogicException;
-use WebDevEtc\BlogEtc\Events\BlogPostAdded;
-use WebDevEtc\BlogEtc\Events\BlogPostEdited;
-use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Repositories\PostsRepository;
-//use WebDevEtc\BlogEtc\Requests\PostRequest;
 
 /**
  * Class BlogEtcPostsService.
@@ -28,15 +23,15 @@ class PostsService
     private $repository;
 
     /** @var UploadsService */
-//    private $uploadsService;
+    private $uploadsService;
 
     /**
      * PostsService constructor.
      */
-    public function __construct(PostsRepository $repository/*, UploadsService $uploadsService*/)
+    public function __construct(PostsRepository $repository, UploadsService $uploadsService)
     {
         $this->repository = $repository;
-//        $this->uploadsService = $uploadsService;
+        $this->uploadsService = $uploadsService;
     }
 
     /**
@@ -113,7 +108,7 @@ class PostsService
      *
      * @throws Exception
      */
-    public function update(int $blogPostID, PostRequest $request): Post
+    public function update(int $blogPostID, /*PostRequest*/ $request): Post
     {
         throw new LogicException('PostsService update is not yet ready for use');
 //        $post = $this->repository->find($blogPostID);
@@ -144,34 +139,34 @@ class PostsService
     public function delete(int $postID): array
     {
         throw new LogicException('PostsService delete is not yet ready for use');
-        $post = $this->repository->find($postID);
-
-        event(new BlogPostWillBeDeleted($post));
-
-        $this->repository->delete($postID);
-
-        $remainingPhotos = [];
-
-        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
-            if ($post->$imageSize) {
-                $fullPath = config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize;
-
-                $fileSize = UploadsService::disk()->getSize($fullPath);
-
-                if (false !== $fileSize) {
-                    $fileSize = $this->humanReadableFileSize($fileSize);
-                }
-
-                $remainingPhotos[] = [
-                    'filename'  => $post->$imageSize,
-                    'full_path' => $fullPath,
-                    'file_size' => $fileSize,
-                    'url'       => UploadsService::disk()->url($fullPath),
-                ];
-            }
-        }
-
-        return [$post, $remainingPhotos];
+//        $post = $this->repository->find($postID);
+//
+//        event(new BlogPostWillBeDeleted($post));
+//
+//        $this->repository->delete($postID);
+//
+//        $remainingPhotos = [];
+//
+//        foreach ((array) config('blogetc.image_sizes') as $imageSize => $imageSizeInfo) {
+//            if ($post->$imageSize) {
+//                $fullPath = config('blogetc.blog_upload_dir', 'blog_images').'/'.$post->$imageSize;
+//
+//                $fileSize = UploadsService::disk()->getSize($fullPath);
+//
+//                if (false !== $fileSize) {
+//                    $fileSize = $this->humanReadableFileSize($fileSize);
+//                }
+//
+//                $remainingPhotos[] = [
+//                    'filename'  => $post->$imageSize,
+//                    'full_path' => $fullPath,
+//                    'file_size' => $fileSize,
+//                    'url'       => UploadsService::disk()->url($fullPath),
+//                ];
+//            }
+//        }
+//
+//        return [$post, $remainingPhotos];
     }
 
     /**
