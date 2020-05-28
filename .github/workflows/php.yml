@@ -1,20 +1,17 @@
-name: PHP Composer
+name: PHP Composer and tests
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
-
     strategy:
       matrix:
         operating-system: [ubuntu-latest, windows-latest, macos-latest]
         php-versions: ['7.2', '7.3', '7.4']
+        dependency-version: [prefer-lowest, prefer-stable]
+        laravel: ['7.6.0']
     runs-on: ${{ matrix.operating-system }}
-    name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }} Laravel L${{ matrix.laravel }} Test on ${{ matrix.operating-system }}
 
     steps:
     - uses: actions/checkout@v2
@@ -23,7 +20,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: mbstring, intl
+        extensions: mbstring, intl, fileinfo, pdo_sqlite, mysql
         ini-values: post_max_size=256M, short_open_tag=On
         coverage: xdebug
 
@@ -31,7 +28,11 @@ jobs:
       run: composer validate
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      run: |
+        composer self-update
+        composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+        composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+#        composer update --prefer-source --no-interaction --no-suggest
 
     - name: Run phpunit tests
       run: ./vendor/bin/phpunit
