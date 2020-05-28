@@ -44,6 +44,7 @@ class PostsService
     {
         return $this->repository;
     }
+
 //
 //    /**
 //     * Create a new BlogEtcPost entry, and process any uploaded image.

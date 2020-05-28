@@ -5,8 +5,6 @@ namespace WebDevEtc\BlogEtc\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
@@ -32,7 +30,7 @@ class ManageUploadsController extends Controller
         $this->middleware(UserCanManageBlogPosts::class);
         $this->uploadsService = $uploadsService;
 
-        if (! config('blogetc.image_upload_enabled')) {
+        if (!config('blogetc.image_upload_enabled')) {
             throw new RuntimeException('The blogetc.php config option is missing or has not enabled image uploading');
         }
     }
