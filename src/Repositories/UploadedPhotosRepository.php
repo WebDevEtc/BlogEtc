@@ -42,7 +42,7 @@ class UploadedPhotosRepository
     /**
      * Delete a uploaded photo from the database.
      */
-    public function delete(int $uploadedPhotoID):? bool
+    public function delete(int $uploadedPhotoID): ?bool
     {
         $uploadedPhoto = $this->find($uploadedPhotoID);
 
