@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
+use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
@@ -71,11 +72,29 @@ class PostsControllerTest extends TestCase
     }
 
     /**
+     * A post with is_published = false should not be shown.
+     */
+    public function testShow404IfNotPublishedWithGates(): void
+    {
+//        $this->withoutExceptionHandling();
+        \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
+            return false;
+        });
+        $this->beNonAdminUserWithGate();
+
+        $post = factory(Post::class)->state('not_published')->create();
+
+        $response = $this->get(route('blogetc.single', $post->slug));
+
+        $response->assertNotFound();
+    }
+
+    /**
      * A post with is_published = false should be visible if logged in with user which passes the gate check.
      */
     public function testShowAdminCanSeeNotPublished(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
         $post = factory(Post::class)->state('not_published')->create();
 
         $response = $this->get(route('blogetc.single', $post->slug));
@@ -100,7 +119,7 @@ class PostsControllerTest extends TestCase
      */
     public function testAdminsCanSeeFuturePosts(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post = factory(Post::class)->state('in_future')->create();
 
@@ -115,7 +134,7 @@ class PostsControllerTest extends TestCase
     public function testShow404IfDeletedPost(): void
     {
         $post = factory(Post::class)->create();
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post->delete();
 

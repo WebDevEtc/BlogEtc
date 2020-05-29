@@ -4,6 +4,7 @@
     /** @var Post $post */
     /** @var CaptchaAbstract $captcha */
 @endphp
+@can(\WebDevEtc\BlogEtc\Gates\GateTypes::ADD_COMMENTS)
 <div class="add_comment_area">
     <h5 class="text-center">Add a comment</h5>
     <form method="post" action="{{ route('blogetc.comments.add_new_comment', $post->slug) }}">
@@ -60,7 +61,6 @@
                     @endif
                 @endif
 
-
                 @if(config("blogetc.comments.ask_for_author_website"))
                     <div class='col'>
                         <div class="form-group">
@@ -91,4 +91,4 @@
         </div>
     </form>
 </div>
-
+@endcan

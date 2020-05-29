@@ -17,25 +17,32 @@ namespace App {
     class AdminUser extends Authenticatable
     {
         use Notifiable;
+    }
 
+    class NonAdminUser extends Authenticatable
+    {
+        use Notifiable;
+    }
+
+    class LegacyAdminUser extends AdminUser
+    {
         public function canManageBlogEtcPosts()
         {
             return true;
         }
     }
 
-    class NormalUser extends Authenticatable
+    class LegacyNonAdminUser extends NonAdminUser
     {
-        use Notifiable;
-
         public function canManageBlogEtcPosts()
         {
             return false;
         }
     }
 
-    if (!class_exists('\App\User')) {
-        class User extends NormalUser
+    // TODO - remove the need for this
+    if (! class_exists('\App\User')) {
+        class User extends NonAdminUser
         {
         }
     }
@@ -43,8 +50,12 @@ namespace App {
 
 namespace WebDevEtc\BlogEtc\Tests {
     use App\AdminUser;
-    use App\NormalUser;
+    use App\LegacyAdminUser;
+    use App\LegacyNonAdminUser;
+    use App\NonAdminUser;
     use App\User;
+    use Config;
+    use Gate;
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Schema;
@@ -54,14 +65,20 @@ namespace WebDevEtc\BlogEtc\Tests {
     use Route;
     use View;
     use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
+    use WebDevEtc\BlogEtc\Gates\GateTypes;
 
     /**
      * Class TestCase.
      */
     abstract class TestCase extends BaseTestCase
     {
-        /** @var User|AdminUser */
+        /** @var User|LegacyAdminUser */
         protected $lastUser;
+
+        protected function setUp(): void
+        {
+            parent::setUp();
+        }
 
         /**
          * As this package does not include layouts.app, it is easier to just mock the whole View part, and concentrate
@@ -110,10 +127,14 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->loadMigrations();
             $this->withFactories(__DIR__.'/../src/Factories');
 
-            if (!Route::has('login')) {
+            if (! Route::has('login')) {
                 Route::get('login', function () {
                 })->name('login');
             }
+
+            // Restore default gates.
+            Gate::define(GateTypes::MANAGE_ADMIN, include(__DIR__.'/../src/Gates/DefaultAdminGate.php'));
+            Gate::define(GateTypes::ADD_COMMENTS, include(__DIR__.'/../src/Gates/DefaultAddCommentsGate.php'));
         }
 
         /**
@@ -133,7 +154,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 $migrator->up();
             }
 
-            if (!Schema::hasTable('users')) {
+            if (! Schema::hasTable('users')) {
                 Schema::create('users', static function (Blueprint $table) {
                     $table->bigIncrements('id');
                     $table->string('name');
@@ -145,7 +166,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 });
             }
 
-            if (!Schema::hasTable('laravel_fulltext')) {
+            if (! Schema::hasTable('laravel_fulltext')) {
                 Schema::create('laravel_fulltext', static function (Blueprint $table) {
                     $table->increments('id');
                     $table->integer('indexable_id');
@@ -195,11 +216,12 @@ namespace WebDevEtc\BlogEtc\Tests {
         }
 
         /**
-         * Be an admin user.
+         * Be an admin user - not using gates.
          */
-        protected function beAdminUser(): self
+        protected function beLegacyAdminUser(): self
         {
-            $this->lastUser = new AdminUser();
+            Config::set('blogetc.auth_type', 'legacy');
+            $this->lastUser = new LegacyAdminUser();
             $this->lastUser->id = 1;
 
             $this->be($this->lastUser);
@@ -208,14 +230,43 @@ namespace WebDevEtc\BlogEtc\Tests {
         }
 
         /**
-         * Be non admin user.
+         * Be non admin user - not using gates.
          */
-        protected function beNonAdminUser(): void
+        protected function beLegacyNonAdminUser(): void
         {
-            $this->lastUser = new NormalUser();
+            Config::set('blogetc.auth_type', 'legacy');
+            $this->lastUser = new LegacyNonAdminUser();
             $this->lastUser->id = 1;
 
             $this->be($this->lastUser);
+        }
+
+        protected function beAdminUserWithGate(): void
+        {
+            $this->withGateAuth();
+
+            $this->lastUser = new AdminUser();
+            $this->lastUser->id = 1;
+
+            $this->be($this->lastUser);
+        }
+
+        protected function beNonAdminUserWithGate(): void
+        {
+            $this->withGateAuth();
+
+            $this->lastUser = new NonAdminUser();
+            $this->lastUser->id = 1;
+
+            $this->be($this->lastUser);
+        }
+
+        protected function withGateAuth()
+        {
+        }
+
+        protected function withLegacyAuth()
+        {
         }
     }
 }

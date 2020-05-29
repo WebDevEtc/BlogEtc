@@ -2,8 +2,12 @@
 
 namespace WebDevEtc\BlogEtc;
 
+use Gate;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use LogicException;
 use Swis\Laravel\Fulltext\ModelObserver;
+use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Models\Post;
 
@@ -18,6 +22,7 @@ class BlogEtcServiceProvider extends ServiceProvider
     {
         if (false == config('blogetc.search.search_enabled')) {
             ModelObserver::disableSyncingFor(Post::class);
+            // Do not remove legacy BlogEtcPost here:
             ModelObserver::disableSyncingFor(BlogEtcPost::class);
         }
 
@@ -36,11 +41,32 @@ class BlogEtcServiceProvider extends ServiceProvider
             ]);
         }
 
+        // Set up default gates to allow/disallow access to features.
+        $this->setupDefaultGates();
+
         $this->publishes([
             __DIR__.'/Views/blogetc'             => base_path('resources/views/vendor/blogetc'),
             __DIR__.'/Config/blogetc.php'        => config_path('blogetc.php'),
             __DIR__.'/css/blogetc_admin_css.css' => public_path('blogetc_admin_css.css'),
         ]);
+    }
+
+    /**
+     * Set up default gates.
+     */
+    protected function setupDefaultGates(): void
+    {
+        if (!Gate::has(GateTypes::MANAGE_ADMIN)) {
+            Gate::define(GateTypes::MANAGE_ADMIN, include(__DIR__.'/Gates/DefaultAdminGate.php'));
+        }
+
+        /*
+         * For people to add comments to your blog posts. By default it will allow anyone - you can add your
+         * own logic here if needed.
+         */
+        if (!Gate::has(GateTypes::ADD_COMMENTS)) {
+            Gate::define(GateTypes::ADD_COMMENTS, include(__DIR__.'/Gates/DefaultAddCommentsGate.php'));
+        }
     }
 
     /**
