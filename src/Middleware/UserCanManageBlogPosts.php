@@ -3,7 +3,6 @@
 namespace WebDevEtc\BlogEtc\Middleware;
 
 use Closure;
-use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Helpers;
 
 /**
