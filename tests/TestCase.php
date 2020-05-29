@@ -17,33 +17,43 @@ namespace App {
     class AdminUser extends Authenticatable
     {
         use Notifiable;
+    }
 
+    class NonAdminUser extends Authenticatable
+    {
+        use Notifiable;
+    }
+
+    class LegacyAdminUser extends AdminUser
+    {
         public function canManageBlogEtcPosts()
         {
             return true;
         }
     }
 
-    class NormalUser extends Authenticatable
+    class LegacyNonAdminUser extends NonAdminUser
     {
-        use Notifiable;
-
         public function canManageBlogEtcPosts()
         {
             return false;
         }
     }
 
+    // TODO - remove the need for this
     if (!class_exists('\App\User')) {
-        class User extends NormalUser
+        class User extends NonAdminUser
         {
         }
     }
 }
 
 namespace WebDevEtc\BlogEtc\Tests {
+
     use App\AdminUser;
-    use App\NormalUser;
+    use App\LegacyAdminUser;
+    use App\LegacyNonAdminUser;
+    use App\NonAdminUser;
     use App\User;
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Foundation\Application;
@@ -60,7 +70,7 @@ namespace WebDevEtc\BlogEtc\Tests {
      */
     abstract class TestCase extends BaseTestCase
     {
-        /** @var User|AdminUser */
+        /** @var User|LegacyAdminUser */
         protected $lastUser;
 
         /**
@@ -195,11 +205,12 @@ namespace WebDevEtc\BlogEtc\Tests {
         }
 
         /**
-         * Be an admin user.
+         * Be an admin user - not using gates.
          */
-        protected function beAdminUser(): self
+        protected function beLegacyAdminUser(): self
         {
-            $this->lastUser = new AdminUser();
+            \Config::set('blogetc.auth_type', 'legacy');
+            $this->lastUser = new LegacyAdminUser();
             $this->lastUser->id = 1;
 
             $this->be($this->lastUser);
@@ -208,14 +219,43 @@ namespace WebDevEtc\BlogEtc\Tests {
         }
 
         /**
-         * Be non admin user.
+         * Be non admin user - not using gates.
          */
-        protected function beNonAdminUser(): void
+        protected function beLegacyNonAdminUser(): void
         {
-            $this->lastUser = new NormalUser();
+            \Config::set('blogetc.auth_type', 'legacy');
+            $this->lastUser = new LegacyNonAdminUser();
             $this->lastUser->id = 1;
 
             $this->be($this->lastUser);
+        }
+
+        protected function beAdminUserWithGate(): void
+        {
+            $this->withGateAuth();
+
+            $this->lastUser = new AdminUser();
+            $this->lastUser->id = 1;
+
+            $this->be($this->lastUser);
+        }
+
+        protected function beNonAdminUserWithGate(): void
+        {
+            $this->withGateAuth();
+
+            $this->lastUser = new NonAdminUser();
+            $this->lastUser->id = 1;
+
+            $this->be($this->lastUser);
+        }
+
+        protected function withGateAuth()
+        {
+        }
+
+        protected function withLegacyAuth()
+        {
         }
     }
 }

@@ -26,7 +26,7 @@ class CommentsControllerTest extends TestCase
     public function testStore(): void
     {
         $post = factory(Post::class)->create();
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $url = route('blogetc.comments.add_new_comment', $post->slug);
 
