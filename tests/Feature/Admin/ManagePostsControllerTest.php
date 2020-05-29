@@ -22,10 +22,8 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testAdminUsersCanAccess(): void
     {
-        $this->beAdminUser();
-
+        $this->beLegacyAdminUser();
         $response = $this->get(route('blogetc.admin.index'));
-
         $response->assertOk();
     }
 
@@ -35,11 +33,10 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testForbiddenToNonAdminUsers(): void
     {
-        $this->beNonAdminUser();
-
+        $this->beLegacyNonAdminUser();
         $response = $this->get(route('blogetc.admin.index'));
-
-        $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $response->assertUnauthorized();
+//        $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
     /**
@@ -60,7 +57,7 @@ class ManagePostsControllerTest extends TestCase
     {
         $post = factory(Post::class)->create();
 
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $response = $this->get(route('blogetc.admin.index'));
 
@@ -74,7 +71,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testCreateForm(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
         $response = $this->get(route('blogetc.admin.create_post'));
         $response->assertOk();
     }
@@ -84,7 +81,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testStore(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $params = [
             'posted_at'         => null,
@@ -107,7 +104,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testStoreWithCategory(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $category = factory(Category::class)->create();
 
@@ -135,7 +132,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testStoreWithInvalidCategory(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
         $invalidCategoryID = 99999;
 
         $params = [
@@ -160,7 +157,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post = factory(Post::class)->create();
 
@@ -174,7 +171,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testEditInvalidPost(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $invalidID = 9999;
 
@@ -188,7 +185,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testDestroy(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post = factory(Post::class)->create();
 
@@ -204,7 +201,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testDestroyInvalidPostID(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $invalidPostID = 999;
         $response = $this->delete(route('blogetc.admin.destroy_post', $invalidPostID));
@@ -217,7 +214,7 @@ class ManagePostsControllerTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post = factory(Post::class)->create();
 
@@ -238,7 +235,7 @@ class ManagePostsControllerTest extends TestCase
     public function testUpdateInvalidPostID(): void
     {
         $invalidPostID = 10000;
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $params = factory(Post::class)->make()->toArray();
 

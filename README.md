@@ -24,15 +24,37 @@
   <a href="https://packagist.org/packages/WebDevEtc/BlogEtc">
     <img src="https://poser.pugx.org/WebDevEtc/BlogEtc/license.png" alt="License">
   </a>
+  
+  <a href="https://scrutinizer-ci.com/g/WebDevEtc/BlogEtc/?branch=master">
+      <img src="https://scrutinizer-ci.com/g/WebDevEtc/BlogEtc/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality" />
+  </a>
+  
+  <a href="https://scrutinizer-ci.com/g/WebDevEtc/BlogEtc/?branch=master">
+      <img src="https://scrutinizer-ci.com/g/WebDevEtc/BlogEtc/badges/coverage.png?b=master" alt="Code Coverage" />
+  </a>
 </p>
 
+# Recent changes (May/June 2020) including recent installation instructions:
 
-# Next version - coming soon
+ - This package no longer uses `\App\User::canManageBlogEtcPosts()` to check if a user can access the admin panel. 
+ - Instead it now uses a Laravel gate. This is currently backwards compatible without any edits. 
+ - For new installations please add the following to `App\Providers\AuthServiceProvider`:
+ 
+ ```php
+    Gate::define(GateTypes::MANAGE_ADMIN, static function (?Model $user) {
+        // Implement your logic here, for example:
+        return $user && $user->email === 'your-admin-user@your-site.com';
+        // Or something like `$user->is_admin === true`
+    });
+```
 
- - A rewrite of a lot of the code will be released soon. The work for this is now on the `blogetc-next-version` branch. Code there is liable to change. 
- - May 2020: I am importing some of the changes from next version (including tests). I am slowly introducing these new features. Tests currently have a few skipped tests just to make migration of test code later a bit easier. All changes will be fully backwards compatible during the next few releases.
+ - The old way (using the `canManageBlogEtcPosts()` method on User.php) will still work but it is not recommended. At some point in the future it will be removed.
+ 
+ (Readme on webdevetc.com will be updated soon)
                                                                                            
-This is [WebDevEtc's](https://webdevetc.com/) BlogEtc package. It has everything you need to quickly and easily add a blog to your laravel app.
+## Blog Package for Laravel                                                                                           
+
+This is [WebDevEtc's](https://webdevetc.com/) [BlogEtc Blog package for Laravel](https://webdevetc.com/blogetc). It has everything you need to quickly and easily add a blog to your laravel app.
 
 ### For installation instructions please read [the Laravel blog install guide here](https://webdevetc.com/laravel/packages/blogetc-blog-system-for-your-laravel-app/help-documentation/laravel-blog-package-blogetc#install_guide)
 

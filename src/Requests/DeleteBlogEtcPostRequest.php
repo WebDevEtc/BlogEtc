@@ -2,7 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-class DeleteBlogEtcPostRequest extends BaseRequest
+class DeleteBlogEtcPostRequest extends BaseAdminRequest
 {
     /**
      * No rules needed for this DELETE request - we just need to implement it due to the interface requirement.

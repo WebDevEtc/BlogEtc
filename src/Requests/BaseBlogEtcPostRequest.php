@@ -2,7 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-abstract class BaseBlogEtcPostRequest extends BaseRequest
+abstract class BaseBlogEtcPostRequest extends BaseAdminRequest
 {
     /**
      * Shared rules for blog posts.

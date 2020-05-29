@@ -66,7 +66,7 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedIn(): void
     {
-        $this->beNonAdminUser();
+        $this->beLegacyNonAdminUser();
 
         $response = $this->get(route('blogetc.feed'));
 
@@ -79,7 +79,7 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedInCanSeeUnpublishedPosts(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post = factory(Post::class)->state('not_published')->create();
 
@@ -93,7 +93,7 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedInCanSeeFuturePosts(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post = factory(Post::class)->state('in_future')->create();
 
@@ -109,7 +109,7 @@ class FeedControllerTest extends TestCase
      */
     public function testLoggedInCacheDoesNotShowToNonLoggedInUsers(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $post = factory(Post::class)->state('not_published')->create();
 

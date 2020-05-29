@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
+use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
@@ -17,11 +18,27 @@ class ManageCategoriesControllerTest extends TestCase
      * These authentication tests are only done on the single index route as they should all be caught by
      * the 'can:blog-etc-admin' middleware on the admin group.
      *
-     * (Via gate)
+     * (Via legacy (non gate))
      */
-    public function testAdminUsersCanAccess(): void
+    public function testLegacyAdminUsersCanAccess(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
+
+        $response = $this->get(route('blogetc.admin.categories.index'));
+
+        $response->assertOk();
+    }
+
+    /**
+     * Test access to admin panel (via gates).
+     */
+    public function testGatedAdminUsersCanAccess(): void
+    {
+        \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
+            return true;
+        });
+
+        $this->beAdminUserWithGate();
 
         $response = $this->get(route('blogetc.admin.categories.index'));
 
@@ -30,11 +47,28 @@ class ManageCategoriesControllerTest extends TestCase
 
     /**
      * Assert that the index admin page is not accessible for guests.
+     * (Via legacy (non gate)).
+     */
+    public function testLegacyForbiddenToNonAdminUsers(): void
+    {
+        $this->beLegacyNonAdminUser();
+
+        $response = $this->get(route('blogetc.admin.categories.index'));
+
+        $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * Assert that the index admin page is not accessible for guests.
      * (Via gate).
      */
-    public function testForbiddenToNonAdminUsers(): void
+    public function testGatedForbiddenToNonAdminUsers(): void
     {
-        $this->beNonAdminUser();
+        \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
+            return false;
+        });
+
+        $this->beAdminUserWithGate();
 
         $response = $this->get(route('blogetc.admin.categories.index'));
 
@@ -59,7 +93,7 @@ class ManageCategoriesControllerTest extends TestCase
     {
         $category = factory(Category::class)->create();
 
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $response = $this->get(route('blogetc.admin.categories.index'));
 
@@ -72,7 +106,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testCreateForm(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
         $response = $this->get(route('blogetc.admin.categories.create_category'));
         $response->assertOk();
     }
@@ -82,7 +116,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testStore(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $params = [
             'category_name'        => $this->faker->sentence,
@@ -102,7 +136,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testEdit(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $category = factory(Category::class)->create();
 
@@ -116,7 +150,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testEditInvalidCategory(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $invalidID = 9999;
 
@@ -130,7 +164,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testDestroy(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $category = factory(Category::class)->create();
 
@@ -146,7 +180,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testDestroyInvalidCategoryID(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $invalidCategoryID = 999;
         $response = $this->delete(route('blogetc.admin.categories.destroy_category', $invalidCategoryID));
@@ -159,7 +193,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $category = factory(Category::class)->create();
 
@@ -180,7 +214,7 @@ class ManageCategoriesControllerTest extends TestCase
     public function testUpdateInvalidCategoryID(): void
     {
         $invalidCategoryID = 10000;
-        $this->beAdminUser();
+        $this->beLegacyAdminUser();
 
         $params = factory(Category::class)->make()->toArray();
 

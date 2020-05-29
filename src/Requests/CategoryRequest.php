@@ -5,7 +5,7 @@ namespace WebDevEtc\BlogEtc\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-class CategoryRequest extends BaseRequest
+class CategoryRequest extends BaseAdminRequest
 {
     /**
      * Get the validation rules that apply to the request.
