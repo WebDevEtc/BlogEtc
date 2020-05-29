@@ -9,7 +9,7 @@ use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
-use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
+use WebDevEtc\BlogEtc\Requests\UploadImageAdminRequest;
 use WebDevEtc\BlogEtc\Services\UploadsService;
 
 /**
@@ -61,7 +61,7 @@ class ManageUploadsController extends Controller
      *
      * @throws Exception
      */
-    public function store(UploadImageRequest $request)
+    public function store(UploadImageAdminRequest $request)
     {
         // Uses some legacy code - this will be refactored and fixed soon!
         $processed_images = $this->uploadsService->legacyProcessUploadedImagesSingle($request);

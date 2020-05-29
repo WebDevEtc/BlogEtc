@@ -4,12 +4,14 @@ namespace WebDevEtc\BlogEtc\Requests;
 
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use WebDevEtc\BlogEtc\Gates\GateTypes;
+use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 
 /**
  * Class BaseRequest.
  */
-abstract class BaseRequest extends FormRequest implements BaseRequestInterface
+abstract class BaseAdminRequest extends FormRequest implements BaseRequestInterface
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,6 +20,6 @@ abstract class BaseRequest extends FormRequest implements BaseRequestInterface
      */
     public function authorize()
     {
-        return Auth::check() && Auth::user()->canManageBlogEtcPosts();
+        return Helpers::hasAccess(GateTypes::MANAGE_ADMIN);
     }
 }

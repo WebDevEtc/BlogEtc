@@ -23,10 +23,10 @@ use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Repositories\UploadedPhotosRepository;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
+use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostAdminRequest;
 //use WebDevEtc\BlogEtc\Requests\PostRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
+use WebDevEtc\BlogEtc\Requests\UploadImageAdminRequest;
 
 /**
  * Class UploadsService.
@@ -104,7 +104,7 @@ class UploadsService
      *
      * @todo - This class was added after the other main features, so this duplicates some code from the main blog post admin controller (BlogEtcAdminController). For next full release this should be tided up.
      */
-    public function legacyProcessUploadedImagesSingle(UploadImageRequest $request)
+    public function legacyProcessUploadedImagesSingle(UploadImageAdminRequest $request)
     {
         $this->increaseMemoryLimit();
         $photo = $request->file('upload');
@@ -609,7 +609,7 @@ class UploadsService
      *
      * @return mixed
      */
-    public function legacyDestroyPost(DeleteBlogEtcPostRequest $request, $blogPostId)
+    public function legacyDestroyPost(DeleteBlogEtcPostAdminRequest $request, $blogPostId)
     {
         $post = Post::findOrFail($blogPostId);
         event(new BlogPostWillBeDeleted($post));

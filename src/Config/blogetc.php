@@ -8,12 +8,14 @@ return [
     // set to false to not include routes.php for BlogEtcReaderController and admin related routes. Default: true. If you disable this, you will have to manually copy over the data from routes.php and add it to your web.php.
     'include_default_routes' => true,
 
-    // used in routes.php. If you want to your http://yoursite.com/latest-news (or anything else), then enter that here. Default: blog
+    // If 'include_default_routes' is true, then the following two options will set the url prefix for the blog & admin:
+    // Location of your blog: http://yoursite.com/blog
     'blog_prefix' => 'blog',
-    // similar to above, but used for the admin panel for the blog. Default: blog_admin
+    // similar to above, but used for the admin panel for the blog. Default: blog_admin (e.g. http://yoursite.com/blog_admin)
     'admin_prefix' => 'blog_admin',
 
-    // set to false to disable the use of being able to make blog posts include a view from resources/views/custom_blog_posts/*.blade.php. Default: false. Set to true to use this feature. Default: false
+    // set to false to disable the use of being able to make blog posts include a view from resources/views/custom_blog_posts/*.blade.php.
+    // Default: false. Set to true to use this feature. Default: false
     'use_custom_view_files' => false,
 
     // how many posts to show per page on the blog index page.
@@ -29,10 +31,7 @@ return [
     // Default: blog_images
     'blog_upload_dir' => 'blog_images',
 
-    // This is used when uploading images :
-    //                              @ini_set('memory_limit', config("blogetc.memory_limit"));
-    //                            See PHP.net for detailso
-    //                            Set to false to not set any value.
+    // Set the memory limit (used only when processing images) via ini_set().
     'memory_limit' => '2048M',
 
     // Should it echo out raw HTML post body (with {!! ... !!})? This is not safe if you do not trust your writers!

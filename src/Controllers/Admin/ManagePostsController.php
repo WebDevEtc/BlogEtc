@@ -12,7 +12,7 @@ use RuntimeException;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Requests\CreateBlogEtcPostRequest;
-use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostRequest;
+use WebDevEtc\BlogEtc\Requests\DeleteBlogEtcPostAdminRequest;
 use WebDevEtc\BlogEtc\Requests\UpdateBlogEtcPostRequest;
 use WebDevEtc\BlogEtc\Services\UploadsService;
 
@@ -147,7 +147,7 @@ class ManagePostsController extends Controller
      *
      * @return mixed
      */
-    public function destroy(DeleteBlogEtcPostRequest $request, $blogPostId)
+    public function destroy(DeleteBlogEtcPostAdminRequest $request, $blogPostId)
     {
         $deletedPost = $this->uploadsService->legacyDestroyPost($request, $blogPostId);
 
@@ -158,7 +158,7 @@ class ManagePostsController extends Controller
     /**
      * @deprecated - use destroy() instead
      */
-    public function destroy_post(DeleteBlogEtcPostRequest $request, $blogPostId)
+    public function destroy_post(DeleteBlogEtcPostAdminRequest $request, $blogPostId)
     {
         return $this->destroy($request, $blogPostId);
     }

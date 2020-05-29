@@ -2,7 +2,7 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-class UploadImageRequest extends BaseRequest
+class UploadImageAdminRequest extends BaseAdminRequest
 {
     public function rules(): array
     {

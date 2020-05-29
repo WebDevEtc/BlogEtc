@@ -7,7 +7,7 @@ use WebDevEtc\BlogEtc\Interfaces\LegacyGetImageFileInterface;
 use WebDevEtc\BlogEtc\Requests\Traits\HasCategoriesTrait;
 use WebDevEtc\BlogEtc\Requests\Traits\HasImageUploadTrait;
 
-class UpdateBlogEtcPostRequest extends BaseBlogEtcPostRequest implements LegacyGetImageFileInterface
+class UpdateBlogEtcPostRequest extends BaseBlogEtcPostAdminRequest implements LegacyGetImageFileInterface
 {
     use HasCategoriesTrait;
     use HasImageUploadTrait;

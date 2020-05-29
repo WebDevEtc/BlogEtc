@@ -2,6 +2,8 @@
 
 namespace WebDevEtc\BlogEtc;
 
+use Auth;
+use Gate;
 use Session;
 
 /**
@@ -13,6 +15,11 @@ class Helpers
      * What key to use for the session::flash / pull / has.
      */
     const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
+
+    public static function hasAccess(string $action, $payload = null): bool
+    {
+            return Gate::allows($action, $payload);
+    }
 
     /**
      * @deprecated use pullFlashedMessage() instead

@@ -8,7 +8,7 @@ use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
-use WebDevEtc\BlogEtc\Requests\CategoryRequest;
+use WebDevEtc\BlogEtc\Requests\CategoryAdminRequest;
 use WebDevEtc\BlogEtc\Services\CategoriesService;
 
 /**
@@ -48,7 +48,7 @@ class ManageCategoriesController extends Controller
     /**
      * @deprecated - use store()
      */
-    public function store_category(CategoryRequest $request)
+    public function store_category(CategoryAdminRequest $request)
     {
         return $this->store($request);
     }
@@ -56,7 +56,7 @@ class ManageCategoriesController extends Controller
     /**
      * Store a new category.
      */
-    public function store(CategoryRequest $request)
+    public function store(CategoryAdminRequest $request)
     {
         $this->service->create($request->validated());
 
@@ -107,7 +107,7 @@ class ManageCategoriesController extends Controller
     /**
      * @deprecated - use update()
      */
-    public function update_category(CategoryRequest $request, $categoryId)
+    public function update_category(CategoryAdminRequest $request, $categoryId)
     {
         return $this->update($request, $categoryId);
     }
@@ -117,7 +117,7 @@ class ManageCategoriesController extends Controller
      *
      * @return RedirectResponse|Redirector
      */
-    public function update(CategoryRequest $request, $categoryID)
+    public function update(CategoryAdminRequest $request, $categoryID)
     {
         $category = $this->service->update($categoryID, $request->validated());
 
@@ -129,7 +129,7 @@ class ManageCategoriesController extends Controller
     /**
      * @deprecated - use destroy()
      */
-    public function destroy_category(CategoryRequest $request, $categoryId)
+    public function destroy_category(CategoryAdminRequest $request, $categoryId)
     {
         return $this->destroy($request, $categoryId);
     }
@@ -137,7 +137,7 @@ class ManageCategoriesController extends Controller
     /**
      * Delete the category.
      */
-    public function destroy(CategoryRequest $request, $categoryID)
+    public function destroy(CategoryAdminRequest $request, $categoryID)
     {
         $this->service->delete($categoryID);
 

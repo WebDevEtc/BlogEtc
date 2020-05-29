@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use WebDevEtc\BlogEtc\Gates\GateTypes;
+use WebDevEtc\BlogEtc\Helpers;
 
 class BlogEtcPublishedScope implements Scope
 {
@@ -18,7 +20,7 @@ class BlogEtcPublishedScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (Auth::check() && Auth::user()->canManageBlogEtcPosts()) {
+        if (Helpers::hasAccess(GateTypes::MANAGE_ADMIN)) {
             return;
         }
 
