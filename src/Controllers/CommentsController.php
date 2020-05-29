@@ -4,11 +4,10 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Auth;
-use Exception;
-use Illuminate\Contracts\View\Factory;
+use Gate;
 use Illuminate\Http\Response;
-use Illuminate\View\View;
 use RuntimeException;
+use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;
 use WebDevEtc\BlogEtc\Services\CaptchaService;
 use WebDevEtc\BlogEtc\Services\CommentsService;
@@ -49,17 +48,15 @@ class CommentsController extends Controller
 
     /**
      * Let a guest (or logged in user) submit a new comment for a blog post.
-     *
-     * @param $blog_post_slug
-     *
-     *@throws Exception
-     *
-     * @return Factory|View
      */
     public function store(AddNewCommentRequest $request, $slug)
     {
         if (CommentsService::COMMENT_TYPE_BUILT_IN !== config('blogetc.comments.type_of_comments_to_show')) {
             throw new RuntimeException('Built in comments are disabled');
+        }
+
+        if (Gate::denies(GateTypes::ADD_COMMENTS)) {
+            abort(Response::HTTP_FORBIDDEN, 'Unable to add comments');
         }
 
         $blogPost = $this->postsService->repository()->findBySlug($slug);

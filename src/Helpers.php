@@ -2,7 +2,9 @@
 
 namespace WebDevEtc\BlogEtc;
 
+use Gate;
 use Session;
+use WebDevEtc\BlogEtc\Gates\GateTypes;
 
 /**
  * Small little helper class of static methods.
@@ -13,6 +15,14 @@ class Helpers
      * What key to use for the session::flash / pull / has.
      */
     const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
+
+    public static function hasAdminGateAccess() :bool {
+        return Gate::allows(GateTypes::MANAGE_ADMIN);
+    }
+
+    public static function hasCommentGateAccess() :bool {
+        return Gate::allows(GateTypes::ADD_COMMENTS);
+    }
 
     /**
      * @deprecated use pullFlashedMessage() instead
