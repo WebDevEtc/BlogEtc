@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc;
 
-use Auth;
 use Gate;
 use Session;
 
@@ -18,7 +17,7 @@ class Helpers
 
     public static function hasAccess(string $action, $payload = null): bool
     {
-            return Gate::allows($action, $payload);
+        return Gate::allows($action, $payload);
     }
 
     /**

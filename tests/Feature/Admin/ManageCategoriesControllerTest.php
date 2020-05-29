@@ -30,7 +30,7 @@ class ManageCategoriesControllerTest extends TestCase
     }
 
     /**
-     * Test access to admin panel (via gates)
+     * Test access to admin panel (via gates).
      */
     public function testGatedAdminUsersCanAccess(): void
     {

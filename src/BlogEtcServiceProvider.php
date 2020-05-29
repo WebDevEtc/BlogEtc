@@ -56,10 +56,10 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     protected function setupDefaultGates(): void
     {
-        if (! Gate::has(GateTypes::MANAGE_ADMIN)) {
+        if (!Gate::has(GateTypes::MANAGE_ADMIN)) {
             Gate::define(GateTypes::MANAGE_ADMIN, static function (?Model $user) {
                 // Do not copy the internals for this gate, as it provides backwards compatibility.
-                if(!$user) {
+                if (!$user) {
                     return false;
                 }
 
@@ -71,8 +71,7 @@ class BlogEtcServiceProvider extends ServiceProvider
                 }
 
                 throw new LogicException('You must implement your own gate in AuthServiceProvider for the \WebDevEtc\BlogEtc\Gates\GateTypes::MANAGE_ADMIN gate.');
-
-// Add something like the following to AuthServiceProvider:
+                // Add something like the following to AuthServiceProvider:
 
 //                Gate::define(GateTypes::MANAGE_ADMIN, static function (?Model $user) {
 //                    Implement your logic to allow or disallow admin access for $user
@@ -80,7 +79,6 @@ class BlogEtcServiceProvider extends ServiceProvider
 //                    or:
 //                    return $model->email === 'your-email@your-site.com';
 //                });
-
             });
         }
 
@@ -88,7 +86,7 @@ class BlogEtcServiceProvider extends ServiceProvider
          * For people to add comments to your blog posts. By default it will allow anyone - you can add your
          * own logic here if needed.
          */
-        if (! Gate::has(GateTypes::ADD_COMMENTS)) {
+        if (!Gate::has(GateTypes::ADD_COMMENTS)) {
             Gate::define(GateTypes::ADD_COMMENTS, static function (?Model $user) {
                 return true;
             });

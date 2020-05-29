@@ -71,7 +71,6 @@ class PostsControllerTest extends TestCase
         $response->assertNotFound();
     }
 
-
     /**
      * A post with is_published = false should not be shown.
      */
@@ -82,7 +81,6 @@ class PostsControllerTest extends TestCase
             return false;
         });
         $this->beNonAdminUserWithGate();
-
 
         $post = factory(Post::class)->state('not_published')->create();
 

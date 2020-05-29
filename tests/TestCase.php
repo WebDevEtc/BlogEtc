@@ -14,7 +14,6 @@ namespace App {
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Illuminate\Notifications\Notifiable;
 
-
     class AdminUser extends Authenticatable
     {
         use Notifiable;
@@ -65,7 +64,6 @@ namespace WebDevEtc\BlogEtc\Tests {
     use Route;
     use View;
     use WebDevEtc\BlogEtc\BlogEtcServiceProvider;
-    use WebDevEtc\BlogEtc\Consts;
 
     /**
      * Class TestCase.
@@ -221,7 +219,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         }
 
         /**
-         * Be non admin user - not using gates
+         * Be non admin user - not using gates.
          */
         protected function beLegacyNonAdminUser(): void
         {
@@ -232,7 +230,8 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->be($this->lastUser);
         }
 
-        protected function beAdminUserWithGate():void{
+        protected function beAdminUserWithGate(): void
+        {
             $this->withGateAuth();
 
             $this->lastUser = new AdminUser();
@@ -241,7 +240,8 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->be($this->lastUser);
         }
 
-        protected function beNonAdminUserWithGate(): void {
+        protected function beNonAdminUserWithGate(): void
+        {
             $this->withGateAuth();
 
             $this->lastUser = new NonAdminUser();
@@ -250,10 +250,12 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->be($this->lastUser);
         }
 
-        protected function withGateAuth() {
+        protected function withGateAuth()
+        {
         }
 
-        protected function withLegacyAuth() {
+        protected function withLegacyAuth()
+        {
         }
     }
 }

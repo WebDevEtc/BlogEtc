@@ -4,11 +4,8 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Auth;
-use Exception;
 use Gate;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
-use Illuminate\View\View;
 use RuntimeException;
 use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Requests\AddNewCommentRequest;

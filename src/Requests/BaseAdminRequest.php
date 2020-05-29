@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Helpers;
