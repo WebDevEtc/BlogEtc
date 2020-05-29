@@ -3,7 +3,6 @@
 namespace WebDevEtc\BlogEtc\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
 
