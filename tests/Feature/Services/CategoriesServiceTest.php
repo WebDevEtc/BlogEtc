@@ -4,10 +4,8 @@ namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Config;
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Captcha\Basic;
 use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
 use WebDevEtc\BlogEtc\Models\Category;
-use WebDevEtc\BlogEtc\Services\CaptchaService;
 use WebDevEtc\BlogEtc\Services\CategoriesService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
@@ -29,7 +27,8 @@ class CategoriesServiceTest extends TestCase
         Category::truncate();
     }
 
-    public function testIndexPaginated():void{
+    public function testIndexPaginated(): void
+    {
 
         factory(Category::class, 25)->create();
         $result = $this->categoriesService->indexPaginated(10);
@@ -38,20 +37,23 @@ class CategoriesServiceTest extends TestCase
         $this->assertSame(3, $result->lastPage());
     }
 
-    public function testFindBySlug():void{
-        $category=factory(Category::class)->create();
+    public function testFindBySlug(): void
+    {
+        $category = factory(Category::class)->create();
 
         $result = $this->categoriesService->findBySlug($category->slug);
 
         $this->assertTrue($category->is($result));
     }
 
-    public function testFindBySlugNotFound():void{
+    public function testFindBySlugNotFound(): void
+    {
         $this->expectException(CategoryNotFoundException::class);
         $this->categoriesService->findBySlug('not-found');
     }
 
-    public function testCreate():void{
+    public function testCreate(): void
+    {
         $attributes = factory(Category::class)->make()->toArray();
 
         $result = $this->categoriesService->create($attributes);
@@ -61,7 +63,8 @@ class CategoriesServiceTest extends TestCase
         $this->assertDatabaseHas('blog_etc_categories', $attributes);
     }
 
-    public function testUpdate():void{
+    public function testUpdate(): void
+    {
         $category = factory(Category::class)->create();
 
         $updatedCategory = $this->categoriesService->update($category->id, ['category_name' => 'updated']);
@@ -71,13 +74,15 @@ class CategoriesServiceTest extends TestCase
         $this->assertDatabaseHas('blog_etc_categories', ['id' => $category->id, 'category_name' => 'updated']);
     }
 
-    public function testUpdateNotFound():void{
+    public function testUpdateNotFound(): void
+    {
         $this->expectException(CategoryNotFoundException::class);
 
         $this->categoriesService->update(0, ['category_name' => 'updated']);
     }
 
-    public function testFind():void{
+    public function testFind(): void
+    {
         $category = factory(Category::class)->create();
 
         $result = $this->categoriesService->find($category->id);
@@ -85,20 +90,23 @@ class CategoriesServiceTest extends TestCase
         $this->assertTrue($category->is($result));
     }
 
-    public function testFindNotFound():void{
+    public function testFindNotFound(): void
+    {
         $this->expectException(CategoryNotFoundException::class);
         $this->categoriesService->find(0);
     }
 
-    public function testDelete():void{
+    public function testDelete(): void
+    {
         $category = factory(Category::class)->create();
 
-        $result = $this->categoriesService->delete($category->id);
+        $this->categoriesService->delete($category->id);
 
         $this->assertDatabaseMissing('blog_etc_categories', ['id' => $category->id]);
     }
 
-    public function testDeleteNotFound():void{
+    public function testDeleteNotFound(): void
+    {
         $this->expectException(CategoryNotFoundException::class);
 
         $this->categoriesService->delete(0);
