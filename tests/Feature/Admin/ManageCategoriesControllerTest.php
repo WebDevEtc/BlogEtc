@@ -4,6 +4,7 @@ namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
+use WebDevEtc\BlogEtc\Exceptions\BlogEtcAuthGateNotImplementedException;
 use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Tests\TestCase;
@@ -34,10 +35,6 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testGatedAdminUsersCanAccess(): void
     {
-        \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
-            return true;
-        });
-
         $this->beAdminUserWithGate();
 
         $response = $this->get(route('blogetc.admin.categories.index'));
@@ -49,7 +46,7 @@ class ManageCategoriesControllerTest extends TestCase
      * Assert that the index admin page is not accessible for guests.
      * (Via legacy (non gate)).
      */
-    public function testLegacyForbiddenToNonAdminUsers(): void
+    public function testLegacyForbiddenToNonAdminUsersDefaultGate(): void
     {
         $this->beLegacyNonAdminUser();
 
@@ -64,11 +61,7 @@ class ManageCategoriesControllerTest extends TestCase
      */
     public function testGatedForbiddenToNonAdminUsers(): void
     {
-        \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
-            return false;
-        });
-
-        $this->beAdminUserWithGate();
+        $this->beNonAdminUserWithGate();
 
         $response = $this->get(route('blogetc.admin.categories.index'));
 

@@ -6,7 +6,10 @@
         <div>
             <h6 class="my-0"><a href="{{ route('blogetc.admin.index') }}">BlogEtc Admin Home</a>
                 <span class="text-muted">(<?php
-                    use WebDevEtc\BlogEtc\Models\BlogEtcPost;use WebDevEtc\BlogEtc\Models\Category;use WebDevEtc\BlogEtc\Models\Comment;$categoryCount = BlogEtcPost::count();
+                    use WebDevEtc\BlogEtc\Models\Category;
+                    use WebDevEtc\BlogEtc\Models\Comment;
+
+                    $categoryCount = \WebDevEtc\BlogEtc\Models\Post::count();
 
                     echo $categoryCount . ' ' . str_plural('Post', $categoryCount);
 

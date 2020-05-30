@@ -18,9 +18,9 @@ class ManagePostsControllerTest extends TestCase
      * These authentication tests are only done on the single index route as they should all be caught by
      * the 'can:blog-etc-admin' middleware on the admin group.
      *
-     * (Via gate)
+     * (Via old legacy checks).
      */
-    public function testAdminUsersCanAccess(): void
+    public function testLegacyAdminUsersCanAccess(): void
     {
         $this->beLegacyAdminUser();
         $response = $this->get(route('blogetc.admin.index'));
@@ -29,11 +29,39 @@ class ManagePostsControllerTest extends TestCase
 
     /**
      * Assert that the index admin page is not accessible for guests.
-     * (Via gate).
+     * (Via old legacy checks).
      */
-    public function testForbiddenToNonAdminUsers(): void
+    public function testForbiddenToLegacyNonAdminUsers(): void
     {
         $this->beLegacyNonAdminUser();
+        $response = $this->get(route('blogetc.admin.index'));
+        $response->assertUnauthorized();
+//        $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
+    }
+
+    /**
+     * Test that users passing the admin gate can access the admin index.
+     *
+     * These authentication tests are only done on the single index route as they should all be caught by
+     * the 'can:blog-etc-admin' middleware on the admin group.
+     *
+     * (Via gate)
+     */
+    public function testGatedAdminUsersCanAccess(): void
+    {
+        $this->withoutExceptionHandling();
+        $this->beAdminUserWithGate();
+        $response = $this->get(route('blogetc.admin.index'));
+        $response->assertOk();
+    }
+
+    /**
+     * Assert that the index admin page is not accessible for guests.
+     * (Via gate).
+     */
+    public function testForbiddenToGatedNonAdminUsers(): void
+    {
+        $this->beNonAdminUserWithGate();
         $response = $this->get(route('blogetc.admin.index'));
         $response->assertUnauthorized();
 //        $this->assertSame(RedirectResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());

@@ -137,7 +137,7 @@ class ManageCategoriesController extends Controller
     /**
      * Delete the category.
      */
-    public function destroy(CategoryRequest $request, $categoryID)
+    public function destroy(/** @scrutinizer ignore-unused */ CategoryRequest $request, $categoryID)
     {
         $this->service->delete($categoryID);
 

@@ -27,6 +27,11 @@ class CommentsController extends Controller
 
     /**
      * BlogEtcCommentWriterController constructor.
+     *
+     * Note: The comment itself and the form are not in this controller but are sent as part of the
+     * main PostsController::show() response.
+     *
+     * This class deals only with the storing of new comments.
      */
     public function __construct(
         PostsService $postsService,
@@ -71,7 +76,7 @@ class CommentsController extends Controller
             $blogPost,
             $request->validated(),
             $request->ip(),
-            Auth::id()
+            (int) Auth::id()
         );
 
         return response()->view('blogetc::saved_comment', [

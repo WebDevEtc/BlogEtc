@@ -243,30 +243,26 @@ namespace WebDevEtc\BlogEtc\Tests {
 
         protected function beAdminUserWithGate(): void
         {
-            $this->withGateAuth();
-
             $this->lastUser = new AdminUser();
             $this->lastUser->id = 1;
 
             $this->be($this->lastUser);
+            $this->setAdminGate();
         }
 
         protected function beNonAdminUserWithGate(): void
         {
-            $this->withGateAuth();
-
             $this->lastUser = new NonAdminUser();
             $this->lastUser->id = 1;
 
             $this->be($this->lastUser);
+            $this->setAdminGate();
         }
 
-        protected function withGateAuth()
-        {
-        }
-
-        protected function withLegacyAuth()
-        {
+        protected function setAdminGate() {
+            \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
+                return get_class($user) === AdminUser::class;
+            });
         }
     }
 }

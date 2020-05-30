@@ -134,7 +134,7 @@ class PostsRepository
      */
     public function updateImageSizes(Post $post, ?array $uploadedImages): Post
     {
-        if ($uploadedImages && count($uploadedImages)) {
+        if (!empty($uploadedImages)) {
             // does not use update() here as it would require fillable for each field - and in theory someone
             // might want to add more image sizes.
             foreach ($uploadedImages as $size => $imageName) {

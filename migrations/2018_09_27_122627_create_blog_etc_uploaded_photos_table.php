@@ -23,6 +23,7 @@ class CreateBlogEtcUploadedPhotosTable extends Migration
 
             $table->timestamps();
         });
+
         Schema::table('blog_etc_posts', static function (Blueprint $table) {
             $table->string('seo_title')->nullable();
         });

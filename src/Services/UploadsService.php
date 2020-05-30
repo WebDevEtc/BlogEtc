@@ -178,8 +178,8 @@ class UploadsService
 
     /**
      * @param BlogEtcPost $new_blog_post
-     * @param $suggested_title - used to help generate the filename
-     * @param $image_size_details - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
+     * @param $suggested_title string - used to help generate the filename
+     * @param $image_size_details mixed - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
      * @param $photo
      *
      * @throws Exception
@@ -609,7 +609,7 @@ class UploadsService
      *
      * @return mixed
      */
-    public function legacyDestroyPost(DeleteBlogEtcPostRequest $request, $blogPostId)
+    public function legacyDestroyPost(/** @scrutinizer ignore-unused */ DeleteBlogEtcPostRequest $request, $blogPostId)
     {
         $post = Post::findOrFail($blogPostId);
         event(new BlogPostWillBeDeleted($post));

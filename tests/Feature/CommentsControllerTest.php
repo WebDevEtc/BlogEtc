@@ -25,6 +25,7 @@ class CommentsControllerTest extends TestCase
      */
     public function testStore(): void
     {
+        $this->withoutExceptionHandling();
         $post = factory(Post::class)->create();
         $this->beLegacyAdminUser();
 

@@ -3,6 +3,7 @@
 //config for webdevetc/blogetc
 
 use WebDevEtc\BlogEtc\Captcha\Basic;
+use WebDevEtc\BlogEtc\Services\CommentsService;
 
 return [
     // set to false to not include routes.php for BlogEtcReaderController and admin related routes. Default: true. If you disable this, you will have to manually copy over the data from routes.php and add it to your web.php.
@@ -156,7 +157,7 @@ return [
         //      'custom' (will load blogetc::partials.custom_comments, which you can copy to your vendor view dir to customise
         //      'disabled' (turn comments off)
         // default: built_in
-        'type_of_comments_to_show' => 'built_in',
+        'type_of_comments_to_show' =>CommentsService::COMMENT_TYPE_BUILT_IN,
 
         // max num of comments to show on a single blog post. Set to a lower number for smaller page sizes. No comment pagination is built in yet.
         'max_num_of_comments_to_show' => 1000,
