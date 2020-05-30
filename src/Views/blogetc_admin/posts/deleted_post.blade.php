@@ -1,7 +1,12 @@
 @extends("blogetc_admin::layouts.admin_layout")
 @section("content")
-    <div class='alert alert-success'><b>Deleted that post</b>
-        <br/><a href='{{ route('blogetc.admin.index') }}' class='btn btn-primary '>Back to posts overview</a></div>
+    <div class="alert alert-success">
+        <b>Deleted that post</b>
+        <br/>
+        <a href="{{ route('blogetc.admin.index') }}" class="btn btn-primary">
+            Back to posts overview
+        </a>
+    </div>
 
     <?php
     $images_to_delete = [];
@@ -15,7 +20,7 @@
     @if(count($images_to_delete))
         <p>However, the following images were <strong>not</strong> deleted:</p>
 
-        <table class='table'>
+        <table class="table">
             <thead>
             <tr>
                 <th>Image/link</th>
@@ -26,23 +31,21 @@
             <tbody>
             @foreach($images_to_delete as $image_size)
                 <tr>
-                    <td class='text-center'><a
-                                href='{{asset(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}'
-                                target='_blank' class='btn btn-primary m-1'>view</a>
+                    <td class="text-center">
+                        <a href="{{asset(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}"
+                           target="_blank" class="btn btn-primary m-1">
+                            view
+                        </a>
 
-                        <img src='{{asset(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}'
-                             width=100>
+                        <img alt="Uploaded image" src="{{asset(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}"
+                             width="100" />
 
                     </td>
                     <td><code>{{$deletedPost->$image_size}}</code>
                         {{--check filesize returns something, so we don't divide by 0--}}
                         @if(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)))
-
-                            ({{ (round(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)) / 1000 ,1)). " kb"}}
-                            )
-
+                            ({{ (round(filesize(public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size)) / 1000 ,1)). " kb"}})
                         @endif
-
                     </td>
                     <td><code>
                             <small>{{ public_path(config("blogetc.blog_upload_dir","blog_images")."/".$deletedPost->$image_size) }}</small>

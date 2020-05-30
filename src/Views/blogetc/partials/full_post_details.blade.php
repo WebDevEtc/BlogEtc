@@ -7,11 +7,10 @@
     </a>
 @endcan
 
-<h2 class='blog_title'>{{$post->title}}</h2>
-<h5 class='blog_subtitle'>{{$post->subtitle}}</h5>
+<h2 class="blog_title">{{$post->title}}</h2>
+<h5 class="blog_subtitle">{{$post->subtitle}}</h5>
 
-
-<?=$post->imageTag('medium', false, 'd-block mx-auto'); ?>
+{!! $post->imageTag('medium', false, 'd-block mx-auto') !!}
 
 <p class="blog_body_content">
     {!! $post->renderBody() !!}

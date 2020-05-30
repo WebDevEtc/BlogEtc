@@ -11,7 +11,7 @@ class Helpers
     /**
      * What key to use for the session::flash / pull / has.
      */
-    const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
+    public const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
 
     public static function hasAdminGateAccess(): bool
     {

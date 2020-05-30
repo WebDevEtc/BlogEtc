@@ -45,7 +45,7 @@ class PostsController extends Controller
      */
     public function search(SearchRequest $request): \Illuminate\Contracts\View\View
     {
-        $searchResults = collect((new Search())->run($request->searchQuery()))->filter(function ($result) {
+        $searchResults = collect((new Search())->run($request->searchQuery()))->filter(static function ($result) {
             return $result->indexable && is_a($result->indexable, Post::class) && $result->indexable->isPublic();
         });
 

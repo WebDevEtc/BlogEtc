@@ -24,14 +24,14 @@ abstract class BaseBlogEtcPostRequest extends BaseAdminRequest
 //            }
 //        };
 
-        $show_error_if_has_value = function ($attribute, $value, $fail) {
+        $show_error_if_has_value = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value...
                 return $fail($attribute.' must be empty');
             }
         };
 
-        $disabled_use_view_file = function ($attribute, $value, $fail) {
+        $disabled_use_view_file = static function ($attribute, $value, $fail) {
             if ($value) {
                 // return $fail if this had a value
                 return $fail('The use of custom view files is not enabled for this site, so you cannot submit a value for it');

@@ -21,8 +21,7 @@
     @break
 
     @default
-    <div class='alert alert-danger'>Invalid comment <code>type_of_comments_to_show</code> config option</div>";
+    <div class="alert alert-danger">
+        Invalid comment <code>type_of_comments_to_show</code> config option
+    </div>
 @endswitch
-
-
-

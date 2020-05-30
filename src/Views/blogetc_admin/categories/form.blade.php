@@ -30,7 +30,7 @@
            oninput="populate_slug_field();"
            required
            aria-describedby="category_category_name_help"
-           name='category_name'
+           name="category_name"
            value="{{old("category_name",$category->category_name)}}"
     >
     <small id="category_category_name_help" class="form-text text-muted">The name of the category</small>
@@ -40,7 +40,7 @@
 <div class="form-group">
     <label for="category_slug">Category slug</label>
     <input
-            maxlength='100'
+            maxlength="100"
             pattern="[a-zA-Z0-9-]+"
             type="text"
             required
@@ -48,21 +48,21 @@
             id="category_slug"
             oninput="SHOULD_AUTO_GEN_SLUG=false;"
             aria-describedby="category_slug_help"
-            name='slug'
+            name="slug"
             value="{{old("slug",$category->slug)}}"
     >
 
     <small id="category_slug_help" class="form-text text-muted">
-        Letters, numbers, dash only. The slug i.e. {{route("blogetc.view_category","")}}/<u><em>this_part</em></u>.
+        Letters, numbers, dash only. The slug i.e. {{ route("blogetc.view_category", "") }}/<u><em>this_part</em></u>.
         This must be unique (two categories can't share the same slug).
     </small>
 </div>
 
 <div class="form-group">
     <label for="category_description">Category Description (optional)</label>
-    <textarea name='category_description'
-              class='form-control'
-              id='category_description'>{{old("category_description",$category->category_description)}}</textarea>
+    <textarea name="category_description"
+              class="form-control"
+              id="category_description">{{old("category_description",$category->category_description)}}</textarea>
 </div>
 
 <script>

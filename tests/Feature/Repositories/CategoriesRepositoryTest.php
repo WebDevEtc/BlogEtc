@@ -12,7 +12,7 @@ class CategoriesRepositoryTest extends TestCase
 {
     use WithFaker;
 
-    /** @var \WebDevEtc\BlogEtc\Repositories\CategoriesRepository */
+    /** @var CategoriesRepository */
     private $categoriesRepository;
 
     /**

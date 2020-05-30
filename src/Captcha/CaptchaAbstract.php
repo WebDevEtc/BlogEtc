@@ -13,8 +13,6 @@ abstract class CaptchaAbstract implements CaptchaInterface
 {
     /**
      * executed when viewing single post.
-     *
-     * @return mixed|void
      */
     public function runCaptchaBeforeShowingPosts(/** @scrutinizer ignore-unused */ Request $request, /** @scrutinizer ignore-unused */ Post $blogEtcPost)
     {
@@ -33,8 +31,6 @@ abstract class CaptchaAbstract implements CaptchaInterface
 
     /**
      * executed when posting new comment.
-     *
-     * @return void|mixed
      */
     public function runCaptchaBeforeAddingComment(Request $request, Post $blogEtcPost)
     {
