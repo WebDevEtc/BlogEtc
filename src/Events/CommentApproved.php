@@ -19,9 +19,6 @@ class CommentApproved
     /** @var Comment */
     public $comment;
 
-    /**
-     * CommentApproved constructor.
-     */
     public function __construct(Comment $comment)
     {
         $this->comment = $comment;

@@ -17,9 +17,6 @@ class BlogPostAdded
     /** @var Post */
     public $blogEtcPost;
 
-    /**
-     * BlogPostAdded constructor.
-     */
     public function __construct(Post $post)
     {
         $this->blogEtcPost = $post;
