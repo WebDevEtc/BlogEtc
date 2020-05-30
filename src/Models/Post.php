@@ -174,7 +174,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @deprecated - use imageTag() instead
      */
-    public function image_tag(    $size = 'medium',
+    public function image_tag($size = 'medium',
         $addAHref = true,
         $imgTagClass = null,
         $anchorTagClass = null)
@@ -377,7 +377,7 @@ class Post extends Model implements SearchResultInterface
     public function renderBody()
     {
         if (config('blogetc.use_custom_view_files') && $this->use_view_file) {
-            $return =(string) view('blogetc::partials.use_view_file', ['post' => $this])->render();
+            $return = (string) view('blogetc::partials.use_view_file', ['post' => $this])->render();
         } else {
             $return = $this->post_body;
         }

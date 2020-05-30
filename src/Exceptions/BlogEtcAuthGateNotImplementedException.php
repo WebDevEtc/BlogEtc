@@ -7,7 +7,7 @@ use Throwable;
 
 class BlogEtcAuthGateNotImplementedException extends ModelNotFoundException
 {
-    public function __construct($_ = "", $code = 0, Throwable $previous = null)
+    public function __construct($_ = '', $code = 0, Throwable $previous = null)
     {
         parent::__construct('You must implement your own gate in AuthServiceProvider for the \WebDevEtc\BlogEtc\Gates\GateTypes::MANAGE_ADMIN gate.', $code, $previous);
 

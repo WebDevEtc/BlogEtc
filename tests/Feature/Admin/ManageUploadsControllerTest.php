@@ -3,10 +3,6 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\RedirectResponse;
-use WebDevEtc\BlogEtc\Models\Category;
-use WebDevEtc\BlogEtc\Models\Comment;
-use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 class ManageUploadsControllerTest extends TestCase
@@ -45,7 +41,6 @@ class ManageUploadsControllerTest extends TestCase
         $response = $this->get(route('blogetc.admin.images.all'));
         $response->assertUnauthorized();
     }
-
 
     public function testLegacyAdminUserCanViewIndex(): void
     {
