@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use DB;
 use Illuminate\Foundation\Testing\WithFaker;
 use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
 use WebDevEtc\BlogEtc\Models\Category;
@@ -13,7 +12,7 @@ class CategoriesRepositoryTest extends TestCase
 {
     use WithFaker;
 
-    /** @var \WebDevEtc\BlogEtc\Repositories\CategoriesRepository $categoriesRepository */
+    /** @var \WebDevEtc\BlogEtc\Repositories\CategoriesRepository */
     private $categoriesRepository;
 
     /**
@@ -39,25 +38,29 @@ class CategoriesRepositoryTest extends TestCase
         $this->assertSame(2, $response->lastPage());
     }
 
-    public function testFind() {
+    public function testFind()
+    {
         $category = factory(Category::class)->create();
         $response = $this->categoriesRepository->find($category->id);
         $this->assertTrue($category->is($response));
     }
 
-    public function testFindNonExisting() {
+    public function testFindNonExisting()
+    {
         $this->expectException(CategoryNotFoundException::class);
 
         $this->categoriesRepository->find(0);
     }
 
-    public function testFindBySlug() {
+    public function testFindBySlug()
+    {
         $category = factory(Category::class)->create();
         $response = $this->categoriesRepository->findBySlug($category->slug);
         $this->assertTrue($category->is($response));
     }
 
-    public function testFindBySlugNonExisting() {
+    public function testFindBySlugNonExisting()
+    {
         $this->expectException(CategoryNotFoundException::class);
 
         $this->categoriesRepository->findBySlug('non-existing');
