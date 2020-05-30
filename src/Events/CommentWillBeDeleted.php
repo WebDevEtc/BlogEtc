@@ -19,9 +19,6 @@ class CommentWillBeDeleted
     /** @var Comment */
     public $comment;
 
-    /**
-     * CommentWillBeDeleted constructor.
-     */
     public function __construct(Comment $comment)
     {
         $this->comment = $comment;

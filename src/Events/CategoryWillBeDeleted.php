@@ -17,9 +17,6 @@ class CategoryWillBeDeleted
     /** @var Category */
     public $blogEtcCategory;
 
-    /**
-     * CategoryWillBeDeleted constructor.
-     */
     public function __construct(Category $category)
     {
         $this->blogEtcCategory = $category;

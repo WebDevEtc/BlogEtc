@@ -17,9 +17,6 @@ class CategoryEdited
     /** @var Category */
     public $blogEtcCategory;
 
-    /**
-     * CategoryEdited constructor.
-     */
     public function __construct(Category $category)
     {
         $this->blogEtcCategory = $category;

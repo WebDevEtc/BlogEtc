@@ -17,9 +17,6 @@ class BlogPostWillBeDeleted
     /** @var Post */
     public $blogEtcPost;
 
-    /**
-     * BlogPostWillBeDeleted constructor.
-     */
     public function __construct(Post $post)
     {
         $this->blogEtcPost = $post;

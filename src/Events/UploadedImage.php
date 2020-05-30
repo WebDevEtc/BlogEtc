@@ -18,11 +18,7 @@ class UploadedImage
 
     /** @var Post|null */
     public $blogEtcPost;
-    /**
-     * @var
-     */
     public $image;
-
     public $source;
     public $image_filename;
 

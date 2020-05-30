@@ -20,9 +20,6 @@ class CommentAdded
     /** @var Comment */
     public $newComment;
 
-    /**
-     * CommentAdded constructor.
-     */
     public function __construct(Post $post, Comment $newComment)
     {
         $this->blogEtcPost = $post;
