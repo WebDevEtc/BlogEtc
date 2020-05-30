@@ -45,25 +45,20 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
-
                 </ul>
 
-                <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
-                    <!-- Authentication Links -->
-
-
-                    <li class='nav-item px-2'><a class='nav-link' href='{{route("blogetc.index")}}'>Blog home</a></li>
-
-
+                    <li class="nav-item px-2">
+                        <a class="nav-link" href="{{route("blogetc.index")}}">
+                            Blog home
+                        </a>
+                    </li>
                     <li class="nav-item ">
-                        <a id="" class="nav-link " href="#" role="button"
+                        <a class="nav-link" href="#" role="button"
                            aria-haspopup="true" aria-expanded="false">
                             Logged in as {{ Auth::user()->name }}
                         </a>
-
                     </li>
                 </ul>
             </div>
@@ -72,18 +67,18 @@
 
     <main class="py-4">
 
-        <div class='container'>
-            <div class='row'>
-                <div class='col-md-3'>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
                     @include("blogetc_admin::layouts.sidebar")
                 </div>
-                <div class='col-md-9 '>
+                <div class="col-md-9 ">
 
 
                     @if (isset($errors) && count($errors))
                         <div class="alert alert-danger">
                             <b>Sorry, but there was an error:</b>
-                            <ul class='m-0'>
+                            <ul class="m-0">
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -92,7 +87,7 @@
                     @endif
                     {{--REPLACING THIS FILE WITH YOUR OWN LAYOUT FILE? Don't forget to include the following section!--}}
                     @if(\WebDevEtc\BlogEtc\Helpers::hasFlashedMessage())
-                        <div class='alert alert-info'>
+                        <div class="alert alert-info">
                             <h3>{{\WebDevEtc\BlogEtc\Helpers::pullFlashedMessage() }}</h3>
                         </div>
                     @endif
@@ -104,8 +99,8 @@
     </main>
 </div>
 
-<div class='text-center mt-5 pt-5 mb-3 text-muted'>
-    <small><a href='https://webdevetc.com/'>Laravel Blog Package provided by Webdevetc</a></small>
+<div class="text-center mt-5 pt-5 mb-3 text-muted">
+    <small><a href="https://webdevetc.com/">Laravel Blog Package provided by Webdevetc</a></small>
 </div>
 
 

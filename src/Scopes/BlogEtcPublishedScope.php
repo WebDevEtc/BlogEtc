@@ -12,8 +12,6 @@ class BlogEtcPublishedScope implements Scope
 {
     /**
      * Only show posts which are published in the past, unless the user has admin access.
-     *
-     * @return void
      */
     public function apply(Builder $builder, Model $model)
     {

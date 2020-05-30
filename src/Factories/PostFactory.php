@@ -2,10 +2,11 @@
 
 namespace WebDevEtc\BlogEtc\Factories;
 
-/* @var \Illuminate\Database\Eloquent\Factory $factory */
+/* @var Factory $factory */
 
 use Carbon\Carbon;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use WebDevEtc\BlogEtc\Models\Post;
 
 // Basic post factory, following happy path where everything is set up so posts can be seen.

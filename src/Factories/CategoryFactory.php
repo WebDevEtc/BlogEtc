@@ -2,9 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Factories;
 
-/* @var \Illuminate\Database\Eloquent\Factory $factory */
+/* @var Factory $factory */
 
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 use WebDevEtc\BlogEtc\Models\Category;
 

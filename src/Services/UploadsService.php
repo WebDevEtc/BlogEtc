@@ -5,6 +5,7 @@ namespace WebDevEtc\BlogEtc\Services;
 use Auth;
 use Carbon\Carbon;
 use Exception;
+use File;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -18,7 +19,6 @@ use WebDevEtc\BlogEtc\Events\BlogPostWillBeDeleted;
 use WebDevEtc\BlogEtc\Events\UploadedImage;
 use WebDevEtc\BlogEtc\Helpers;
 use WebDevEtc\BlogEtc\Interfaces\LegacyGetImageFileInterface;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Repositories\UploadedPhotosRepository;
@@ -58,7 +58,7 @@ class UploadsService
 
         $this->legacyProcessUploadedImages($request, $new_blog_post);
 
-        if (!$new_blog_post->posted_at) {
+        if (! $new_blog_post->posted_at) {
             $new_blog_post->posted_at = Carbon::now();
         }
 
@@ -78,7 +78,7 @@ class UploadsService
      */
     public function legacyUpdatePost(UpdateBlogEtcPostRequest $request, $blogPostId)
     {
-        /** @var BlogEtcPost $post */
+        /** @var Post $post */
         $post = Post::findOrFail($blogPostId);
         $post->fill($request->all());
 
@@ -120,7 +120,7 @@ class UploadsService
         }
 
         foreach ((array) config('blogetc.image_sizes') as $size => $image_size_details) {
-            if (!isset($sizes_to_upload[$size]) || !$sizes_to_upload[$size] || !$image_size_details['enabled']) {
+            if (! isset($sizes_to_upload[$size]) || ! $sizes_to_upload[$size] || ! $image_size_details['enabled']) {
                 continue;
             }
 
@@ -149,7 +149,7 @@ class UploadsService
      */
     public function legacyProcessUploadedImages(LegacyGetImageFileInterface $request, Post $new_blog_post)
     {
-        if (!config('blogetc.image_upload_enabled')) {
+        if (! config('blogetc.image_upload_enabled')) {
             return;
         }
 
@@ -177,7 +177,7 @@ class UploadsService
     }
 
     /**
-     * @param BlogEtcPost $new_blog_post
+     * @param Post $new_blog_post
      * @param $suggested_title string - used to help generate the filename
      * @param $image_size_details mixed - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
      * @param $photo
@@ -200,7 +200,7 @@ class UploadsService
             if (isset($image_size_details['crop']) && $image_size_details['crop']) {
                 $resizedImage = $resizedImage->fit($w, $h);
             } else {
-                $resizedImage = $resizedImage->resize($w, $h, function ($constraint) {
+                $resizedImage = $resizedImage->resize($w, $h, static function ($constraint) {
                     $constraint->aspectRatio();
                 });
             }
@@ -246,7 +246,7 @@ class UploadsService
      */
     protected function check_image_destination_path_is_writable($path)
     {
-        if (!is_writable($path)) {
+        if (! is_writable($path)) {
             throw new RuntimeException("Image destination path is not writable ($path)");
         }
     }
@@ -271,13 +271,13 @@ class UploadsService
         $wh = $this->getDimensions($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 10; ++$i) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.str_random(5) : '';
 
             $attempt = str_slug($base.$suffix.$wh).$ext;
 
-            if (!\File::exists($this->image_destination_path().'/'.$attempt)) {
+            if (! File::exists($this->image_destination_path().'/'.$attempt)) {
                 // filename doesn't exist, let's use it!
                 return $attempt;
             }
@@ -293,7 +293,7 @@ class UploadsService
     protected function generate_base_filename(string $suggested_title)
     {
         $base = substr($suggested_title, 0, 100);
-        if (!$base) {
+        if (! $base) {
             // if we have an empty string then we should use a random one:
             $base = 'image-'.str_random(5);
 
@@ -452,13 +452,13 @@ class UploadsService
         $wh = $this->getDimensions($image_size_details);
         $ext = '.'.$photo->getClientOriginalExtension();
 
-        for ($i = 1; $i <= self::$availableFilenameAttempts; $i++) {
+        for ($i = 1; $i <= self::$availableFilenameAttempts; ++$i) {
             // add suffix if $i>1
             $suffix = $i > 1 ? '-'.Str::random(5) : '';
 
             $attempt = Str::slug($base.$suffix.$wh).$ext;
 
-            if (!$this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
+            if (! $this::disk()->exists($this->imageDestinationPath().'/'.$attempt)) {
                 return $attempt;
             }
         }
@@ -609,7 +609,7 @@ class UploadsService
      *
      * @return mixed
      */
-    public function legacyDestroyPost(/** @scrutinizer ignore-unused */ DeleteBlogEtcPostRequest $request, $blogPostId)
+    public function legacyDestroyPost(/* @scrutinizer ignore-unused */ DeleteBlogEtcPostRequest $request, $blogPostId)
     {
         $post = Post::findOrFail($blogPostId);
         event(new BlogPostWillBeDeleted($post));

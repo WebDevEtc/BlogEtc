@@ -8,12 +8,12 @@
     {{-- the view file wasn't there. Show a detailed error if user is logged in and can manage the blog, otherwise show generic error.--}}
 
     @can(\WebDevEtc\BlogEtc\Gates\GateTypes::MANAGE_BLOG_ADMIN)
-        <div class='alert alert-danger'>
+        <div class="alert alert-danger">
             Custom blog post blade view file
             (<code>{{$post->bladeViewFile()}}</code>) not found.
             <a
-                href='https://webdevetc.com/blogetc'
-                target='_blank'>
+                href="https://webdevetc.com/blogetc"
+                target="_blank">
                 See Laravel Blog Package help here.
             </a>
         </div>

@@ -23,18 +23,16 @@
 
         </div>
 
-        <div class='container-fluid'>
-            <div class='row'>
-
-                @if(config("blogetc.comments.save_user_id_if_logged_in", true) == false || !Auth::check())
-
-                    <div class='col'>
-                        <div class="form-group ">
+        <div class="container-fluid">
+            <div class="row">
+                @if(config("blogetc.comments.save_user_id_if_logged_in", true) === false || !Auth::check())
+                    <div class="col">
+                        <div class="form-group">
                             <label id="author_name_label" for="author_name">Your Name </label>
                             <input
-                                    type='text'
+                                    type="text"
                                     class="form-control"
-                                    name='author_name'
+                                    name="author_name"
                                     id="author_name"
                                     placeholder="Your name"
                                     required
@@ -43,15 +41,15 @@
                     </div>
 
                     @if(config("blogetc.comments.ask_for_author_email"))
-                        <div class='col'>
+                        <div class="col">
                             <div class="form-group">
                                 <label id="author_email_label" for="author_email">Your Email
                                     <small>(won't be displayed publicly)</small>
                                 </label>
                                 <input
-                                        type='email'
+                                        type="email"
                                         class="form-control"
-                                        name='author_email'
+                                        name="author_email"
                                         id="author_email"
                                         placeholder="Your Email"
                                         required
@@ -62,15 +60,15 @@
                 @endif
 
                 @if(config("blogetc.comments.ask_for_author_website"))
-                    <div class='col'>
+                    <div class="col">
                         <div class="form-group">
                             <label id="author_website_label" for="author_website">Your Website
                                 <small>(Will be displayed)</small>
                             </label>
                             <input
-                                    type='url'
+                                    type="url"
                                     class="form-control"
-                                    name='author_website'
+                                    name="author_website"
                                     id="author_website"
                                     placeholder="Your Website URL"
                                     value="{{old("author_website")}}">
