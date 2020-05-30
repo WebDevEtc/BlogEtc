@@ -102,7 +102,7 @@ This is [WebDevEtc's](https://webdevetc.com/) [BlogEtc Blog package for Laravel]
    - install with composer,
    - do the database migration, copy the config file over (done with `php artisan vendor:publish`)
    - chmod/chown the `public/blog_images/` directory so featured images can be uploaded for each blog post
-   - and then add 1 method to your `\App\User` file (`canManageBlogEtcPosts()`) (this will change to using gates soon but will be backwards compatible)
+   - and then add a gate to AuthServiceProvider (see note above)
    - __but please see the install instructions to get everything up and working__
 
 ## How to customise the blog views/templates
