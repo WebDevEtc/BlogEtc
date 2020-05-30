@@ -4,9 +4,9 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use LogicException;
 use Swis\Laravel\Fulltext\Search;
 use View;
+use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Requests\SearchRequest;
 use WebDevEtc\BlogEtc\Services\CaptchaService;
 use WebDevEtc\BlogEtc\Services\CategoriesService;
@@ -45,18 +45,13 @@ class PostsController extends Controller
      */
     public function search(SearchRequest $request): \Illuminate\Contracts\View\View
     {
-        if (!config('blogetc.search.search_enabled')) {
-            throw new LogicException('Search is disabled');
-        }
-
-        $query = $request->searchQuery();
-
-        $search = new Search();
-        $searchResults = $search->run($query);
+        $searchResults = collect((new Search())->run($request->searchQuery()))->filter(function ($result) {
+            return $result->indexable && is_a($result->indexable, Post::class) && $result->indexable->isPublic();
+        });
 
         return view('blogetc::search', [
-            'title'          => 'Search results for '.e($query),
-            'query'          => $query,
+            'title'          => 'Search results for '.e($request->searchQuery()),
+            'query'          => $request->searchQuery(),
             'search_results' => $searchResults,
         ]);
     }

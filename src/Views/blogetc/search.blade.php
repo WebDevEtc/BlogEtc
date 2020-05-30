@@ -7,15 +7,9 @@
         <div class="col-sm-12">
             <h2>Search Results for {{ $query }}</h2>
 
-            @forelse($searchResults as $result)
-                @if($result->indexable && is_a($result->indexable,\WebDevEtc\BlogEtc\Models\Post::class) && $result->indexable->isPublic())
-{{--                    TODO--}}
-{{--                    && Gate::allows('view-blog-etc-post', $result->indexable)--}}
-                    <h2>Search result #{{ $loop->count }}</h2>
-                    @include('blogetc::partials.index_loop', ['post' => $result->indexable])
-                @else
-                    <div class="alert alert-danger">Unable to show this search result - unknown type</div>
-                @endif
+            @forelse($search_results as $result)
+                <h2>Search result #{{ $loop->iteration }}</h2>
+                @include('blogetc::partials.index_loop', ['post' => $result->indexable])
             @empty
                 <div class="alert alert-danger">Sorry, but there were no results!</div>
             @endforelse

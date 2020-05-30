@@ -195,8 +195,8 @@ return [
 
     'search' => [
         // Is search enabled? By default this is disabled, but you can easily turn it on.
+        // Not recommended if you make use of unpublished posts.
         // Default: false
-        // [Search is temporarily completely disabled - will return in a future version soon. Sorry!]
         'search_enabled' => false,
     ],
 ];

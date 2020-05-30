@@ -3,6 +3,7 @@
 namespace WebDevEtc\BlogEtc\Models;
 
 use App\User;
+use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -81,7 +82,7 @@ class Post extends Model implements SearchResultInterface
 
     public function isPublic(): bool
     {
-        return $this->is_published && $this->posted_at->isFuture();
+        return $this->is_published && $this->posted_at->lte(Carbon::now());
     }
 
     /**
