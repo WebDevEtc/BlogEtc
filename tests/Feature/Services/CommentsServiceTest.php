@@ -2,14 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use Config;
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\CommentNotFoundException;
-use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Services\CategoriesService;
 use WebDevEtc\BlogEtc\Services\CommentsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
@@ -29,7 +25,6 @@ class CommentsServiceTest extends TestCase
         $this->commentsService = resolve(CommentsService::class);
         Comment::truncate();
     }
-
 
     public function testApprove()
     {

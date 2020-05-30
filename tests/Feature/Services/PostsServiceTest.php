@@ -3,16 +3,10 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Carbon\Carbon;
-use Config;
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
-use WebDevEtc\BlogEtc\Exceptions\CommentNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\PostNotFoundException;
 use WebDevEtc\BlogEtc\Models\Category;
-use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Services\CategoriesService;
-use WebDevEtc\BlogEtc\Services\CommentsService;
 use WebDevEtc\BlogEtc\Services\PostsService;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
@@ -32,7 +26,6 @@ class PostsServiceTest extends TestCase
         $this->postsService = resolve(PostsService::class);
         Post::truncate();
     }
-
 
     public function testIndexPaginated()
     {
@@ -64,7 +57,6 @@ class PostsServiceTest extends TestCase
 
         $this->assertSame(0, $response->total());
     }
-
 
     public function testRssItems()
     {
@@ -130,4 +122,3 @@ class PostsServiceTest extends TestCase
         $this->postsService->findBySlug('');
     }
 }
-
