@@ -109,7 +109,7 @@ class PostsService
      *
      * @throws Exception
      */
-    public function update(int $blogPostID, /*PostRequest*/ $request): Post
+    public function update(/** @scrutinizer ignore-unused */ int $blogPostID, /*PostRequest*/ /** @scrutinizer ignore-unused */ $request): Post
     {
         throw new LogicException('PostsService update is not yet ready for use');
 //        $post = $this->repository->find($blogPostID);

@@ -118,17 +118,15 @@ class PostsController extends Controller
     /**
      * @deprecated - use show()
      */
-    public function viewSinglePost(Request $request, $blogPostSlug)
+    public function viewSinglePost(Request $request, string $blogPostSlug)
     {
         return $this->show($request, $blogPostSlug);
     }
 
     /**
      * View a single post and (if enabled) comments.
-     *
-     * @param $postSlug
      */
-    public function show(Request $request, $postSlug): \Illuminate\View\View
+    public function show(Request $request, string $postSlug): \Illuminate\View\View
     {
         $blogPost = $this->postsService->findBySlug($postSlug);
 

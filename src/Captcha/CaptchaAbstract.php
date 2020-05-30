@@ -16,7 +16,7 @@ abstract class CaptchaAbstract implements CaptchaInterface
      *
      * @return mixed|void
      */
-    public function runCaptchaBeforeShowingPosts(Request $request, Post $blogEtcPost)
+    public function runCaptchaBeforeShowingPosts(/** @scrutinizer ignore-unused */ Request $request, /** @scrutinizer ignore-unused */ Post $blogEtcPost)
     {
         /*
         No code here to run! Maybe in your subclass you can make use of this?
