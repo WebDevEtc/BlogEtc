@@ -60,7 +60,7 @@ class CommentsController extends Controller
             throw new RuntimeException('Built in comments are disabled');
         }
 
-        if (Gate::denies(GateTypes::ADD_COMMENTS)) {
+        if (Gate::denies(GateTypes::ADD_COMMENT)) {
             abort(Response::HTTP_FORBIDDEN, 'Unable to add comments');
         }
 

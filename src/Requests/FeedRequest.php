@@ -34,6 +34,8 @@ class FeedRequest extends FormRequest
      */
     public function getFeedType(): string
     {
-        return 'rss' === $this->get('type') ? 'rss' : 'atom';
+        return 'rss' === $this->get('type')
+            ? 'rss'
+            : 'atom';
     }
 }

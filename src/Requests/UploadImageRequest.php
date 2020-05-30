@@ -6,7 +6,7 @@ class UploadImageRequest extends BaseAdminRequest
 {
     public function rules(): array
     {
-        $rules = [
+        return [
             'sizes_to_upload' => [
                 'required',
                 'array',
@@ -26,7 +26,5 @@ class UploadImageRequest extends BaseAdminRequest
                 'max:150',
             ],
         ];
-
-        return $rules;
     }
 }

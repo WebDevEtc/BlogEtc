@@ -11,8 +11,7 @@ use WebDevEtc\BlogEtc\Helpers;
 class BlogEtcPublishedScope implements Scope
 {
     /**
-     * If user is logged in and canManageBlogEtcPosts() == true, then don't add any scope
-     * But for everyone else then it should only show PUBLISHED posts with a POSTED_AT < NOW().
+     * Only show posts which are published in the past, unless the user has admin access.
      *
      * @return void
      */

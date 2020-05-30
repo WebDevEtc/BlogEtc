@@ -54,16 +54,16 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     protected function setupDefaultGates(): void
     {
-        if (!Gate::has(GateTypes::MANAGE_ADMIN)) {
-            Gate::define(GateTypes::MANAGE_ADMIN, include(__DIR__.'/Gates/DefaultAdminGate.php'));
+        if (!Gate::has(GateTypes::MANAGE_BLOG_ADMIN)) {
+            Gate::define(GateTypes::MANAGE_BLOG_ADMIN, include(__DIR__.'/Gates/DefaultAdminGate.php'));
         }
 
         /*
          * For people to add comments to your blog posts. By default it will allow anyone - you can add your
          * own logic here if needed.
          */
-        if (!Gate::has(GateTypes::ADD_COMMENTS)) {
-            Gate::define(GateTypes::ADD_COMMENTS, include(__DIR__.'/Gates/DefaultAddCommentsGate.php'));
+        if (!Gate::has(GateTypes::ADD_COMMENT)) {
+            Gate::define(GateTypes::ADD_COMMENT, include(__DIR__.'/Gates/DefaultAddCommentsGate.php'));
         }
     }
 

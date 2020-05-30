@@ -19,7 +19,7 @@
 @empty
     <div class="alert alert-info">
         No comments yet!
-        @can(\WebDevEtc\BlogEtc\Gates\GateTypes::ADD_COMMENTS)
+        @can(\WebDevEtc\BlogEtc\Gates\GateTypes::ADD_COMMENT)
             Why don't you be the first?
         @endcan
     </div>

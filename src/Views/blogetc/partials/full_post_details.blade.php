@@ -1,7 +1,7 @@
 @php
     /** @var \WebDevEtc\BlogEtc\Models\Post $post */
 @endphp
-@can(\WebDevEtc\BlogEtc\Gates\GateTypes::MANAGE_ADMIN)
+@can(\WebDevEtc\BlogEtc\Gates\GateTypes::MANAGE_BLOG_ADMIN)
     <a href="{{$post->editUrl()}}" class="btn btn-outline-secondary btn-sm pull-right float-right">
         Edit Post
     </a>

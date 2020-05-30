@@ -4,7 +4,7 @@
     /** @var Post $post */
     /** @var CaptchaAbstract $captcha */
 @endphp
-@can(\WebDevEtc\BlogEtc\Gates\GateTypes::ADD_COMMENTS)
+@can(\WebDevEtc\BlogEtc\Gates\GateTypes::ADD_COMMENT)
 <div class="add_comment_area">
     <h5 class="text-center">Add a comment</h5>
     <form method="post" action="{{ route('blogetc.comments.add_new_comment', $post->slug) }}">
