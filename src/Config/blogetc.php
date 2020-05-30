@@ -95,18 +95,18 @@ return [
             'crop' => true,
         ],
         'image_thumbnail' => [ // this key must start with 'image_'. This is what the DB column must be named
-            'w'         => 150, // width in pixels
-            'h'         => 150, //height
+            'w' => 150, // width in pixels
+            'h' => 150, //height
             'basic_key' => 'thumbnail', // same as the main key, but WITHOUT 'image_'.
-            'name'      => 'Thumbnail', // description, used in the admin panel
-            'enabled'   => true, // see note above
+            'name' => 'Thumbnail', // description, used in the admin panel
+            'enabled' => true, // see note above
         ],
 
         // you can add more fields here, but make sure that you create the relevant database columns too!
         // They must be in the same format as the default ones - image_xxxxx (and this db column must exist on the blog_etc_posts table)
 
         /*
-        'image_custom_example_size' => [ // << MAKE A DB COLUM WITH THIS NAME.
+        'image_custom_example_size' => [ // << MAKE A DB COLUMN WITH THIS NAME.
                                          //   You can name it whatever you want, but it must start with image_
             'w' => 123,                  // << DEFINE YOUR CUSTOM WIDTH/HEIGHT
             'h' => 456,
@@ -137,18 +137,15 @@ return [
         'basic_answers' => 'black,dark',
     ],
 
-    ////////// RSS FEED
-
     'rssfeed' => [
-        'should_shorten_text'       => true, // boolean. Default: true. Should we shorten the text in rss feed?
-        'text_limit'                => 100, // max length of description text in the rss feed
+        'should_shorten_text' => true, // boolean. Default: true. Should we shorten the text in rss feed?
+        'text_limit' => 100, // max length of description text in the rss feed
         'posts_to_show_in_rss_feed' => 10,  // how many posts should we show in the rss feed
-        'cache_in_minutes'          => 60, // how long (in minutes) to cache the RSS blog feed for.
-        'description'               => 'Our blog post RSS feed', //description for the RSS feed
-        'language'                  => 'en', // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
+        'cache_in_minutes' => 60, // how long (in minutes) to cache the RSS blog feed for.
+        'description' => 'Our blog post RSS feed', //description for the RSS feed
+        'language' => 'en', // see https://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
     ],
 
-    // Comments settings:
     'comments' => [
         // What type (if any) of comments/comment form to show.
         // options:
@@ -157,7 +154,7 @@ return [
         //      'custom' (will load blogetc::partials.custom_comments, which you can copy to your vendor view dir to customise
         //      'disabled' (turn comments off)
         // default: built_in
-        'type_of_comments_to_show' =>CommentsService::COMMENT_TYPE_BUILT_IN,
+        'type_of_comments_to_show' => CommentsService::COMMENT_TYPE_BUILT_IN,
 
         // max num of comments to show on a single blog post. Set to a lower number for smaller page sizes. No comment pagination is built in yet.
         'max_num_of_comments_to_show' => 1000,
@@ -196,7 +193,6 @@ return [
         ],
     ],
 
-    // Search config:
     'search' => [
         // Is search enabled? By default this is disabled, but you can easily turn it on.
         // Default: false

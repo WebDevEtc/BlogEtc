@@ -6,9 +6,6 @@ use Gate;
 use Session;
 use WebDevEtc\BlogEtc\Gates\GateTypes;
 
-/**
- * Small little helper class of static methods.
- */
 class Helpers
 {
     /**
@@ -18,12 +15,12 @@ class Helpers
 
     public static function hasAdminGateAccess(): bool
     {
-        return Gate::allows(GateTypes::MANAGE_ADMIN);
+        return Gate::allows(GateTypes::MANAGE_BLOG_ADMIN);
     }
 
     public static function hasCommentGateAccess(): bool
     {
-        return Gate::allows(GateTypes::ADD_COMMENTS);
+        return Gate::allows(GateTypes::ADD_COMMENT);
     }
 
     /**

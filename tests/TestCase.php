@@ -133,8 +133,8 @@ namespace WebDevEtc\BlogEtc\Tests {
             }
 
             // Restore default gates.
-            Gate::define(GateTypes::MANAGE_ADMIN, include(__DIR__.'/../src/Gates/DefaultAdminGate.php'));
-            Gate::define(GateTypes::ADD_COMMENTS, include(__DIR__.'/../src/Gates/DefaultAddCommentsGate.php'));
+            Gate::define(GateTypes::MANAGE_BLOG_ADMIN, include(__DIR__.'/../src/Gates/DefaultAdminGate.php'));
+            Gate::define(GateTypes::ADD_COMMENT, include(__DIR__.'/../src/Gates/DefaultAddCommentsGate.php'));
         }
 
         /**
@@ -261,7 +261,7 @@ namespace WebDevEtc\BlogEtc\Tests {
 
         protected function setAdminGate()
         {
-            \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
+            \Gate::define(GateTypes::MANAGE_BLOG_ADMIN, static function ($user) {
                 return get_class($user) === AdminUser::class;
             });
         }

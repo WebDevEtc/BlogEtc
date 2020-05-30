@@ -12,7 +12,7 @@ class UserCanManageBlogPosts
         abort_if(
             !Helpers::hasAdminGateAccess(),
             401,
-            'User not authorised to manage blog posts: Your account is not authorised to edit blog posts'
+            'User not authorised to manage blog posts'
         );
 
         return $next($request);
