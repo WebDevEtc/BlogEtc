@@ -2,14 +2,10 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use DB;
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
 use WebDevEtc\BlogEtc\Exceptions\CommentNotFoundException;
-use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Comment;
 use WebDevEtc\BlogEtc\Models\Post;
-use WebDevEtc\BlogEtc\Repositories\CategoriesRepository;
 use WebDevEtc\BlogEtc\Repositories\CommentsRepository;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
@@ -59,7 +55,8 @@ class CommentsRepositoryTest extends TestCase
         $this->commentsRepository->approve(0);
     }
 
-    public function testFind() {
+    public function testFind()
+    {
         $comment = factory(Comment::class)->create();
 
         $response = $this->commentsRepository->find($comment->id);
@@ -67,25 +64,28 @@ class CommentsRepositoryTest extends TestCase
         $this->assertTrue($comment->is($response));
     }
 
-
-    public function testFindApproved() {
+    public function testFindApproved()
+    {
         $comment = factory(Comment::class)->create(['approved' => true]);
         $response = $this->commentsRepository->find($comment->id, true);
         $this->assertTrue($comment->is($response));
     }
 
-    public function testFindNonApproved() {
+    public function testFindNonApproved()
+    {
         $comment = factory(Comment::class)->create(['approved' => false]);
         $this->expectException(CommentNotFoundException::class);
         $this->commentsRepository->find($comment->id, true);
     }
 
-    public function testFindNonExisting() {
+    public function testFindNonExisting()
+    {
         $this->expectException(CommentNotFoundException::class);
         $response = $this->commentsRepository->find(0);
     }
 
-    public function testCreate() {
+    public function testCreate()
+    {
         $post = factory(Post::class)->create();
 
         $commentText = $this->faker->sentence;
@@ -94,7 +94,8 @@ class CommentsRepositoryTest extends TestCase
         $this->assertDatabaseHas('blog_etc_comments', ['comment' => $commentText, 'blog_etc_post_id' => $post->id, 'approved' => false]);
     }
 
-    public function testCreateAutoApproved() {
+    public function testCreateAutoApproved()
+    {
         $post = factory(Post::class)->create();
 
         $commentText = $this->faker->sentence;

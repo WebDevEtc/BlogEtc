@@ -3,7 +3,6 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
-use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
@@ -118,6 +117,7 @@ class PostsControllerTest extends TestCase
 
         $response->assertNotFound();
     }
+
     /**
      * A post with is_published = false should not be shown.
      */
