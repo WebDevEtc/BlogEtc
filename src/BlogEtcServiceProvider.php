@@ -3,9 +3,7 @@
 namespace WebDevEtc\BlogEtc;
 
 use Gate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use LogicException;
 use Swis\Laravel\Fulltext\ModelObserver;
 use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Models\BlogEtcPost;

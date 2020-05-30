@@ -48,16 +48,17 @@ class Post extends Model implements SearchResultInterface
         'meta_desc',
         'slug',
         'use_view_file',
-
         'is_published',
         'posted_at',
     ];
+
     protected $indexContentColumns =
         [
             'post_body',
             'short_description',
             'meta_desc',
         ];
+
     protected $indexTitleColumns =
         [
             'title',
@@ -174,7 +175,7 @@ class Post extends Model implements SearchResultInterface
      *
      * @deprecated - use imageTag() instead
      */
-    public function image_tag(    $size = 'medium',
+    public function image_tag($size = 'medium',
         $addAHref = true,
         $imgTagClass = null,
         $anchorTagClass = null)
@@ -237,7 +238,6 @@ class Post extends Model implements SearchResultInterface
         }
 
         throw new InvalidArgumentException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
-//        throw new InvalidImageSizeException('BlogEtcPost image size should be \'large\', \'medium\', \'thumbnail\''.' or another field as defined in config/blogetc.php. Provided size ('.e($size).') is not valid');
     }
 
     /**
@@ -377,7 +377,7 @@ class Post extends Model implements SearchResultInterface
     public function renderBody()
     {
         if (config('blogetc.use_custom_view_files') && $this->use_view_file) {
-            $return =(string) view('blogetc::partials.use_view_file', ['post' => $this])->render();
+            $return = (string) view('blogetc::partials.use_view_file', ['post' => $this])->render();
         } else {
             $return = $this->post_body;
         }

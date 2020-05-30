@@ -16,11 +16,13 @@ class Helpers
      */
     const FLASH_MESSAGE_SESSION_KEY = 'WEBDEVETC_FLASH';
 
-    public static function hasAdminGateAccess() :bool {
+    public static function hasAdminGateAccess(): bool
+    {
         return Gate::allows(GateTypes::MANAGE_ADMIN);
     }
 
-    public static function hasCommentGateAccess() :bool {
+    public static function hasCommentGateAccess(): bool
+    {
         return Gate::allows(GateTypes::ADD_COMMENTS);
     }
 

@@ -41,7 +41,7 @@ namespace App {
     }
 
     // TODO - remove the need for this
-    if (! class_exists('\App\User')) {
+    if (!class_exists('\App\User')) {
         class User extends NonAdminUser
         {
         }
@@ -127,7 +127,7 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->loadMigrations();
             $this->withFactories(__DIR__.'/../src/Factories');
 
-            if (! Route::has('login')) {
+            if (!Route::has('login')) {
                 Route::get('login', function () {
                 })->name('login');
             }
@@ -154,7 +154,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 $migrator->up();
             }
 
-            if (! Schema::hasTable('users')) {
+            if (!Schema::hasTable('users')) {
                 Schema::create('users', static function (Blueprint $table) {
                     $table->bigIncrements('id');
                     $table->string('name');
@@ -166,7 +166,7 @@ namespace WebDevEtc\BlogEtc\Tests {
                 });
             }
 
-            if (! Schema::hasTable('laravel_fulltext')) {
+            if (!Schema::hasTable('laravel_fulltext')) {
                 Schema::create('laravel_fulltext', static function (Blueprint $table) {
                     $table->increments('id');
                     $table->integer('indexable_id');
@@ -259,7 +259,8 @@ namespace WebDevEtc\BlogEtc\Tests {
             $this->setAdminGate();
         }
 
-        protected function setAdminGate() {
+        protected function setAdminGate()
+        {
             \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
                 return get_class($user) === AdminUser::class;
             });
