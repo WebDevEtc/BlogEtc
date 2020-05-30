@@ -2,7 +2,6 @@
 
 namespace WebDevEtc\BlogEtc\Tests\Feature;
 
-use Config;
 use Illuminate\Foundation\Testing\WithFaker;
 use WebDevEtc\BlogEtc\Exceptions\CategoryNotFoundException;
 use WebDevEtc\BlogEtc\Models\Category;
@@ -29,7 +28,6 @@ class CategoriesServiceTest extends TestCase
 
     public function testIndexPaginated(): void
     {
-
         factory(Category::class, 25)->create();
         $result = $this->categoriesService->indexPaginated(10);
 
