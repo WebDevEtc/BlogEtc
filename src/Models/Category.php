@@ -26,8 +26,6 @@ class Category extends Model
             'blog_etc_category_id',
             'blog_etc_post_id'
         );
-//        return $this->belongsToMany(Post::class, 'blog_etc_post_categories', 'blog_etc_category_id',
-//            'blog_etc_post_id');
     }
 
     /**

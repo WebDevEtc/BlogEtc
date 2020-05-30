@@ -26,8 +26,43 @@ class PostsControllerTest extends TestCase
     {
         $response = $this->get(route('blogetc.index'));
 
-        $response->assertOk()
-            ->assertViewHas('posts');
+        $response->assertOk()->assertViewHas('posts');
+    }
+
+    public function testIndexAsLoggedInLegacyNonAdmin(): void
+    {
+        $this->beLegacyNonAdminUser();
+
+        $response = $this->get(route('blogetc.index'));
+
+        $response->assertOk()->assertViewHas('posts');
+    }
+
+    public function testIndexAsLoggedInGatedNonAdmin(): void
+    {
+        $this->beNonAdminUserWithGate();
+
+        $response = $this->get(route('blogetc.index'));
+
+        $response->assertOk()->assertViewHas('posts');
+    }
+
+    public function testIndexAsLoggedInLegacyAdmin(): void
+    {
+        $this->beLegacyAdminUser();
+
+        $response = $this->get(route('blogetc.index'));
+
+        $response->assertOk()->assertViewHas('posts');
+    }
+
+    public function testIndexAsLoggedInGatedAdmin(): void
+    {
+        $this->beAdminUserWithGate();
+
+        $response = $this->get(route('blogetc.index'));
+
+        $response->assertOk()->assertViewHas('posts');
     }
 
     /**
@@ -76,12 +111,19 @@ class PostsControllerTest extends TestCase
      */
     public function testShow404IfNotPublishedWithGates(): void
     {
-//        $this->withoutExceptionHandling();
-        \Gate::define(GateTypes::MANAGE_ADMIN, static function ($user) {
-            return false;
-        });
         $this->beNonAdminUserWithGate();
+        $post = factory(Post::class)->state('not_published')->create();
 
+        $response = $this->get(route('blogetc.single', $post->slug));
+
+        $response->assertNotFound();
+    }
+    /**
+     * A post with is_published = false should not be shown.
+     */
+    public function testShow404IfNotPublishedWithLegacy(): void
+    {
+        $this->beLegacyNonAdminUser();
         $post = factory(Post::class)->state('not_published')->create();
 
         $response = $this->get(route('blogetc.single', $post->slug));

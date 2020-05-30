@@ -3,10 +3,7 @@
 namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\RedirectResponse;
-use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Models\Comment;
-use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 
 class ManageCommentsControllerTest extends TestCase
@@ -46,7 +43,6 @@ class ManageCommentsControllerTest extends TestCase
         $response->assertUnauthorized();
     }
 
-
     public function testLegacyAdminUserCanViewIndex(): void
     {
         $this->beLegacyAdminUser();
@@ -60,7 +56,6 @@ class ManageCommentsControllerTest extends TestCase
         $response = $this->get(route('blogetc.admin.comments.index'));
         $response->assertUnauthorized();
     }
-
 
     public function testCommentsIndex(): void
     {
@@ -82,7 +77,6 @@ class ManageCommentsControllerTest extends TestCase
         $response->assertSessionHasNoErrors()->assertRedirect();
         $this->assertDatabaseHas('blog_etc_comments', ['id' => $comment->id, 'approved' => true]);
     }
-
 
     public function testApproveNonExistingComment(): void
     {

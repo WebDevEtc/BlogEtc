@@ -4,8 +4,6 @@ namespace WebDevEtc\BlogEtc\Tests\Feature\Admin;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\RedirectResponse;
-use WebDevEtc\BlogEtc\Exceptions\BlogEtcAuthGateNotImplementedException;
-use WebDevEtc\BlogEtc\Gates\GateTypes;
 use WebDevEtc\BlogEtc\Models\Category;
 use WebDevEtc\BlogEtc\Tests\TestCase;
 

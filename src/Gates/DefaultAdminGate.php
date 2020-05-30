@@ -5,7 +5,7 @@ use WebDevEtc\BlogEtc\Exceptions\BlogEtcAuthGateNotImplementedException;
 
 return function (/** @scrutinizer ignore-unused */ ?Model $user) {
     // Do not copy the internals for this gate, as it provides backwards compatibility.
-    if (! $user) {
+    if (!$user) {
         return false;
     }
 

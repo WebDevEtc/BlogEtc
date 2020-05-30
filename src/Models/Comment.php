@@ -17,6 +17,7 @@ class Comment extends Model
         'comment',
         'author_name',
     ];
+
     protected $table = 'blog_etc_comments';
 
     /**
@@ -32,7 +33,7 @@ class Comment extends Model
     }
 
     /**
-     * The associated BlogEtcPost.
+     * The associated Post for this comment..
      *
      * @return BelongsTo
      */
