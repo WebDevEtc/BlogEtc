@@ -202,8 +202,9 @@ class PostsService
         return $this->repository->search($query, $max);
     }
 
-    public function clearImageSizes(Post $post, array $sizes) {
-        foreach($sizes as $size) {
+    public function clearImageSizes(Post $post, array $sizes)
+    {
+        foreach ($sizes as $size) {
             $post->$size = null;
         }
 
