@@ -18,6 +18,7 @@ class ManageCommentsControllerTest extends TestCase
 
     public function testNonLoggedInUserForbidden(): void
     {
+        $this->withoutExceptionHandling();
         $response = $this->get(route('blogetc.admin.comments.index'));
         $response->assertUnauthorized();
     }

@@ -14,8 +14,6 @@
         <h3><a href="{{$post->url()}}">{{$post->title}}</a></h3>
         <h5>{{$post->subtitle}}</h5>
 
-        @dump(config('blogetc.show_full_post_on_index'))
-
         @if(config('blogetc.show_full_post_on_index'))
             {!! $post->renderBody() !!}
         @else
