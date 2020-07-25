@@ -117,9 +117,8 @@
 
 
 @if( config("blogetc.use_wysiwyg") && config("blogetc.echo_html") && (in_array( Request::route()->getName() ,[ 'blogetc.admin.create_post' , 'blogetc.admin.edit_post'  ])))
-    <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"
-            integrity="sha384-BpuqJd0Xizmp9PSp/NTwb/RSBCHK+rVdGWTrwcepj1ADQjNYPWT2GDfnfAr6/5dn"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.ckeditor.com/4.14.1/standard/ckeditor.js" integrity="sha256-wURXWeMdyFKDl3v/rGzRT42o2lslbozA3ppL/M7ZVGI=" crossorigin="anonymous"></script>
+
     <script>
       if (typeof (CKEDITOR) !== 'undefined') {
         CKEDITOR.replace('post_body');
