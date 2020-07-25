@@ -120,7 +120,7 @@ class Post extends Model implements SearchResultInterface
      */
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(config("blogetc.user_model", User::class), 'user_id');
     }
 
     /**
