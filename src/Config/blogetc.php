@@ -36,6 +36,9 @@ return [
     // Set the memory limit (used only when processing images) via ini_set().
     'memory_limit' => '2048M',
 
+    // User model - update if you have a different user class.
+    'user_model' => \App\User::class,
+
     // Show full post on the index pages
     'show_full_post_on_index' => false,
 
