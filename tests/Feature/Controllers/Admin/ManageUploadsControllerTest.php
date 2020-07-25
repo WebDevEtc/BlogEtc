@@ -30,6 +30,7 @@ class ManageUploadsControllerTest extends TestCase
 
     public function testGatedAdminUserCanViewIndex(): void
     {
+        $this->withoutExceptionHandling();
         $this->beAdminUserWithGate();
         $response = $this->get(route('blogetc.admin.images.all'));
         $response->assertOk();
