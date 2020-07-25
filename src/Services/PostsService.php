@@ -187,10 +187,26 @@ class PostsService
     }
 
     /**
+     * Find and return a blog post based on id.
+     */
+    public function findById(int $id): Post
+    {
+        return $this->repository->findById($id);
+    }
+
+    /**
      * Search for posts.
      */
     public function search(string $query, $max = 25): Collection
     {
         return $this->repository->search($query, $max);
+    }
+
+    public function clearImageSizes(Post $post, array $sizes) {
+        foreach($sizes as $size) {
+            $post->$size = null;
+        }
+
+        $post->save();
     }
 }

@@ -36,6 +36,9 @@ Route::group(['middleware' => ['web'], 'namespace' => '\WebDevEtc\BlogEtc\Contro
             Route::get('/upload', 'BlogEtcImageUploadController@create')->name('blogetc.admin.images.upload');
 
             Route::post('/upload', 'BlogEtcImageUploadController@store')->name('blogetc.admin.images.store');
+
+            Route::get('/post/{postId}/delete-images', 'Admin\ManageUploadsController@deletePostImage')->name('blogetc.admin.images.delete-post-image');
+            Route::delete('/post/{postId}/delete-images', 'Admin\ManageUploadsController@deletePostImageConfirmed')->name('blogetc.admin.images.delete-post-image-confirmed');
         });
 
         Route::delete('/delete_post/{blogPostId}', 'Admin\ManagePostsController@destroy')->name('blogetc.admin.destroy_post');

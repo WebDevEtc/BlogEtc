@@ -10,6 +10,7 @@ use RuntimeException;
 use WebDevEtc\BlogEtc\Middleware\UserCanManageBlogPosts;
 use WebDevEtc\BlogEtc\Models\UploadedPhoto;
 use WebDevEtc\BlogEtc\Requests\UploadImageRequest;
+use WebDevEtc\BlogEtc\Services\PostsService;
 use WebDevEtc\BlogEtc\Services\UploadsService;
 
 /**
@@ -21,14 +22,19 @@ class ManageUploadsController extends Controller
      * @var UploadsService
      */
     private $uploadsService;
+    /**
+     * @var PostsService
+     */
+    private PostsService $postsService;
 
     /**
      * BlogEtcAdminController constructor.
      */
-    public function __construct(UploadsService $uploadsService)
+    public function __construct(UploadsService $uploadsService, PostsService $postsService)
     {
         $this->middleware(UserCanManageBlogPosts::class);
         $this->uploadsService = $uploadsService;
+        $this->postsService = $postsService;
 
         if (!config('blogetc.image_upload_enabled')) {
             throw new RuntimeException('The blogetc.php config option is missing or has not enabled image uploading');
@@ -42,8 +48,10 @@ class ManageUploadsController extends Controller
      */
     public function index()
     {
-        return view('blogetc_admin::imageupload.index', ['uploaded_photos' => UploadedPhoto::orderBy('id', 'desc')
-            ->paginate(10), ]);
+        return view('blogetc_admin::imageupload.index', [
+            'uploaded_photos' => UploadedPhoto::orderBy('id', 'desc')
+                ->paginate(10),
+        ]);
     }
 
     /**
@@ -68,4 +76,21 @@ class ManageUploadsController extends Controller
 
         return view('blogetc_admin::imageupload.uploaded', ['images' => $processed_images]);
     }
+
+    public function deletePostImage(int $postId)
+    {
+        return view('blogetc_admin::imageupload.delete-post-image', ['postId' => $postId]);
+    }
+
+    public function deletePostImageConfirmed(int $postId)
+    {
+        $post = $this->postsService->findById($postId);
+
+        $deletedSizes = $this->uploadsService->deletePostImage($post);
+        $this->postsService->clearImageSizes($post, $deletedSizes);
+
+        return view('blogetc_admin::imageupload.deleted-post-image');
+    }
+
 }
+

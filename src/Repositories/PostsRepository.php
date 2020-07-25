@@ -76,7 +76,7 @@ class PostsRepository
     }
 
     /**
-     * Find a blog etc post by ID
+     * Find a blog etc post by slug
      * If cannot find, throw exception.
      */
     public function findBySlug(string $slug): Post
@@ -89,6 +89,23 @@ class PostsRepository
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new PostNotFoundException('Unable to find blog post with slug: '.$slug);
+        }
+    }
+
+    /**
+     * Find a blog etc post by ID
+     * If cannot find, throw exception.
+     */
+    public function findById(int $id): Post
+    {
+        try {
+            // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the
+            // logged in user can manage log posts
+            return $this->query(true)
+                ->where('id', $id)
+                ->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            throw new PostNotFoundException('Unable to find blog post with id: '.$id);
         }
     }
 

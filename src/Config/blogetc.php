@@ -12,6 +12,7 @@ return [
     // If 'include_default_routes' is true, then the following two options will set the url prefix for the blog & admin:
     // Location of your blog: http://yoursite.com/blog
     'blog_prefix' => 'blog',
+
     // similar to above, but used for the admin panel for the blog. Default: blog_admin (e.g. http://yoursite.com/blog_admin)
     'admin_prefix' => 'blog_admin',
 
@@ -34,6 +35,9 @@ return [
 
     // Set the memory limit (used only when processing images) via ini_set().
     'memory_limit' => '2048M',
+
+    // Show full post on the index pages
+    'show_full_post_on_index' => false,
 
     // Should it echo out raw HTML post body (with {!! ... !!})? This is not safe if you do not trust your writers!
     // Do not set to true if you don't trust your blog post writers. They could put in any HTML or JS code.

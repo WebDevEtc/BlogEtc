@@ -14,7 +14,13 @@
         <h3><a href="{{$post->url()}}">{{$post->title}}</a></h3>
         <h5>{{$post->subtitle}}</h5>
 
-        <p>{!! $post->generateIntroduction(400) !!}</p>
+        @dump(config('blogetc.show_full_post_on_index'))
+
+        @if(config('blogetc.show_full_post_on_index'))
+            {!! $post->renderBody() !!}
+        @else
+            <p>{!! $post->generateIntroduction(400) !!}</p>
+        @endif
 
         <div class="text-center">
             <a href="{{ $post->url() }}" class="btn btn-primary">View Post</a>

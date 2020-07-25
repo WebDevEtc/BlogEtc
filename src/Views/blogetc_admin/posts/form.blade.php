@@ -123,9 +123,13 @@
         </style>
         <h4>Featured Images</h4>
 
+        @php
+            // TODO - put this logic in controller
+            $hasImage = false; @endphp
         @foreach(config("blogetc.image_sizes") as $imageSizeKey =>$imageSizeAttributes)
             <div class="form-group mb-4 p-2 {{ $loop->iteration > 1 ? 'image_upload_other_sizes' : '' }}">
-                @if($post->has_image($imageSizeAttributes['basic_key']))
+                @if($post->hasImage($imageSizeAttributes['basic_key']))
+                    @php $hasImage = true; @endphp
                     <div style="max-width:55px;" class="float-right m-2">
                         <a style="cursor: zoom-in;" target="_blank"
                            href="{{$post->image_url($imageSizeAttributes['basic_key'])}}">
@@ -142,6 +146,10 @@
                 </small>
                 <input class="form-control" type="file" name="{{$imageSizeKey}}" id="blog_{{$imageSizeKey}}"
                        aria-describedby="blog_{{$imageSizeKey}}_help">
+
+                @if($hasImage)
+                    <a href="{{route('blogetc.admin.images.delete-post-image', $post)}}" class="btn btn-xs btn-danger" target="_blank">Delete images</a>
+                @endif
             </div>
         @endforeach
 
