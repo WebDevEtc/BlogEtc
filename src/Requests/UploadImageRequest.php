@@ -2,17 +2,13 @@
 
 namespace WebDevEtc\BlogEtc\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use WebDevEtc\BlogEtc\Interfaces\BaseRequestInterface;
-
 /**
- * Class BaseRequest
- * @package WebDevEtc\BlogEtc\Requests
+ * Class BaseRequest.
  */
 class UploadImageRequest extends BaseRequest
 {
     /**
-     *  rules for uploads
+     *  rules for uploads.
      *
      * @return array
      */
