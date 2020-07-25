@@ -91,6 +91,4 @@ class ManageUploadsController extends Controller
 
         return view('blogetc_admin::imageupload.deleted-post-image');
     }
-
 }
-
