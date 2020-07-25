@@ -25,7 +25,7 @@ class ManageUploadsController extends Controller
     /**
      * @var PostsService
      */
-    private PostsService $postsService;
+    private $postsService;
 
     /**
      * BlogEtcAdminController constructor.
