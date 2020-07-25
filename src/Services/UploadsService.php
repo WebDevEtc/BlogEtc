@@ -622,13 +622,14 @@ class UploadsService
         return $post;
     }
 
-    public function deletePostImage(Post $post):array{
+    public function deletePostImage(Post $post): array
+    {
         $deletedImageSizes = [];
-        foreach(array_keys(config('blogetc.image_sizes')) as $size) {
+        foreach (array_keys(config('blogetc.image_sizes')) as $size) {
             $imageFilename = $post->$size;
-            $path = $this->image_destination_path() .'/'. $imageFilename;
+            $path = $this->image_destination_path().'/'.$imageFilename;
 
-            if($imageFilename && file_exists($path) ){
+            if ($imageFilename && file_exists($path)) {
                 unlink($path);
                 $deletedImageSizes[] = $size;
             }
@@ -637,4 +638,3 @@ class UploadsService
         return $deletedImageSizes;
     }
 }
-
