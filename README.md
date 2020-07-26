@@ -41,7 +41,7 @@
  - For new installations please add the following to `App\Providers\AuthServiceProvider`:
  
  ```php
-    Gate::define(GateTypes::MANAGE_ADMIN, static function (?Model $user) {
+    Gate::define(GateTypes::MANAGE_BLOG_ADMIN, static function (?Model $user) {
         // Implement your logic here, for example:
         return $user && $user->email === 'your-admin-user@your-site.com';
         // Or something like `$user->is_admin === true`
