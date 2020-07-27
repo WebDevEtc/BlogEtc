@@ -13,7 +13,7 @@ class BlogEtcAuthGateNotImplementedException extends ModelNotFoundException
 
         // Add something like the following to AuthServiceProvider:
 
-        //  Gate::define(GateTypes::MANAGE_ADMIN, static function (?Model $user) {
+        //  Gate::define(GateTypes::MANAGE_BLOG_ADMIN, static function (?Model $user) {
         //      Implement your logic to allow or disallow admin access for $user
         //      return $model->is_admin === true;
         //      or:
