@@ -4,10 +4,7 @@ namespace WebDevEtc\BlogEtc;
 
 use Gate;
 use Illuminate\Support\ServiceProvider;
-use Swis\Laravel\Fulltext\ModelObserver;
 use WebDevEtc\BlogEtc\Gates\GateTypes;
-use WebDevEtc\BlogEtc\Models\BlogEtcPost; // Do not remove - disable syncing for legacy class.
-use WebDevEtc\BlogEtc\Models\Post;
 
 class BlogEtcServiceProvider extends ServiceProvider
 {
@@ -18,12 +15,6 @@ class BlogEtcServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (!config('blogetc.search.search_enabled')) {
-            ModelObserver::disableSyncingFor(Post::class);
-            // Do not remove legacy BlogEtcPost here:
-            ModelObserver::disableSyncingFor(BlogEtcPost::class);
-        }
-
         if (config('blogetc.include_default_routes', true)) {
             include __DIR__.'/routes.php';
         }
