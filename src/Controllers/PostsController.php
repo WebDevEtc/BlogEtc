@@ -50,7 +50,7 @@ class PostsController extends Controller
         });
 
         return view('blogetc::search', [
-            'title' => 'Search results for ' . e($request->searchQuery()),
+            'title' => 'Search results for '.e($request->searchQuery()),
             'query' => $request->searchQuery(),
             'search_results' => $searchResults,
         ]);
@@ -97,7 +97,7 @@ class PostsController extends Controller
             $categoryID = $category->id;
 
             // TODO - make configurable
-            $title = config('blogetc.blog_index_category_title', 'Viewing blog posts in ') . $category->category_name;
+            $title = config('blogetc.blog_index_category_title', 'Viewing blog posts in ').$category->category_name;
         }
 
         $posts = $this->postsService->indexPaginated(config('blogetc.per_page'), $categoryID);
