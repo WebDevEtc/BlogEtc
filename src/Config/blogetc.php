@@ -6,6 +6,11 @@ use WebDevEtc\BlogEtc\Captcha\Basic;
 use WebDevEtc\BlogEtc\Services\CommentsService;
 
 return [
+    // Index page title, passed as $title view data.
+    'blog_index_title' => 'Viewing blog',
+    // Category title - should have trailing space.
+    'blog_index_category_title' => 'View posts in: ',
+
     // set to false to not include routes.php for BlogEtcReaderController and admin related routes. Default: true. If you disable this, you will have to manually copy over the data from routes.php and add it to your web.php.
     'include_default_routes' => true,
 

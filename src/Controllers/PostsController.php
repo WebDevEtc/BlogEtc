@@ -50,8 +50,8 @@ class PostsController extends Controller
         });
 
         return view('blogetc::search', [
-            'title'          => 'Search results for '.e($request->searchQuery()),
-            'query'          => $request->searchQuery(),
+            'title' => 'Search results for ' . e($request->searchQuery()),
+            'query' => $request->searchQuery(),
             'search_results' => $searchResults,
         ]);
     }
@@ -84,8 +84,7 @@ class PostsController extends Controller
     {
         // the published_at + is_published are handled by BlogEtcPublishedScope, and don't take effect if the logged
         // in user can manage log posts
-//        $title = config('blogetc.blog_index_title'); // default title...
-        $title = 'Viewing blog';
+        $title = config('blogetc.blog_index_title', 'Viewing blog');
 
         // default category ID
         $categoryID = null;
@@ -98,14 +97,14 @@ class PostsController extends Controller
             $categoryID = $category->id;
 
             // TODO - make configurable
-            $title = 'Viewing blog posts in '.$category->category_name;
+            $title = config('blogetc.blog_index_category_title', 'Viewing blog posts in ') . $category->category_name;
         }
 
         $posts = $this->postsService->indexPaginated(config('blogetc.per_page'), $categoryID);
 
         return view('blogetc::index', [
-            'posts'            => $posts,
-            'title'            => $title,
+            'posts' => $posts,
+            'title' => $title,
             'blogetc_category' => $category ?? null,
         ]);
     }
@@ -134,8 +133,8 @@ class PostsController extends Controller
         return view(
             'blogetc::single_post',
             [
-                'post'     => $blogPost,
-                'captcha'  => $usingCaptcha,
+                'post' => $blogPost,
+                'captcha' => $usingCaptcha,
                 'comments' => $blogPost->comments->load('user'),
             ]
         );
