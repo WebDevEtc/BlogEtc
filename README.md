@@ -126,6 +126,7 @@ Please contact me on the contact from on [WebDev Etc](https://webdevetc.com/) or
 
 ## Versions
 
+- **8.4** (Sept 2020): Added support for Laravel 8. Removed support for PHP 7.2
 - **8.3** (Sept 2020): Removed support for `swisnl/laravel-fulltext` as it seems abandoned. 
   - Searching in blogetc is now much more simple - it is all inline in the controller and does a simple LIKE query. 
   - If you need full text search then I recommend you implement your own search controller (see older commits to copy code that used full text search)
