@@ -55,7 +55,7 @@ class PostsController extends Controller
             return new class($post) {
                 public $indexable;
 
-                function __construct(Post $post)
+                public function __construct(Post $post)
                 {
                     $this->indexable = $post;
                 }
