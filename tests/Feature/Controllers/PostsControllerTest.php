@@ -64,6 +64,29 @@ class PostsControllerTest extends TestCase
         $response->assertOk()->assertViewHas('posts');
     }
 
+    public function testSearch(): void
+    {
+        $post1 = factory(Post::class)->create(['title' => 'test qwerty test']);
+        $post2 = factory(Post::class)->create(['title' => 'do not find me zxcvb']);
+
+        config(['blogetc.search.search_enabled'=>true]);
+        $response = $this->get(route('blogetc.search').'?s=qwerty');
+
+        $response->assertOk()->assertViewHas('search_results');
+
+        $response->assertSee($post1->title);
+        $response->assertDontSee($post2->title);
+    }
+
+    public function testSearchDisabled(): void
+    {
+        config(['blogetc.search.search_enabled'=>false]);
+        $response = $this->get(route('blogetc.search').'?s=test');
+
+        $response->assertForbidden();
+    }
+
+
     /**
      * Test the show page loads.
      *
