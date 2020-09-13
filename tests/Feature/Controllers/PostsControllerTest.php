@@ -86,7 +86,6 @@ class PostsControllerTest extends TestCase
         $response->assertForbidden();
     }
 
-
     /**
      * Test the show page loads.
      *
