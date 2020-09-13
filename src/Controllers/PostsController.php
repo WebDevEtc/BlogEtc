@@ -4,7 +4,6 @@ namespace WebDevEtc\BlogEtc\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Swis\Laravel\Fulltext\Search;
 use View;
 use WebDevEtc\BlogEtc\Models\Post;
 use WebDevEtc\BlogEtc\Requests\SearchRequest;
@@ -45,14 +44,28 @@ class PostsController extends Controller
      */
     public function search(SearchRequest $request): \Illuminate\Contracts\View\View
     {
-        $searchResults = collect((new Search())->run($request->searchQuery()))->filter(static function ($result) {
-            return $result->indexable && is_a($result->indexable, Post::class) && $result->indexable->isPublic();
+        // Laravel full text search (swisnl/laravel-fulltext) disabled due to poor Laravel 8 support.
+        // If you wish to add it, copy the code in this method that was in commit 9aff6c37d130.
+
+        // The LIKE query is not efficient. Search can be disabled in config.
+        $searchResults = Post::where('title', 'LIKE', '%'.$request->get('s').'%')->limit(100)->get();
+
+        // Map it so the post is actually accessible with ->indexable, for backwards compatibility in old view files.
+        $searchResultsMappedWithIndexable = $searchResults->map(function (Post $post) {
+            return new class($post) {
+                public $indexable;
+
+                function __construct(Post $post)
+                {
+                    $this->indexable = $post;
+                }
+            };
         });
 
         return view('blogetc::search', [
             'title' => 'Search results for ' . e($request->searchQuery()),
             'query' => $request->searchQuery(),
-            'search_results' => $searchResults,
+            'search_results' => $searchResultsMappedWithIndexable,
         ]);
     }
 
