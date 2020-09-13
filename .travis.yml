@@ -1,11 +1,12 @@
 language: php
 
 php:
-  - 7.2
   - 7.3
   - 7.4
 
 env:
+  - LARAVEL_VERSION=8.0.1
+  - LARAVEL_VERSION=7.28.0
   - LARAVEL_VERSION=7.6.0
   - LARAVEL_VERSION=7.0.0
   - LARAVEL_VERSION=6.18.8

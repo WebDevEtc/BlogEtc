@@ -123,3 +123,8 @@ php artisan ui vue --auth;
 ## Issues, support, bug reports, security issues
 
 Please contact me on the contact from on [WebDev Etc](https://webdevetc.com/) or on [twitter](https://twitter.com/web_dev_etc/) and I'll get back to you asap.
+
+## Versions
+
+ 8.2: Supports Laravel 7.6 - 8.0.1, on PHP 7.3/7.4
+ Up to 8.1.0: Supported Laravel 7.6, PHP 7.2, 7.3, 7.4
