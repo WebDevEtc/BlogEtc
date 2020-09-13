@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use RuntimeException;
-use Swis\Laravel\Fulltext\Indexable;
 use WebDevEtc\BlogEtc\Interfaces\SearchResultInterface;
 use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
 
@@ -22,7 +21,6 @@ use WebDevEtc\BlogEtc\Scopes\BlogEtcPublishedScope;
 class Post extends Model implements SearchResultInterface
 {
     use Sluggable;
-    use Indexable;
 
     /**
      * @var array
@@ -53,19 +51,6 @@ class Post extends Model implements SearchResultInterface
         'posted_at',
     ];
 
-    protected $indexContentColumns =
-        [
-            'post_body',
-            'short_description',
-            'meta_desc',
-        ];
-
-    protected $indexTitleColumns =
-        [
-            'title',
-            'subtitle',
-            'seo_title',
-        ];
     protected $table = 'blog_etc_posts';
 
     protected static function boot()
@@ -97,6 +82,9 @@ class Post extends Model implements SearchResultInterface
         ];
     }
 
+    /**
+     * @deprecated
+     */
     public function search_result_page_url()
     {
         return $this->url();
