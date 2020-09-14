@@ -9,7 +9,7 @@ jobs:
         operating-system: [ubuntu-latest, windows-latest, macos-latest]
         php-versions: ['7.3', '7.4']
         dependency-version: [prefer-lowest, prefer-stable]
-          laravel: ['7.6.0', '7.28.0', '8.0.1']
+          laravel: ['7.6.0', '7.28.0', '8.0.1', '8.2.0', '8.1.0']
     runs-on: ${{ matrix.operating-system }}
     name: PHP ${{ matrix.php-versions }} Laravel L${{ matrix.laravel }} Test on ${{ matrix.operating-system }}
 
