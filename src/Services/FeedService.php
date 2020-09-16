@@ -39,10 +39,10 @@ class FeedService
         // (Use check(), as it is possible for user to be logged in without having an ID (depending on how the guard
         // is set up...)
         $userOrGuest = Auth::check()
-            ? 'logged-in-'.Auth::id()
+            ? 'logged-in-' . Auth::id()
             : 'guest';
 
-        $key = 'blogetc-'.$feedType.$userOrGuest;
+        $key = 'blogetc-' . $feedType . $userOrGuest;
 
         $feed->setCache(
             config('blogetc.rssfeed.cache_in_minutes', 60),
@@ -72,12 +72,16 @@ class FeedService
 
         /** @var Post $blogPost */
         foreach ($blogPosts as $blogPost) {
-            $feed->add(
-                $blogPost->title,
-                $blogPost->authorString(),
-                $blogPost->url(),
-                $blogPost->posted_at,
-                $blogPost->short_description
+            $feed->addItem(
+                [
+                    'title' => $blogPost->title,
+                    'author' => $blogPost->authorString(),
+                    'url' => $blogPost->url(),
+                    'link' => $blogPost->url(),
+                    'pubdate' => $blogPost->posted_at,
+                    'description' => $blogPost->short_description,
+                    'content' => $blogPost->short_description,
+                ]
             );
         }
     }

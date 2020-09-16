@@ -1,4 +1,6 @@
 .DS_Store
+.idea/
+.idea/*
 build/
 vendor/
 node_modules/

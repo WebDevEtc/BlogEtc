@@ -53,12 +53,15 @@ class FeedController extends Controller
 
         /** @var Post $post */
         foreach ($posts as $post) {
-            $feed->add($post->title,
-                $post->authorString(),
-                $post->url(),
-                $post->posted_at,
-                $post->short_description,
-                $post->generateIntroduction()
+            $feed->addItem(  [
+                    'title' => $post->title,
+                    'author' => $post->authorString(),
+                    'url' => $post->url(),
+                    'link' => $post->url(),
+                    'pubdate' => $post->posted_at,
+                    'description' => $post->short_description,
+                    'content' => $post->short_description,
+                ]
             );
         }
     }
