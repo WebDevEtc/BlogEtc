@@ -49,7 +49,7 @@ class Comment extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(config('blogetc.user_model', User::class));
     }
 
     /**
