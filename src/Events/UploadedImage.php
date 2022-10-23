@@ -26,7 +26,7 @@ class UploadedImage
      * UploadedImage constructor.
      *
      * @param $image_filename - the new filename
-     * @param Post $blogEtcPost
+     * @param  Post  $blogEtcPost
      * @param $image
      * @param $source string|null  the __METHOD__  firing this event (or other string)
      */

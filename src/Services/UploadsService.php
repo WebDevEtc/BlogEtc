@@ -98,9 +98,9 @@ class UploadsService
      *
      * Process any uploaded images (for featured image).
      *
-     * @throws Exception
-     *
      * @return array returns an array of details about each file resized
+     *
+     * @throws Exception
      *
      * @todo - This class was added after the other main features, so this duplicates some code from the main blog post admin controller (BlogEtcAdminController). For next full release this should be tided up.
      */
@@ -177,14 +177,13 @@ class UploadsService
     }
 
     /**
-     * @param Post $new_blog_post
+     * @param  Post  $new_blog_post
      * @param $suggested_title string - used to help generate the filename
      * @param $image_size_details mixed - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size, no size reduction, but will use this string to generate the filename)
      * @param $photo
+     * @return array
      *
      * @throws Exception
-     *
-     * @return array
      */
     protected function legacyUploadAndResize(Post $new_blog_post = null, $suggested_title, $image_size_details, $photo)
     {
@@ -223,9 +222,9 @@ class UploadsService
     }
 
     /**
-     * @throws RuntimeException
-     *
      * @return string
+     *
+     * @throws RuntimeException
      */
     public function image_destination_path()
     {
@@ -258,10 +257,9 @@ class UploadsService
      * Todo: support multiple filesystem locations.
      *
      * @param $image_size_details - either an array (with w/h attributes) or a string
+     * @return string
      *
      * @throws RuntimeException
-     *
-     * @return string
      */
     public function legacyGetImageFilename(string $suggested_title, $image_size_details, UploadedFile $photo)
     {
@@ -381,10 +379,10 @@ class UploadsService
     /**
      * Resize and store an image.
      *
-     * @param Post $new_blog_post
+     * @param  Post  $new_blog_post
      * @param $suggested_title - used to help generate the filename
-     * @param array|string $imageSizeDetails - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
-     *                                       no size reduction, but will use this string to generate the filename)
+     * @param  array|string  $imageSizeDetails  - either an array (with 'w' and 'h') or a string (and it'll be uploaded at full size,
+     *                                          no size reduction, but will use this string to generate the filename)
      * @param $photo
      *
      * @throws Exception
@@ -491,7 +489,7 @@ class UploadsService
      * If a string is given:
      * getWhForFilename("some string") it will return -some-string". (max len: 30)
      *
-     * @param array|string $imageSize
+     * @param  array|string  $imageSize
      *
      * @throws RuntimeException
      */
@@ -606,7 +604,6 @@ class UploadsService
      * Legacy function, will be refactored soon.
      *
      * @param $blogPostId
-     *
      * @return mixed
      */
     public function legacyDestroyPost(/* @scrutinizer ignore-unused */ DeleteBlogEtcPostRequest $request, $blogPostId)

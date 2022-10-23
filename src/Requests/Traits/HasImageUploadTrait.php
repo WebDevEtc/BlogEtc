@@ -8,7 +8,6 @@ trait HasImageUploadTrait
 {
     /**
      * @param $size
-     *
      * @return UploadedFile|null
      */
     public function get_image_file($size)

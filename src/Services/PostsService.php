@@ -83,7 +83,7 @@ class PostsService
     /**
      * Return all results, paginated.
      *
-     * @param int $perPage
+     * @param  int  $perPage
      */
     public function indexPaginated($perPage = 10, int $categoryID = null): LengthAwarePaginator
     {
@@ -133,9 +133,9 @@ class PostsService
      * Delete a blog etc post, return the deleted post and an array of featured images which were associated
      * to the blog post (but which were not deleted form the filesystem).
      *
-     * @throws Exception
-     *
      * @return array - [Post (deleted post), array (remaining featured photos)
+     *
+     * @throws Exception
      */
     public function delete(int $postID): array
     {
