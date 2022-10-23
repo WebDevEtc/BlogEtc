@@ -102,8 +102,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         /**
          * Used for Orchestra\Testbench package.
          *
-         * @param Application $app
-         *
+         * @param  Application  $app
          * @return array
          */
         protected function getPackageProviders($app)
@@ -181,8 +180,7 @@ namespace WebDevEtc\BlogEtc\Tests {
         /**
          * Define environment setup.
          *
-         * @param Application $app
-         *
+         * @param  Application  $app
          * @return void
          */
         protected function getEnvironmentSetUp($app)

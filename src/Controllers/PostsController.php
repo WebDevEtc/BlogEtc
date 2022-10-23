@@ -52,7 +52,8 @@ class PostsController extends Controller
 
         // Map it so the post is actually accessible with ->indexable, for backwards compatibility in old view files.
         $searchResultsMappedWithIndexable = $searchResults->map(function (Post $post) {
-            return new class($post) {
+            return new class($post)
+            {
                 public $indexable;
 
                 public function __construct(Post $post)
@@ -89,8 +90,7 @@ class PostsController extends Controller
      * Show blog posts
      * If $categorySlug is set, then only show from that category.
      *
-     * @param string $categorySlug
-     *
+     * @param  string  $categorySlug
      * @return mixed
      */
     public function index(string $categorySlug = null)

@@ -31,7 +31,7 @@ class PostsRepository
     /**
      * Return blog posts ordered by posted_at, paginated.
      *
-     * @param int $categoryID
+     * @param  int  $categoryID
      */
     public function indexPaginated(int $perPage = 10, int $categoryID = null): LengthAwarePaginator
     {
@@ -147,7 +147,7 @@ class PostsRepository
      *
      * TODO - currently untested.
      *
-     * @param array $uploadedImages
+     * @param  array  $uploadedImages
      */
     public function updateImageSizes(Post $post, ?array $uploadedImages): Post
     {
