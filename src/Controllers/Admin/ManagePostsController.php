@@ -73,9 +73,9 @@ class ManagePostsController extends Controller
     /**
      * Save a new post.
      *
-     * @throws Exception
-     *
      * @return RedirectResponse|Redirector
+     *
+     * @throws Exception
      */
     public function store(CreateBlogEtcPostRequest $request)
     {
@@ -96,7 +96,6 @@ class ManagePostsController extends Controller
      * Show form to edit post.
      *
      * @param $blogPostId
-     *
      * @return mixed
      */
     public function edit($blogPostId)
@@ -120,10 +119,9 @@ class ManagePostsController extends Controller
      * This uses some legacy code. This will get refactored soon into something nicer.
      *
      * @param $blogPostId
+     * @return RedirectResponse|Redirector
      *
      * @throws Exception
-     *
-     * @return RedirectResponse|Redirector
      */
     public function update(UpdateBlogEtcPostRequest $request, $blogPostId)
     {
@@ -144,7 +142,6 @@ class ManagePostsController extends Controller
      * Delete a post.
      *
      * @param $blogPostId
-     *
      * @return mixed
      */
     public function destroy(DeleteBlogEtcPostRequest $request, $blogPostId)

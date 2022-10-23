@@ -6,6 +6,7 @@ interface LegacyGetImageFileInterface
 {
     /**
      * legacy.
+     *
      * @param $size
      * @return mixed
      */

@@ -65,7 +65,6 @@ class FeedController extends Controller
 
     /**
      * @param $posts
-     *
      * @return mixed
      */
     protected function setupFeed(Feed $feed, $posts)
