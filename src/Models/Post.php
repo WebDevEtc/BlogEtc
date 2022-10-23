@@ -160,7 +160,7 @@ class Post extends Model implements SearchResultInterface
     }
 
     /**
-     * @param mixed ...$args
+     * @param  mixed  ...$args
      *
      * @deprecated - use imageTag() instead
      */
@@ -177,10 +177,10 @@ class Post extends Model implements SearchResultInterface
      *
      * TODO - return HtmlString
      *
-     * @param string $size - large, medium, thumbnail
-     * @param bool $addAHref - if true then it will add <a href=''>...</a> around the <img> tag
-     * @param string|null $imgTagClass - if you want any additional CSS classes for this tag for the <IMG>
-     * @param string|null $anchorTagClass - is you want any additional CSS classes in the <a> anchor tag
+     * @param  string  $size  - large, medium, thumbnail
+     * @param  bool  $addAHref  - if true then it will add <a href=''>...</a> around the <img> tag
+     * @param  string|null  $imgTagClass  - if you want any additional CSS classes for this tag for the <IMG>
+     * @param  string|null  $anchorTagClass  - is you want any additional CSS classes in the <a> anchor tag
      */
     public function imageTag(
         $size = 'medium',
@@ -205,7 +205,7 @@ class Post extends Model implements SearchResultInterface
      * Returns true if the database record indicates that this blog post
      * has a featured image of size $size.
      *
-     * @param string $size
+     * @param  string  $size
      */
     public function hasImage($size = 'medium'): bool
     {
@@ -233,7 +233,7 @@ class Post extends Model implements SearchResultInterface
      * Get the full URL for an image
      * You should use ::has_image($size) to check if the size is valid.
      *
-     * @param string $size - should be 'medium' , 'large' or 'thumbnail'
+     * @param  string  $size  - should be 'medium' , 'large' or 'thumbnail'
      */
     public function imageUrl($size = 'medium'): string
     {
