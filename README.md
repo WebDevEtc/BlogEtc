@@ -1,5 +1,7 @@
 **Note: this is a very old project. I haven't updated it for years.**
 
+Dependabot has alerts saying there are outdated dependancy with security issues. Please stop using this package, and upgrade your code to something else. 
+
 **It is not compatible with recent version of Laravel. There are some forks of this package, please use one of those.**
 
 ---------------
