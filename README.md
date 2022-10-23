@@ -1,3 +1,8 @@
+Note: this is a very old project. I haven't updated it for years.
+
+It is not compatible with recent version of Laravel. There are some forks of this package, please use one of those. 
+
+---------------
 
 # Webdevetc BlogEtc - Complete Laravel Blog Package
 
